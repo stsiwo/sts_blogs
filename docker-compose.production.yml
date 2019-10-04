@@ -1,0 +1,7 @@
+version: '3'
+# use for swarm mode
+services:
+  spa:
+  api:
+  db:
+

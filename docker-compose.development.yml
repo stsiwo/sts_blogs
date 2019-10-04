@@ -1,0 +1,5 @@
+version: '3'
+services:
+  spa:
+  api:
+  # db: in-memory in dev
