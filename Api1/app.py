@@ -1,11 +1,16 @@
 from flask import Flask
+from flask_restful import Resource, Api
 
 app = Flask(__name__)
+api = Api(app)
 
-@app.route("/api1")
-def hello():
-    html = "<h3>Hello {name} from api1 api!</h3>" 
-    return html.format(name="satoshi")
+
+class HelloWorld(Resource):
+    def get(self):
+        return {'hello': 'world'}
+
+
+api.add_resource(HelloWorld, '/')
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000, debug=True)

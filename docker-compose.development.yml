@@ -2,6 +2,7 @@ version: '3'
 services:
   spa:
   api1:
+    image: api1:dev
   web-server: 
     image: nginx
     volumes:
