@@ -15,15 +15,12 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
 db = SQLAlchemy(app)
 api = Api(app)
 
-# NOTE: This is just a basic example of how to enable cookies. This is
-#       vulnerable to CSRF attacks, and should not be used as is. See
-#       csrf_protection_with_cookies.py for a more complete example!
-
-
-# Configure application to store JWTs in cookies. Whenever you make
-# a request to a protected endpoint, you will need to send in the
-# access or refresh JWT via a cookie.
+# Configure application to store JWTs in cookies
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
+
+# Only allow JWT cookies to be sent over https. In production, this
+# should likely be True
+app.config['JWT_COOKIE_SECURE'] = False
 
 # Set the cookie paths, so that you are only sending your access token
 # cookie to the access endpoints, and only sending your refresh token
@@ -33,10 +30,9 @@ app.config['JWT_TOKEN_LOCATION'] = ['cookies']
 app.config['JWT_ACCESS_COOKIE_PATH'] = '/api/'
 app.config['JWT_REFRESH_COOKIE_PATH'] = '/token/refresh'
 
-# Disable CSRF protection for this example. In almost every case,
-# this is a bad idea. See examples/csrf_protection_with_cookies.py
-# for how safely store JWTs in cookies
-app.config['JWT_COOKIE_CSRF_PROTECT'] = False
+# Enable csrf double submit protection. See this for a thorough
+# explanation: http://www.redotheweb.com/2015/11/09/api-security.html
+app.config['JWT_COOKIE_CSRF_PROTECT'] = True
 
 # Set the secret key to sign the JWTs with
 app.config['JWT_SECRET_KEY'] = 'super-secret'  # Change this!
@@ -44,14 +40,19 @@ app.config['JWT_SECRET_KEY'] = 'super-secret'  # Change this!
 jwt = JWTManager(app)
 
 
-# Use the set_access_cookie() and set_refresh_cookie() on a response
-# object to set the JWTs in the response cookies. You can configure
-# the cookie names and other settings via various app.config options
+# By default, the CRSF cookies will be called csrf_access_token and
+# csrf_refresh_token, and in protected endpoints we will look for the
+# CSRF token in the 'X-CSRF-TOKEN' header. You can modify all of these
+# with various app.config options. Check the options page for details.
+
+
+# With JWT_COOKIE_CSRF_PROTECT set to True, set_access_cookies() and
+# set_refresh_cookies() will now also set the non-httponly CSRF cookies
+# as well
 @app.route('/token/auth', methods=['POST'])
 def login():
-    app.logger.info("logger test =============")
-    username = request.form['username']
-    password = request.form['password']
+    username = request.json.get('username', None)
+    password = request.json.get('password', None)
     if username != 'test' or password != 'test':
         return jsonify({'login': False}), 401
 
@@ -59,15 +60,14 @@ def login():
     access_token = create_access_token(identity=username)
     refresh_token = create_refresh_token(identity=username)
 
-    # Set the JWT cookies in the response
+    # Set the JWTs and the CSRF double submit protection cookies
+    # in this response
     resp = jsonify({'login': True})
     set_access_cookies(resp, access_token)
     set_refresh_cookies(resp, refresh_token)
     return resp, 200
 
 
-# Same thing as login here, except we are only setting a new cookie
-# for the access token.
 @app.route('/token/refresh', methods=['POST'])
 @jwt_refresh_token_required
 def refresh():
@@ -75,7 +75,8 @@ def refresh():
     current_user = get_jwt_identity()
     access_token = create_access_token(identity=current_user)
 
-    # Set the JWT access cookie in the response
+    # Set the access JWT and CSRF double submit protection cookies
+    # in this response
     resp = jsonify({'refresh': True})
     set_access_cookies(resp, access_token)
     return resp, 200
@@ -93,15 +94,11 @@ def logout():
     return resp, 200
 
 
-# We do not need to make any changes to our protected endpoints. They
-# will all still function the exact same as they do when sending the
-# JWT in via a header instead of a cookie
 @app.route('/api/example', methods=['GET'])
 @jwt_required
 def protected():
     username = get_jwt_identity()
     return jsonify({'hello': 'from {}'.format(username)}), 200
-
 
 # class UserDB(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
