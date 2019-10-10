@@ -1,5 +1,6 @@
 import Configs.dbConfig
 import logging
+from passlib.apps import custom_app_context as pwd_context
 
 logging.info("User Model")
 db = Configs.dbConfig.db
@@ -7,8 +8,13 @@ db = Configs.dbConfig.db
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
+    name = db.Column(db.VARCHAR, nullable=False)
+    email = db.Column(db.VARCHAR, unique=True, nullable=False)
+    password = db.Column(db.VARCHAR, nullable=False)
+    avatarUrl = db.Column(db.VARCHAR, nullable=True)
 
-    def __repr__(self):
-        return '<User %r>' % self.username
+    def hash_password(self, password):
+        self.password_hash = pwd_context.encrypt(password)
+
+    def verify_password(self, password):
+        return pwd_context.verify(password, self.password_hash)

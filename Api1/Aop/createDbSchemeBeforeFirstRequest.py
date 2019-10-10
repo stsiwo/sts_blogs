@@ -3,6 +3,7 @@ import Configs.dbConfig
 import sys
 
 
+# not working
 def createDbSchemeBeforeFirstRequest():
     @Configs.appConfig.app.before_first_request
     def createDbScheme():
