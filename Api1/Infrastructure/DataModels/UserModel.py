@@ -1,9 +1,5 @@
-import Configs.dbConfig
-import logging
+from Configs.extensions import db
 from passlib.apps import custom_app_context as pwd_context
-
-logging.info("User Model")
-db = Configs.dbConfig.db
 
 
 class User(db.Model):

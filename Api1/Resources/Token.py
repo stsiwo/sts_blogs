@@ -1,15 +1,19 @@
 from flask import request, jsonify
 from flask_jwt_extended import (
-    jwt_required, create_access_token,
+    create_access_token,
     jwt_refresh_token_required, create_refresh_token,
     get_jwt_identity, set_access_cookies,
     set_refresh_cookies, unset_jwt_cookies
 )
+from flask_restful import Resource
+
+# use this when jwt authentication needed
+# @jwt_required
+# username = get_jwt_identity()
 
 
-def configureTokenController(app):
-    @app.route('/token/auth', methods=['POST'])
-    def login():
+class TokenAuth(Resource):
+    def post(self):
         username = request.json.get('username', None)
         password = request.json.get('password', None)
         if username != 'test' or password != 'test':
@@ -26,9 +30,10 @@ def configureTokenController(app):
         set_refresh_cookies(resp, refresh_token)
         return resp, 200
 
-    @app.route('/token/refresh', methods=['POST'])
+
+class TokenRefresh(Resource):
     @jwt_refresh_token_required
-    def refresh():
+    def post(self):
         # Create the new access token
         current_user = get_jwt_identity()
         access_token = create_access_token(identity=current_user)
@@ -39,14 +44,9 @@ def configureTokenController(app):
         set_access_cookies(resp, access_token)
         return resp, 200
 
-    @app.route('/token/remove', methods=['POST'])
-    def logout():
+
+class TokenRemove(Resource):
+    def post(self):
         resp = jsonify({'logout': True})
         unset_jwt_cookies(resp)
         return resp, 200
-
-    @app.route('/api/example', methods=['GET'])
-    @jwt_required
-    def protected():
-        username = get_jwt_identity()
-        return jsonify({'hello': 'from {}'.format(username)}), 200

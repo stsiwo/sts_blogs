@@ -1,31 +1,27 @@
 from flask import Flask
-from Configs.dbConfig import configureDb
-from Configs.apiConfig import configureApi
-from Configs.jwtConfig import configureJwt
-from Controllers.TokenController import configureTokenController
-from Aop.registerAops import registerAops
-import sys
-import logging
-
-thismodule = sys.modules[__name__]
-thismodule.app = None
+from Configs.extensions import (
+        api, db, jwt, migrate
+        )
+# import all model class of DataModels directory
+import Infrastructure.DataModels
+# import all routes
+import Resources.configureRoute
+# from Aop.registerAops import registerAops
 
 
 # the order must be kept
-def configureApp():
+def configureApp(config_object="Configs.settings"):
     # create db object
-    thismodule.app = Flask(__name__)
-    logging.info("app")
+    app = Flask(__name__)
+    app.config.from_object(config_object)
 
-    configureDb(thismodule.app)
-
-    configureApi(thismodule.app)
-
-    configureJwt(thismodule.app)
-
-    configureTokenController(thismodule.app)
+    # extensions
+    api.init_app(app)
+    db.init_app(app)
+    migrate.init_app(app, db)
+    jwt.init_app(app)
 
     # register aspect oriented methods
-    registerAops()
+    # registerAops()
 
-    return thismodule.app
+    return app

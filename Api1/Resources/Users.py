@@ -1,14 +1,12 @@
 from flask_restful import Resource
-from flask import request, abort, jsonify, url_for
+from flask import request, abort, jsonify
 from Infrastructure.DataModels.UserModel import User
-import Configs.dbConfig
-
-db = Configs.dbConfig.db
+from Configs.extensions import db
 
 
-class UserList(Resource):
+class Users(Resource):
     def get(self):
-        return {"userList": "get"}
+        return {"all_users": "get"}
 
     # create new user
     def post(self):
