@@ -26,9 +26,10 @@ class TokenAuth(Resource):
         # Set the JWTs and the CSRF double submit protection cookies
         # in this response
         resp = jsonify({'login': True})
+        resp.status_code = 200
         set_access_cookies(resp, access_token)
         set_refresh_cookies(resp, refresh_token)
-        return resp, 200
+        return resp
 
 
 class TokenRefresh(Resource):
@@ -41,12 +42,14 @@ class TokenRefresh(Resource):
         # Set the access JWT and CSRF double submit protection cookies
         # in this response
         resp = jsonify({'refresh': True})
+        resp.status_code = 200
         set_access_cookies(resp, access_token)
-        return resp, 200
+        return resp
 
 
 class TokenRemove(Resource):
     def post(self):
         resp = jsonify({'logout': True})
+        resp.status_code = 200
         unset_jwt_cookies(resp)
-        return resp, 200
+        return resp
