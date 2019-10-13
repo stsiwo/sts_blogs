@@ -5,8 +5,10 @@ from Resources.Token import (
         TokenRemove
         )
 from Resources.Users import Users
+from Resources.Signup import Signup
 
 api.add_resource(TokenAuth, '/token/auth')
 api.add_resource(TokenRefresh, '/token/refresh')
 api.add_resource(TokenRemove, '/token/remove')
 api.add_resource(Users, '/users/<string:user_id>')
+api.add_resource(Signup, '/signup')

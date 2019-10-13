@@ -3,13 +3,21 @@ from flask_jwt_extended import (
     create_access_token,
     jwt_refresh_token_required, create_refresh_token,
     get_jwt_identity, set_access_cookies,
-    set_refresh_cookies, unset_jwt_cookies
+    set_refresh_cookies, unset_jwt_cookies,
 )
 from flask_restful import Resource
+from Configs.extensions import jwt
 
 # use this when jwt authentication needed
 # @jwt_required
 # username = get_jwt_identity()
+
+
+@jwt.user_claims_loader
+def add_claims_to_access_token(identity):
+    return {
+        'role': identity.roles,
+    }
 
 
 class TokenAuth(Resource):
