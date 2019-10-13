@@ -3,11 +3,12 @@ from Configs.extensions import (
         api, db, jwt, migrate
         )
 # import all model class of DataModels directory
-import Infrastructure.DataModels
-import Infrastructure.DataModels.TestModel
+# spec says "import *" is anti-pattern but other developers does
+# not need to know all modules under DataModels.
+# this is for just helping 'migration' can detect any change in data models
+from Infrastructure.DataModels import *
 # import all routes
 import Resources.configureRoute
-# from Aop.registerAops import registerAops
 
 
 # the order must be kept

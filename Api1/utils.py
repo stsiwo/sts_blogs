@@ -1,3 +1,6 @@
-import os
+import pprint
 
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+def prettyPrint(target):
+    pp = pprint.PrettyPrinter()
+    pp.pprint(target)

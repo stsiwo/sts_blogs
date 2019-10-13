@@ -1,9 +1,8 @@
-import utils
 from Infrastructure.DataModels.RoleModel import Role
 from Infrastructure.DataModels.UserModel import User
 
 
-def test_user_factory(session, UserFactory, RoleFactory):
+def test_user_role_relationship(session, UserFactory, RoleFactory):
 
     role = RoleFactory.create(name="admin")
     user = UserFactory.create(roles=[role])

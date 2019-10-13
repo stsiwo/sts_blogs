@@ -1,6 +1,5 @@
 from Configs.extensions import db
 from passlib.apps import custom_app_context as pwd_context
-from Infrastructure.DataModels import RoleModel
 
 
 roles = db.Table(

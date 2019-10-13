@@ -1,21 +1,7 @@
 import factory
-from Infrastructure.DataModels.TestModel import Test
 from Infrastructure.DataModels.UserModel import User
 from Infrastructure.DataModels.RoleModel import Role
 import pytest
-
-
-@pytest.fixture
-def TestFactory(session):
-
-    class TestFactory(factory.alchemy.SQLAlchemyModelFactory):
-        class Meta:
-            model = Test
-            sqlalchemy_session = session   # the SQLAlchemy session object
-
-        name = "satoshi"
-
-    yield TestFactory
 
 
 @pytest.fixture
