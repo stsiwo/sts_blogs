@@ -1,14 +1,14 @@
+import utils
+from Infrastructure.DataModels.RoleModel import Role
+from Infrastructure.DataModels.UserModel import User
 
 
-def test_user_factory(session, UserFactory):
-    factory = UserFactory()
-    print(factory)
+def test_user_factory(session, UserFactory, RoleFactory):
 
-    assert 1 == 2
+    role = RoleFactory.create(name="admin")
+    user = UserFactory.create(roles=[role])
 
+    roleList = session.query(Role).all()
+    user = session.query(User).filter(User.name == user.name).first()
 
-def test_role_factory(session, RoleFactory):
-    factory = RoleFactory()
-    print(factory)
-
-    assert 1 == 2
+    assert user.roles == roleList

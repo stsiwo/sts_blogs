@@ -31,6 +31,33 @@ def UserFactory(session):
         password = "password"
         avatarUrl = "avatarUrl"
 
+        # code in docs does not work in the case of SQLAlchemy
+        # so, i modified it
+        # code in docs is following:
+
+        #    @factory.post_generation
+        #    def groups(self, create, extracted, **kwargs):
+        #        if not create:
+        #            # Simple build, do nothing.
+        #            return
+
+        #        if extracted:
+        #            # A list of groups were passed in, use them
+        #            for group in extracted:
+        #                self.groups.add(group)
+
+        @factory.post_generation
+        def roles(self, create, extracted, **kwargs):
+            if not create:
+                # Simple build, do nothing.
+                return
+
+            if extracted:
+                # A list of groups were passed in, use them
+                print(extracted)
+                for role in extracted:
+                    self.roles.append(role)
+
     yield UserFactory
 
 

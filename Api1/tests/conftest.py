@@ -33,4 +33,5 @@ def session():
     engine = create_engine('sqlite:////tmp/api1.db')
     session = scoped_session(sessionmaker(bind=engine))
     yield session
+    session.rollback()
     print("teardown session")
