@@ -3,6 +3,8 @@ import tempfile
 import pytest
 from Configs.appConfig import configureApp
 from Configs.extensions import db
+from sqlalchemy import create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
 
 app = configureApp()
 
@@ -23,3 +25,12 @@ def client():
 
     os.close(db_fd)
     os.unlink(app.config['DATABASE'])
+
+
+@pytest.fixture
+def session():
+    print("setup session")
+    engine = create_engine('sqlite:////tmp/api1.db')
+    session = scoped_session(sessionmaker(bind=engine))
+    yield session
+    print("teardown session")

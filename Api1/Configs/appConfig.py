@@ -4,6 +4,7 @@ from Configs.extensions import (
         )
 # import all model class of DataModels directory
 import Infrastructure.DataModels
+import Infrastructure.DataModels.TestModel
 # import all routes
 import Resources.configureRoute
 # from Aop.registerAops import registerAops

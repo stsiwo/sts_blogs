@@ -4,3 +4,5 @@ Flask-SQLAlchemy
 flask-jwt-extended
 Flask-Migrate
 passlib
+Faker
+factory_boy
