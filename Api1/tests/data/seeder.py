@@ -1,5 +1,17 @@
-from faker import Faker
-fake = Faker()
+from flask_sqlalchemy import SQLAlchemy
+from Infrastructure.DataModels.RoleModel import Role
+import utils
 
-print(fake.name())
-# 'Lucy Cechtelar'
+
+def seed(db: SQLAlchemy):
+    # initial role model data
+    db.session.bulk_save_objects(
+            [
+                Role(name='admin'),
+                Role(name='member')
+            ])
+
+    roles = db.session.query(Role).all()
+    utils.prettyPrint(roles)
+
+    db.session.commit()

@@ -5,26 +5,38 @@ from Configs.appConfig import configureApp
 from Configs.extensions import db
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
+from tests.data.seeder import seed
 
 app = configureApp()
 
 
 @pytest.fixture
-def client():
+def application():
     db_fd, app.config['DATABASE'] = tempfile.mkstemp()
     app.config['TESTING'] = True
-    client = app.test_client()
 
-    with app.app_context():
-        db.create_all()
-
-    yield client
-
-    with app.app_context():
-        db.drop_all()
+    yield app
 
     os.close(db_fd)
     os.unlink(app.config['DATABASE'])
+
+
+@pytest.fixture
+def database(application):
+
+    with application.app_context():
+        db.create_all()
+        seed(db)
+
+    yield db
+
+    with application.app_context():
+        db.drop_all()
+
+
+@pytest.fixture
+def client(database, application):
+    yield application.test_client()
 
 
 @pytest.fixture

@@ -1,5 +1,7 @@
 from flask import Response
 import json
+# from Configs.extensions import db
+from Infrastructure.DataModels.UserModel import User
 
 
 def test_signup_endpoint_no_json_data_should_response_with_400(client):
@@ -36,3 +38,23 @@ def test_new_user_created_successfully(client):
         }, headers=headers)
 
     assert 201 == rv.status_code
+
+
+def test_new_user_created_successfully_and_user_is_persisted(client, database, application):
+
+    mimetype = 'application/json'
+    headers = {
+        'Content-Type': mimetype,
+        'Accept': mimetype
+    }
+    rv = client.post('/signup', 'http://localhost', json={
+        'name': 'test1',
+        'email': 'test1@test.com',
+        'password': 'password'
+        }, headers=headers)
+
+    with application.app_context():
+        queriedUser = database.session.query(User).filter_by(name='test1').first()
+
+    assert 201 == rv.status_code
+    assert queriedUser is not None
