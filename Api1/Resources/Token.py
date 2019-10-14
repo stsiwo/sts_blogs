@@ -22,22 +22,24 @@ def add_claims_to_access_token(identity):
 
 class TokenAuth(Resource):
     def post(self):
-        username = request.json.get('username', None)
-        password = request.json.get('password', None)
-        if username != 'test' or password != 'test':
-            return jsonify({'login': False}), 401
-
-        # Create the tokens we will be sending back to the user
-        access_token = create_access_token(identity=username)
-        refresh_token = create_refresh_token(identity=username)
-
-        # Set the JWTs and the CSRF double submit protection cookies
-        # in this response
-        resp = jsonify({'login': True})
-        resp.status_code = 200
-        set_access_cookies(resp, access_token)
-        set_refresh_cookies(resp, refresh_token)
-        return resp
+        print("redirected to token auth")
+#        username = request.json.get('username', None)
+#        password = request.json.get('password', None)
+#        if username != 'test' or password != 'test':
+#            return jsonify({'login': False}), 401
+#
+#        # Create the tokens we will be sending back to the user
+#        access_token = create_access_token(identity=username)
+#        refresh_token = create_refresh_token(identity=username)
+#
+#        # Set the JWTs and the CSRF double submit protection cookies
+#        # in this response
+#        resp = jsonify({'login': True})
+#        resp.status_code = 200
+#        set_access_cookies(resp, access_token)
+#        set_refresh_cookies(resp, refresh_token)
+#        return resp
+        return "hey"
 
 
 class TokenRefresh(Resource):

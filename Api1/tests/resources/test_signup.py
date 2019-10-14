@@ -37,7 +37,7 @@ def test_new_user_created_successfully(client):
         'password': 'password'
         }, headers=headers)
 
-    assert 201 == rv.status_code
+    assert 301 == rv.status_code
 
 
 def test_new_user_created_successfully_and_user_is_persisted(client, database, application):
@@ -56,5 +56,6 @@ def test_new_user_created_successfully_and_user_is_persisted(client, database, a
     with application.app_context():
         queriedUser = database.session.query(User).filter_by(name='test1').first()
 
-    assert 201 == rv.status_code
+    assert 301 == rv.status_code
     assert queriedUser is not None
+    assert 0

@@ -1,8 +1,10 @@
 from flask_restful import Resource, reqparse
-from flask import jsonify, request
+from flask import request, redirect
 from Configs.extensions import db
+from Configs.extensions import api
 from Infrastructure.DataModels.UserModel import User
 from Infrastructure.DataModels.RoleModel import Role
+from Resources.Token import TokenAuth
 
 
 class Signup(Resource):
@@ -34,6 +36,4 @@ class Signup(Resource):
         db.session.add(newUser)
         db.session.commit()
 
-        res = jsonify({'signup': 'signup'})
-        res.status_code = 201
-        return res
+        return redirect(api.url_for(TokenAuth, user=newUser, _method='POST'), code=301)
