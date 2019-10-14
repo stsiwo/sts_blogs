@@ -1,8 +1,10 @@
 from dotenv import load_dotenv
 import os
+from pathlib import Path
 
 # env file
-load_dotenv()
+env_path = Path('.').parent / '.env'
+load_dotenv(dotenv_path=env_path)
 
 # jwt config
 

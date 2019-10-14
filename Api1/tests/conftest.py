@@ -1,13 +1,13 @@
 import os
 import tempfile
 import pytest
-from Configs.appConfig import configureApp
+from Configs.appConfig import main
 from Configs.extensions import db
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from tests.data.seeder import seed
 
-app = configureApp()
+app = main
 
 
 @pytest.fixture
