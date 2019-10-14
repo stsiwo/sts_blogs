@@ -21,9 +21,6 @@ class Signup(Resource):
         # get 'member' role from db
         memberRole = Role.query.filter_by(name='member').first()
 
-        print("memberRole: ")
-        print(memberRole)
-
         # create new User
         newUser = User(
                 name=request.json.get('name'),

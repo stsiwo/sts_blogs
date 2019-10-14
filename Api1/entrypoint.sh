@@ -2,4 +2,4 @@
 set -e
 
 flask db upgrade
-python ./app.py
+python ./run.py

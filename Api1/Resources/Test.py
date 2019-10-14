@@ -5,15 +5,14 @@ from Configs.extensions import api
 from Infrastructure.DataModels.UserModel import User
 from Infrastructure.DataModels.RoleModel import Role
 from Resources.Token import TokenAuth
-from app import app
+from Configs.app import app
 
 
 class Test(Resource):
     # create new user
     def post(self):
-        app.logging.info("post")
         return redirect(api.url_for(Test, _method='GET'), code=301)
 
     def get(self):
-        app.logging.info("get")
+        app.logger.info("get in Test src")
         return jsonify({"get": "in test"})

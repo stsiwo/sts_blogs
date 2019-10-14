@@ -1,5 +1,8 @@
+from dotenv import load_dotenv
 import os
 
+# env file
+load_dotenv()
 
 # jwt config
 

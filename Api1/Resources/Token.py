@@ -22,7 +22,6 @@ def add_claims_to_access_token(identity):
 
 class TokenAuth(Resource):
     def post(self):
-        print("redirected to token auth")
 #        username = request.json.get('username', None)
 #        password = request.json.get('password', None)
 #        if username != 'test' or password != 'test':
