@@ -1,22 +1,6 @@
 from Configs.extensions import db
 from passlib.apps import custom_app_context as pwd_context
-
-
-roles = db.Table(
-        'users_roles',
-        db.Column(
-            'user_id',
-            db.Integer,
-            db.ForeignKey('users.id'),
-            primary_key=True
-        ),
-        db.Column(
-            'role_id',
-            db.Integer,
-            db.ForeignKey('roles.id'),
-            primary_key=True
-            ),
-)
+from Infrastructure.DataModels.UserRoleModel import roles
 
 
 class User(db.Model):
