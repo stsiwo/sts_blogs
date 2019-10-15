@@ -19,3 +19,7 @@ class Blog(db.Model):
             backref=db.backref('blogs', lazy=True))
 
     comments = db.relationship('Comment', backref='blogs', lazy='subquery')
+
+    # reverse relational to User
+    # back_populates is for reverse
+    # user = db.relationship('User', back_populates='blogs', lazy='subquery')

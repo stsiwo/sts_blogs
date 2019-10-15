@@ -11,4 +11,4 @@ class Comment(db.Model):
 
     blogId = db.Column(db.Integer, db.ForeignKey('blogs.id'), nullable=False)
 
-    authorId = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    authorId = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)

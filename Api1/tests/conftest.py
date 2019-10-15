@@ -41,9 +41,11 @@ def client(database, application):
 
 @pytest.fixture
 def session():
-    print("setup session")
+    print("setup session fixture")
+    # enable echo executed query statement
+    # engine = create_engine('sqlite:////tmp/api1.db', echo=True)
     engine = create_engine('sqlite:////tmp/api1.db')
     session = scoped_session(sessionmaker(bind=engine))
     yield session
     session.rollback()
-    print("teardown session")
+    print("teardown session fixture")
