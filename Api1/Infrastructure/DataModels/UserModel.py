@@ -16,6 +16,10 @@ class User(db.Model):
     roles = db.relationship('Role', secondary=roles, lazy='subquery',
                             backref=db.backref('users', lazy=True))
 
+    blogs = db.relationship('Blog', backref='users', lazy=True)
+
+    comments = db.relationship('Comment', backref='users', lazy=True)
+
     def hash_password(self, password):
         self.password_hash = pwd_context.encrypt(password)
 
