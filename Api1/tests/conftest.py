@@ -25,13 +25,12 @@ def application():
 def database(application):
 
     with application.app_context():
-        db.create_all()
         seed(db)
 
     yield db
 
     with application.app_context():
-        db.drop_all()
+        db.session.rollback()
 
 
 @pytest.fixture

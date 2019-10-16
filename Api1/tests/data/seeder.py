@@ -10,8 +10,3 @@ def seed(db: SQLAlchemy):
                 Role(name='admin'),
                 Role(name='member')
             ])
-
-    roles = db.session.query(Role).all()
-    utils.prettyPrint(roles)
-
-    db.session.commit()

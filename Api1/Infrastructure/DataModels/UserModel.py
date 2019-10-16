@@ -16,7 +16,10 @@ class User(db.Model):
     roles = db.relationship('Role', secondary=roles, lazy='subquery',
                             backref=db.backref('users', lazy=True))
 
-    blogs = db.relationship('Blog', backref='users', lazy=True)
+    # use backref => unidirectional relationship
+    # use back_populates => bidirectinal relationship
+    # value should be property of target Model (e.g., Blog.user)
+    blogs = db.relationship('Blog', back_populates='user', lazy=True)
 
     comments = db.relationship('Comment', backref='users', lazy=True)
 

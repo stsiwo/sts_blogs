@@ -16,5 +16,3 @@ def testUserWithMemberRoleSeeder(db: SQLAlchemy):
     testUser.roles.append(memberRole)
 
     db.session.add(testUser)
-
-    db.session.commit()
