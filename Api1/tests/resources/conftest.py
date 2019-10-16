@@ -15,8 +15,10 @@ def testUserWithMemberRoleFixture(database, application):
 
 @pytest.fixture
 def blogsSeededFixture(database, application):
+    print("setup blogsSeededFixture fixture")
 
     with application.app_context():
         blogsSeed(database)
 
     yield None
+    print("teardown blogsSeededFixture fixture")
