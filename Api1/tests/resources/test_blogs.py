@@ -1,15 +1,26 @@
+import utils
 
 
-def test_blogs_get_endpoint_should_return_404_since_no_blogs_data(client):
+def test_b01_blogs_get_endpoint_should_return_404_since_no_blogs_data(client):
 
     response = client.get('/blogs')
     assert 404 == response.status_code
 
 
-def test_blogs_get_endpoint_should_return_202(client, blogsSeededFixture):
+def test_b02_blogs_get_endpoint_should_return_202(client, blogsSeededFixture):
 
     response = client.get('/blogs')
     assert 200 == response.status_code
+
+
+def test_b03_blogs_get_endpoint_should_return_202_and_blogs_json(client, blogsSeededFixture):
+
+    response = client.get('/blogs')
+    assert 200 == response.status_code
+
+    print(utils.decodeResponseByteJsonToDictionary(response.data))
+
+    assert 0
 
 
 # def test_blogs_post_endpoint(client):
