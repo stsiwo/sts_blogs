@@ -1,23 +1,25 @@
 from flask_restful import Resource
-from typing import Dict, List
-from flask import jsonify
-from application.BlogService import BlogService
+from flask import request, abort, jsonify
+from Infrastructure.DataModels.UserModel import User
+from Configs.extensions import db
 from Configs.app import app
+from application.UserBlogService import UserBlogService
+from typing import Dict, List
 
 
-class Blogs(Resource):
+class UserBlogs(Resource):
 
-    blogService: BlogService
+    _userBlogService: UserBlogService
 
     def __init__(self):
-        self.blogService = BlogService()
+        self._userBlogService = UserBlogService()
 
     # get all blogs
-    def get(self):
+    def get(self, user_id: str):
         app.logger.info("start processing get request at /blogs")
         print("start processing get request at /blogs")
 
-        blogs: List[Dict] = self.blogService.getAllBlogService()
+        blogs: List[Dict] = self._userBlogService.getAllUserBlogService(user_id)
 
         response = jsonify(blogs)
 
