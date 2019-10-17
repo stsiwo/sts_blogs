@@ -1,14 +1,15 @@
 from Infrastructure.DataModels.BlogModel import Blog
-from tests.data.factories.UserFactory import UserFactory
 import factory
+from tests.data.factories.BaseFactory import BaseFactory
+from tests.data.factories.UserFactory import UserFactory
 
 
-class BlogFactory(factory.Factory):
+class BlogFactory(BaseFactory):
     class Meta:
         model = Blog
 
     # if you need fixed fake values use faker.py instead of factory.Faker(...)
-    id = factory.Sequence(lambda n: n)
+    id = factory.Sequence(lambda n: n+1)
     title = factory.Faker('sentence')
     content = factory.Faker('sentence')
     user = UserFactory()
