@@ -25,9 +25,13 @@ def blogsSeededFixture(database, application):
 
     with application.app_context():
         database.session.add(BlogFactory())
+        database.session.add(BlogFactory())
+        database.session.add(BlogFactory())
 
         blogs = database.session.query(Blog).all()
         utils.printObject(blogs)
+
+        database.session.commit()
 
     yield None
     print("teardown blogsSeededFixture fixture")

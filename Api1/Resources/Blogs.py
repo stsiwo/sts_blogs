@@ -1,15 +1,35 @@
 from flask_restful import Resource
-from flask import request, abort, jsonify
-from Infrastructure.DataModels.UserModel import User
-from Configs.extensions import db
+from typing import Dict, List
+from flask import jsonify
+from application.BlogService import BlogService
+from Configs.app import app
+import utils
 
 
 class Blogs(Resource):
 
+    blogService: BlogService
+
+    def __init__(self):
+        self.blogService = BlogService()
+
     # get all blogs
     def get(self):
-        response = jsonify({})
-        response.status_code = 201
+        app.logger.info("start processing get request at /blogs")
+        print("start processing get request at /blogs")
+
+        blogs: List[Dict] = self.blogService.getAllBlogService()
+
+        response = jsonify(blogs)
+
+        # blogs list of dict is empty
+        if len(blogs) == 0:
+            # NOT FOUND
+            response.status_code = 404
+        else:
+            # OK
+            response.status_code = 200
+
         return response
 
     # create new blog

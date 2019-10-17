@@ -1,7 +1,8 @@
 from Configs.extensions import db
+from Infrastructure.DataModels.BaseModel import BaseModel
 
 
-class Comment(db.Model):
+class Comment(BaseModel):
 
     __tablename__ = 'comments'
 

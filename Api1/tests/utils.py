@@ -9,6 +9,8 @@ def prettyPrint(target):
 
 def printObject(target):
 
+    print(type(target))
+
     # if target is iterable
     if isinstance(target, Iterable):
         for obj in target:

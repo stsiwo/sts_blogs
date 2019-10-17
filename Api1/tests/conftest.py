@@ -21,16 +21,25 @@ def application():
     os.unlink(app.config['DATABASE'])
 
 
+# use addfinalizer to execute teardown code even when exception is thrown
 @pytest.fixture
-def database(application):
+def database(application, request):
 
-    with application.app_context():
-        seed(db)
+    def fin():
+        print("teardown database ...")
+        with application.app_context():
+            clear_data(db)
 
-    yield db
+    request.addfinalizer(fin)
+    return db
 
-    with application.app_context():
-        db.session.rollback()
+
+def clear_data(session):
+    meta = db.metadata
+    for table in reversed(meta.sorted_tables):
+        print('Clear table %s' % table)
+        db.session.execute(table.delete())
+    db.session.commit()
 
 
 @pytest.fixture

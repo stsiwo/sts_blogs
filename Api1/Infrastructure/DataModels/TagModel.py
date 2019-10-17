@@ -1,7 +1,8 @@
 from Configs.extensions import db
+from Infrastructure.DataModels.BaseModel import BaseModel
 
 
-class Tag(db.Model):
+class Tag(BaseModel):
 
     __tablename__ = 'tags'
 

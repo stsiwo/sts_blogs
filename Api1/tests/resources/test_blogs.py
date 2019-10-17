@@ -1,10 +1,15 @@
 
 
-def test_blogs_get_endpoint(client, blogsSeededFixture):
+def test_blogs_get_endpoint_should_return_404_since_no_blogs_data(client):
 
     response = client.get('/blogs')
-    assert 201 == response.status_code
-    assert 0
+    assert 404 == response.status_code
+
+
+def test_blogs_get_endpoint_should_return_202(client, blogsSeededFixture):
+
+    response = client.get('/blogs')
+    assert 200 == response.status_code
 
 
 # def test_blogs_post_endpoint(client):

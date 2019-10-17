@@ -1,7 +1,8 @@
 from Configs.extensions import db
+from Infrastructure.DataModels.BaseModel import BaseModel
 
 
-class Role(db.Model):
+class Role(BaseModel):
 
     __tablename__ = 'roles'
 
