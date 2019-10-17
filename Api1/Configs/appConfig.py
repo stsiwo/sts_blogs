@@ -1,6 +1,6 @@
 from Configs.app import app
 from Configs.extensions import (
-        api, db, jwt, migrate
+        api, db, jwt, migrate, ma
         )
 
 
@@ -23,7 +23,11 @@ def configureApp(config_object="Configs.settings"):
     # IMPORTANT: adding resources must be done before init_app!!!!
     # ============================================================
     api.init_app(app)
+    # ============================================================
+    # IMPORTANT: db.init_app must be before ma.init_app
+    # ============================================================
     db.init_app(app)
+    ma.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
 
