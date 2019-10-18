@@ -5,6 +5,9 @@ from Configs.extensions import db
 from Configs.app import app
 from application.UserBlogService import UserBlogService
 from typing import Dict, List
+from Resources.roleAccessDecorator import requires_jwt_role_claim
+from flask_jwt_extended import jwt_required
+import utils
 
 
 class UserBlogs(Resource):
@@ -15,6 +18,10 @@ class UserBlogs(Resource):
         self._userBlogService = UserBlogService()
 
     # get all blogs
+    # requires_jwt_role_claim must be after jwt_required
+    # otherwise, you cannot access claim of jwt
+    @jwt_required
+    @requires_jwt_role_claim({'admin', 'member'})
     def get(self, user_id: str):
         app.logger.info("start processing get request at /blogs")
         print("start processing get request at /blogs")

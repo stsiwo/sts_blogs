@@ -7,21 +7,10 @@ from flask_jwt_extended import (
     set_access_cookies
 )
 from flask_restful import Resource
-from Configs.extensions import jwt
-from typing import Dict
 
 # use this when jwt authentication needed
 # @jwt_required
 # username = get_jwt_identity()
-
-
-@jwt.user_claims_loader
-def add_claims_to_access_token(identity: Dict):
-    print("constructing claim in jwt")
-    return {
-        'name': identity['name'],
-        'roles': identity['roles'],
-    }
 
 
 class TokenRefresh(Resource):

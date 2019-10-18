@@ -18,6 +18,9 @@ def configureApp(config_object="Configs.settings"):
     # import all routes
     import Resources.configureRoute
 
+    # jwt claim loader
+    import Resources.claimLoader
+
     # extensions
     # ============================================================
     # IMPORTANT: adding resources must be done before init_app!!!!

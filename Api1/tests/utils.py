@@ -12,8 +12,12 @@ def printObject(target):
 
     print(type(target))
 
+    # if target is primitive (str, int, ...)
+    if _isPrimitive(target):
+        print(target)
+
     # if target is iterable
-    if isinstance(target, Iterable):
+    elif isinstance(target, Iterable):
         for obj in target:
             _printObject(obj)
     # if target is object
@@ -29,3 +33,7 @@ def _printObject(target: object):
 
 def decodeResponseByteJsonToDictionary(target: bytes):
     return json.loads(target.decode("utf-8"))
+
+
+def _isPrimitive(obj):
+    return not hasattr(obj, '__dict__')

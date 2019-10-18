@@ -30,6 +30,7 @@ class LoginService(object):
             self._tokenService.createJwtToken(
                  response,
                  {
+                     'id': loginUser.id,
                      "name": loginUser.name,
                      "roles": [role.name for role in loginUser.roles]
                  })

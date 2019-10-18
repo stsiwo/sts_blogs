@@ -39,7 +39,7 @@ def blogsSeededFixture(database, application):
 
 @pytest.fixture
 def rolesSeededFixture(database, application):
-    print("setup blogsSeededFixture fixture")
+    print("setup rolesSeededFixture fixture")
 
     with application.app_context():
         database.session.add(RoleFactory(name='admin'))
@@ -48,19 +48,113 @@ def rolesSeededFixture(database, application):
         roles = database.session.query(Role).all()
         utils.printObject(roles)
 
+        database.session.commit()
+
     yield None
-    print("teardown blogsSeededFixture fixture")
+    print("teardown rolesSeededFixture fixture")
 
 
 @pytest.fixture
 def usersSeededFixture(database, application):
-    print("setup blogsSeededFixture fixture")
+    print("setup usersSeededFixture fixture")
 
     with application.app_context():
-        database.session.add(UserFactory())
+        database.session.add(UserFactory(
+            name='test',
+            email='test@test.com',
+            password='test'
+            ))
 
         users = database.session.query(User).all()
         utils.printObject(users)
 
+        database.session.commit()
+
     yield None
-    print("teardown blogsSeededFixture fixture")
+    print("teardown usersSeededFixture fixture")
+
+
+@pytest.fixture
+def adminUserSeededFixture(database, application):
+    print("setup adminUserSeededFixture fixture")
+
+    with application.app_context():
+        database.session.add(
+                UserFactory(
+                    name='admin',
+                    email='admin@admin.com',
+                    password='admin',
+                    roles=[RoleFactory(name='admin')])
+                )
+
+        users = database.session.query(User).all()
+        utils.printObject(users)
+
+        database.session.commit()
+
+    yield None
+    print("teardown adminUserSeededFixture fixture")
+
+
+@pytest.fixture
+def authedClient(client, usersSeededFixture):
+
+    mimetype = 'application/json'
+    headers = {
+        'Content-Type': mimetype,
+        'Accept': mimetype
+    }
+    rv = client.post('/login', 'http://localhost', json={
+        'email': 'test@test.com',
+        'password': 'test'
+        }, headers=headers)
+
+    tokenDict = {}
+
+    for header in rv.headers:
+        if header[0] == 'Set-Cookie':
+            token = header[1].replace(";", "=").split("=")
+            tokenDict[token[0]] = token[1]
+
+    utils.printObject(tokenDict)
+
+    # IMPORTANT NOTE
+    # content should just access_token itself. DO NOT include any other info such as path, httpOnly
+    client.set_cookie('localhost', 'access_token_cookie', tokenDict['access_token_cookie'])
+    client.set_cookie('localhost', 'refresh_token_cookie', tokenDict['refresh_token_cookie'])
+    client.set_cookie('localhost', 'csrf_access_token', tokenDict['csrf_access_token'])
+    client.set_cookie('localhost', 'csrf_refresh_token', tokenDict['csrf_refresh_token'])
+
+    yield client
+
+
+@pytest.fixture
+def authedAdminClient(client, adminUserSeededFixture):
+
+    mimetype = 'application/json'
+    headers = {
+        'Content-Type': mimetype,
+        'Accept': mimetype
+    }
+    rv = client.post('/login', 'http://localhost', json={
+        'email': 'admin@admin.com',
+        'password': 'admin'
+        }, headers=headers)
+
+    tokenDict = {}
+
+    for header in rv.headers:
+        if header[0] == 'Set-Cookie':
+            token = header[1].replace(";", "=").split("=")
+            tokenDict[token[0]] = token[1]
+
+    utils.printObject(tokenDict)
+
+    # IMPORTANT NOTE
+    # content should just access_token itself. DO NOT include any other info such as path, httpOnly
+    client.set_cookie('localhost', 'access_token_cookie', tokenDict['access_token_cookie'])
+    client.set_cookie('localhost', 'refresh_token_cookie', tokenDict['refresh_token_cookie'])
+    client.set_cookie('localhost', 'csrf_access_token', tokenDict['csrf_access_token'])
+    client.set_cookie('localhost', 'csrf_refresh_token', tokenDict['csrf_refresh_token'])
+
+    yield client

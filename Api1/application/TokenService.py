@@ -1,5 +1,5 @@
 from Configs.app import app
-from flask import Response
+from flask import Response, session
 from flask_jwt_extended import (
     create_access_token,
     create_refresh_token,
@@ -7,6 +7,7 @@ from flask_jwt_extended import (
     set_refresh_cookies
     )
 from typing import Dict
+import utils
 
 
 class TokenService(object):
@@ -23,6 +24,8 @@ class TokenService(object):
         access_token = create_access_token(identity=identity)
         refresh_token = create_refresh_token(identity=identity)
 
+        utils.printObject(access_token)
+
         print("about save token in cookie")
         self.__saveTokenInCookie(response, access_token, refresh_token)
 
@@ -33,3 +36,5 @@ class TokenService(object):
         # in this response
         set_access_cookies(response, access_token)
         set_refresh_cookies(response, refresh_token)
+
+        utils.printObject(session)

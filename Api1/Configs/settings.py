@@ -20,12 +20,12 @@ JWT_COOKIE_SECURE = os.getenv('JWT_COOKIE_SECURE', False)
 # to the refresh endpoint. Technically this is optional, but it is in
 # your best interest to not send additional cookies in the request if
 # they aren't needed.
-JWT_ACCESS_COOKIE_PATH = '/api/'
+JWT_ACCESS_COOKIE_PATH = '/'
 JWT_REFRESH_COOKIE_PATH = '/token/refresh'
 
 # Enable csrf double submit protection. See this for a thorough
 # explanation: http://www.redotheweb.com/2015/11/09/api-security.html
-JWT_COOKIE_CSRF_PROTECT = True
+JWT_COOKIE_CSRF_PROTECT = True 
 
 # Set the secret key to sign the JWTs with
 JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'super-secret')

@@ -1,26 +1,49 @@
 import utils
 from Infrastructure.DataModels.UserModel import User
+from Infrastructure.DataModels.RoleModel import Role
+import pytest
 
 
-def test_ub01_blogs_get_endpoint_should_return_404_since_no_blogs_data(client):
+def test_ub01_blogs_get_endpoint_should_return_404_since_no_blogs_data(authedClient):
 
-    response = client.get('/users/1/blogs')
+    response = authedClient.get('/users/1/blogs')
     assert 404 == response.status_code
 
 
-def test_ub02_blogs_get_endpoint_should_return_200(client, database, application, blogsSeededFixture):
+@pytest.mark.selected
+def test_ub02_blogs_get_endpoint_should_return_401_for_unauthorized_access(client):
+
+    response = client.get('/users/1/blogs')
+    assert 401 == response.status_code
+
+
+@pytest.mark.selected
+def test_ub03_blogs_get_endpoint_should_allow_admin_user_to_access(authedAdminClient, application, database, blogsSeededFixture):
 
     userId = None
 
     with application.app_context():
-        user = database.session.query(User).first()
+        user = database.session.query(User).join(User.roles).filter(Role.name == 'member').first()
         userId = user.id
 
-    response = client.get('/users/' + str(userId) + '/blogs')
+    response = authedAdminClient.get('/users/' + str(userId) + '/blogs')
     assert 200 == response.status_code
 
 
-def test_ub03_blogs_get_endpoint_should_return_200_and_blogs_json(client, database, application, blogsSeededFixture):
+@pytest.mark.selected
+def test_ub04_blogs_get_endpoint_should_allow_the_user_to_access(authedClient, database, application, blogsSeededFixture):
+
+    userId = None
+
+    with application.app_context():
+        user = database.session.query(User).join(User.roles).filter(Role.name == 'member').first()
+        userId = user.id
+
+    response = authedClient.get('/users/' + str(userId) + '/blogs')
+    assert 200 == response.status_code
+
+
+def test_ub05_blogs_get_endpoint_should_allow_the_user_to_access_its_own_blogs(authedClient, database, application, blogsSeededFixture):
 
     userId = None
 
@@ -28,7 +51,7 @@ def test_ub03_blogs_get_endpoint_should_return_200_and_blogs_json(client, databa
         user = database.session.query(User).first()
         userId = user.id
 
-    response = client.get('/users/' + str(userId) + '/blogs')
+    response = authedClient.get('/users/' + str(userId) + '/blogs')
     assert 200 == response.status_code
 
     data = utils.decodeResponseByteJsonToDictionary(response.data)
@@ -39,7 +62,7 @@ def test_ub03_blogs_get_endpoint_should_return_200_and_blogs_json(client, databa
         assert blog['id'] is not None
 
 
-def test_ub04_blogs_get_endpoint_should_return_202_and_blogs_json_with_user_dependencies(client, database, application, blogsSeededFixture):
+def test_ub06_blogs_get_endpoint_should_return_202_and_blogs_json_with_user_dependencies(authedClient, database, application, blogsSeededFixture):
 
     userId = None
 
@@ -47,7 +70,7 @@ def test_ub04_blogs_get_endpoint_should_return_202_and_blogs_json_with_user_depe
         user = database.session.query(User).first()
         userId = user.id
 
-    response = client.get('/users/' + str(userId) + '/blogs')
+    response = authedClient.get('/users/' + str(userId) + '/blogs')
     assert 200 == response.status_code
 
     data = utils.decodeResponseByteJsonToDictionary(response.data)
@@ -56,6 +79,22 @@ def test_ub04_blogs_get_endpoint_should_return_202_and_blogs_json_with_user_depe
 
     for blog in data:
         assert blog['user']['id'] == userId
+
+
+def test_ub07_blogs_post_endpoint_should_return_400_for_bad_request_for_invalid_input(authedClient, database, application):
+
+    userId = None
+
+    with application.app_context():
+        user = database.session.query(User).first()
+        userId = user.id
+
+    response = authedClient.post('/users/' + str(userId) + '/blogs')
+    assert 400 == response.status_code
+
+
+
+
 
 # def test_blogs_post_endpoint(client):
 # 

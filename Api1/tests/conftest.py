@@ -14,6 +14,9 @@ app = main
 def application():
     db_fd, app.config['DATABASE'] = tempfile.mkstemp()
     app.config['TESTING'] = True
+    # RuntimeError: Session backend did not open a session. Check the configuration
+    # need to set secret key
+    app.config['SECRET_KEY'] = 'sekrit!'
 
     yield app
 

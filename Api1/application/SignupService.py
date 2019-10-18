@@ -26,7 +26,7 @@ class SignupService(object):
         print("start register user service")
 
         # get 'member' role from db
-        memberRole = Role.query.filter_by(name='member').first()
+        memberRole = db.session.query(Role).filter_by(name='member').first()
 
         # create new User
         newUser = User(
@@ -38,6 +38,7 @@ class SignupService(object):
 
         # save to db
         db.session.add(newUser)
+        newUser = db.session.query(User).filter_by(email=newUser.email).first()
 
         # construct response
         response = jsonify({'success': True})
@@ -47,6 +48,7 @@ class SignupService(object):
         self._tokenService.createJwtToken(
              response,
              {
+                 'id': newUser.id,
                  "name": newUser.name,
                  "roles": [role.name for role in newUser.roles]
              })
