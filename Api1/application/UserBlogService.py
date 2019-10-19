@@ -4,6 +4,7 @@ from Configs.extensions import db
 from typing import Dict, List
 from Resources.viewModels.BlogSchema import BlogSchema
 from Infrastructure.transactionDecorator import db_transaction
+import utils
 
 
 class UserBlogService(object):
@@ -37,3 +38,15 @@ class UserBlogService(object):
         db.session.add(newBlog)
 
         return newBlog
+
+    @db_transaction()
+    def deleteAllBlogService(self, user_id: str) -> bool:
+        app.logger.info("start delete all user blog service")
+        print("start delete all user blog service")
+
+        # delete() returns # of object deleted
+        result = db.session.query(Blog).filter_by(userId=user_id).delete()
+
+        isSuccessOrNotFound: bool = result > 0
+
+        return isSuccessOrNotFound

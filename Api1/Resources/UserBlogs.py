@@ -86,7 +86,18 @@ class UserBlogs(Resource):
     #     return response
 
     # delete whole blogs
-    # def delete(self):
-    #     response = jsonify({})
-    #     response.status_code = 205
-    #     return response
+    @jwt_required
+    @requires_jwt_role_claim({'admin', 'member'})
+    def delete(self, user_id: str):
+        app.logger.info("start processing delete request at /blogs")
+        print("start processing delete request at /blogs")
+
+        isSuccessOrNotFound: bool = self._userBlogService.deleteAllBlogService(user_id)
+
+        response = jsonify({})
+        if isSuccessOrNotFound:
+            response.status_code = 204
+        else:
+            response.status_code = 404
+
+        return response

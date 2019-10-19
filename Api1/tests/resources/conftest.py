@@ -161,6 +161,23 @@ def authedAdminClient(client, adminUserSeededFixture):
 
 
 @pytest.fixture
+def authedClientWithBlogSeeded(application, database, authedClient):
+    print("setup seedBlogsOfAuthedClient fixture")
+
+    authedUser = None
+
+    with application.app_context():
+        authedUser = database.session.query(User).filter_by(email='test@test.com').first()
+        database.session.add(BlogFactory(user=authedUser, userId=authedUser.id))
+        database.session.add(BlogFactory(user=authedUser, userId=authedUser.id))
+        database.session.add(BlogFactory(user=authedUser, userId=authedUser.id))
+        database.session.commit()
+
+    yield authedClient
+    print("teardown seedBlogsOfAuthedClient fixture")
+
+
+@pytest.fixture
 def httpHeaders():
     mimetype = 'application/json'
     headers = {
