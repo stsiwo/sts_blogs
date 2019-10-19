@@ -93,8 +93,150 @@ def test_ub07_blogs_post_endpoint_should_return_400_for_bad_request_for_invalid_
     assert 400 == response.status_code
 
 
+def test_ub08_blogs_post_endpoint_should_allow_authed_user_to_get_201_code(authedClient, database, application, httpHeaders):
+
+    userId = None
+
+    with application.app_context():
+        user = database.session.query(User).filter_by(email='test@test.com').first()
+        userId = user.id
+
+    csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
+    httpHeaders['X-CSRF-TOKEN'] = csrf_token
+
+    response = authedClient.post(
+            '/users/' + str(userId) + '/blogs',
+            json={
+                'title': "test-title",
+                'content': "test-content"
+                },
+            headers=httpHeaders
+            )
+
+    assert 201 == response.status_code
 
 
+def test_ub09_blogs_post_endpoint_should_allow_authed_user_to_create_its_new_blog(authedClient, database, application, httpHeaders):
+
+    userId = None
+
+    with application.app_context():
+        user = database.session.query(User).filter_by(email='test@test.com').first()
+        userId = user.id
+
+    csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
+    httpHeaders['X-CSRF-TOKEN'] = csrf_token
+
+    response = authedClient.post(
+            '/users/' + str(userId) + '/blogs',
+            json={
+                'title': "test-title",
+                'content': "test-content"
+                },
+            headers=httpHeaders
+            )
+
+    data = utils.decodeResponseByteJsonToDictionary(response.data)
+
+    assert data['id'] is not None
+
+
+def test_ub10_blogs_post_endpoint_should_return_location_header_to_new_blog(authedClient, database, application, httpHeaders):
+
+    userId = None
+
+    with application.app_context():
+        user = database.session.query(User).filter_by(email='test@test.com').first()
+        userId = user.id
+
+    csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
+    httpHeaders['X-CSRF-TOKEN'] = csrf_token
+
+    response = authedClient.post(
+            '/users/' + str(userId) + '/blogs',
+            json={
+                'title': "test-title",
+                'content': "test-content"
+                },
+            headers=httpHeaders
+            )
+
+    data = utils.decodeResponseByteJsonToDictionary(response.data)
+
+    assert response.headers['location'] == 'http://localhost/blogs/{}'.format(data['id'])
+
+
+def test_ub11_blogs_post_endpoint_should_allow_admin_user_to_get_201_code(authedAdminClient, database, application, httpHeaders, usersSeededFixture):
+
+    userId = None
+
+    with application.app_context():
+        user = database.session.query(User).filter_by(email='test@test.com').first()
+        userId = user.id
+
+    csrf_token = [cookie.value for cookie in authedAdminClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
+    httpHeaders['X-CSRF-TOKEN'] = csrf_token
+
+    response = authedAdminClient.post(
+            '/users/' + str(userId) + '/blogs',
+            json={
+                'title': "test-title",
+                'content': "test-content"
+                },
+            headers=httpHeaders
+            )
+
+    assert 201 == response.status_code
+
+
+def test_ub12_blogs_post_endpoint_should_allow_authed_user_to_create_its_new_blog(authedAdminClient, database, application, httpHeaders, usersSeededFixture):
+
+    userId = None
+
+    with application.app_context():
+        user = database.session.query(User).filter_by(email='test@test.com').first()
+        userId = user.id
+
+    csrf_token = [cookie.value for cookie in authedAdminClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
+    httpHeaders['X-CSRF-TOKEN'] = csrf_token
+
+    response = authedAdminClient.post(
+            '/users/' + str(userId) + '/blogs',
+            json={
+                'title': "test-title",
+                'content': "test-content"
+                },
+            headers=httpHeaders
+            )
+
+    data = utils.decodeResponseByteJsonToDictionary(response.data)
+
+    assert data['id'] is not None
+
+
+def test_ub13_blogs_post_endpoint_should_return_location_header_to_new_blog(authedAdminClient, database, application, httpHeaders, usersSeededFixture):
+
+    userId = None
+
+    with application.app_context():
+        user = database.session.query(User).filter_by(email='test@test.com').first()
+        userId = user.id
+
+    csrf_token = [cookie.value for cookie in authedAdminClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
+    httpHeaders['X-CSRF-TOKEN'] = csrf_token
+
+    response = authedAdminClient.post(
+            '/users/' + str(userId) + '/blogs',
+            json={
+                'title': "test-title",
+                'content': "test-content"
+                },
+            headers=httpHeaders
+            )
+
+    data = utils.decodeResponseByteJsonToDictionary(response.data)
+
+    assert response.headers['location'] == 'http://localhost/blogs/{}'.format(data['id'])
 
 # def test_blogs_post_endpoint(client):
 # 

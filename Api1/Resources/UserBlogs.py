@@ -8,18 +8,27 @@ from typing import Dict, List
 from Resources.roleAccessDecorator import requires_jwt_role_claim
 from flask_jwt_extended import jwt_required
 import utils
+from Resources.validators.validatorDecorator import validate_request_with
+from Resources.validators.userBlogValidator import userBlogValidator
+from Infrastructure.DataModels.BlogModel import Blog
+from Resources.viewModels.BlogSchema import BlogSchema
 
 
 class UserBlogs(Resource):
 
     _userBlogService: UserBlogService
 
+    _blogSchema: BlogSchema
+
     def __init__(self):
         self._userBlogService = UserBlogService()
+        self._blogSchema = BlogSchema()
 
     # get all blogs
+    # IMPORTANT NOTE ==================================
     # requires_jwt_role_claim must be after jwt_required
     # otherwise, you cannot access claim of jwt
+    # ================================================
     @jwt_required
     @requires_jwt_role_claim({'admin', 'member'})
     def get(self, user_id: str):
@@ -41,11 +50,26 @@ class UserBlogs(Resource):
         return response
 
     # create new blog
-    # use /users/{id}/blogs for creating blogs for specific user
-    # def post(self):
-    #     response = jsonify({})
-    #     response.status_code = 202
-    #     return response
+    @validate_request_with(userBlogValidator)
+    @jwt_required
+    @requires_jwt_role_claim({'admin', 'member'})
+    def post(self, user_id: str):
+        app.logger.info("start processing post request at /blogs")
+        print("start processing post request at /blogs")
+
+        newBlog: Blog = self._userBlogService.createNewBlogService(
+                user_id,
+                request.json.get('title'),
+                request.json.get('content')
+                )
+
+        blogSchema = self._blogSchema.dump(newBlog)
+
+        response = jsonify(blogSchema)
+        response.status_code = 201
+        # after db.session.commit(), newBlog.id is automcatically assigned my SQLAlchemy
+        response.headers['location'] = '/blogs/' + str(newBlog.id)
+        return response
 
     # replace existing whole blogs or create whole blogs if does not exist
     # payload must be whole blogs (all properties of blog)

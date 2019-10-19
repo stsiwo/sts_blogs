@@ -158,3 +158,13 @@ def authedAdminClient(client, adminUserSeededFixture):
     client.set_cookie('localhost', 'csrf_refresh_token', tokenDict['csrf_refresh_token'])
 
     yield client
+
+
+@pytest.fixture
+def httpHeaders():
+    mimetype = 'application/json'
+    headers = {
+        'Content-Type': mimetype,
+        'Accept': mimetype,
+    }
+    yield headers

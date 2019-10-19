@@ -3,6 +3,7 @@ from Infrastructure.DataModels.BlogModel import Blog
 from Configs.extensions import db
 from typing import Dict, List
 from Resources.viewModels.BlogSchema import BlogSchema
+from Infrastructure.transactionDecorator import db_transaction
 
 
 class UserBlogService(object):
@@ -21,3 +22,18 @@ class UserBlogService(object):
         serializedBlogs: List[Dict] = [self._blogSchema.dump(blog) for blog in blogs]
 
         return serializedBlogs
+
+    @db_transaction()
+    def createNewBlogService(self, user_id: str, title: str, content: str) -> Blog:
+        app.logger.info("start userblog user service")
+        print("start userblog user service")
+
+        newBlog: Blog = Blog(
+                            title=title,
+                            content=content,
+                            userId=user_id
+                            )
+
+        db.session.add(newBlog)
+
+        return newBlog
