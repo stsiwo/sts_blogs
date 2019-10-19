@@ -246,7 +246,7 @@ def test_ub14_blogs_delete_endpoint_should_return_401_code_since_unauthorized_ac
     assert 401 == response.status_code
 
 
-def test_ub15_blogs_delete_endpoint_should_allow_authed_user_to_get_201_code(authedClient, database, application, httpHeaders):
+def test_ub15_blogs_delete_endpoint_should_allow_authed_user_to_get_201_code(authedClientWithBlogSeeded, database, application, httpHeaders):
 
     userId = None
 
@@ -254,10 +254,10 @@ def test_ub15_blogs_delete_endpoint_should_allow_authed_user_to_get_201_code(aut
         user = database.session.query(User).filter_by(email='test@test.com').first()
         userId = user.id
 
-    csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
+    csrf_token = [cookie.value for cookie in authedClientWithBlogSeeded.cookie_jar if cookie.name == 'csrf_access_token'][0]
     httpHeaders['X-CSRF-TOKEN'] = csrf_token
 
-    response = authedClient.delete(
+    response = authedClientWithBlogSeeded.delete(
             '/users/' + str(userId) + '/blogs',
             headers=httpHeaders
             )
@@ -265,7 +265,7 @@ def test_ub15_blogs_delete_endpoint_should_allow_authed_user_to_get_201_code(aut
     assert 204 == response.status_code
 
 
-def test_ub16_blogs_delete_endpoint_should_allow_authed_user_to_delete_all_his_blogs(authedClient, database, application, httpHeaders):
+def test_ub16_blogs_delete_endpoint_should_allow_authed_user_to_delete_all_his_blogs(authedClientWithBlogSeeded, database, application, httpHeaders):
 
     userId = None
 
@@ -273,10 +273,10 @@ def test_ub16_blogs_delete_endpoint_should_allow_authed_user_to_delete_all_his_b
         user = database.session.query(User).filter_by(email='test@test.com').first()
         userId = user.id
 
-    csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
+    csrf_token = [cookie.value for cookie in authedClientWithBlogSeeded.cookie_jar if cookie.name == 'csrf_access_token'][0]
     httpHeaders['X-CSRF-TOKEN'] = csrf_token
 
-    response = authedClient.delete(
+    response = authedClientWithBlogSeeded.delete(
             '/users/' + str(userId) + '/blogs',
             headers=httpHeaders
             )
@@ -305,7 +305,6 @@ def test_ub17_blogs_delete_endpoint_should_allow_authed_user_to_delete_all_his_b
             )
 
     assert 404 == response.status_code
-
 
 # def test_blogs_post_endpoint(client):
 # 

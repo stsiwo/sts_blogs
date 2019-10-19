@@ -75,7 +75,7 @@ class UserBlogs(Resource):
     # payload must be whole blogs (all properties of blog)
     # def put(self):
     #     response = jsonify({})
-    #     response.status_code = 203
+    #     response.status_code = 204
     #     return response
 
     # patial update exisitng blogs
