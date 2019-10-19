@@ -4,6 +4,7 @@ from Configs.extensions import db
 from typing import Dict, List
 from Resources.viewModels.BlogSchema import BlogSchema
 from Infrastructure.transactionDecorator import db_transaction
+import utils
 
 
 class BlogService(object):
@@ -35,5 +36,7 @@ class BlogService(object):
         if targetBlog is not None:
             targetBlog.title = title
             targetBlog.content = content
+
+        targetBlog = self._blogSchema.dump(targetBlog)
 
         return targetBlog

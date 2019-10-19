@@ -9,6 +9,7 @@ from Infrastructure.DataModels.BlogModel import Blog
 from Resources.viewModels.BlogSchema import BlogSchema
 from Resources.roleAccessDecorator import requires_jwt_role_claim
 from flask_jwt_extended import jwt_required
+import utils
 
 
 class Blogs(Resource):
@@ -67,11 +68,14 @@ class Blogs(Resource):
             response = jsonify({'msg': 'specified blog is not found'})
             response.status_code = 404
             return response
-        # successfully updated
+        # successfully updated and return its serialized and updated blog
+        # ==============================================================
+        # NOTE: don't specify body when using 204 (NO CONTENT). even if you set response body
+        # HTTP ignore the response body and client only receives no body
+        # =============================================================
         else:
-            blogSchema = self._blogSchema.dump(updatedBlog)
-            response = jsonify(blogSchema)
-            response.status_code = 204
+            response = jsonify(updatedBlog)
+            response.status_code = 200
             return response
 
     # patial update exisitng blogs

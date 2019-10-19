@@ -1,4 +1,6 @@
 import utils
+from Infrastructure.DataModels.UserModel import User
+from Infrastructure.DataModels.BlogModel import Blog
 
 
 def test_b01_blogs_get_endpoint_should_return_404_since_no_blogs_data(client):
@@ -45,44 +47,86 @@ def test_b05_blogs_put_endpoint_should_return_401_code_since_unauthorized_access
     assert 401 == response.status_code
 
 
-def test_b06_blogs_put_endpoint_should_allow_authed_user_to_get_201_code(authedClient, database, application, httpHeaders):
-
-    userId = None
-
-    with application.app_context():
-        user = database.session.query(User).filter_by(email='test@test.com').first()
-        userId = user.id
+def test_b06_blogs_put_endpoint_should_allow_authed_user_to_get_404_code_since_target_blog_does_not_exist(authedClient, database, application, httpHeaders):
 
     csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
     httpHeaders['X-CSRF-TOKEN'] = csrf_token
 
     response = authedClient.put(
-            '/users/' + str(userId) + '/blogs',
+            '/blogs/{}'.format(12342),
+            json={
+                'title': 'updated_title',
+                'content': 'updated_content'
+                },
             headers=httpHeaders
             )
 
-    assert 204 == response.status_code
+    assert 404 == response.status_code
 
 
-# def test_blogs_post_endpoint(client):
-# 
-#     response = client.post('/blogs')
-#     assert 202 == response.status_code
-# 
-# 
-# def test_blogs_put_endpoint(client):
-# 
-#     response = client.put('/blogs')
-#     assert 203 == response.status_code
-# 
-# 
-# def test_blogs_patch_endpoint(client):
-# 
-#     response = client.patch('/blogs')
-#     assert 204 == response.status_code
-# 
-# 
-# def test_blogs_delete_endpoint(client):
-# 
-#     response = client.delete('/blogs')
-#     assert 205 == response.status_code
+def test_b07_blogs_put_endpoint_should_allow_authed_user_to_get_400_code_since_input_is_invalid(authedClient, database, application, httpHeaders):
+
+    csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
+    httpHeaders['X-CSRF-TOKEN'] = csrf_token
+
+    response = authedClient.put(
+            '/blogs/{}'.format(12342),
+            json={
+                'content': 'updated_title'
+                },
+            headers=httpHeaders
+            )
+
+    assert 400 == response.status_code
+
+
+def test_b08_blogs_put_endpoint_should_allow_authed_user_to_get_200_code(authedClientWithBlogSeeded, database, application, httpHeaders):
+
+    blogId = None
+
+    with application.app_context():
+        blog = database.session.query(Blog).join(Blog.user).filter(User.email == 'test@test.com').first()
+        blogId = blog.id
+
+    csrf_token = [cookie.value for cookie in authedClientWithBlogSeeded.cookie_jar if cookie.name == 'csrf_access_token'][0]
+    httpHeaders['X-CSRF-TOKEN'] = csrf_token
+
+    response = authedClientWithBlogSeeded.put(
+            '/blogs/{}'.format(blogId),
+            json={
+                'title': 'updated_title',
+                'content': 'updated_content'
+                },
+            headers=httpHeaders
+            )
+
+    assert 200 == response.status_code
+
+
+def test_b09_blogs_put_endpoint_should_allow_authed_user_to_return_updated_blog(authedClientWithBlogSeeded, database, application, httpHeaders):
+
+    blogId = None
+
+    with application.app_context():
+        blog = database.session.query(Blog).join(Blog.user).filter(User.email == 'test@test.com').first()
+        blogId = blog.id
+
+    csrf_token = [cookie.value for cookie in authedClientWithBlogSeeded.cookie_jar if cookie.name == 'csrf_access_token'][0]
+    httpHeaders['X-CSRF-TOKEN'] = csrf_token
+
+    response = authedClientWithBlogSeeded.put(
+            '/blogs/{}'.format(blogId),
+            json={
+                'title': 'updated_title',
+                'content': 'updated_content'
+                },
+            headers=httpHeaders
+            )
+
+    utils.printObject(response)
+
+    data = utils.decodeResponseByteJsonToDictionary(response.data)
+
+    assert 200 == response.status_code
+    assert 'updated_title' == data['title']
+    assert 'updated_content' == data['content']
