@@ -9,9 +9,17 @@ from Configs.app import app
 # ui04. wrong type file type error response message test (only accept image file e.g., png, jpg)
 # ui05. status code test when successfully created
 # ui06. response message includes image path as response message when successfully create
-# ui05. admin upload access test (admin can update all other upload's data)
+# ui07. admin upload access test (admin can update all other upload's data)
+
 
 # PUT /uploads/{file_name} updating image functional testing
+# ui-put01. unauthorized access test
+# ui-put02. invalid input test (no file is provided)
+# ui-put03. invalid file type test (only accept image file e.g., png, jpg)
+# ui-put04. wrong type file type error response message test (only accept image file e.g., png, jpg)
+# ui-put05. status code test when successfully created
+# ui-put06. response message includes image path as response message when successfully create
+# ui-put05. admin upload access test (admin can update all other upload's data)
 
 uploads_url = app.config['UPLOAD_ENDPOINT']
 
@@ -104,4 +112,24 @@ def test_ui06_uploads_post_endpoint_should_allow_authed_user_to_get_image_path_u
 
     data = utils.decodeResponseByteJsonToDictionary(response.data)
 
-    assert data['imageUrl'] is not False 
+    assert data['imageUrl'] is not False
+
+
+def test_ui07_uploads_post_endpoint_should_allow_admin_user_to_get_image_path_url_when_200_code(authedAdminClient, database, application, multipartHttpHeaders, testImageFile):
+
+    csrf_token = [cookie.value for cookie in authedAdminClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
+    multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
+
+    response = authedAdminClient.post(
+            uploads_url,
+            data={
+                'avatorFile': testImageFile
+                },
+            headers=multipartHttpHeaders
+            )
+
+    assert 200 == response.status_code
+
+    data = utils.decodeResponseByteJsonToDictionary(response.data)
+
+    assert data['imageUrl'] is not False
