@@ -50,9 +50,9 @@ class Blogs(Resource):
 
     # replace existing whole blogs or create whole blogs if does not exist
     # payload must be whole blogs (all properties of blog)
-    @validate_request_with(userBlogValidator)
     @jwt_required
     @requires_jwt_role_claim({'admin', 'member'})
+    @validate_request_with(userBlogValidator)
     def put(self, blog_id: str):
         app.logger.info("start processing post request at /blogs")
         print("start processing post request at /blogs")

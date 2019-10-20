@@ -43,7 +43,7 @@ def test_b04_blogs_get_endpoint_should_return_202_and_blogs_json_with_user_depen
 
 def test_b05_blogs_put_endpoint_should_return_401_code_since_unauthorized_access(client, database, application, httpHeaders):
 
-    response = client.delete('/users/1/blogs')
+    response = client.put('/blogs/1')
     assert 401 == response.status_code
 
 

@@ -25,7 +25,7 @@ JWT_REFRESH_COOKIE_PATH = '/token/refresh'
 
 # Enable csrf double submit protection. See this for a thorough
 # explanation: http://www.redotheweb.com/2015/11/09/api-security.html
-JWT_COOKIE_CSRF_PROTECT = True 
+JWT_COOKIE_CSRF_PROTECT = True
 
 # Set the secret key to sign the JWTs with
 JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'super-secret')
@@ -33,3 +33,9 @@ JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'super-secret')
 # db config
 SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/api1.db'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+# image files
+UPLOAD_FOLDER = 'uploads'
+
+# original config parameters
+UPLOAD_ENDPOINT = '/{}'.format(UPLOAD_FOLDER)

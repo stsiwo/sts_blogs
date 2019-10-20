@@ -50,9 +50,9 @@ class UserBlogs(Resource):
         return response
 
     # create new blog
-    @validate_request_with(userBlogValidator)
     @jwt_required
     @requires_jwt_role_claim({'admin', 'member'})
+    @validate_request_with(userBlogValidator)
     def post(self, user_id: str):
         app.logger.info("start processing post request at /blogs")
         print("start processing post request at /blogs")

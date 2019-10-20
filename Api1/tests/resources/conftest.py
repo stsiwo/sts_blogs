@@ -7,6 +7,8 @@ from tests.data.factories.UserFactory import UserFactory
 from Infrastructure.DataModels.BlogModel import Blog
 from Infrastructure.DataModels.RoleModel import Role
 from Infrastructure.DataModels.UserModel import User
+from io import BytesIO, StringIO
+from PIL import Image
 
 
 # fixture for test_login
@@ -185,3 +187,32 @@ def httpHeaders():
         'Accept': mimetype,
     }
     yield headers
+
+
+@pytest.fixture
+def multipartHttpHeaders():
+    mimetype = 'multipart/form-data'
+    headers = {
+        'Content-Type': mimetype,
+        'Accept': mimetype,
+    }
+    yield headers
+
+
+@pytest.fixture
+def testImageFile():
+    file = BytesIO()
+    image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
+    image.save(file, 'png')
+    file.name = 'test.png'
+    file.seek(0)
+    yield file
+
+
+@pytest.fixture
+def testNoImageFile():
+    file = BytesIO()
+    file.write('this is not image file'.encode('utf-8'))
+    file.name = 'non-image-file.js'
+    file.seek(0)
+    yield file
