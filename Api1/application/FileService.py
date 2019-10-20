@@ -18,7 +18,19 @@ class FileService(object):
         if imgFile and self._allowed_file(imgFile.filename):
             filename: str = secure_filename(imgFile.filename)
             imgDir = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            print("image path: {}".format(imgDir))
+            imgFile.save(imgDir)
+            return imgDir
+        else:
+            raise Exception("file does not selected or file type is not allowed")
+
+    def updateImageFileToDir(self, files: Dict[str, BinaryIO], fileKeyName: str, originalFileName: str) -> str:
+
+        imgFile: BinaryIO = self._checkAndExtractImageFile(files, fileKeyName)
+
+        if imgFile and self._allowed_file(imgFile.filename):
+            filename: str = secure_filename(imgFile.filename)
+            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], originalFileName))
+            imgDir = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             imgFile.save(imgDir)
             return imgDir
         else:

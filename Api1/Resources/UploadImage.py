@@ -8,6 +8,7 @@ from Resources.validators.validatorDecorator import validate_request_with
 from Resources.roleAccessDecorator import requires_jwt_role_claim
 from flask_jwt_extended import jwt_required
 import utils
+import os
 
 
 class UploadImage(Resource):
@@ -16,11 +17,6 @@ class UploadImage(Resource):
 
     def __init__(self):
         self._fileService = FileService()
-
-    def get(self, file_name: str = None):
-        response = jsonify({'upload image': 'get'})
-        response.status_code = 200
-        return response
 
     @jwt_required
     @requires_jwt_role_claim({'admin', 'member'})
@@ -36,6 +32,29 @@ class UploadImage(Resource):
                     )
 
             response = jsonify({'imageUrl': uploadedFilePath})
+            response.status_code = 200
+            return response
+
+        except Exception as e:
+            response = jsonify({'msg': str(e)})
+            response.status_code = 400
+            return response
+
+    @jwt_required
+    @requires_jwt_role_claim({'admin', 'member'})
+    @validate_request_with(userImageValidator)
+    def put(self, file_name: str):
+        app.logger.info("start processing put request at /uploadimage")
+        print("start processing put request at /uploadimage")
+
+        try:
+            updatedFilePath: str = self._fileService.updateImageFileToDir(
+                    files=request.files,
+                    fileKeyName='avatorFile',
+                    originalFileName=file_name
+                    )
+
+            response = jsonify({'imageUrl': updatedFilePath})
             response.status_code = 200
             return response
 

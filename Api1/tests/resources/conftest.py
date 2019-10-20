@@ -9,6 +9,8 @@ from Infrastructure.DataModels.RoleModel import Role
 from Infrastructure.DataModels.UserModel import User
 from io import BytesIO, StringIO
 from PIL import Image
+import os
+import shutil
 
 
 # fixture for test_login
@@ -216,3 +218,34 @@ def testNoImageFile():
     file.name = 'non-image-file.js'
     file.seek(0)
     yield file
+
+
+uploadedFilePath = 'temp/uploads'
+
+
+@pytest.fixture
+def setupTempUploadDir(application, request):
+
+    # for upload image directory
+    application.config['UPLOAD_FOLDER'] = uploadedFilePath
+    os.mkdir('temp')
+    os.mkdir('temp/uploads')
+
+    utils.printObject(os.listdir('.'))
+
+    def fin():
+        shutil.rmtree('temp')
+
+    request.addfinalizer(fin)
+    return None
+
+
+@pytest.fixture
+def setupTempUploadDirWithTestImageFile(setupTempUploadDir):
+
+    image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
+    image.save(os.path.join(uploadedFilePath, 'existing_test.png'))
+
+    utils.printObject(os.listdir(uploadedFilePath))
+
+    yield None
