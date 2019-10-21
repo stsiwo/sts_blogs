@@ -25,7 +25,6 @@ def printObject(target):
 
 
 def _printObject(target: object):
-    print(type(target))
     props = vars(target)
     prettyPrint([(key, props[key]) for key in props])
 

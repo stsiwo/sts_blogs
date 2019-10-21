@@ -2,20 +2,20 @@ from Infrastructure.DataModels.BlogModel import Blog
 from tests.data.generators.UserGenerator import generateUserModel
 from tests.data.fakers.faker import fake
 
-id = 0
 
+def generateBlogModel(
+        id=1,
+        title=fake.sentence(),
+        content=fake.sentence(),
+        userId=None,
+        user=None
+        ):
 
-def generateBlogModel():
-
-    global id
-    id += 1
-
-    user = generateUserModel()
     blog = Blog(
             id=id,
-            title=fake.sentence(),
-            content=fake.sentence(),
-            userId=user.id
+            title=title,
+            content=content,
+            userId=userId
             )
 
     blog.user = user

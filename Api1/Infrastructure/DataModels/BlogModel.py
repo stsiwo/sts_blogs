@@ -9,7 +9,7 @@ class Blog(BaseModel):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.VARCHAR, nullable=False)
-    content = db.Column(db.VARCHAR, unique=True, nullable=False)
+    content = db.Column(db.VARCHAR, nullable=False)
 
     userId = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 

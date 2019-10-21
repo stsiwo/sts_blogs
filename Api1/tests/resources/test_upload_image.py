@@ -24,13 +24,13 @@ from Configs.app import app
 uploads_url = app.config['UPLOAD_ENDPOINT']
 
 
-def test_ui_post01_upload_image_post_endpoint_should_return_401_code_since_unauthorized_access(client, database, application, httpHeaders):
+def test_ui_post01_upload_image_post_endpoint_should_return_401_code_since_unauthorized_access(client):
 
     response = client.post(uploads_url)
     assert 401 == response.status_code
 
 
-def test_ui_post02_upload_image_post_endpoint_should_allow_authed_user_to_get_400_code_since_input_is_invalid(authedClient, database, application, multipartHttpHeaders):
+def test_ui_post02_upload_image_post_endpoint_should_allow_authed_user_to_get_400_code_since_input_is_invalid(authedClient, multipartHttpHeaders):
 
     csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
     multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
@@ -45,7 +45,7 @@ def test_ui_post02_upload_image_post_endpoint_should_allow_authed_user_to_get_40
     assert 400 == response.status_code
 
 
-def test_ui_post03_upload_image_post_endpoint_should_return_400_code_since_input_is_wrong_type(authedClient, database, application, multipartHttpHeaders, testNoImageFile):
+def test_ui_post03_upload_image_post_endpoint_should_return_400_code_since_input_is_wrong_type(authedClient, multipartHttpHeaders, testNoImageFile):
 
     csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
     multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
@@ -61,7 +61,7 @@ def test_ui_post03_upload_image_post_endpoint_should_return_400_code_since_input
     assert 400 == response.status_code
 
 
-def test_ui_post04_upload_image_post_endpoint_should_return_error_msg_since_input_is_wrong_type(authedClient, database, application, multipartHttpHeaders, testNoImageFile, setupTempUploadDir):
+def test_ui_post04_upload_image_post_endpoint_should_return_error_msg_since_input_is_wrong_type(authedClient, multipartHttpHeaders, testNoImageFile, setupTempUploadDir):
 
     csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
     multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
@@ -79,7 +79,7 @@ def test_ui_post04_upload_image_post_endpoint_should_return_error_msg_since_inpu
     assert data['msg'] is not None
 
 
-def test_ui_post05_upload_image_post_endpoint_should_allow_authed_upload_to_get_200_code(authedClient, database, application, multipartHttpHeaders, testImageFile, setupTempUploadDir):
+def test_ui_post05_upload_image_post_endpoint_should_allow_authed_upload_to_get_200_code(authedClient, multipartHttpHeaders, testImageFile, setupTempUploadDir):
 
     csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
     multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
@@ -95,7 +95,7 @@ def test_ui_post05_upload_image_post_endpoint_should_allow_authed_upload_to_get_
     assert 200 == response.status_code
 
 
-def test_ui_post06_uploads_post_endpoint_should_allow_authed_user_to_get_image_path_url_when_200_code(authedClient, database, application, multipartHttpHeaders, testImageFile, setupTempUploadDir):
+def test_ui_post06_uploads_post_endpoint_should_allow_authed_user_to_get_image_path_url_when_200_code(authedClient, multipartHttpHeaders, testImageFile, setupTempUploadDir):
 
     csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
     multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
@@ -113,7 +113,7 @@ def test_ui_post06_uploads_post_endpoint_should_allow_authed_user_to_get_image_p
     assert data['imageUrl'] is not False
 
 
-def test_ui_post07_uploads_post_endpoint_should_allow_admin_user_to_get_image_path_url_when_200_code(authedAdminClient, database, application, multipartHttpHeaders, testImageFile, setupTempUploadDir):
+def test_ui_post07_uploads_post_endpoint_should_allow_admin_user_to_get_image_path_url_when_200_code(authedAdminClient, multipartHttpHeaders, testImageFile, setupTempUploadDir):
 
     csrf_token = [cookie.value for cookie in authedAdminClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
     multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
@@ -133,13 +133,13 @@ def test_ui_post07_uploads_post_endpoint_should_allow_admin_user_to_get_image_pa
     assert data['imageUrl'] is not False
 
 
-def test_ui_put01_upload_image_put_endpoint_should_return_401_code_since_unauthorized_access(client, database, application, httpHeaders):
+def test_ui_put01_upload_image_put_endpoint_should_return_401_code_since_unauthorized_access(client):
 
     response = client.put(uploads_url)
     assert 401 == response.status_code
 
 
-def test_ui_put02_upload_image_put_endpoint_should_allow_authed_user_to_get_400_code_since_input_is_invalid(authedClient, database, application, multipartHttpHeaders):
+def test_ui_put02_upload_image_put_endpoint_should_allow_authed_user_to_get_400_code_since_input_is_invalid(authedClient, multipartHttpHeaders):
 
     csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
     multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
@@ -154,7 +154,7 @@ def test_ui_put02_upload_image_put_endpoint_should_allow_authed_user_to_get_400_
     assert 400 == response.status_code
 
 
-def test_ui_put03_upload_image_put_endpoint_should_return_400_code_since_input_is_wrong_type(authedClient, database, application, multipartHttpHeaders, testNoImageFile):
+def test_ui_put03_upload_image_put_endpoint_should_return_400_code_since_input_is_wrong_type(authedClient, multipartHttpHeaders, testNoImageFile):
 
     csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
     multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
@@ -170,7 +170,7 @@ def test_ui_put03_upload_image_put_endpoint_should_return_400_code_since_input_i
     assert 400 == response.status_code
 
 
-def test_ui_put04_upload_image_put_endpoint_should_return_error_msg_since_input_is_wrong_type(authedClient, database, application, multipartHttpHeaders, testNoImageFile):
+def test_ui_put04_upload_image_put_endpoint_should_return_error_msg_since_input_is_wrong_type(authedClient, multipartHttpHeaders, testNoImageFile):
 
     csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
     multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
@@ -188,7 +188,7 @@ def test_ui_put04_upload_image_put_endpoint_should_return_error_msg_since_input_
     assert data['msg'] is not None
 
 
-def test_ui_put05_upload_image_put_endpoint_should_allow_authed_upload_to_get_200_code(authedClient, database, application, multipartHttpHeaders, testImageFile, setupTempUploadDirWithTestImageFile):
+def test_ui_put05_upload_image_put_endpoint_should_allow_authed_upload_to_get_200_code(authedClient, multipartHttpHeaders, testImageFile, setupTempUploadDirWithTestImageFile):
 
     csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
     multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
@@ -204,7 +204,7 @@ def test_ui_put05_upload_image_put_endpoint_should_allow_authed_upload_to_get_20
     assert 200 == response.status_code
 
 
-def test_ui_put06_uploads_put_endpoint_should_allow_authed_user_to_get_image_path_url_when_200_code(authedClient, database, application, multipartHttpHeaders, testImageFile, setupTempUploadDirWithTestImageFile):
+def test_ui_put06_uploads_put_endpoint_should_allow_authed_user_to_get_image_path_url_when_200_code(authedClient, multipartHttpHeaders, testImageFile, setupTempUploadDirWithTestImageFile):
 
     csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
     multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
@@ -224,7 +224,7 @@ def test_ui_put06_uploads_put_endpoint_should_allow_authed_user_to_get_image_pat
     assert data['imageUrl'] is not False
 
 
-def test_ui_put07_uploads_put_endpoint_should_allow_admin_user_to_get_image_path_url_when_200_code(authedAdminClient, database, application, multipartHttpHeaders, testImageFile, setupTempUploadDirWithTestImageFile):
+def test_ui_put07_uploads_put_endpoint_should_allow_admin_user_to_get_image_path_url_when_200_code(authedAdminClient, multipartHttpHeaders, testImageFile, setupTempUploadDirWithTestImageFile):
 
     csrf_token = [cookie.value for cookie in authedAdminClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
     multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token

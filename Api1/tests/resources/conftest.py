@@ -1,102 +1,70 @@
-from tests.data.testUserWithMemberRoleSeeder import testUserWithMemberRoleSeeder
 import pytest
 import utils
-from tests.data.factories.BlogFactory import BlogFactory
-from tests.data.factories.RoleFactory import RoleFactory
-from tests.data.factories.UserFactory import UserFactory
-from Infrastructure.DataModels.BlogModel import Blog
 from Infrastructure.DataModels.RoleModel import Role
 from Infrastructure.DataModels.UserModel import User
-from io import BytesIO, StringIO
+from io import BytesIO
 from PIL import Image
 import os
 import shutil
-
-
-# fixture for test_login
-@pytest.fixture
-def testUserWithMemberRoleFixture(database, application):
-
-    with application.app_context():
-        testUserWithMemberRoleSeeder(database)
-
-    yield None
+from tests.data.generators.UserGenerator import generateUserModel
+from tests.data.generators.BlogGenerator import generateBlogModel
 
 
 @pytest.fixture
-def blogsSeededFixture(database, application):
+def blogsSeededFixture(exSession, usersSeededFixture):
     print("setup blogsSeededFixture fixture")
 
-    with application.app_context():
-        database.session.add(BlogFactory())
-        database.session.add(BlogFactory())
-        database.session.add(BlogFactory())
+    memberUser = usersSeededFixture
 
-        blogs = database.session.query(Blog).all()
-        utils.printObject(blogs)
+    blogs = [
+            generateBlogModel(id=1, userId=memberUser.id, user=memberUser),
+            generateBlogModel(id=2, userId=memberUser.id, user=memberUser),
+            generateBlogModel(id=3, userId=memberUser.id, user=memberUser)
+            ]
 
-        database.session.commit()
+    for blog in blogs:
+        exSession.add(blog)
 
-    yield None
+    exSession.commit()
+    yield blogs
     print("teardown blogsSeededFixture fixture")
 
 
 @pytest.fixture
-def rolesSeededFixture(database, application):
-    print("setup rolesSeededFixture fixture")
-
-    with application.app_context():
-        database.session.add(RoleFactory(name='admin'))
-        database.session.add(RoleFactory(name='member'))
-
-        roles = database.session.query(Role).all()
-        utils.printObject(roles)
-
-        database.session.commit()
-
-    yield None
-    print("teardown rolesSeededFixture fixture")
-
-
-@pytest.fixture
-def usersSeededFixture(database, application):
+def usersSeededFixture(exSession):
     print("setup usersSeededFixture fixture")
 
-    with application.app_context():
-        database.session.add(UserFactory(
+    memberRole = exSession.query(Role).filter_by(name='member').first()
+    memberUser = generateUserModel(
             name='test',
             email='test@test.com',
-            password='test'
-            ))
+            password='test',
+            roles=[memberRole]
+            )
 
-        users = database.session.query(User).all()
-        utils.printObject(users)
+    exSession.add(memberUser)
 
-        database.session.commit()
+    exSession.commit()
 
-    yield None
+    yield memberUser
     print("teardown usersSeededFixture fixture")
 
 
 @pytest.fixture
-def adminUserSeededFixture(database, application):
+def adminUserSeededFixture(exSession):
     print("setup adminUserSeededFixture fixture")
 
-    with application.app_context():
-        database.session.add(
-                UserFactory(
-                    name='admin',
-                    email='admin@admin.com',
-                    password='admin',
-                    roles=[RoleFactory(name='admin')])
-                )
+    adminRole = exSession.query(Role).filter_by(name='admin').first()
+    adminUser = generateUserModel(
+        name='admin',
+        email='admin@admin.com',
+        password='admin',
+        roles=[adminRole])
 
-        users = database.session.query(User).all()
-        utils.printObject(users)
+    exSession.add(adminUser)
+    exSession.commit()
 
-        database.session.commit()
-
-    yield None
+    yield adminUser
     print("teardown adminUserSeededFixture fixture")
 
 
@@ -165,17 +133,14 @@ def authedAdminClient(client, adminUserSeededFixture):
 
 
 @pytest.fixture
-def authedClientWithBlogSeeded(application, database, authedClient):
+def authedClientWithBlogSeeded(exSession, authedClient):
     print("setup seedBlogsOfAuthedClient fixture")
 
-    authedUser = None
-
-    with application.app_context():
-        authedUser = database.session.query(User).filter_by(email='test@test.com').first()
-        database.session.add(BlogFactory(user=authedUser, userId=authedUser.id))
-        database.session.add(BlogFactory(user=authedUser, userId=authedUser.id))
-        database.session.add(BlogFactory(user=authedUser, userId=authedUser.id))
-        database.session.commit()
+    authedUser = exSession.query(User).filter_by(email='test@test.com').first()
+    exSession.add(generateBlogModel(id=1, user=authedUser, userId=authedUser.id))
+    exSession.add(generateBlogModel(id=2, user=authedUser, userId=authedUser.id))
+    exSession.add(generateBlogModel(id=3, user=authedUser, userId=authedUser.id))
+    exSession.commit()
 
     yield authedClient
     print("teardown seedBlogsOfAuthedClient fixture")
