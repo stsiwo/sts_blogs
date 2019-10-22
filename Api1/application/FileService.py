@@ -19,7 +19,8 @@ class FileService(object):
             filename: str = secure_filename(imgFile.filename)
             imgDir = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             imgFile.save(imgDir)
-            return imgDir
+            destImagePath = os.path.join('/images', filename)
+            return destImagePath
         else:
             raise Exception("file does not selected or file type is not allowed")
 
@@ -32,7 +33,8 @@ class FileService(object):
             os.remove(os.path.join(app.config['UPLOAD_FOLDER'], originalFileName))
             imgDir = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             imgFile.save(imgDir)
-            return imgDir
+            destImagePath = os.path.join('/images', filename)
+            return destImagePath
         else:
             raise Exception("file does not selected or file type is not allowed")
 

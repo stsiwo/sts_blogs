@@ -10,8 +10,7 @@ from Resources.Blogs import Blogs
 from Resources.UserBlogs import UserBlogs
 from Resources.Test import Test
 from Resources.UploadImage import UploadImage
-from Configs.app import app
-import utils
+from Resources.UploadedImage import UploadedImage
 
 
 api.add_resource(TokenRefresh, '/token/refresh')
@@ -22,4 +21,5 @@ api.add_resource(Signup, '/signup')
 api.add_resource(Login, '/login')
 api.add_resource(Blogs, '/blogs/<string:blog_id>')
 api.add_resource(UploadImage, '/uploads', '/uploads/<string:file_name>')
+api.add_resource(UploadedImage, '/images/<string:file_name>')
 api.add_resource(Test, '/test')

@@ -9,6 +9,7 @@ from Resources.roleAccessDecorator import requires_jwt_role_claim
 from flask_jwt_extended import jwt_required
 import utils
 import os
+import urllib.parse
 
 
 class UploadImage(Resource):
@@ -24,6 +25,9 @@ class UploadImage(Resource):
     def post(self):
         app.logger.info("start processing post request at /uploadimage")
         print("start processing post request at /uploadimage")
+
+        print("request object")
+        utils.printObject(request.url_root)
 
         try:
             uploadedFilePath: str = self._fileService.saveImageFileToDir(
@@ -54,7 +58,7 @@ class UploadImage(Resource):
                     originalFileName=file_name
                     )
 
-            response = jsonify({'imageUrl': updatedFilePath})
+            response = jsonify({'imageUrl': os.path.join(request.host_url, updatedFilePath)})
             response.status_code = 200
             return response
 

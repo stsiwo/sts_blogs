@@ -1,5 +1,8 @@
 import utils
 from Configs.app import app
+from pathlib import Path
+import os
+import pytest
 
 
 # POST /uploads/ creating image functional testing
@@ -10,7 +13,8 @@ from Configs.app import app
 # ui_post05. status code test when successfully created
 # ui_post06. response message includes image path as response message when successfully create
 # ui_post07. admin upload access test (admin can update all other upload's data)
-
+# NOTE: different endpoint
+# ui_get08. access to uploaded image at /images/{file_name} endpoint
 
 # PUT /uploads/{file_name} updating image functional testing
 # ui_put01. unauthorized access test
@@ -131,6 +135,41 @@ def test_ui_post07_uploads_post_endpoint_should_allow_admin_user_to_get_image_pa
     data = utils.decodeResponseByteJsonToDictionary(response.data)
 
     assert data['imageUrl'] is not False
+
+
+def test_ui_get08_uploaded_image_get_endpoint_should_allow_authed_user_access_uploaded_image(authedClient, multipartHttpHeaders, testImageFile, setupTempUploadDir):
+
+    csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
+    multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
+
+    response = authedClient.post(
+            uploads_url,
+            data={
+                'avatorFile': testImageFile
+                },
+            headers=multipartHttpHeaders
+            )
+
+    assert Path(os.path.join(app.config['UPLOAD_FOLDER'], testImageFile.name)).is_file()
+
+    data = utils.decodeResponseByteJsonToDictionary(response.data)
+
+    headers = {
+            'X-CSRF-TOKEN': csrf_token
+            }
+
+    uploadedImagePath = data['imageUrl']
+    print(uploadedImagePath)
+
+    response = authedClient.get(
+            uploadedImagePath,
+            headers=headers
+            )
+
+    # assert decode image throw exception
+    # this makes sure response data is image not error message (decodable)
+    with pytest.raises(Exception):
+        response.data.decode('utf-8')
 
 
 def test_ui_put01_upload_image_put_endpoint_should_return_401_code_since_unauthorized_access(client):
