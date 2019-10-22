@@ -53,7 +53,7 @@ def test_u03_users_put_endpoint_should_allow_authed_user_to_get_404_code_since_t
     assert 404 == response.status_code
 
 
-def test_u04_users_put_endpoint_should_allow_authed_user_to_get_200_code_without_avator_image_file(authedClient, database, application, httpHeaders):
+def test_u04_users_put_endpoint_should_allow_authed_user_to_get_200_code_without_avatar_image_file(authedClient, database, application, httpHeaders):
 
     userId = None
 

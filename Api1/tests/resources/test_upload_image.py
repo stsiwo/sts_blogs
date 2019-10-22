@@ -3,6 +3,7 @@ from Configs.app import app
 from pathlib import Path
 import os
 import pytest
+from Infrastructure.DataModels.UserModel import User
 
 
 # POST /uploads/ creating image functional testing
@@ -12,9 +13,10 @@ import pytest
 # ui_post04. wrong type file type error response message test (only accept image file e.g., png, jpg)
 # ui_post05. status code test when successfully created
 # ui_post06. response message includes image path as response message when successfully create
-# ui_post07. admin upload access test (admin can update all other upload's data)
+# ui_post07. uploaded image url is saved to db when successfully created
+# ui_post08. admin upload access test (admin can update all other upload's data)
 # NOTE: different endpoint
-# ui_get08. access to uploaded image at /images/{file_name} endpoint
+# ui_get09. access to uploaded image at /images/{file_name} endpoint
 
 # PUT /uploads/{file_name} updating image functional testing
 # ui_put01. unauthorized access test
@@ -23,7 +25,8 @@ import pytest
 # ui_put04. wrong type file type error response message test (only accept image file e.g., png, jpg)
 # ui_put05. status code test when successfully updated
 # ui_put06. response message includes image path as response message when successfully updated
-# ui_put05. admin upload access test (admin can update all other upload's data)
+# ui_put07. uploaded image url is saved to db when successfully created
+# ui_put08. admin upload access test (admin can update all other upload's data)
 
 uploads_url = app.config['UPLOAD_ENDPOINT']
 
@@ -57,7 +60,7 @@ def test_ui_post03_upload_image_post_endpoint_should_return_400_code_since_input
     response = authedClient.post(
             uploads_url,
             data={
-                'avatorFile': testNoImageFile
+                'avatarFile': testNoImageFile
                 },
             headers=multipartHttpHeaders
             )
@@ -73,7 +76,7 @@ def test_ui_post04_upload_image_post_endpoint_should_return_error_msg_since_inpu
     response = authedClient.post(
             uploads_url,
             data={
-                'avatorFile': testNoImageFile
+                'avatarFile': testNoImageFile
                 },
             headers=multipartHttpHeaders
             )
@@ -91,7 +94,7 @@ def test_ui_post05_upload_image_post_endpoint_should_allow_authed_upload_to_get_
     response = authedClient.post(
             uploads_url,
             data={
-                'avatorFile': testImageFile
+                'avatarFile': testImageFile
                 },
             headers=multipartHttpHeaders
             )
@@ -107,7 +110,7 @@ def test_ui_post06_uploads_post_endpoint_should_allow_authed_user_to_get_image_p
     response = authedClient.post(
             uploads_url,
             data={
-                'avatorFile': testImageFile
+                'avatarFile': testImageFile
                 },
             headers=multipartHttpHeaders
             )
@@ -117,7 +120,28 @@ def test_ui_post06_uploads_post_endpoint_should_allow_authed_user_to_get_image_p
     assert data['imageUrl'] is not False
 
 
-def test_ui_post07_uploads_post_endpoint_should_allow_admin_user_to_get_image_path_url_when_200_code(authedAdminClient, multipartHttpHeaders, testImageFile, setupTempUploadDir):
+def test_ui_post07_uploads_post_endpoint_should_save_uploaded_image_url_to_db_when_200_code(authedClient, multipartHttpHeaders, testImageFile, setupTempUploadDir, exSession):
+
+    csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
+    multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
+
+    response = authedClient.post(
+            uploads_url,
+            data={
+                'avatarFile': testImageFile
+                },
+            headers=multipartHttpHeaders
+            )
+
+    assert 200 == response.status_code
+
+    data = utils.decodeResponseByteJsonToDictionary(response.data)
+
+    authedUser = exSession.query(User).filter_by(email='test@test.com').first()
+    assert data['imageUrl'] == authedUser.avatarUrl
+
+
+def test_ui_post08_uploads_post_endpoint_should_allow_admin_user_to_get_image_path_url_when_200_code(authedAdminClient, multipartHttpHeaders, testImageFile, setupTempUploadDir):
 
     csrf_token = [cookie.value for cookie in authedAdminClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
     multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
@@ -125,7 +149,7 @@ def test_ui_post07_uploads_post_endpoint_should_allow_admin_user_to_get_image_pa
     response = authedAdminClient.post(
             uploads_url,
             data={
-                'avatorFile': testImageFile
+                'avatarFile': testImageFile
                 },
             headers=multipartHttpHeaders
             )
@@ -145,7 +169,7 @@ def test_ui_get08_uploaded_image_get_endpoint_should_allow_authed_user_access_up
     response = authedClient.post(
             uploads_url,
             data={
-                'avatorFile': testImageFile
+                'avatarFile': testImageFile
                 },
             headers=multipartHttpHeaders
             )
@@ -201,7 +225,7 @@ def test_ui_put03_upload_image_put_endpoint_should_return_400_code_since_input_i
     response = authedClient.put(
             uploads_url + '/existing_test.png',
             data={
-                'avatorFile': testNoImageFile
+                'avatarFile': testNoImageFile
                 },
             headers=multipartHttpHeaders
             )
@@ -217,7 +241,7 @@ def test_ui_put04_upload_image_put_endpoint_should_return_error_msg_since_input_
     response = authedClient.put(
             uploads_url + '/existing_test.png',
             data={
-                'avatorFile': testNoImageFile
+                'avatarFile': testNoImageFile
                 },
             headers=multipartHttpHeaders
             )
@@ -235,7 +259,7 @@ def test_ui_put05_upload_image_put_endpoint_should_allow_authed_upload_to_get_20
     response = authedClient.put(
             uploads_url + '/existing_test.png',
             data={
-                'avatorFile': testImageFile
+                'avatarFile': testImageFile
                 },
             headers=multipartHttpHeaders
             )
@@ -251,7 +275,7 @@ def test_ui_put06_uploads_put_endpoint_should_allow_authed_user_to_get_image_pat
     response = authedClient.put(
             uploads_url + '/existing_test.png',
             data={
-                'avatorFile': testImageFile
+                'avatarFile': testImageFile
                 },
             headers=multipartHttpHeaders
             )
@@ -263,7 +287,28 @@ def test_ui_put06_uploads_put_endpoint_should_allow_authed_user_to_get_image_pat
     assert data['imageUrl'] is not False
 
 
-def test_ui_put07_uploads_put_endpoint_should_allow_admin_user_to_get_image_path_url_when_200_code(authedAdminClient, multipartHttpHeaders, testImageFile, setupTempUploadDirWithTestImageFile):
+def test_ui_put07_uploads_put_endpoint_should_save_uploaded_image_url_to_db_when_200_code(authedClient, multipartHttpHeaders, testImageFile, setupTempUploadDirWithTestImageFile, exSession):
+
+    csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
+    multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
+
+    response = authedClient.put(
+            uploads_url + '/existing_test.png',
+            data={
+                'avatarFile': testImageFile
+                },
+            headers=multipartHttpHeaders
+            )
+
+    assert 200 == response.status_code
+
+    data = utils.decodeResponseByteJsonToDictionary(response.data)
+
+    authedUser = exSession.query(User).filter_by(email='test@test.com').first()
+    assert data['imageUrl'] == authedUser.avatarUrl
+
+
+def test_ui_put08_uploads_put_endpoint_should_allow_admin_user_to_get_image_path_url_when_200_code(authedAdminClient, multipartHttpHeaders, testImageFile, setupTempUploadDirWithTestImageFile):
 
     csrf_token = [cookie.value for cookie in authedAdminClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
     multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
@@ -271,7 +316,7 @@ def test_ui_put07_uploads_put_endpoint_should_allow_admin_user_to_get_image_path
     response = authedAdminClient.put(
             uploads_url + '/existing_test.png',
             data={
-                'avatorFile': testImageFile
+                'avatarFile': testImageFile
                 },
             headers=multipartHttpHeaders
             )

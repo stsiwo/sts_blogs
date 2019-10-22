@@ -27,7 +27,7 @@ class UserService(object):
         # to avoid any confict concurrency request
         targetUser = db.session.query(User).get(userId)
 
-        imgFile = self._fileService.checkAndExtractImageFile(files, 'avatorFile')
+        imgFile = self._fileService.checkAndExtractImageFile(files, 'avatarFile')
 
         if imgFile is not None:
             app.logger.info("image file is uploaded and start processing the image")

@@ -1,23 +1,22 @@
 from flask_restful import Resource
-from typing import Dict, List
 from Resources.validators.userImageValidator import userImageValidator
 from flask import jsonify, request
-from application.FileService import FileService
 from Configs.app import app
 from Resources.validators.validatorDecorator import validate_request_with
 from Resources.roleAccessDecorator import requires_jwt_role_claim
 from flask_jwt_extended import jwt_required
 import utils
 import os
-import urllib.parse
+from application.UploadImageService import UploadImageService
+from flask_jwt_extended import get_jwt_identity
 
 
 class UploadImage(Resource):
 
-    _fileService: FileService
+    _uploadImageService: UploadImageService
 
     def __init__(self):
-        self._fileService = FileService()
+        self._uploadImageService = UploadImageService()
 
     @jwt_required
     @requires_jwt_role_claim({'admin', 'member'})
@@ -26,13 +25,11 @@ class UploadImage(Resource):
         app.logger.info("start processing post request at /uploadimage")
         print("start processing post request at /uploadimage")
 
-        print("request object")
-        utils.printObject(request.url_root)
-
         try:
-            uploadedFilePath: str = self._fileService.saveImageFileToDir(
+            uploadedFilePath: str = self._uploadImageService.saveUploadImageService(
                     files=request.files,
-                    fileKeyName='avatorFile'
+                    fileKeyName='avatarFile',
+                    userId=get_jwt_identity()['id']
                     )
 
             response = jsonify({'imageUrl': uploadedFilePath})
@@ -52,10 +49,11 @@ class UploadImage(Resource):
         print("start processing put request at /uploadimage")
 
         try:
-            updatedFilePath: str = self._fileService.updateImageFileToDir(
+            updatedFilePath: str = self._uploadImageService.updateUploadImageService(
                     files=request.files,
-                    fileKeyName='avatorFile',
-                    originalFileName=file_name
+                    fileKeyName='avatarFile',
+                    originalFileName=file_name,
+                    userId=get_jwt_identity()['id']
                     )
 
             response = jsonify({'imageUrl': os.path.join(request.host_url, updatedFilePath)})
