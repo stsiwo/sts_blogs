@@ -1,0 +1,3 @@
+
+class EmailServiceException(Exception):
+    pass

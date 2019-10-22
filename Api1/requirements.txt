@@ -2,7 +2,10 @@ alembic==1.2.1
 aniso8601==8.0.0
 atomicwrites==1.3.0
 attrs==19.2.0
+cffi==1.13.1
 Click==7.0
+cryptography==2.8
+entrypoints==0.3
 factory-boy==2.12.0
 Faker==2.0.2
 Flask==1.1.1
@@ -13,7 +16,9 @@ Flask-RESTful==0.3.7
 Flask-SQLAlchemy==2.4.1
 importlib-metadata==0.23
 itsdangerous==1.1.0
+jeepney==0.4.1
 Jinja2==2.10.3
+keyring==19.2.0
 Mako==1.1.0
 MarkupSafe==1.1.1
 marshmallow==3.2.1
@@ -24,6 +29,7 @@ passlib==1.7.1
 Pillow==6.2.0
 pluggy==0.13.0
 py==1.8.0
+pycparser==2.19
 PyJWT==1.7.1
 pyparsing==2.4.2
 pytest==5.2.1
@@ -31,9 +37,11 @@ python-dateutil==2.8.0
 python-dotenv==0.10.3
 python-editor==1.0.4
 pytz==2019.3
+SecretStorage==3.1.1
 six==1.12.0
 SQLAlchemy==1.3.9
 text-unidecode==1.3
 wcwidth==0.1.7
 Werkzeug==0.16.0
+yagmail==0.11.220
 zipp==0.6.0

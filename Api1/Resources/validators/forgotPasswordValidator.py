@@ -1,10 +1,8 @@
 from flask_restful import reqparse
-from Resources.validators.base.arguments.emailArg import addEmailArg
 from Resources.validators.base.arguments.passwordArg import addPasswordArg
 
 
-def userLoginParser():
+def forgotPasswordValidator():
     parser = reqparse.RequestParser(bundle_errors=True)
-    addEmailArg(parser)
     addPasswordArg(parser)
-    return parser
+    args = parser.parse_args(strict=True)

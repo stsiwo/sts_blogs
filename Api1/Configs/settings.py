@@ -39,3 +39,13 @@ UPLOAD_FOLDER = 'uploads'
 
 # original config parameters
 UPLOAD_ENDPOINT = '/{}'.format(UPLOAD_FOLDER)
+
+# itsdangrous
+SIGNER_SECRET_KEY = os.getenv('SIGNER_SECRET_KEY')
+# 30 min
+FORGOT_PASSWORD_TOKEN_EXPIRY = 1800
+
+
+# yagmail
+MYGMAIL_USERNAME = os.getenv('MYGMAIL_USERNAME')
+MYGMAIL_PASSWORD = os.getenv('MYGMAIL_PASSWORD')

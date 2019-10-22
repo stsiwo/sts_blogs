@@ -10,6 +10,8 @@ def configureApp(config_object="Configs.settings"):
     # config
     app.config.from_object(config_object)
 
+    # ygmail config (register and connection)
+    import Configs.ygmailConfig
     # import all model class of DataModels directory
     # spec says "import *" is anti-pattern but other developers does
     # not need to know all modules under DataModels.

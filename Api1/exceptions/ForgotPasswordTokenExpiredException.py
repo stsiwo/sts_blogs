@@ -1,0 +1,3 @@
+
+class ForgotPasswordTokenExpiredException(Exception):
+    pass

@@ -1,0 +1,4 @@
+
+
+class EmailAddressNotFoundException(Exception):
+    pass

@@ -35,3 +35,5 @@ def decodeResponseByteJsonToDictionary(target: bytes):
 
 def _isPrimitive(obj):
     return not hasattr(obj, '__dict__')
+
+
