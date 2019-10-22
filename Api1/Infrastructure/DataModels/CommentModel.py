@@ -8,7 +8,7 @@ class Comment(BaseModel):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.VARCHAR, nullable=False)
-    content = db.Column(db.VARCHAR, unique=True, nullable=False)
+    content = db.Column(db.VARCHAR, nullable=False)
 
     blogId = db.Column(db.Integer, db.ForeignKey('blogs.id'), nullable=False)
 

@@ -8,6 +8,27 @@ import os
 import shutil
 from tests.data.generators.UserGenerator import generateUserModel
 from tests.data.generators.BlogGenerator import generateBlogModel
+from tests.data.generators.CommentGenerator import generateCommentModel
+
+
+@pytest.fixture
+def blogCommentsSeededFixture(exSession, blogsSeededFixture):
+    print("setup blogCommentsSeededFixture fixture")
+
+    blog = blogsSeededFixture[0]
+
+    comments = [
+            generateCommentModel(id=1, blogId=blog.id),
+            generateCommentModel(id=2, blogId=blog.id),
+            generateCommentModel(id=3, blogId=blog.id),
+            ]
+
+    for comment in comments:
+        exSession.add(comment)
+
+    exSession.commit()
+    yield comments
+    print("teardown blogCommentsSeededFixture fixture")
 
 
 @pytest.fixture
@@ -36,6 +57,7 @@ def usersSeededFixture(exSession):
 
     memberRole = exSession.query(Role).filter_by(name='member').first()
     memberUser = generateUserModel(
+            id=2,
             name='test',
             email='test@test.com',
             password='test',
@@ -56,6 +78,7 @@ def adminUserSeededFixture(exSession):
 
     adminRole = exSession.query(Role).filter_by(name='admin').first()
     adminUser = generateUserModel(
+        id=1,
         name='admin',
         email='admin@admin.com',
         password='admin',
