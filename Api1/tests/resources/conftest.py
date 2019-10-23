@@ -11,6 +11,9 @@ from tests.data.generators.BlogGenerator import generateBlogModel
 from tests.data.generators.CommentGenerator import generateCommentModel
 from exceptions.EmailServiceException import EmailServiceException
 from Configs.ygmailConfig import yag
+from Configs.app import app
+from utils.forgotPasswordToken import generateForgotPasswordToken
+from Configs.settings import FORGOT_PASSWORD_TOKEN_EXPIRY
 
 
 @pytest.fixture
@@ -248,6 +251,14 @@ def patchedYgmailSendFunc(mocker):
 
 
 @pytest.fixture
-def patchedYgmailSendFuncWithThrowException(mocker):
-    mocked_yag_send = mocker.patch.object(yag, 'send', side_effect=EmailServiceException())
-    yield mocked_yag_send
+def expiredTokenGenerator():
+    # use negative number for testing expiry
+    # don't use '0' without time.sleep, itsdangerous does not recognize it
+    app.config['FORGOT_PASSWORD_TOKEN_EXPIRY'] = -1
+
+    def generateToken(userId: str):
+        return generateForgotPasswordToken(userId)
+
+    yield generateToken
+
+    app.config['FORGOT_PASSWORD_TOKEN_EXPIRY'] = FORGOT_PASSWORD_TOKEN_EXPIRY

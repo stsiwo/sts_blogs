@@ -1,11 +1,12 @@
 from Configs.app import app
 from exceptions.EmailAddressNotFoundException import EmailAddressNotFoundException
 from exceptions.ForgotPasswordTokenExpiredException import ForgotPasswordTokenExpiredException
-from utils.forgotPasswordToken import signer
+from utils.forgotPasswordToken import generateForgotPasswordToken, decodeForgotPasswordToken
 from Infrastructure.DataModels.UserModel import User
 from Configs.extensions import db
 from application.EmailService import EmailService
 from Infrastructure.transactionDecorator import db_transaction
+from itsdangerous import BadSignature, SignatureExpired
 
 
 class PasswordResetService(object):
@@ -24,7 +25,7 @@ class PasswordResetService(object):
         if user is None:
             raise EmailAddressNotFoundException()
         else:
-            token = signer.dumps(user.id)
+            token = generateForgotPasswordToken(user.id)
 
             self._emailService.sendForgotPasswordEmail(
                 to=user.email,
@@ -37,9 +38,13 @@ class PasswordResetService(object):
         print("start resetPasswordService service")
 
         try:
-            userId = signer.loads(token, max_age=app.config['FORGOT_PASSWORD_TOKEN_EXPIRY'])
-        except Exception:
-            raise ForgotPasswordTokenExpiredException()
+            userId = decodeForgotPasswordToken(token)
+        except SignatureExpired as e:
+            print("SignatureExpired is called")
+            raise e
+        except BadSignature as e:
+            print("BadSignature is called")
+            raise e
         else:
             user = db.session.query(User).get(userId)
             user.password = newPassword
