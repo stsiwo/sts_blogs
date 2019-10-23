@@ -44,7 +44,7 @@ def test_fp_post03_forgot_password_post_endpoint_should_return_500_code_since_in
     patchedYgmailSendFuncWithThrowException.assert_called
 
 
-def test_fp_post04_forgot_password_post_endpoint_should_return_202_code_since_internal_email_service_exception_is_thrown(client, httpHeaders, patchedYgmailSendFunc, usersSeededFixture, exSession):
+def test_fp_post04_forgot_password_post_endpoint_should_return_202_code_for_successfully_email_was_sent(client, httpHeaders, patchedYgmailSendFunc, usersSeededFixture, exSession):
 
     userEmail = exSession.query(User).get(2).email
 
@@ -56,5 +56,4 @@ def test_fp_post04_forgot_password_post_endpoint_should_return_202_code_since_in
             headers=httpHeaders)
 
     assert response.status_code == 202
-    printObject(patchedYgmailSendFunc)
     assert patchedYgmailSendFunc.assert_called

@@ -45,6 +45,8 @@ SIGNER_SECRET_KEY = os.getenv('SIGNER_SECRET_KEY')
 # 30 min
 FORGOT_PASSWORD_TOKEN_EXPIRY = 1800
 
+# client spa url
+CLIENT_SPA_URL = 'http://spa.com'
 
 # yagmail
 MYGMAIL_USERNAME = os.getenv('MYGMAIL_USERNAME')

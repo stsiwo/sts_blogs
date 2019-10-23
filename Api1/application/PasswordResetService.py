@@ -28,7 +28,7 @@ class PasswordResetService(object):
 
             self._emailService.sendForgotPasswordEmail(
                 to=user.email,
-                link='/spa/password-reset?token={}'.format(token)
+                token=token
                 )
 
     @db_transaction()
