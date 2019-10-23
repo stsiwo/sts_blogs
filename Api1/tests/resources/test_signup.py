@@ -1,6 +1,6 @@
 from flask import Response
 import json
-import utils
+from utils.util import prettyPrint
 from Infrastructure.DataModels.UserModel import User
 from flask_jwt_extended import decode_token
 
@@ -102,7 +102,7 @@ def test_s07_user_signuped_successfully_and_token_include_role_claim(
     access_token = [cookie[1].replace(";", "=").split("=")[1] for cookie in rv.headers if (cookie[0] == 'Set-Cookie' and 'access_token' in cookie[1])]
     user_claims = None
     with application.app_context():
-        utils.prettyPrint(decode_token(access_token[0]))
+        prettyPrint(decode_token(access_token[0]))
         user_claims = decode_token(access_token[0])['user_claims']
 
     assert 200 == rv.status_code

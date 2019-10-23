@@ -1,5 +1,5 @@
 import pytest
-import utils
+from utils.util import printObject
 from Infrastructure.DataModels.RoleModel import Role
 from Infrastructure.DataModels.UserModel import User
 from io import BytesIO
@@ -9,6 +9,8 @@ import shutil
 from tests.data.generators.UserGenerator import generateUserModel
 from tests.data.generators.BlogGenerator import generateBlogModel
 from tests.data.generators.CommentGenerator import generateCommentModel
+from exceptions.EmailServiceException import EmailServiceException
+from Configs.ygmailConfig import yag
 
 
 @pytest.fixture
@@ -111,7 +113,7 @@ def authedClient(client, usersSeededFixture):
             token = header[1].replace(";", "=").split("=")
             tokenDict[token[0]] = token[1]
 
-    utils.printObject(tokenDict)
+    printObject(tokenDict)
 
     # IMPORTANT NOTE
     # content should just access_token itself. DO NOT include any other info such as path, httpOnly
@@ -143,7 +145,7 @@ def authedAdminClient(client, adminUserSeededFixture):
             token = header[1].replace(";", "=").split("=")
             tokenDict[token[0]] = token[1]
 
-    utils.printObject(tokenDict)
+    printObject(tokenDict)
 
     # IMPORTANT NOTE
     # content should just access_token itself. DO NOT include any other info such as path, httpOnly
@@ -219,7 +221,7 @@ def setupTempUploadDir(application, request):
     os.mkdir('temp')
     os.mkdir('temp/uploads')
 
-    utils.printObject(os.listdir('.'))
+    printObject(os.listdir('.'))
 
     def fin():
         shutil.rmtree('temp')
@@ -234,6 +236,18 @@ def setupTempUploadDirWithTestImageFile(setupTempUploadDir):
     image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
     image.save(os.path.join(uploadedFilePath, 'existing_test.png'))
 
-    utils.printObject(os.listdir(uploadedFilePath))
+    printObject(os.listdir(uploadedFilePath))
 
     yield None
+
+
+@pytest.fixture
+def patchedYgmailSendFunc(mocker):
+    mocked_yag_send = mocker.patch.object(yag, 'send')
+    yield mocked_yag_send
+
+
+@pytest.fixture
+def patchedYgmailSendFuncWithThrowException(mocker):
+    mocked_yag_send = mocker.patch.object(yag, 'send', side_effect=EmailServiceException())
+    yield mocked_yag_send

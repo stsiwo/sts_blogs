@@ -5,7 +5,7 @@ from typing import Dict, List, BinaryIO
 from Resources.viewModels.UserSchema import UserSchema
 from Infrastructure.transactionDecorator import db_transaction
 from application.FileService import FileService
-import utils
+from utils.util import printObject
 
 
 class UserService(object):
@@ -43,7 +43,7 @@ class UserService(object):
         targetUser = self._userSchema.dump(targetUser)
 
         print("target user (view model)")
-        utils.printObject(targetUser)
+        printObject(targetUser)
 
         return targetUser
 

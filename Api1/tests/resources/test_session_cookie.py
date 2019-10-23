@@ -1,6 +1,6 @@
 from flask import Response
 from Infrastructure.DataModels.UserModel import User
-import utils
+from utils.util import printObject
 
 
 def test_session_cookie(application, database, rolesSeededFixture, blogsSeededFixture, authedClient):
@@ -13,6 +13,6 @@ def test_session_cookie(application, database, rolesSeededFixture, blogsSeededFi
 
     response = authedClient.get('/users/' + str(userId) + '/blogs')
 
-    utils.printObject(response.data)
+    printObject(response.data)
 
     assert response.status_code == 200

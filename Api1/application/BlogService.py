@@ -4,7 +4,6 @@ from Configs.extensions import db
 from typing import Dict, List
 from Resources.viewModels.BlogSchema import BlogSchema
 from Infrastructure.transactionDecorator import db_transaction
-import utils
 
 
 class BlogService(object):

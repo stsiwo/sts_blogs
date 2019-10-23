@@ -3,7 +3,6 @@ from flask_jwt_extended import (
     get_jwt_claims
 )
 from flask import Response, jsonify
-import utils
 from typing import Set
 
 

@@ -7,7 +7,6 @@ from application.UserBlogService import UserBlogService
 from typing import Dict, List
 from Resources.roleAccessDecorator import requires_jwt_role_claim
 from flask_jwt_extended import jwt_required
-import utils
 from Resources.validators.validatorDecorator import validate_request_with
 from Resources.validators.userBlogValidator import userBlogValidator
 from Infrastructure.DataModels.BlogModel import Blog

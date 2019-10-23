@@ -5,7 +5,7 @@ from Configs.appConfig import main
 from Configs.extensions import db
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
-import utils
+from utils.util import printObject
 from tests.data.generators.RoleGenerator import generateRoleModel
 from Infrastructure.DataModels.RoleModel import Role
 
@@ -66,7 +66,7 @@ def rolesSeededFixture(database, application):
     database.session.commit()
 
     roles = database.session.query(Role).all()
-    utils.printObject(roles)
+    printObject(roles)
 
     yield None
     print("teardown rolesSeededFixture fixture")

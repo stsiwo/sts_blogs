@@ -5,7 +5,6 @@ from Configs.app import app
 from Resources.validators.validatorDecorator import validate_request_with
 from Resources.roleAccessDecorator import requires_jwt_role_claim
 from flask_jwt_extended import jwt_required
-import utils
 import os
 from application.UploadImageService import UploadImageService
 from flask_jwt_extended import get_jwt_identity

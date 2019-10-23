@@ -1,4 +1,4 @@
-import utils
+from utils.util import prettyPrint
 
 
 def test_token_auth_endpoint(client):
@@ -15,7 +15,7 @@ def test_token_auth_endpoint(client):
         'password': 'test'
         }, headers=headers)
 
-    utils.prettyPrint(rv.status_code)
+    prettyPrint(rv.status_code)
     assert 200 == rv.status_code
 
 
@@ -40,7 +40,7 @@ def test_token_refresh_endpoint(client):
 
     rv = client.post('/token/refresh', 'http://localhost')
 
-    utils.prettyPrint(rv.status_code)
+    prettyPrint(rv.status_code)
     assert 200 == rv.status_code
 
 
@@ -65,5 +65,5 @@ def test_token_remove_endpoint(client):
 
     rv = client.post('/token/remove', 'http://localhost')
 
-    utils.prettyPrint(rv.status_code)
+    prettyPrint(rv.status_code)
     assert 200 == rv.status_code

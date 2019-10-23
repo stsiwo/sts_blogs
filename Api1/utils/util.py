@@ -12,7 +12,6 @@ def printObject(target):
 
     print(type(target))
 
-    # if target is primitive (str, int, ...)
     if _isPrimitive(target):
         print(target)
 
@@ -26,7 +25,6 @@ def printObject(target):
 
 
 def _printObject(target: object):
-    print(type(target))
     props = vars(target)
     prettyPrint([(key, props[key]) for key in props])
 

@@ -1,4 +1,4 @@
-import utils
+from utils.util import decodeResponseByteJsonToDictionary
 from Configs.app import app
 from pathlib import Path
 import os
@@ -81,7 +81,7 @@ def test_ui_post04_upload_image_post_endpoint_should_return_error_msg_since_inpu
             headers=multipartHttpHeaders
             )
 
-    data = utils.decodeResponseByteJsonToDictionary(response.data)
+    data = decodeResponseByteJsonToDictionary(response.data)
 
     assert data['msg'] is not None
 
@@ -115,7 +115,7 @@ def test_ui_post06_uploads_post_endpoint_should_allow_authed_user_to_get_image_p
             headers=multipartHttpHeaders
             )
 
-    data = utils.decodeResponseByteJsonToDictionary(response.data)
+    data = decodeResponseByteJsonToDictionary(response.data)
 
     assert data['imageUrl'] is not False
 
@@ -135,7 +135,7 @@ def test_ui_post07_uploads_post_endpoint_should_save_uploaded_image_url_to_db_wh
 
     assert 200 == response.status_code
 
-    data = utils.decodeResponseByteJsonToDictionary(response.data)
+    data = decodeResponseByteJsonToDictionary(response.data)
 
     authedUser = exSession.query(User).filter_by(email='test@test.com').first()
     assert data['imageUrl'] == authedUser.avatarUrl
@@ -156,7 +156,7 @@ def test_ui_post08_uploads_post_endpoint_should_allow_admin_user_to_get_image_pa
 
     assert 200 == response.status_code
 
-    data = utils.decodeResponseByteJsonToDictionary(response.data)
+    data = decodeResponseByteJsonToDictionary(response.data)
 
     assert data['imageUrl'] is not False
 
@@ -176,7 +176,7 @@ def test_ui_get08_uploaded_image_get_endpoint_should_allow_authed_user_access_up
 
     assert Path(os.path.join(app.config['UPLOAD_FOLDER'], testImageFile.name)).is_file()
 
-    data = utils.decodeResponseByteJsonToDictionary(response.data)
+    data = decodeResponseByteJsonToDictionary(response.data)
 
     headers = {
             'X-CSRF-TOKEN': csrf_token
@@ -246,7 +246,7 @@ def test_ui_put04_upload_image_put_endpoint_should_return_error_msg_since_input_
             headers=multipartHttpHeaders
             )
 
-    data = utils.decodeResponseByteJsonToDictionary(response.data)
+    data = decodeResponseByteJsonToDictionary(response.data)
 
     assert data['msg'] is not None
 
@@ -282,7 +282,7 @@ def test_ui_put06_uploads_put_endpoint_should_allow_authed_user_to_get_image_pat
 
     assert 200 == response.status_code
 
-    data = utils.decodeResponseByteJsonToDictionary(response.data)
+    data = decodeResponseByteJsonToDictionary(response.data)
 
     assert data['imageUrl'] is not False
 
@@ -302,7 +302,7 @@ def test_ui_put07_uploads_put_endpoint_should_save_uploaded_image_url_to_db_when
 
     assert 200 == response.status_code
 
-    data = utils.decodeResponseByteJsonToDictionary(response.data)
+    data = decodeResponseByteJsonToDictionary(response.data)
 
     authedUser = exSession.query(User).filter_by(email='test@test.com').first()
     assert data['imageUrl'] == authedUser.avatarUrl
@@ -323,6 +323,6 @@ def test_ui_put08_uploads_put_endpoint_should_allow_admin_user_to_get_image_path
 
     assert 200 == response.status_code
 
-    data = utils.decodeResponseByteJsonToDictionary(response.data)
+    data = decodeResponseByteJsonToDictionary(response.data)
 
     assert data['imageUrl'] is not False

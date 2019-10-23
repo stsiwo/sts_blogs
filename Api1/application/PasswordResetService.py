@@ -24,7 +24,7 @@ class PasswordResetService(object):
         if user is None:
             raise EmailAddressNotFoundException()
         else:
-            token = signer.sign(user.id)
+            token = signer.dumps(user.id)
 
             self._emailService.sendForgotPasswordEmail(
                 to=user.email,
@@ -37,7 +37,7 @@ class PasswordResetService(object):
         print("start resetPasswordService service")
 
         try:
-            userId = signer.unsign(token, max_age=app.config['FORGOT_PASSWORD_TOKEN_EXPIRY'])
+            userId = signer.loads(token, max_age=app.config['FORGOT_PASSWORD_TOKEN_EXPIRY'])
         except Exception:
             raise ForgotPasswordTokenExpiredException()
         else:

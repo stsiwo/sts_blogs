@@ -1,4 +1,4 @@
-import utils
+from .import printObject, decodeResponseByteJsonToDictionary
 from Infrastructure.DataModels.UserModel import User
 
 
@@ -97,9 +97,9 @@ def test_u05_users_put_endpoint_should_allow_authed_user_to_return_updated_user(
             headers=httpHeaders
             )
 
-    utils.printObject(response)
+    printObject(response)
 
-    data = utils.decodeResponseByteJsonToDictionary(response.data)
+    data = decodeResponseByteJsonToDictionary(response.data)
 
     assert 200 == response.status_code
     assert 'updated_title' == data['title']

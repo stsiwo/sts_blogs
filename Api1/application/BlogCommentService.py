@@ -4,7 +4,6 @@ from typing import Dict, List
 from Resources.viewModels.CommentSchema import CommentSchema
 from Infrastructure.transactionDecorator import db_transaction
 from Infrastructure.DataModels.CommentModel import Comment
-import utils
 
 
 class BlogCommentService(object):

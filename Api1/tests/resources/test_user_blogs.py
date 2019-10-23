@@ -1,4 +1,4 @@
-import utils
+from utils.util import decodeResponseByteJsonToDictionary
 from Infrastructure.DataModels.UserModel import User
 from Infrastructure.DataModels.RoleModel import Role
 from Infrastructure.DataModels.BlogModel import Blog
@@ -55,7 +55,7 @@ def test_ub05_blogs_get_endpoint_should_allow_the_user_to_access_its_own_blogs(a
     response = authedClient.get('/users/' + str(userId) + '/blogs')
     assert 200 == response.status_code
 
-    data = utils.decodeResponseByteJsonToDictionary(response.data)
+    data = decodeResponseByteJsonToDictionary(response.data)
 
     assert data is not None
 
@@ -74,7 +74,7 @@ def test_ub06_blogs_get_endpoint_should_return_202_and_blogs_json_with_user_depe
     response = authedClient.get('/users/' + str(userId) + '/blogs')
     assert 200 == response.status_code
 
-    data = utils.decodeResponseByteJsonToDictionary(response.data)
+    data = decodeResponseByteJsonToDictionary(response.data)
 
     assert data is not None
 
@@ -137,7 +137,7 @@ def test_ub09_blogs_post_endpoint_should_allow_authed_user_to_create_its_new_blo
             headers=httpHeaders
             )
 
-    data = utils.decodeResponseByteJsonToDictionary(response.data)
+    data = decodeResponseByteJsonToDictionary(response.data)
 
     assert data['id'] is not None
 
@@ -162,7 +162,7 @@ def test_ub10_blogs_post_endpoint_should_return_location_header_to_new_blog(auth
             headers=httpHeaders
             )
 
-    data = utils.decodeResponseByteJsonToDictionary(response.data)
+    data = decodeResponseByteJsonToDictionary(response.data)
 
     assert response.headers['location'] == 'http://localhost/blogs/{}'.format(data['id'])
 
@@ -210,7 +210,7 @@ def test_ub12_blogs_post_endpoint_should_allow_authed_user_to_create_its_new_blo
             headers=httpHeaders
             )
 
-    data = utils.decodeResponseByteJsonToDictionary(response.data)
+    data = decodeResponseByteJsonToDictionary(response.data)
 
     assert data['id'] is not None
 
@@ -235,7 +235,7 @@ def test_ub13_blogs_post_endpoint_should_return_location_header_to_new_blog(auth
             headers=httpHeaders
             )
 
-    data = utils.decodeResponseByteJsonToDictionary(response.data)
+    data = decodeResponseByteJsonToDictionary(response.data)
 
     assert response.headers['location'] == 'http://localhost/blogs/{}'.format(data['id'])
 

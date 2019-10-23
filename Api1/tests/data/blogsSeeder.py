@@ -3,7 +3,7 @@ from tests.data.factories.BlogFactory import BlogFactory
 from Infrastructure.DataModels.BlogModel import Blog
 from Infrastructure.DataModels.UserModel import User
 from Infrastructure.DataModels.RoleModel import Role
-import utils
+from .import printObject
 
 
 def blogsSeed(db: SQLAlchemy):
@@ -15,10 +15,10 @@ def blogsSeed(db: SQLAlchemy):
             ])
 
     blogs = db.session.query(Blog).all()
-    utils.printObject(blogs)
+    printObject(blogs)
 
     users = db.session.query(User).all()
-    utils.printObject(users)
+    printObject(users)
 
     roles = db.session.query(Role).all()
-    utils.printObject(roles)
+    printObject(roles)

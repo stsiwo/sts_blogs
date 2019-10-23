@@ -1,4 +1,4 @@
-import utils
+from utils.util import printObject, decodeResponseByteJsonToDictionary
 from Infrastructure.DataModels.UserModel import User
 from Infrastructure.DataModels.BlogModel import Blog
 
@@ -20,7 +20,7 @@ def test_b03_blogs_get_endpoint_should_return_202_and_blogs_json(client, blogsSe
     response = client.get('/blogs')
     assert 200 == response.status_code
 
-    data = utils.decodeResponseByteJsonToDictionary(response.data)
+    data = decodeResponseByteJsonToDictionary(response.data)
 
     assert data is not None
 
@@ -33,7 +33,7 @@ def test_b04_blogs_get_endpoint_should_return_202_and_blogs_json_with_user_depen
     response = client.get('/blogs')
     assert 200 == response.status_code
 
-    data = utils.decodeResponseByteJsonToDictionary(response.data)
+    data = decodeResponseByteJsonToDictionary(response.data)
 
     assert data is not None
 
@@ -123,9 +123,9 @@ def test_b09_blogs_put_endpoint_should_allow_authed_user_to_return_updated_blog(
             headers=httpHeaders
             )
 
-    utils.printObject(response)
+    printObject(response)
 
-    data = utils.decodeResponseByteJsonToDictionary(response.data)
+    data = decodeResponseByteJsonToDictionary(response.data)
 
     assert 200 == response.status_code
     assert 'updated_title' == data['title']

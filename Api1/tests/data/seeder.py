@@ -1,6 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
 from Infrastructure.DataModels.RoleModel import Role
-import utils
 
 
 def seed(db: SQLAlchemy):

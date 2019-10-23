@@ -1,4 +1,4 @@
-import utils
+from utils.util import decodeResponseByteJsonToDictionary
 from Infrastructure.DataModels.UserModel import User
 from Infrastructure.DataModels.RoleModel import Role
 from Infrastructure.DataModels.BlogModel import Blog
@@ -8,6 +8,7 @@ import pytest
 # bc_get01: 404 status code since no comments for the blog
 # bc_get02: 200 status code
 # bc_get03: response data contains list of comments for the blog
+
 
 @pytest.mark.blog_comment_get
 def test_bc_get01_blog_comment_get_endpoint_should_return_404_since_no_blogs_data(client):
@@ -32,7 +33,7 @@ def test_bc_get03_blog_comment_get_endpoint_should_return_list_of_comments_for_t
 
     response = client.get('/blogs/' + str(blog.id) + '/comments')
 
-    data = utils.decodeResponseByteJsonToDictionary(response.data)
+    data = decodeResponseByteJsonToDictionary(response.data)
 
     assert data is not None
 
@@ -88,7 +89,7 @@ def test_bc_post03_blog_comment_post_endpoint_should_return_newly_created_commen
                 },
             headers=httpHeaders)
 
-    data = utils.decodeResponseByteJsonToDictionary(response.data)
+    data = decodeResponseByteJsonToDictionary(response.data)
 
     assert data['id'] is not None
 

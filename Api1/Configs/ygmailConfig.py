@@ -1,5 +1,5 @@
 import yagmail
-from Config.app import app
+from Configs.app import app
 
 # yagmail register
 yagmail.register(app.config['MYGMAIL_USERNAME'], app.config['MYGMAIL_PASSWORD'])

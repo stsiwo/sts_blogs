@@ -1,4 +1,4 @@
-import utils
+from .import printObject
 from Infrastructure.DataModels.BlogModel import Blog
 from Infrastructure.DataModels.UserModel import User
 from Infrastructure.DataModels.TagModel import Tag
@@ -26,10 +26,10 @@ def test_user_can_create_blog(userRolePopulatedSession):
 def test_user_can_create_blog_with_tags(userRoleTagPopulatedSession):
 
     user = userRoleTagPopulatedSession.query(User).first()
-    utils.printObject(user)
+    printObject(user)
 
     tags = userRoleTagPopulatedSession.query(Tag).all()
-    [utils.printObject(tag) for tag in tags]
+    [printObject(tag) for tag in tags]
 
     blog = Blog(
             title='test title',
