@@ -36,26 +36,6 @@ def blogCommentsSeededFixture(exSession, blogsSeededFixture):
 
 
 @pytest.fixture
-def blogsSeededFixture(exSession, usersSeededFixture):
-    print("setup blogsSeededFixture fixture")
-
-    memberUser = usersSeededFixture
-
-    blogs = [
-            generateBlogModel(id=1, userId=memberUser.id, user=memberUser),
-            generateBlogModel(id=2, userId=memberUser.id, user=memberUser),
-            generateBlogModel(id=3, userId=memberUser.id, user=memberUser)
-            ]
-
-    for blog in blogs:
-        exSession.add(blog)
-
-    exSession.commit()
-    yield blogs
-    print("teardown blogsSeededFixture fixture")
-
-
-@pytest.fixture
 def adminUserSeededFixture(exSession):
     print("setup adminUserSeededFixture fixture")
 

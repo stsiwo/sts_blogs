@@ -10,6 +10,7 @@ from tests.data.generators.RoleGenerator import generateRoleModel
 from Infrastructure.DataModels.RoleModel import Role
 from Infrastructure.DataModels.TagModel import Tag
 from tests.data.generators.UserGenerator import generateUserModel
+from tests.data.generators.BlogGenerator import generateBlogModel
 
 app = main
 
@@ -162,6 +163,26 @@ def usersSeededFixture(exSession):
 
     yield memberUser
     print("teardown usersSeededFixture fixture")
+
+
+@pytest.fixture
+def blogsSeededFixture(exSession, usersSeededFixture):
+    print("setup blogsSeededFixture fixture")
+
+    memberUser = usersSeededFixture
+
+    blogs = [
+            generateBlogModel(id=1, userId=memberUser.id, user=memberUser),
+            generateBlogModel(id=2, userId=memberUser.id, user=memberUser),
+            generateBlogModel(id=3, userId=memberUser.id, user=memberUser)
+            ]
+
+    for blog in blogs:
+        exSession.add(blog)
+
+    exSession.commit()
+    yield blogs
+    print("teardown blogsSeededFixture fixture")
 
 
 @pytest.fixture
