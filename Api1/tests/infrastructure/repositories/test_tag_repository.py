@@ -1,15 +1,13 @@
 from Infrastructure.repositories.TagRepository import TagRepository
-from Infrastructure.DataModels.TagModel import Tag
-from utils.util import printObject
 
 # TagRepository testing
 # tr1: getAll() test
 # tr2: get(name) test
 # tr3: get(name) test with lower and no whitespace
-# tr4: create() test with lower and no whitespace
-# tr5: create() test should not to save a tag when the tag name already exist
-# tr6: isExist() test for True
-# tr7: isExist() tes for False
+# tr4: createIfNotExit() test with lower and no whitespace
+# tr5: createifNotExit() test should not to save a tag when the tag name already exist
+# tr6: delete() test by name
+# tr6: delete() test should not throw exception when tag name does not exist
 
 
 def test_tr1_get_all():
@@ -39,39 +37,45 @@ def test_tr3_get():
     assert tag.name == 'js'
 
 
-def test_tr4_create(exSession):
+def test_tr4_createIfNotExit_should_create_new_tag(exSession):
 
     tagRepo = TagRepository()
 
-    tagRepo.create('newTag')
+    tagRepo.createIfNotExist('newTag')
     exSession.commit()
 
-    newlyCreatedTag = tagRepo.get('newTag')
+    newTag = tagRepo.get('newTag')
 
-    assert newlyCreatedTag.name == 'newtag'
+    assert newTag.name == 'newtag'
 
 
-# use mocker.MagicMock for session.add to make sure it is not called
-def test_tr5_create_should_not_save_a_tag_if_it_already_exist(exSession, mocker):
+def test_tr5_createIfNotExit_should_not_create_a_tag_since_it_already_exists(exSession, mocker):
 
     tagRepo = TagRepository()
-    tagRepo._session.add = mocker.MagicMock()
+    tagRepo.add = mocker.MagicMock()
 
-    tagRepo.create('js')
+    tagRepo.createIfNotExist(' jS ')
     exSession.commit()
 
-    assert not tagRepo._session.add.called
+    # make sure add function inside if statement is not called when tag exists
+    assert not tagRepo.add.called
 
 
-def test_tr6_isExist_should_return_true():
-
-    tagRepo = TagRepository()
-
-    assert tagRepo.isExist('js') is True
-
-
-def test_tr7_isExist_should_return_false():
+def test_tr6_delete(exSession):
 
     tagRepo = TagRepository()
 
-    assert tagRepo.isExist('not_exisitng_tag') is False
+    tagRepo.delete('js')
+    exSession.commit()
+
+    assert tagRepo.get('js') is None
+
+
+def test_tr7_delete_should_not_throw_exception(exSession):
+
+    tagRepo = TagRepository()
+
+    tagRepo.delete('tag_not_exist')
+    exSession.commit()
+
+    assert tagRepo.get('tag_not_exist') is None
