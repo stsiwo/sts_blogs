@@ -8,3 +8,8 @@ class Tag(BaseModel):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.VARCHAR, nullable=False)
+
+    # lower-case and remove space
+    @staticmethod
+    def sanitizeName(name: str):
+        return name.lower().split()[0]

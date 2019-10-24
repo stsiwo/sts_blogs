@@ -8,6 +8,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from utils.util import printObject
 from tests.data.generators.RoleGenerator import generateRoleModel
 from Infrastructure.DataModels.RoleModel import Role
+from Infrastructure.DataModels.TagModel import Tag
 
 app = main
 
@@ -70,6 +71,48 @@ def rolesSeededFixture(database, application):
 
     yield None
     print("teardown rolesSeededFixture fixture")
+
+
+@pytest.fixture(scope="session", autouse=True)
+def tagsSeededFixture(database, application):
+    print("setup tagsSeededFixture fixture")
+
+    database.session.bulk_save_objects(
+                [
+                    Tag(name='ui'),
+                    Tag(name='frontend'),
+                    Tag(name='backend'),
+                    Tag(name='css'),
+                    Tag(name='sql'),
+                    Tag(name='python'),
+                    Tag(name='typscript'),
+                    Tag(name='react'),
+                    Tag(name='angular'),
+                    Tag(name='sqlalchemy'),
+                    Tag(name='php'),
+                    Tag(name='laravel'),
+                    Tag(name='flask'),
+                    Tag(name='django'),
+                    Tag(name='oop'),
+                    Tag(name='designpattern'),
+                    Tag(name='nodejs'),
+                    Tag(name='csharp'),
+                    Tag(name='autofac'),
+                    Tag(name='unittesting'),
+                    Tag(name='mock'),
+                    Tag(name='pytest'),
+                    Tag(name='webpack'),
+                    Tag(name='js')
+                ]
+            )
+
+    database.session.commit()
+
+    tags = database.session.query(Role).all()
+    printObject(tags)
+
+    yield None
+    print("teardown tagsSeededFixture fixture")
 
 
 @pytest.fixture(autouse=True)

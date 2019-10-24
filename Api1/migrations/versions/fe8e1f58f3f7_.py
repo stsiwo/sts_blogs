@@ -23,7 +23,7 @@ def upgrade():
     sa.Column('name', sa.VARCHAR(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('tags',
+    tags_table = op.create_table('tags',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.VARCHAR(), nullable=False),
     sa.PrimaryKeyConstraint('id')
@@ -76,6 +76,36 @@ def upgrade():
                 {'name': 'member'}
                 ]
             )
+
+    op.bulk_insert(
+            tags_table,
+            [
+                {'name': 'ui'},
+                {'name': 'frontend'},
+                {'name': 'backend'},
+                {'name': 'css'},
+                {'name': 'sql'},
+                {'name': 'python'},
+                {'name': 'typscript'},
+                {'name': 'react'},
+                {'name': 'angular'},
+                {'name': 'sqlalchemy'},
+                {'name': 'php'},
+                {'name': 'laravel'},
+                {'name': 'flask'},
+                {'name': 'django'},
+                {'name': 'oop'},
+                {'name': 'designpattern'},
+                {'name': 'nodejs'},
+                {'name': 'csharp'},
+                {'name': 'autofac'},
+                {'name': 'unittesting'},
+                {'name': 'mock'},
+                {'name': 'pytest'},
+                {'name': 'webpack'},
+                {'name': 'js'}
+            ]
+    )
     # ### end Alembic commands ###
 
 
