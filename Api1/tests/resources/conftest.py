@@ -9,7 +9,6 @@ import shutil
 from tests.data.generators.UserGenerator import generateUserModel
 from tests.data.generators.BlogGenerator import generateBlogModel
 from tests.data.generators.CommentGenerator import generateCommentModel
-from exceptions.EmailServiceException import EmailServiceException
 from Configs.ygmailConfig import yag
 from Configs.app import app
 from utils.forgotPasswordToken import generateForgotPasswordToken
@@ -54,27 +53,6 @@ def blogsSeededFixture(exSession, usersSeededFixture):
     exSession.commit()
     yield blogs
     print("teardown blogsSeededFixture fixture")
-
-
-@pytest.fixture
-def usersSeededFixture(exSession):
-    print("setup usersSeededFixture fixture")
-
-    memberRole = exSession.query(Role).filter_by(name='member').first()
-    memberUser = generateUserModel(
-            id=2,
-            name='test',
-            email='test@test.com',
-            password='test',
-            roles=[memberRole]
-            )
-
-    exSession.add(memberUser)
-
-    exSession.commit()
-
-    yield memberUser
-    print("teardown usersSeededFixture fixture")
 
 
 @pytest.fixture

@@ -24,8 +24,9 @@ class User(BaseModel):
 
     comments = db.relationship('Comment', backref='users', lazy=True)
 
-    def hash_password(self, password):
-        self.password_hash = pwd_context.encrypt(password)
+    def hashPassword(self, password: str):
+        self._hashedPassword = pwd_context.encrypt(password)
+        return self._hashedPassword
 
-    def verify_password(self, password):
-        return pwd_context.verify(password, self.password_hash)
+    def verifyPassword(self, password: str):
+        return pwd_context.verify(password, self._hashedPassword)

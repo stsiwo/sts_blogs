@@ -9,6 +9,7 @@ from utils.util import printObject
 from tests.data.generators.RoleGenerator import generateRoleModel
 from Infrastructure.DataModels.RoleModel import Role
 from Infrastructure.DataModels.TagModel import Tag
+from tests.data.generators.UserGenerator import generateUserModel
 
 app = main
 
@@ -140,6 +141,27 @@ def exSession(database, request):
 
     request.addfinalizer(fin)
     return database.session
+
+
+@pytest.fixture
+def usersSeededFixture(exSession):
+    print("setup usersSeededFixture fixture")
+
+    memberRole = exSession.query(Role).filter_by(name='member').first()
+    memberUser = generateUserModel(
+            id=2,
+            name='test',
+            email='test@test.com',
+            password='test',
+            roles=[memberRole]
+            )
+
+    exSession.add(memberUser)
+
+    exSession.commit()
+
+    yield memberUser
+    print("teardown usersSeededFixture fixture")
 
 
 @pytest.fixture

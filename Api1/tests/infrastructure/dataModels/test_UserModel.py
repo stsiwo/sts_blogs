@@ -1,13 +1,9 @@
-from Infrastructure.DataModels.RoleModel import Role
 from Infrastructure.DataModels.UserModel import User
 
 
-def test_user_role_relationship(session, UserFactory, RoleFactory):
+def test_u1_hash_password_should_return_hashed_password():
 
-    role = RoleFactory.create(name="admin")
-    user = UserFactory.create(roles=[role])
+    tempUser = User()
+    tempUser.hashPassword("password")
 
-    roleList = session.query(Role).all()
-    user = session.query(User).filter(User.name == user.name).first()
-
-    assert user.roles == roleList
+    assert tempUser.verifyPassword("password") is True

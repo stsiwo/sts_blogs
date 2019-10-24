@@ -8,11 +8,8 @@ class TagRepository(object):
 
     _session: Session
 
-    myAttribute: str
-
     def __init__(self):
         self._session = db.session
-        self.myAttribute = "hey"
 
     def getAll(self) -> List[Tag]:
         return self._session.query(Tag).all()
