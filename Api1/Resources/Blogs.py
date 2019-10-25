@@ -29,15 +29,7 @@ class Blogs(Resource):
         blogs: List[Dict] = self._blogService.getAllBlogService()
 
         response = jsonify(blogs)
-
-        # blogs list of dict is empty
-        if len(blogs) == 0:
-            # NOT FOUND
-            response.status_code = 404
-        else:
-            # OK
-            response.status_code = 200
-
+        response.status_code = 200
         return response
 
     # create new blog
@@ -62,20 +54,14 @@ class Blogs(Resource):
                 request.json.get('content')
                 )
 
-        # target blog is not found
-        if updatedBlog is None:
-            response = jsonify({'msg': 'specified blog is not found'})
-            response.status_code = 404
-            return response
         # successfully updated and return its serialized and updated blog
         # ==============================================================
         # NOTE: don't specify body when using 204 (NO CONTENT). even if you set response body
         # HTTP ignore the response body and client only receives no body
         # =============================================================
-        else:
-            response = jsonify(updatedBlog)
-            response.status_code = 200
-            return response
+        response = jsonify(updatedBlog)
+        response.status_code = 200
+        return response
 
     # patial update exisitng blogs
     # payload must be only properties to be updated (not include unchanged properties)

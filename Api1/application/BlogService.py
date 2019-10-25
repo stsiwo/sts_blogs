@@ -1,23 +1,31 @@
 from Configs.app import app
 from Infrastructure.DataModels.BlogModel import Blog
-from Configs.extensions import db
+from flask import abort
 from typing import Dict, List
 from Resources.viewModels.BlogSchema import BlogSchema
 from Infrastructure.transactionDecorator import db_transaction
+from Infrastructure.repositories.BlogRepository import BlogRepository
+from utils.util import printObject
 
 
 class BlogService(object):
 
     _blogSchema: BlogSchema
 
+    _blogRepository: BlogRepository
+
     def __init__(self):
         self._blogSchema = BlogSchema()
+        self._blogRepository = BlogRepository()
 
     def getAllBlogService(self) -> List[Dict]:
         app.logger.info("start blog user service")
         print("start blog user service")
 
-        blogs: List[Blog] = db.session.query(Blog).all()
+        blogs: List[Blog] = self._blogRepository.getAll()
+
+        if len(blogs) == 0:
+            abort(404, {'message': 'any blog does not exist.'})
 
         serializedBlogs: List[Dict] = [self._blogSchema.dump(blog) for blog in blogs]
 
@@ -30,11 +38,13 @@ class BlogService(object):
 
         # need to implement 'optimistic locking' later
         # to avoid any confict concurrency request
-        targetBlog = db.session.query(Blog).get(blog_id)
+        targetBlog = self._blogRepository.get(blog_id)
 
-        if targetBlog is not None:
-            targetBlog.title = title
-            targetBlog.content = content
+        if targetBlog is None:
+            abort(404, {'message': 'specified blog does not exist'})
+
+        targetBlog.title = title
+        targetBlog.content = content
 
         targetBlog = self._blogSchema.dump(targetBlog)
 
