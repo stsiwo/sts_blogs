@@ -21,7 +21,33 @@ def test_ur2_get(usersSeededFixture):
     assert user.id == 2
 
 
-def test_ur3_getByEmail(usersSeededFixture):
+def test_ur3_find(usersSeededFixture):
+
+    userRepo = UserRepository()
+
+    user = userRepo.find(
+            id=2,
+            name='test',
+            email='test@test.com',
+            )
+
+    assert user.id == 2
+
+
+def test_ur4_find_should_return_none_when_one_of_arg_is_wrong(usersSeededFixture):
+
+    userRepo = UserRepository()
+
+    user = userRepo.find(
+            id=2,
+            name='wrong',
+            email='test@test.com',
+            )
+
+    assert user is None
+
+
+def test_ur5_getByEmail(usersSeededFixture):
 
     userRepo = UserRepository()
 
@@ -30,7 +56,7 @@ def test_ur3_getByEmail(usersSeededFixture):
     assert user.id == 2
 
 
-def test_ur8_delete(exSession, usersSeededFixture):
+def test_ur6_delete(exSession, usersSeededFixture):
 
     user = usersSeededFixture
 
@@ -45,7 +71,7 @@ def test_ur8_delete(exSession, usersSeededFixture):
     assert deletedUser is None
 
 
-def test_ur9_deleteByEmail(exSession, usersSeededFixture):
+def test_ur7_deleteByEmail(exSession, usersSeededFixture):
 
     user = usersSeededFixture
 

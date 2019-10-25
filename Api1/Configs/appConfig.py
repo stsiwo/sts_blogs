@@ -1,6 +1,6 @@
 from Configs.app import app
 from Configs.extensions import (
-        api, db, jwt, migrate, ma
+        api, db, jwt, migrate, ma, bcrypt
         )
 
 
@@ -32,6 +32,7 @@ def configureApp(config_object="Configs.settings"):
     # ============================================================
     # IMPORTANT: db.init_app must be before ma.init_app
     # ============================================================
+    bcrypt.init_app(app)
     db.init_app(app)
     ma.init_app(app)
     migrate.init_app(app, db)

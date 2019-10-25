@@ -1,38 +1,29 @@
 from Configs.app import app
-from flask import request, jsonify
-from Infrastructure.DataModels.UserModel import User
-from application.TokenService import TokenService
+from flask import abort
+from Infrastructure.repositories.UserRepository import UserRepository
+from Resources.viewModels.UserSchema import UserSchema
 
 
 class LoginService(object):
 
-    _tokenService: TokenService
+    _userSchema: UserSchema
+
+    _userRepository: UserRepository
 
     def __init__(self):
-        self._tokenService = TokenService()
+        self._userRepository = UserRepository()
+        self._userSchema = UserSchema()
 
-    def loginUserService(self):
+    def loginUserService(self, email: str, password: str):
         app.logger.info("start login user service")
         print("start login user service")
 
-        loginUser = User.query.filter_by(email=request.json.get('email'), password=request.json.get('password')).first()
+        loginUser = self._userRepository.find(email=email)
 
         if loginUser is None:
-            response = jsonify({'Not Found': False})
-            response.status_code = 404
-            return response
-        else:
-            # construct response
-            response = jsonify({'success': True})
-            response.status_code = 200
+            abort(404, {'message': 'entered email does not exist.'})
 
-            # create jwt tokens
-            self._tokenService.createJwtToken(
-                 response,
-                 {
-                     'id': loginUser.id,
-                     "name": loginUser.name,
-                     "roles": [role.name for role in loginUser.roles]
-                 })
+        if not loginUser.verifyPassword(password):
+            abort(400, {'message': 'invalid password'})
 
-            return response
+        return loginUser

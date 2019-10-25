@@ -24,36 +24,25 @@ def test_login_endpoint_no_json_data_should_response_with_400_with_bundle_error_
     assert len(data['message']) > 1
 
 
-def test_user_logined_successfully(client, testUserWithMemberRoleFixture):
+def test_user_logined_successfully(client, usersSeededFixture, httpHeaders):
 
-    mimetype = 'application/json'
-    headers = {
-        'Content-Type': mimetype,
-        'Accept': mimetype
-    }
     rv = client.post('/login', 'http://localhost', json={
         'email': 'test@test.com',
-        'password': 'password'
-        }, headers=headers)
+        'password': 'test'
+        }, headers=httpHeaders)
 
     assert 200 == rv.status_code
 
 
 def test_user_logined_successfully_and_get_jwt_tokens(
         client,
-        database,
-        application,
-        testUserWithMemberRoleFixture):
+        usersSeededFixture,
+        httpHeaders):
 
-    mimetype = 'application/json'
-    headers = {
-        'Content-Type': mimetype,
-        'Accept': mimetype
-    }
     rv = client.post('/login', 'http://localhost', json={
         'email': 'test@test.com',
-        'password': 'password'
-        }, headers=headers)
+        'password': 'test'
+        }, headers=httpHeaders)
 
     cookies = [cookie[1] for cookie in rv.headers if (cookie[0] == 'Set-Cookie')]
     assert 200 == rv.status_code
@@ -65,22 +54,19 @@ def test_user_logined_successfully_and_get_jwt_tokens(
 
 def test_user_logined_successfully_and_token_include_role_claim(
         client,
-        database,
         application,
-        testUserWithMemberRoleFixture):
+        usersSeededFixture,
+        httpHeaders
+        ):
 
-    mimetype = 'application/json'
-    headers = {
-        'Content-Type': mimetype,
-        'Accept': mimetype
-    }
     rv = client.post('/login', 'http://localhost', json={
         'email': 'test@test.com',
-        'password': 'password'
-        }, headers=headers)
+        'password': 'test'
+        }, headers=httpHeaders)
 
     access_token = [cookie[1].replace(";", "=").split("=")[1] for cookie in rv.headers if (cookie[0] == 'Set-Cookie' and 'access_token' in cookie[1])]
     user_claims = None
+
     with application.app_context():
         prettyPrint(decode_token(access_token[0]))
         user_claims = decode_token(access_token[0])['user_claims']
@@ -92,18 +78,12 @@ def test_user_logined_successfully_and_token_include_role_claim(
 
 def test_user_logined_failed_since_not_found_and_receive_404(
         client,
-        database,
-        application,
-        testUserWithMemberRoleFixture):
+        usersSeededFixture,
+        httpHeaders):
 
-    mimetype = 'application/json'
-    headers = {
-        'Content-Type': mimetype,
-        'Accept': mimetype
-    }
     rv = client.post('/login', 'http://localhost', json={
         'email': 'not-test@test.com',
-        'password': 'password'
-        }, headers=headers)
+        'password': 'test'
+        }, headers=httpHeaders)
 
     assert 404 == rv.status_code

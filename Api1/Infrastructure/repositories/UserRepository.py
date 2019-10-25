@@ -1,6 +1,6 @@
 from Infrastructure.DataModels.UserModel import User
 from Infrastructure.repositories.BaseRepository import BaseRepository
-from typing import List
+from typing import List, Dict
 
 
 class UserRepository(BaseRepository[User]):
@@ -10,6 +10,10 @@ class UserRepository(BaseRepository[User]):
 
     def get(self, id: str) -> User:
         return self._session.query(User).get(id)
+
+    def find(self, **kwargs: Dict) -> User:
+        """ don't include password as args """
+        return self._session.query(User).filter_by(**kwargs).first()
 
     def getByEmail(self, email: str) -> User:
         return self._session.query(User).filter_by(email=email).first()

@@ -1,7 +1,10 @@
 from Configs.extensions import db
-from passlib.apps import custom_app_context as pwd_context
 from Infrastructure.DataModels.UserRoleModel import roles
 from Infrastructure.DataModels.BaseModel import BaseModel
+from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
+from Configs.extensions import bcrypt
+from typing import Dict
+from utils.util import printObject
 
 
 class User(BaseModel):
@@ -11,7 +14,7 @@ class User(BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.VARCHAR, nullable=False)
     email = db.Column(db.VARCHAR, unique=True, nullable=False)
-    password = db.Column(db.VARCHAR, nullable=False)
+    _password = db.Column('password', db.VARCHAR, nullable=False)
     avatarUrl = db.Column(db.VARCHAR, nullable=True)
 
     roles = db.relationship('Role', secondary=roles, lazy='subquery',
@@ -24,9 +27,19 @@ class User(BaseModel):
 
     comments = db.relationship('Comment', backref='users', lazy=True)
 
-    def hashPassword(self, password: str):
-        self._hashedPassword = pwd_context.encrypt(password)
-        return self._hashedPassword
+    @hybrid_property
+    def password(self):
+        return self._password
 
+    @password.setter
+    def password(self, password: str):
+        self._password = bcrypt.generate_password_hash(password).decode('utf-8')
+        return self._password
+
+    @hybrid_method
     def verifyPassword(self, password: str):
-        return pwd_context.verify(password, self._hashedPassword)
+        return bcrypt.check_password_hash(self.password, password)
+
+    @password.expression
+    def password(cls):
+        return cls._password
