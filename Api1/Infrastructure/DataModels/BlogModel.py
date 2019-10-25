@@ -19,7 +19,7 @@ class Blog(BaseModel):
             lazy='subquery',
             backref=db.backref('blogs', lazy=True))
 
-    comments = db.relationship('Comment', backref='blogs', lazy='subquery')
+    comments = db.relationship('Comment', backref='blogs', lazy='subquery', cascade="all, delete-orphan")
 
     # reverse relational to User
     user = db.relationship('User', back_populates='blogs', lazy='subquery')

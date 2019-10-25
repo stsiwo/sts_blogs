@@ -1,25 +1,36 @@
 from Configs.app import app
-from Configs.extensions import db
 from typing import Dict, List
 from Resources.viewModels.CommentSchema import CommentSchema
 from Infrastructure.transactionDecorator import db_transaction
 from Infrastructure.DataModels.CommentModel import Comment
+from Infrastructure.DataModels.BlogModel import Blog
+from Infrastructure.repositories.BlogRepository import BlogRepository
+from flask import abort
 
 
 class BlogCommentService(object):
 
     _commentSchema: CommentSchema
 
+    _blogRepository: BlogRepository()
+
     def __init__(self):
         self._commentSchema = CommentSchema()
+        self._blogRepository = BlogRepository()
 
     def getAllCommentService(self, blog_id: str) -> List[Dict]:
         app.logger.info("start getAllCommentCommentService service")
         print("start getAllCommentCommentService service")
 
-        comments: List[Comment] = db.session.query(Comment).filter_by(blogId=blog_id).all()
+        blog: Blog = self._blogRepository.get(blog_id)
 
-        serializedComments: List[Dict] = [self._commentSchema.dump(comment) for comment in comments]
+        if blog is None:
+            abort(404, {'message': "specified blog does not exist."})
+
+        if len(blog.comments) == 0:
+            abort(404, {'message': "specified blog does not have any comment yet."})
+
+        serializedComments: List[Dict] = [self._commentSchema.dump(comment) for comment in blog.comments]
 
         return serializedComments
 
@@ -28,24 +39,34 @@ class BlogCommentService(object):
         app.logger.info("start createNewCommentService service")
         print("start createNewCommentService service")
 
+        blog: Blog = self._blogRepository.get(blog_id)
+
+        if blog is None:
+            abort(404, {'message': "specified blog does not exist."})
+
         newComment: Comment = Comment(
                             title=title,
                             content=content,
                             blogId=blog_id
                             )
 
-        db.session.add(newComment)
+        blog.comments.append(newComment)
+
+        self._blogRepository.add(blog)
 
         return newComment
 
     @db_transaction()
-    def deleteAllCommentService(self, blog_id: str) -> bool:
+    def deleteAllCommentService(self, blog_id: str) -> None:
         app.logger.info("start deleteAllCommentService service")
         print("start deleteAllCommentService service")
 
-        # delete() returns # of object deleted
-        result = db.session.query(Comment).filter_by(blogId=blog_id).delete()
+        blog: Blog = self._blogRepository.get(blog_id)
 
-        isSuccessOrNotFound: bool = result > 0
+        if blog is None:
+            abort(404, {'message': "specified blog does not exist."})
 
-        return isSuccessOrNotFound
+        if len(blog.comments) == 0:
+            abort(404, {'message': "specified blog does not have any comment yet."})
+
+        del blog.comments[:]

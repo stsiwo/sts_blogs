@@ -28,6 +28,7 @@ def configureApp(config_object="Configs.settings"):
     # IMPORTANT: adding resources must be done before init_app!!!!
     # ============================================================
     api.init_app(app)
+    # error message handling by flask restapi so you don't need to write try/except on every endpoint
     # ============================================================
     # IMPORTANT: db.init_app must be before ma.init_app
     # ============================================================

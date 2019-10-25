@@ -37,6 +37,9 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 # image files
 UPLOAD_FOLDER = 'uploads'
 
+# custome error handling
+# PROPAGATE_EXCEPTIONS = True
+
 # original config parameters
 UPLOAD_ENDPOINT = '/{}'.format(UPLOAD_FOLDER)
 

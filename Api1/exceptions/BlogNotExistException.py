@@ -1,0 +1,4 @@
+
+
+class BlogNotExistException(Exception):
+    pass

@@ -29,14 +29,8 @@ class BlogComments(Resource):
         comments: List[Dict] = self._blogCommentService.getAllCommentService(blog_id)
 
         response = jsonify(comments)
-
-        # blogs list of dict is empty
-        if len(comments) == 0:
-            # NOT FOUND
-            response.status_code = 404
-        else:
-            # OK
-            response.status_code = 200
+        # OK
+        response.status_code = 200
 
         return response
 
@@ -75,18 +69,15 @@ class BlogComments(Resource):
     #     return response
 
     # delete whole blogs
+    # allow only admin to delete for now but it might change in future
     @jwt_required
     @requires_jwt_role_claim({'admin'})
     def delete(self, blog_id: str):
         app.logger.info("start processing delete request at /blogs/{id}/comments")
         print("start processing delete request at /blogs/{id}/comments")
 
-        isSuccessOrNotFound: bool = self._blogCommentService.deleteAllCommentService(blog_id)
+        self._blogCommentService.deleteAllCommentService(blog_id)
 
         response = jsonify({})
-        if isSuccessOrNotFound:
-            response.status_code = 204
-        else:
-            response.status_code = 404
-
+        response.status_code = 204
         return response
