@@ -1,56 +1,43 @@
 from Configs.app import app
-from flask import request, jsonify
 from Infrastructure.DataModels.UserModel import User
-from Infrastructure.DataModels.RoleModel import Role
-from Configs.extensions import db
 from Infrastructure.transactionDecorator import db_transaction
-from application.TokenService import TokenService
-from flask_jwt_extended import (
-    create_access_token,
-    create_refresh_token,
-    set_access_cookies,
-    set_refresh_cookies
-    )
+from Infrastructure.repositories.RoleRepository import RoleRepository
+from Infrastructure.repositories.UserRepository import UserRepository
+from Resources.viewModels.UserSchema import UserSchema
 
 
 class SignupService(object):
 
-    _tokenService: TokenService
+    _roleRepository: RoleRepository
+
+    _userRepository: UserRepository
+
+    _userSchema: UserSchema
 
     def __init__(self):
-        self._tokenService = TokenService()
+        self._roleRepository = RoleRepository()
+        self._userRepository = UserRepository()
+        self._userSchema = UserSchema()
 
     @db_transaction()
-    def registerUserService(self):
+    def registerUserService(self, name: str, email: str, password: str):
         app.logger.info("start register user service")
         print("start register user service")
 
         # get 'member' role from db
-        memberRole = db.session.query(Role).filter_by(name='member').first()
+        memberRole = self._roleRepository.get('member')
 
         # create new User
         newUser = User(
-                name=request.json.get('name'),
-                email=request.json.get('email'),
-                password=request.json.get('password'),
+                name=name,
+                email=email,
+                password=password,
                 roles=[memberRole]
                 )
 
-        # save to db
-        db.session.add(newUser)
-        newUser = db.session.query(User).filter_by(email=newUser.email).first()
+        # flush to generate id for new user but not commit yet
+        self._userRepository.flush()
 
-        # construct response
-        response = jsonify({'success': True})
-        response.status_code = 200
+        userViewModel = self._userSchema.dump(newUser)
 
-        # create jwt tokens
-        self._tokenService.createJwtToken(
-             response,
-             {
-                 'id': newUser.id,
-                 "name": newUser.name,
-                 "roles": [role.name for role in newUser.roles]
-             })
-
-        return response
+        return userViewModel

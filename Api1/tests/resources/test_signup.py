@@ -109,4 +109,3 @@ def test_s07_user_signuped_successfully_and_token_include_role_claim(
     assert user_claims.get('id') is not None
     assert user_claims.get('name') is not None
     assert user_claims.get('roles') is not None
-    assert 0

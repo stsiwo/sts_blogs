@@ -14,14 +14,6 @@ from exceptions.BadSignatureException import BadSignatureException
 from exceptions.EmailNotFoundException import EmailNotFoundException
 
 
-@app.errorhandler(400)
-def badRequest(e):
-    print("inside bad request error handler")
-    response: Response = jsonify(e.description['message'])
-    response.status_code = 400
-    return response
-
-
 class PasswordResetService(object):
 
     _emailService: EmailService

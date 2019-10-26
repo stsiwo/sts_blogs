@@ -27,3 +27,6 @@ class BaseRepository(ABC, Generic[T]):
 
     def add(self, model: T) -> None:
         self._session.add(model)
+
+    def flush(self) -> None:
+        self._session.flush()
