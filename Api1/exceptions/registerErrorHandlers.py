@@ -7,6 +7,7 @@ from exceptions.EmailNotFoundException import EmailNotFoundException
 from exceptions.CommentNotFoundException import CommentNotFoundException
 from exceptions.PasswordInvalidException import PasswordInvalidException
 from exceptions.UploadedFileException import UploadedFileException
+from exceptions.UserNotFoundException import UserNotFoundException
 
 
 def constructResponse(error):
@@ -46,5 +47,10 @@ def passwordInvalid(error):
 
 
 @app.errorhandler(UploadedFileException)
-def uploadedFileException(error):
+def uploadedFile(error):
+    return constructResponse(error)
+
+
+@app.errorhandler(UserNotFoundException)
+def userNotFound(error):
     return constructResponse(error)

@@ -1,4 +1,4 @@
-from .import printObject, decodeResponseByteJsonToDictionary
+from utils.util import printObject, decodeResponseByteJsonToDictionary
 from Infrastructure.DataModels.UserModel import User
 
 
@@ -77,22 +77,23 @@ def test_u04_users_put_endpoint_should_allow_authed_user_to_get_200_code_without
     assert 200 == response.status_code
 
 
-def test_u05_users_put_endpoint_should_allow_authed_user_to_return_updated_user(authedClientWithUserSeeded, database, application, httpHeaders):
+def test_u05_users_put_endpoint_should_allow_authed_user_to_return_updated_user(authedClient, database, application, httpHeaders):
 
     userId = None
 
     with application.app_context():
-        user = database.session.query(User).join(User.user).filter(User.email == 'test@test.com').first()
+        user = database.session.query(User).filter(User.email == 'test@test.com').first()
         userId = user.id
 
-    csrf_token = [cookie.value for cookie in authedClientWithUserSeeded.cookie_jar if cookie.name == 'csrf_access_token'][0]
+    csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
     httpHeaders['X-CSRF-TOKEN'] = csrf_token
 
-    response = authedClientWithUserSeeded.put(
+    response = authedClient.put(
             '/users/{}'.format(userId),
             json={
-                'title': 'updated_title',
-                'content': 'updated_content'
+                'name': 'updated_name',
+                'email': 'updated@test.com',
+                'password': 'updated_password'
                 },
             headers=httpHeaders
             )
@@ -102,5 +103,5 @@ def test_u05_users_put_endpoint_should_allow_authed_user_to_return_updated_user(
     data = decodeResponseByteJsonToDictionary(response.data)
 
     assert 200 == response.status_code
-    assert 'updated_title' == data['title']
-    assert 'updated_content' == data['content']
+    assert 'updated_name' == data['name']
+    assert 'updated@test.com' == data['email']
