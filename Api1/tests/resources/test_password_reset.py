@@ -1,11 +1,7 @@
-from utils.util import printObject
-from exceptions.EmailServiceException import EmailServiceException
-import pytest
 from Infrastructure.DataModels.UserModel import User
 from utils.util import decodeResponseByteJsonToDictionary
-from Configs.app import app
 from utils.forgotPasswordToken import generateForgotPasswordToken, decodeForgotPasswordToken
-import time
+from utils.util import printObject
 
 # POST /user/password-reset (request for forgot password)
 # pr_post01: 400 code for invalid input (missing token)
@@ -46,7 +42,7 @@ def test_pr_post03_password_reset_post_endpoint_should_return_400_code_since_tok
     data = decodeResponseByteJsonToDictionary(response.data)
 
     assert response.status_code == 400
-    assert data['err'] == 'BadSignature'
+    assert data['title'] == 'bad signature'
 
 
 def test_pr_post04_password_reset_post_endpoint_should_return_400_code_since_token_is_expired(client, httpHeaders, expiredTokenGenerator, usersSeededFixture):
@@ -62,8 +58,10 @@ def test_pr_post04_password_reset_post_endpoint_should_return_400_code_since_tok
 
     data = decodeResponseByteJsonToDictionary(response.data)
 
+    printObject(data)
+
     assert response.status_code == 400
-    assert data['err'] == 'SignatureExpired'
+    assert data['title'] == 'signature expired'
 
 
 def test_pr_post05_password_reset_post_endpoint_should_return_204_code_for_successfully_update_password(client, httpHeaders, usersSeededFixture):
@@ -91,6 +89,6 @@ def test_pr_post06_password_reset_post_endpoint_should_update_password_in_db_whe
                 },
             headers=httpHeaders)
 
-    updatedPassword = exSession.query(User).get(2).password
+    updatedUser = exSession.query(User).get(2)
 
-    assert updatedPassword == 'new-test-password'
+    assert updatedUser.verifyPassword('new-test-password')

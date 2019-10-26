@@ -3,7 +3,7 @@ from Resources.validators.validatorDecorator import validate_request_with
 from Configs.app import app
 from flask import jsonify, request
 from exceptions.EmailServiceException import EmailServiceException
-from exceptions.EmailAddressNotFoundException import EmailAddressNotFoundException
+from exceptions.EmailNotFoundException import EmailNotFoundException
 from application.PasswordResetService import PasswordResetService
 from Resources.validators.forgotPasswordValidator import forgotPasswordValidator
 
@@ -27,7 +27,7 @@ class ForgotPassword(Resource):
             response = jsonify({})
             response.status_code = 202
             return response
-        except EmailAddressNotFoundException as e:
+        except EmailNotFoundException as e:
             response = jsonify({'msg': 'provided email is not found'})
             response.status_code = 404
             return response

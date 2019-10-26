@@ -2,6 +2,14 @@ from utils.util import printObject
 from Infrastructure.DataModels.BlogModel import Blog
 
 
+def test_t1(client):
+    response = client.get('/test')
+
+    printObject(response.data)
+    print(response.status_code)
+    assert 0
+
+
 def test_s2(blogsSeededFixture, exSession):
     print("executing test sample 2")
 

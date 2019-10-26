@@ -20,6 +20,8 @@ def configureApp(config_object="Configs.settings"):
     # import all routes
     import Resources.configureRoute
 
+    # set error response handlers
+    import exceptions.registerErrorHandlers
     # jwt claim loader
     import Resources.claimLoader
 

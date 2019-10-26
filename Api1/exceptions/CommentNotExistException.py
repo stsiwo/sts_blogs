@@ -1,4 +1,0 @@
-
-
-class CommentNotExistException(Exception):
-    pass
