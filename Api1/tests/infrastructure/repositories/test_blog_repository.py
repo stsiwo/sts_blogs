@@ -21,6 +21,28 @@ def test_br2_get(blogsSeededFixture):
     assert blog.id == 2
 
 
+def test_ur3_find(blogsSeededFixture):
+
+    blogRepo = BlogRepository()
+
+    blogs = blogRepo.find(
+            userId=2
+            )
+
+    assert len(blogs) != 0
+
+
+def test_ur4_find_should_return_none_when_one_of_arg_is_wrong(blogsSeededFixture):
+
+    blogRepo = BlogRepository()
+
+    blogs = blogRepo.find(
+            userId=3232
+            )
+
+    assert len(blogs) == 0
+
+
 def test_br8_delete(exSession, blogsSeededFixture):
 
     blog = blogsSeededFixture[0]

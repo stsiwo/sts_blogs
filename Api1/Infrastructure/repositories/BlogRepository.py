@@ -11,5 +11,8 @@ class BlogRepository(BaseRepository[Blog]):
     def get(self, id: str) -> Blog:
         return self._session.query(Blog).get(id)
 
+    def find(self, **kwargs) -> List[Blog]:
+        return self._session.query(Blog).filter_by(**kwargs).all()
+
     def delete(self, id: str):
         self._session.query(Blog).filter_by(id=id).delete()
