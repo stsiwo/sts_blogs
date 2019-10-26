@@ -13,6 +13,7 @@ from Configs.ygmailConfig import yag
 from Configs.app import app
 from utils.forgotPasswordToken import generateForgotPasswordToken
 from Configs.settings import FORGOT_PASSWORD_TOKEN_EXPIRY
+from exceptions.EmailServiceException import EmailServiceException
 
 
 @pytest.fixture
@@ -205,6 +206,12 @@ def setupTempUploadDirWithTestImageFile(setupTempUploadDir):
 @pytest.fixture
 def patchedYgmailSendFunc(mocker):
     mocked_yag_send = mocker.patch.object(yag, 'send')
+    yield mocked_yag_send
+
+
+@pytest.fixture
+def patchedYgmailSendFuncWithThrowException(mocker):
+    mocked_yag_send = mocker.patch.object(yag, 'send', side_effect=EmailServiceException())
     yield mocked_yag_send
 
 
