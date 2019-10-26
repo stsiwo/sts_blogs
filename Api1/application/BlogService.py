@@ -6,6 +6,7 @@ from Resources.viewModels.BlogSchema import BlogSchema
 from Infrastructure.transactionDecorator import db_transaction
 from Infrastructure.repositories.BlogRepository import BlogRepository
 from utils.util import printObject
+from exceptions.BlogNotFoundException import BlogNotFoundException
 
 
 class BlogService(object):
@@ -25,7 +26,7 @@ class BlogService(object):
         blogs: List[Blog] = self._blogRepository.getAll()
 
         if len(blogs) == 0:
-            abort(404, {'message': 'any blog does not exist.'})
+            raise BlogNotFoundException
 
         serializedBlogs: List[Dict] = [self._blogSchema.dump(blog) for blog in blogs]
 
@@ -41,7 +42,7 @@ class BlogService(object):
         targetBlog = self._blogRepository.get(blog_id)
 
         if targetBlog is None:
-            abort(404, {'message': 'specified blog does not exist'})
+            raise BlogNotFoundException
 
         targetBlog.title = title
         targetBlog.content = content
