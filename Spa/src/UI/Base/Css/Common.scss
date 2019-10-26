@@ -1,0 +1,10 @@
+@import './Mixins';
+@import './GlobalVariables';
+
+.input-text {
+  @include input-text; 
+}
+
+.regular-btn {
+  @include regular-btn;
+}

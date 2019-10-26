@@ -6,3 +6,6 @@ env/
 
 # cache
 __pycache__/
+
+# npm node module
+node_modules/

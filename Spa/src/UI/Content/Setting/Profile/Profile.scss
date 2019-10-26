@@ -1,0 +1,144 @@
+@import '../../../Base/Css/GlobalVariables';
+@import '../../../Base/Css/Mixins';
+
+.profile-wrapper {
+
+}
+
+.profile-title {
+  position: relative;
+  padding: 0.83em;
+}
+
+.profile-title::after {
+  content: "";
+  position: absolute;
+  background-color: grey;
+  width: 100%;
+  height: 1px;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+}
+
+.profile-picture-wrapper {
+
+  background-color: white;
+  border-radius: 3px;
+  position: relative;
+
+  @media only screen and (max-width: $mobileLSize - 1 + "px") {
+    width: 100px;
+    height: 100px;
+  }
+
+  @media only screen and (min-width: $mobileLSize + "px") and (max-width: $tabletSize - 1 + "px") {
+    float: right;
+    width: 150px;
+    height: 150px;
+  }
+
+  @media only screen and (min-width: $tabletSize + "px") and (max-width: $laptopSize - 1 + "px") {
+    float: right;
+    width: 200px;
+    height: 200px;
+  }
+
+  @media only screen and (min-width: $laptopSize + "px") {
+    float: right;
+    width: 250px;
+    height: 250px;
+  }
+}
+
+.profile-picture-img {
+
+  @media only screen and (max-width: $mobileLSize - 1 + "px") {
+  }
+
+  @media only screen and (min-width: $mobileLSize + "px") and (max-width: $tabletSize - 1 + "px") {
+  }
+
+  @media only screen and (min-width: $tabletSize + "px") and (max-width: $laptopSize - 1 + "px") {
+  }
+
+  @media only screen and (min-width: $laptopSize + "px") {
+  }
+}
+
+.profile-picture-input-wrapper {
+
+  @media only screen and (max-width: $mobileLSize - 1 + "px") {
+
+  }
+
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  box-sizing: border-box;
+  margin: 5px;
+  padding: 5px 0; /* must match with padding in ...label */
+}
+
+.profile-picture-input-label {
+
+  @media only screen and (max-width: $mobileLSize - 1 + "px") {
+    font-size: 1.0em;
+  }
+
+  border-radius: 3px;
+  background-color: grey;
+  color: white;
+  font-size: 1.2em;
+  box-sizing: border-box;
+  padding: 5px; /* must match with padding in ...wrapper */
+  position: relative;
+}
+
+.profile-picture-input-label::after {
+  content: "";
+  position: absolute;
+  top:1px;
+  left: 1px;
+  right: 1px;
+  bottom: 1px;
+  border: 1px dashed white;
+  border-radius: 3px;
+}
+
+.profile-picture-input {
+  display: none;
+}
+
+.profile-user-name-wrapper {
+}
+
+.profile-user-name-title {
+}
+
+.profile-user-name-description {
+}
+
+.profile-user-name-input {
+  @include input-text;
+}
+
+.profile-email-wrapper {
+}
+
+.profile-password-wrapper {
+}
+
+.profile-btn-wrapper {
+  box-sizing: border-box;
+  padding: 10px 0;
+  text-align: end;
+}
+
+.profile-btn-reset {
+  @include regular-btn;
+}
+
+.profile-btn-update {
+  @include regular-btn;
+}

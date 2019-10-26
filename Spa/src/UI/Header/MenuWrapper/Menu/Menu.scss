@@ -1,0 +1,48 @@
+@import '../../../Base/Css/GlobalVariables';
+
+.header-menu-ul {
+
+  z-index: 9000;
+
+  /* disable default */
+  list-style-type: none;
+  padding-inline-start: 0;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  position: fixed;
+  text-align: center;
+
+  @media only screen and (max-width: $laptopSize - 1 + "px") {
+    top: $headerHeight;
+    right: 0;
+    width: 0;
+    height: 100%;
+    background-color: pink;
+  }
+
+  @media only screen and (min-width: $laptopSize + "px") {
+    right: 0;
+    margin-right: 5px;
+  }
+}
+
+.header-menu-li {
+
+  @media only screen and (max-width: $laptopSize - 1 + "px") {
+    font-size: $titileFontSize;
+    margin: 3px 0;
+  }
+
+  @media only screen and (min-width: $laptopSize + "px") {
+    display: inline-block;
+    font-size: $subTitleFontSize;
+    margin: 0 3px;
+  }
+
+}
+
+.header-menu-li-link {
+
+  text-decoration: none;
+  color: $mainColor;
+}

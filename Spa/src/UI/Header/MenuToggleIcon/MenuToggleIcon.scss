@@ -1,0 +1,16 @@
+@import '../../Base/Css/GlobalVariables';
+
+.header-menu-toggle-icon {
+  width: 30px;
+  height: 30px;
+  margin: 10px;
+
+  @media only screen and (max-width: $laptopSize - 1 + "px") {
+     position: fixed;
+     top: 0;
+     right: 0;
+  }
+
+  @media only screen and (min-width: $laptopSize + "px") {
+  }
+}
