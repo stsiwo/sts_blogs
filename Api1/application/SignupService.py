@@ -36,6 +36,7 @@ class SignupService(object):
                 )
 
         # flush to generate id for new user but not commit yet
+        # do i need to add()??
         self._userRepository.flush()
 
         userViewModel = self._userSchema.dump(newUser)

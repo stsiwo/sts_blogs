@@ -82,15 +82,18 @@ def test_ub06_blogs_get_endpoint_should_return_202_and_blogs_json_with_user_depe
         assert blog['user']['id'] == userId
 
 
-def test_ub07_blogs_post_endpoint_should_return_400_for_bad_request_for_invalid_input(authedClient, database, application):
+def test_ub07_blogs_post_endpoint_should_return_400_for_bad_request_for_invalid_input(authedClient, database, application, httpHeaders):
 
     userId = None
 
     with application.app_context():
-        user = database.session.query(User).first()
+        user = database.session.query(User).filter_by(email='test@test.com').first()
         userId = user.id
 
-    response = authedClient.post('/users/' + str(userId) + '/blogs')
+    csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
+    httpHeaders['X-CSRF-TOKEN'] = csrf_token
+
+    response = authedClient.post('/users/' + str(userId) + '/blogs', headers=httpHeaders)
     assert 400 == response.status_code
 
 

@@ -1,23 +1,30 @@
 from Configs.app import app
 from Infrastructure.DataModels.BlogModel import Blog
-from Configs.extensions import db
 from typing import Dict, List
 from Resources.viewModels.BlogSchema import BlogSchema
 from Infrastructure.transactionDecorator import db_transaction
+from Infrastructure.repositories.BlogRepository import BlogRepository
+from exceptions.BlogNotFoundException import BlogNotFoundException
 
 
 class UserBlogService(object):
 
     _blogSchema: BlogSchema
 
+    _blogRepository: BlogRepository
+
     def __init__(self):
         self._blogSchema = BlogSchema()
+        self._blogRepository = BlogRepository()
 
     def getAllUserBlogService(self, user_id: str) -> List[Dict]:
         app.logger.info("start userblog user service")
         print("start userblog user service")
 
-        blogs: List[Blog] = db.session.query(Blog).filter_by(userId=user_id).all()
+        blogs: List[Blog] = self._blogRepository.find(userId=user_id)
+
+        if len(blogs) == 0:
+            raise BlogNotFoundException(message='specified user does not have any blog')
 
         serializedBlogs: List[Dict] = [self._blogSchema.dump(blog) for blog in blogs]
 
@@ -34,18 +41,17 @@ class UserBlogService(object):
                             userId=user_id
                             )
 
-        db.session.add(newBlog)
+        self._blogRepository.add(newBlog)
 
         return newBlog
 
     @db_transaction()
-    def deleteAllBlogService(self, user_id: str) -> bool:
+    def deleteAllBlogService(self, user_id: str) -> None:
         app.logger.info("start delete all user blog service")
         print("start delete all user blog service")
 
         # delete() returns # of object deleted
-        result = db.session.query(Blog).filter_by(userId=user_id).delete()
+        result = self._blogRepository.deleteByUserId(userId=user_id)
 
-        isSuccessOrNotFound: bool = result > 0
-
-        return isSuccessOrNotFound
+        if result == 0:
+            raise BlogNotFoundException(message='specified user does not have any blog')

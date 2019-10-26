@@ -37,15 +37,7 @@ class UserBlogs(Resource):
         blogs: List[Dict] = self._userBlogService.getAllUserBlogService(user_id)
 
         response = jsonify(blogs)
-
-        # blogs list of dict is empty
-        if len(blogs) == 0:
-            # NOT FOUND
-            response.status_code = 404
-        else:
-            # OK
-            response.status_code = 200
-
+        response.status_code = 200
         return response
 
     # create new blog
@@ -91,12 +83,8 @@ class UserBlogs(Resource):
         app.logger.info("start processing delete request at /blogs")
         print("start processing delete request at /blogs")
 
-        isSuccessOrNotFound: bool = self._userBlogService.deleteAllBlogService(user_id)
+        self._userBlogService.deleteAllBlogService(user_id)
 
         response = jsonify({})
-        if isSuccessOrNotFound:
-            response.status_code = 204
-        else:
-            response.status_code = 404
-
+        response.status_code = 204
         return response
