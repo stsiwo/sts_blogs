@@ -6,6 +6,8 @@ from Infrastructure.DataModels.CommentModel import Comment
 from Infrastructure.DataModels.BlogModel import Blog
 from Infrastructure.repositories.BlogRepository import BlogRepository
 from flask import abort
+from exceptions.BlogNotFoundException import BlogNotFoundException
+from exceptions.CommentNotFoundException import CommentNotFoundException
 
 
 class BlogCommentService(object):
@@ -25,10 +27,10 @@ class BlogCommentService(object):
         blog: Blog = self._blogRepository.get(blog_id)
 
         if blog is None:
-            abort(404, {'message': "specified blog does not exist."})
+            raise BlogNotFoundException
 
         if len(blog.comments) == 0:
-            abort(404, {'message': "specified blog does not have any comment yet."})
+            raise CommentNotFoundException
 
         serializedComments: List[Dict] = [self._commentSchema.dump(comment) for comment in blog.comments]
 
@@ -64,9 +66,9 @@ class BlogCommentService(object):
         blog: Blog = self._blogRepository.get(blog_id)
 
         if blog is None:
-            abort(404, {'message': "specified blog does not exist."})
+            raise BlogNotFoundException
 
         if len(blog.comments) == 0:
-            abort(404, {'message': "specified blog does not have any comment yet."})
+            raise CommentNotFoundException
 
         del blog.comments[:]
