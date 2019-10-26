@@ -16,3 +16,6 @@ class BlogRepository(BaseRepository[Blog]):
 
     def delete(self, id: str):
         self._session.query(Blog).filter_by(id=id).delete()
+
+    def deleteByUserId(self, userId: str):
+        self._session.query(Blog).filter_by(userId=userId).delete()

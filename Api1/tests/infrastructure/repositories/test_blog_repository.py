@@ -56,3 +56,21 @@ def test_br8_delete(exSession, blogsSeededFixture):
     deletedBlog = blogRepo.get(blog.id)
 
     assert deletedBlog is None
+
+
+def test_br8_deleteByUserId(exSession, blogsSeededFixture):
+
+    blogRepo = BlogRepository()
+
+    blogs = blogRepo.find(userId=2)
+
+    assert len(blogs) != 0
+
+    # test user id = 2
+    blogRepo.deleteByUserId(2)
+
+    exSession.commit()
+
+    deletedBlog = blogRepo.find(userId=2)
+
+    assert len(deletedBlog) == 0
