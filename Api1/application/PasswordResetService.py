@@ -11,6 +11,7 @@ from Infrastructure.repositories.UserRepository import UserRepository
 from utils.util import printObject
 from exceptions.SignatureExpiredException import SignatureExpiredException
 from exceptions.BadSignatureException import BadSignatureException
+from exceptions.EmailNotFoundException import EmailNotFoundException
 
 
 @app.errorhandler(400)
@@ -38,7 +39,7 @@ class PasswordResetService(object):
         user = self._userRepository.find(email=email)
 
         if user is None:
-            abort(404, {'message': 'entered email does not exist.'})
+            raise EmailNotFoundException
 
         token = generateForgotPasswordToken(user.id)
 
