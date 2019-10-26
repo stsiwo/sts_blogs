@@ -2,6 +2,8 @@ from Configs.app import app
 from flask import abort
 from Infrastructure.repositories.UserRepository import UserRepository
 from Resources.viewModels.UserSchema import UserSchema
+from exceptions.EmailNotFoundException import EmailNotFoundException
+from exceptions.PasswordInvalidException import PasswordInvalidException
 
 
 class LoginService(object):
@@ -21,9 +23,9 @@ class LoginService(object):
         loginUser = self._userRepository.find(email=email)
 
         if loginUser is None:
-            abort(404, {'message': 'entered email does not exist.'})
+            raise EmailNotFoundException
 
         if not loginUser.verifyPassword(password):
-            abort(400, {'message': 'invalid password'})
+            raise PasswordInvalidException
 
         return loginUser

@@ -5,6 +5,7 @@ from exceptions.SignatureExpiredException import SignatureExpiredException
 from exceptions.BlogNotFoundException import BlogNotFoundException
 from exceptions.EmailNotFoundException import EmailNotFoundException
 from exceptions.CommentNotFoundException import CommentNotFoundException
+from exceptions.PasswordInvalidException import PasswordInvalidException
 
 
 def constructResponse(error):
@@ -35,4 +36,9 @@ def blogNotFound(error):
 
 @app.errorhandler(CommentNotFoundException)
 def commentNotFound(error):
+    return constructResponse(error)
+
+
+@app.errorhandler(PasswordInvalidException)
+def passwordInvalid(error):
     return constructResponse(error)
