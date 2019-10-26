@@ -83,7 +83,7 @@ def test_ui_post04_upload_image_post_endpoint_should_return_error_msg_since_inpu
 
     data = decodeResponseByteJsonToDictionary(response.data)
 
-    assert data['msg'] is not None
+    assert data['title'] == 'uploaded file error'
 
 
 def test_ui_post05_upload_image_post_endpoint_should_allow_authed_upload_to_get_200_code(authedClient, multipartHttpHeaders, testImageFile, setupTempUploadDir):
@@ -248,7 +248,7 @@ def test_ui_put04_upload_image_put_endpoint_should_return_error_msg_since_input_
 
     data = decodeResponseByteJsonToDictionary(response.data)
 
-    assert data['msg'] is not None
+    assert data['title'] == 'uploaded file error'
 
 
 def test_ui_put05_upload_image_put_endpoint_should_allow_authed_upload_to_get_200_code(authedClient, multipartHttpHeaders, testImageFile, setupTempUploadDirWithTestImageFile):

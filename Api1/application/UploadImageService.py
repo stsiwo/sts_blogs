@@ -18,32 +18,26 @@ class UploadImageService(object):
         app.logger.info("start update uploadImage service")
         print("start update uploadImage service")
 
-        try:
-            uploadedImagePath: str = self._fileService.saveImageFileToDir(
-                    files=files,
-                    fileKeyName=fileKeyName)
+        uploadedImagePath: str = self._fileService.saveImageFileToDir(
+                files=files,
+                fileKeyName=fileKeyName)
 
-            imageUploader = db.session.query(User).get(userId)
-            imageUploader.avatarUrl = uploadedImagePath
+        imageUploader = db.session.query(User).get(userId)
+        imageUploader.avatarUrl = uploadedImagePath
 
-            return uploadedImagePath
-        except Exception as e:
-            raise e
+        return uploadedImagePath
 
     @db_transaction()
     def updateUploadImageService(self, files: Dict[str, BinaryIO], fileKeyName: str, originalFileName: str, userId: str) -> str:
         app.logger.info("start update uploadImage service")
         print("start update uploadImage service")
 
-        try:
-            updatedImagePath: str = self._fileService.updateImageFileToDir(
-                    files=files,
-                    fileKeyName=fileKeyName,
-                    originalFileName=originalFileName)
+        updatedImagePath: str = self._fileService.updateImageFileToDir(
+                files=files,
+                fileKeyName=fileKeyName,
+                originalFileName=originalFileName)
 
-            imageUploader = db.session.query(User).get(userId)
-            imageUploader.avatarUrl = updatedImagePath
+        imageUploader = db.session.query(User).get(userId)
+        imageUploader.avatarUrl = updatedImagePath
 
-            return updatedImagePath
-        except Exception as e:
-            raise e
+        return updatedImagePath

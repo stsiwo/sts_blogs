@@ -18,7 +18,6 @@ class TokenService(object):
     def createJwtToken(self, response: Response, identity: Dict):
         app.logger.info("start create jwt token service")
         print("start create jwt token service")
-        print("start create jwt token service1")
 
         # Create the tokens we will be sending back to the user
         access_token = create_access_token(identity=identity)

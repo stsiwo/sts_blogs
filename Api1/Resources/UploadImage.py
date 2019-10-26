@@ -24,21 +24,15 @@ class UploadImage(Resource):
         app.logger.info("start processing post request at /uploadimage")
         print("start processing post request at /uploadimage")
 
-        try:
-            uploadedFilePath: str = self._uploadImageService.saveUploadImageService(
-                    files=request.files,
-                    fileKeyName='avatarFile',
-                    userId=get_jwt_identity()['id']
-                    )
+        uploadedFilePath: str = self._uploadImageService.saveUploadImageService(
+                files=request.files,
+                fileKeyName='avatarFile',
+                userId=get_jwt_identity()['id']
+                )
 
-            response = jsonify({'imageUrl': uploadedFilePath})
-            response.status_code = 200
-            return response
-
-        except Exception as e:
-            response = jsonify({'msg': str(e)})
-            response.status_code = 400
-            return response
+        response = jsonify({'imageUrl': uploadedFilePath})
+        response.status_code = 200
+        return response
 
     @jwt_required
     @requires_jwt_role_claim({'admin', 'member'})
@@ -47,19 +41,13 @@ class UploadImage(Resource):
         app.logger.info("start processing put request at /uploadimage")
         print("start processing put request at /uploadimage")
 
-        try:
-            updatedFilePath: str = self._uploadImageService.updateUploadImageService(
-                    files=request.files,
-                    fileKeyName='avatarFile',
-                    originalFileName=file_name,
-                    userId=get_jwt_identity()['id']
-                    )
+        updatedFilePath: str = self._uploadImageService.updateUploadImageService(
+                files=request.files,
+                fileKeyName='avatarFile',
+                originalFileName=file_name,
+                userId=get_jwt_identity()['id']
+                )
 
-            response = jsonify({'imageUrl': os.path.join(request.host_url, updatedFilePath)})
-            response.status_code = 200
-            return response
-
-        except Exception as e:
-            response = jsonify({'msg': str(e)})
-            response.status_code = 400
-            return response
+        response = jsonify({'imageUrl': os.path.join(request.host_url, updatedFilePath)})
+        response.status_code = 200
+        return response

@@ -2,6 +2,7 @@ from Configs.app import app
 from typing import Dict, BinaryIO
 from werkzeug.utils import secure_filename
 import os
+from exceptions.UploadedFileException import UploadedFileException
 
 
 class FileService(object):
@@ -22,7 +23,7 @@ class FileService(object):
             destImagePath = os.path.join('/images', filename)
             return destImagePath
         else:
-            raise Exception("file does not selected or file type is not allowed")
+            raise UploadedFileException
 
     def updateImageFileToDir(self, files: Dict[str, BinaryIO], fileKeyName: str, originalFileName: str) -> str:
 
@@ -36,7 +37,7 @@ class FileService(object):
             destImagePath = os.path.join('/images', filename)
             return destImagePath
         else:
-            raise Exception("file does not selected or file type is not allowed")
+            raise UploadedFileException
 
     def _allowed_file(self, filename: str) -> bool:
         return '.' in filename and filename.rsplit('.', 1)[1].lower() in self._allowedExtension
