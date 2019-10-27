@@ -3,5 +3,5 @@ import { CaseReducerType } from '../caseReducers/CaseReducerType';
 import { ActionTypeEnum } from '../../actions/types';
 
 export type HandlerType<T> = {
-  ActionTypeEnum?: CaseReducerType<T>;
+  [P in ActionTypeEnum]: CaseReducerType<T>;
   }
