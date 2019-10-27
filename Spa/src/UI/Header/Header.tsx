@@ -6,6 +6,7 @@ import MenuToggleIcon from './MenuToggleIcon/MenuToggleIcon';
 import Menu from './MenuWrapper/Menu/Menu';
 import MenuWrapper from './MenuWrapper/MenuWrapper';
 import SignupForm from './Modal/SignupForm/SignupForm';
+import LoginForm from './Modal/LoginForm/LoginForm';
 
 
 const Header: React.FunctionComponent<{}> = (props: {}) => {
@@ -34,6 +35,7 @@ const Header: React.FunctionComponent<{}> = (props: {}) => {
       {(currentScreenWidth < cssGlobal.laptopSize && renderMenuSidebar())}
       {(currentScreenWidth >= cssGlobal.laptopSize && renderHorizontalMenu())}
     {/*<SignupForm />*/}
+    {/*<LoginForm />*/}
     </header>
   );
 }

@@ -8,3 +8,11 @@
 .regular-btn {
   @include regular-btn;
 }
+
+.modal-form-wrapper {
+  @include modal-form-wrapper;
+}
+
+.modal-form-cover {
+  @include modal-form-cover; 
+}

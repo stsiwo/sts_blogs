@@ -4,8 +4,8 @@ import './SignupForm.scss';
 const SignupForm: React.FunctionComponent<{}> = (props: {}) => {
 
   return (
-    <div className="signup-form-wrapper">
-      <div className="signup-form-cover">
+    <div className="modal-form-wrapper signup-form-wrapper">
+      <div className="modal-form-cover signup-form-cover">
         <h2 className="signup-form-title">Signup Form</h2>
         <form className="signup-form-content">
 
