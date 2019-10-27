@@ -7,8 +7,10 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import Header from './UI/Header/Header';
 import Content from './UI/Content/Content';
 import './UI/Base/Css/Common.scss';
+import { createStore } from 'redux';
+import { rootReducer } from './reducers/rootReducer';
+import { store } from './configs/storeConfig';
 
-const store = createStore(rootReducer)
 
 const App = (props: any) => {
   return (
