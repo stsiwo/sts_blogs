@@ -1,7 +1,7 @@
 export declare type UiStateType = {
-  ui1: boolean,
-  ui2: boolean,
-  ui3: boolean
+  isLoginFormOpen: boolean;
+  isSignupFormOpen: boolean;
+  isNavBarOpen: boolean;
 }
 
 export declare type AppStateType = {

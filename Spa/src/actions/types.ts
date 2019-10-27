@@ -1,23 +1,23 @@
 import { Action } from "redux";
 
 export declare type ActionTypeType = {
-  UI_1: string;
-  UI_2: string;
-  UI_3: string;
+  TOGGLE_LOGIN_FORM: string
+  TOGGLE_SIGNUP_FORM: string
+  TOGGLE_NAV_BAR: string
 }
 
 // base action type which only allow type is one of ActionTypeType
 export declare type AppActionType = Action<keyof ActionTypeType>
 
-export declare type Ui1ActionType = AppActionType & {
-  ui1: boolean
+export declare type ToggleLoginFormActionType = AppActionType & {
+  isLoginFormOpen: boolean
 }
 
-export declare type Ui2ActionType = AppActionType & {
-  ui2: boolean
+export declare type ToggleSignupFormActionType = AppActionType & {
+  isSignupFormOpen: boolean
 }
 
-export declare type Ui3ActionType = AppActionType & {
-  ui3: boolean
+export declare type ToggleNavBarActionType = AppActionType & {
+  isNavBarOpen: boolean
 }
 

@@ -1,19 +1,19 @@
 import { CaseReducerType } from "./CaseReducerType";
 import { UiStateType } from "../../states/types";
-import { Ui1ActionType, Ui2ActionType, Ui3ActionType } from "../../actions/types";
+import { ToggleLoginFormActionType, ToggleSignupFormActionType, ToggleNavBarActionType } from "../../actions/types";
 
 
-export const ui1CaseReducer: CaseReducerType<UiStateType, Ui1ActionType> = (ui, action) => {
-  ui.ui1 = !ui.ui1;
+export const toggleLoginFormCaseReducer: CaseReducerType<UiStateType, ToggleLoginFormActionType> = (ui, action) => {
+  ui.isLoginFormOpen = action.isLoginFormOpen
   return ui;
 };
 
-export const ui2CaseReducer: CaseReducerType<UiStateType, Ui2ActionType> = (ui, action) => {
-  ui.ui2 = !ui.ui2;
+export const toggleSignupFormCaseReducer: CaseReducerType<UiStateType, ToggleSignupFormActionType> = (ui, action) => {
+  ui.isSignupFormOpen = action.isSignupFormOpen
   return ui;
 };
 
-export const ui3CaseReducer: CaseReducerType<UiStateType, Ui3ActionType> = (ui, action) => {
-  ui.ui3 = !ui.ui3;
+export const toggleNavBarCaseReducer: CaseReducerType<UiStateType, ToggleNavBarActionType> = (ui, action) => {
+  ui.isNavBarOpen = action.isNavBarOpen
   return ui;
 };
