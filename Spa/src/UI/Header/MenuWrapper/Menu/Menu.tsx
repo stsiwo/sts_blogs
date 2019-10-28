@@ -8,10 +8,12 @@ import { StateType } from '../../../../states/types';
 
 const Menu: React.FunctionComponent<{}> = (props: {}) => {
 
-    const isNavBarOpen = useSelector((state: StateType) => state.ui.isNavBarOpen)
-    const handleStopPropagationClickEvent: React.EventHandler<React.MouseEvent<HTMLUListElement>> = (e) => {
-      e.stopPropagation() 
-    }
+  const isNavBarOpen = useSelector((state: StateType) => state.ui.isNavBarOpen)
+  const handleStopPropagationClickEvent: React.EventHandler<React.MouseEvent<HTMLUListElement>> = (e) => {
+    e.stopPropagation()
+  }
+
+  const isLogin = useSelector((state: StateType) => state.app.isLogin)
 
   return isNavBarOpen && (
     <ul className="header-menu-ul" onClick={handleStopPropagationClickEvent}>
@@ -28,6 +30,20 @@ const Menu: React.FunctionComponent<{}> = (props: {}) => {
       <li className="header-menu-li">
         <Link className="header-menu-li-link" to="./" >item4</Link>
       </li>
+      {isLogin &&
+        <li className="header-menu-li">
+          <Link className="header-menu-li-link" to="./logout" >Logout</Link>
+        </li>}
+      {!isLogin &&
+        <React.Fragment>
+          <li className="header-menu-li">
+            <Link className="header-menu-li-link" to="./signup" >Signup</Link>
+          </li>
+          <li className="header-menu-li">
+            <Link className="header-menu-li-link" to="./login" >Login</Link>
+          </li>
+        </React.Fragment>
+      }
     </ul>
   );
 }
