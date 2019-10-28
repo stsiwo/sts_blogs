@@ -5,6 +5,8 @@ import { useCssGlobalContext } from '../Base/Context/CssGlobalContext/CssGlobalC
 import { Route } from 'react-router-dom';
 import Home from './Home/Home';
 import Setting from './Setting/Setting';
+import Login from './Login/Login';
+import Signup from './Signup/Signup';
 
 
 const Content: React.FunctionComponent<{}> = (props: {}) => {
@@ -13,6 +15,8 @@ const Content: React.FunctionComponent<{}> = (props: {}) => {
     <section className="content-wrapper">
       <Route path="/" exact component={Home} /> 
       <Route path="/setting" exact component={Setting} /> 
+      <Route path="/login" exact component={Login} /> 
+      <Route path="/signup" exact component={Signup} /> 
     </section>
   );
 }
