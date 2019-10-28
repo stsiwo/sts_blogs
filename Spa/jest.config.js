@@ -10,4 +10,5 @@ module.exports = {
   "transform": {
     "^.+\\.tsx?$": "ts-jest"
   },
+  "setupFilesAfterEnv": ["<rootDir>/tests/enzyme.config.ts"]
 }
