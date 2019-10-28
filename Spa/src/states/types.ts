@@ -5,9 +5,7 @@ export declare type UiStateType = {
 }
 
 export declare type AppStateType = {
-  app1: boolean,
-  app2: boolean,
-  app3: boolean
+  isLogin: boolean;
 }
 
 export declare type DomainStateType = {
@@ -18,4 +16,5 @@ export declare type DomainStateType = {
 
 export declare type StateType = {
   ui: UiStateType,
+  app: AppStateType,
 }

@@ -1,4 +1,4 @@
-import { ToggleLoginFormActionCreatorType, ToggleSignupFormActionCreatorType, ToggleNavBarActionCreatorType, ActionTypeEnum } from "./types";
+import { ToggleLoginFormActionCreatorType, ToggleSignupFormActionCreatorType, ToggleNavBarActionCreatorType, ActionTypeEnum, ToggleLoginStatusActionCreatorType } from "./types";
 
 
 export const toggleLoginFormActionCreator: ToggleLoginFormActionCreatorType = (isLoginFormOpen) => ({
@@ -15,4 +15,9 @@ export const toggleSignupFormActionCreator: ToggleSignupFormActionCreatorType = 
 export const toggleNavBarActionCreator: ToggleNavBarActionCreatorType = (isNavBarOpen) => ({
   type: ActionTypeEnum.TOGGLE_NAV_BAR,
   isNavBarOpen: isNavBarOpen
+})
+
+export const toggleLoginStatusActionCreator: ToggleLoginStatusActionCreatorType = (isLogin) => ({
+  type: ActionTypeEnum.TOGGLE_LOGIN_STATUS,
+  isLogin: isLogin
 })

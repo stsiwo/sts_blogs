@@ -1,8 +1,10 @@
 import { createStore } from "redux";
 import { rootReducer } from "../../src/reducers/rootReducer";
 import { initialState } from "../../src/states/state";
-import { ToggleLoginFormActionType, ToggleSignupFormActionType, ToggleNavBarActionType, ActionTypeEnum } from "../../src/actions/types";
+import { ToggleLoginFormActionType, ToggleSignupFormActionType, ToggleNavBarActionType, ActionTypeEnum, ToggleLoginStatusActionType } from "../../src/actions/types";
 import { prettyConsole } from "../../src/utils";
+import { toggleLoginStatusActionCreator } from '../../src/actions/creators'
+import { StateType } from "../../src/states/types";
 
 
 describe('rr01_rootReducer', () => {
@@ -10,7 +12,7 @@ describe('rr01_rootReducer', () => {
   it('should have same state as initial state', () => {
 
     let store = createStore(rootReducer)
-    
+
     expect(store.getState()).toEqual(initialState)
   })
 
@@ -27,7 +29,7 @@ describe('rr01_rootReducer', () => {
 
     expect(store.getState().ui.isLoginFormOpen).toEqual(false)
   })
-  
+
   it('should update ui.isSignupFormOpen state when that action is dispatched', () => {
 
     let store = createStore(rootReducer)
@@ -47,12 +49,22 @@ describe('rr01_rootReducer', () => {
     let store = createStore(rootReducer)
 
     let action: ToggleNavBarActionType = {
-      type: ActionTypeEnum.TOGGLE_NAV_BAR, 
+      type: ActionTypeEnum.TOGGLE_NAV_BAR,
       isNavBarOpen: false
     }
 
     store.dispatch(action)
 
     expect(store.getState().ui.isNavBarOpen).toEqual(false)
+  })
+
+  it('should update app.isLogin state when that action is dispatched', () => {
+
+    let store = createStore(rootReducer)
+
+    let action: ToggleLoginStatusActionType = toggleLoginStatusActionCreator(true)
+    store.dispatch(action)
+
+    expect(store.getState().app.isLogin).toEqual(true)
   })
 })
