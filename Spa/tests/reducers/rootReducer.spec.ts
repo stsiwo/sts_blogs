@@ -1,7 +1,7 @@
 import { createStore } from "redux";
 import { rootReducer } from "../../src/reducers/rootReducer";
 import { initialState } from "../../src/states/state";
-import { ToggleLoginFormActionType, ToggleSignupFormActionType, ToggleNavBarActionType } from "../../src/actions/types";
+import { ToggleLoginFormActionType, ToggleSignupFormActionType, ToggleNavBarActionType, ActionTypeEnum } from "../../src/actions/types";
 import { prettyConsole } from "../../src/utils";
 
 
@@ -19,7 +19,7 @@ describe('rr01_rootReducer', () => {
     let store = createStore(rootReducer)
 
     let action: ToggleLoginFormActionType = {
-      type: 'TOGGLE_LOGIN_FORM',
+      type: ActionTypeEnum.TOGGLE_LOGIN_FORM,
       isLoginFormOpen: false
     }
 
@@ -33,7 +33,7 @@ describe('rr01_rootReducer', () => {
     let store = createStore(rootReducer)
 
     let action: ToggleSignupFormActionType = {
-      type: 'TOGGLE_SIGNUP_FORM',
+      type: ActionTypeEnum.TOGGLE_SIGNUP_FORM,
       isSignupFormOpen: false
     }
 
@@ -47,7 +47,7 @@ describe('rr01_rootReducer', () => {
     let store = createStore(rootReducer)
 
     let action: ToggleNavBarActionType = {
-      type: 'TOGGLE_NAV_BAR',
+      type: ActionTypeEnum.TOGGLE_NAV_BAR, 
       isNavBarOpen: false
     }
 
