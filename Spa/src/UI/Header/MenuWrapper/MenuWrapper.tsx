@@ -3,16 +3,16 @@ import './MenuWrapper.scss';
 import Menu from './Menu/Menu';
 import { useSelector, useDispatch } from 'react-redux';
 import { StateType } from '../../../states/types';
-import { toggleLoginFormActionCreator } from '../../../actions/creators';
+import { toggleNavBarActionCreator } from '../../../actions/creators';
 
 
 const MenuWrapper: React.FunctionComponent<{}> = (props: {}) => {
 
-    const isNavBarOpen = useSelector((state: StateType) => state.ui.isLoginFormOpen)
+    const isNavBarOpen = useSelector((state: StateType) => state.ui.isNavBarOpen)
     const dispatch = useDispatch()
 
     const handleNavBarOutsideClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = (e) => {
-      dispatch(toggleLoginFormActionCreator(false))
+      dispatch(toggleNavBarActionCreator(false))
     }
 
     return isNavBarOpen && (

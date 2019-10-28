@@ -15,9 +15,10 @@
   @media only screen and (max-width: $laptopSize - 1 + "px") {
     top: $headerHeight;
     right: 0;
-    width: 0;
+    width: 100px;
     height: 100%;
     background-color: pink;
+    transition: 0.5s
   }
 
   @media only screen and (min-width: $laptopSize + "px") {

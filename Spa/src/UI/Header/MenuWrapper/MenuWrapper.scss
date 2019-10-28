@@ -1,10 +1,6 @@
 @import '../../Base/Css/GlobalVariables';
 
 .header-menu-wrapper {
-  /* implement when adding event handling in react */
-  /* for now hide this wrapper */
-  display: none; // <=====
-
   z-index: 8000;  
   position: fixed;
   top: 0;
