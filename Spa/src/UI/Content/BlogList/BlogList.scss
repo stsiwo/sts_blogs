@@ -1,12 +1,12 @@
 @import '../../Base/Css/GlobalVariables';
 @import '../../Base/Css/Mixins';
 
-.blog-wrapper {
+.blog-list-wrapper {
   display: flex;
   justify-content: center;
 }
 
-.blog-aside-wrapper {
+.blog-list-aside-wrapper {
   background-color: yellow;
   width: 100px;
 
@@ -22,11 +22,11 @@
   }
 }
 
-.blog-filter-sort-close-icon-wrapper {
+.blog-list-filter-sort-close-icon-wrapper {
   text-align: right;
 }
 
-.blog-filter-sort-close-icon {
+.blog-list-filter-sort-close-icon {
   font-style: normal;
   font-size: 20px;
 
@@ -40,53 +40,53 @@
   border-radius: 15px;
 }
 
-.blog-filter-wrapper {
+.blog-list-filter-wrapper {
   background-color: rgba(117, 255, 51, 0.5);
 }
 
-.blog-filter-title {
+.blog-list-filter-title {
 }
 
-.blog-filter-tags-wrapper {
+.blog-list-filter-tags-wrapper {
 }
 
-.blog-filter-tags-title {
+.blog-list-filter-tags-title {
 }
 
-.blog-filter-tags-tag {
+.blog-list-filter-tags-tag {
 }
 
-.blog-filter-date-wrapper {
+.blog-list-filter-date-wrapper {
 }
 
-.blog-filter-date-title {
+.blog-list-filter-date-title {
 }
 
-.blog-sort-wrapper {
+.blog-list-sort-wrapper {
 }
 
-.blog-sort-title {
+.blog-list-sort-title {
 }
 
-.blog-filter-sort-item-wrapper {
+.blog-list-filter-sort-item-wrapper {
 }
 
-.blog-filter-sort-item-input {
+.blog-list-filter-sort-item-input {
 }
 
-.blog-filter-sort-item-label {
+.blog-list-filter-sort-item-label {
 }
 
-.blog-section-wrapper {
+.blog-list-section-wrapper {
   width: 80%;
   max-width: 600px;
   text-align: center;
 }
 
-.blog-title {
+.blog-list-title {
 }
 
-.blog-items-wrapper {
+.blog-list-items-wrapper {
   display: flex;
   flex-wrap: wrap;
   margin: 10px;
@@ -94,7 +94,7 @@
   justify-content: center;
 }
 
-.blog-items-item-wrapper {
+.blog-list-items-item-wrapper {
   width: 100px;
   height: 100px;
   border: 1px solid black;
@@ -103,11 +103,11 @@
   margin: 5px;
 }
 
-.blog-pagination-wrapper {
+.blog-list-pagination-wrapper {
   text-align: center;
 }
 
-.blog-pagination-btn {
+.blog-list-pagination-btn {
   font-family: inherit;
   border: 0;
   padding: 0;
@@ -115,7 +115,7 @@
   
 }
 
-.blog-filter-sort-icon {
+.blog-list-filter-sort-icon {
   width: 30px;
   height: 30px;
   background-color: black; 
