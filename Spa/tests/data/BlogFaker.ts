@@ -10,7 +10,8 @@ export const getBlogTestData = (num: number = 20): BlogType[] => {
       id: i.toString(),
       title: faker.name.title(),
       subTitle: faker.lorem.sentences(),
-      content: faker.lorem.paragraphs(10)
+      content: faker.lorem.paragraphs(10),
+      createdDate: faker.date.past(),
     })
   }
 

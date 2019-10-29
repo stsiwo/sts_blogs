@@ -13,3 +13,5 @@ export const prettyConsole = (target: any): void => {
 }, 2));
   cache = null
 }
+
+export const dateFormatOption =  { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}

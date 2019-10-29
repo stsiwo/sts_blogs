@@ -6,6 +6,7 @@ export declare type BlogType = {
   title: string, 
   subTitle: string, 
   content: string,
+  createdDate: Date
   //author: AuthorType,
   //tags: TagType[],
 }
