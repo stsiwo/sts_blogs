@@ -9,8 +9,8 @@ export const getBlogTestData = (num: number = 20): BlogType[] => {
     blogList.push({
       id: i.toString(),
       title: faker.name.title(),
-      subTitle: faker.name.title(),
-      content: faker.lorem.sentences()
+      subTitle: faker.lorem.sentences(),
+      content: faker.lorem.paragraphs(10)
     })
   }
 
