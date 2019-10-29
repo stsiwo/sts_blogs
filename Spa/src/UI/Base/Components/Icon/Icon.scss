@@ -1,0 +1,17 @@
+@import '../../../Base/Css/GlobalVariables';
+@import '../../../Base/Css/Mixins';
+
+.icon-wrapper {
+  width: 30px;
+  height: 30px;
+  background-color: white;
+  border-radius: 15px;
+  text-align: center; 
+  line-height: 30px;
+  box-shadow: 1px 1px 3px black;
+}
+
+.icon-item {
+  font-style: normal;
+}
+
