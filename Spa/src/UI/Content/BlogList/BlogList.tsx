@@ -9,6 +9,7 @@ import { StateType } from '../../../states/types';
 import { useResponsiveComponent } from '../../Base/Hooks/ResponsiveComponentHook';
 import { useCssGlobalContext } from '../../Base/Context/CssGlobalContext/CssGlobalContext';
 import { toggleFilterSortBarActionCreator } from '../../../actions/creators';
+import { Link } from 'react-router-dom';
 
 
 const BlogList: React.FunctionComponent<{}> = (props: {}) => {
@@ -35,7 +36,8 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   const renderBlogLists = (blogList: BlogType[]): React.ReactNode => {
     return blogList.map((blog: BlogType) => {
       return (
-        <div className="blog-list-items-item-wrapper" key={blog.id}></div>
+        <Link to={`/blog/${blog.id}`} className="blog-list-items-item-wrapper" key={blog.id}>
+        </Link>
       )
     })
   }
