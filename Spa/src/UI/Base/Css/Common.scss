@@ -16,3 +16,7 @@
 .modal-form-cover {
   @include modal-form-cover; 
 }
+
+.tag-icon {
+  @include tag-icon;
+}
