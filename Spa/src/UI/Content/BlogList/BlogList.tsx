@@ -1,5 +1,5 @@
 import * as React from 'react';
-import './Blog.scss';
+import './BlogList.scss';
 import { TagType } from '../../../domain/tag/TagType';
 import { getTagTestData } from '../../../../tests/data/TagFaker';
 import { BlogType } from '../../../domain/blog/BlogType';
@@ -11,7 +11,7 @@ import { useCssGlobalContext } from '../../Base/Context/CssGlobalContext/CssGlob
 import { toggleFilterSortBarActionCreator } from '../../../actions/creators';
 
 
-const Blog: React.FunctionComponent<{}> = (props: {}) => {
+const BlogList: React.FunctionComponent<{}> = (props: {}) => {
 
   const isFilterSortBarOpen = useSelector((state: StateType) => state.ui.isFilterSortBarOpen)
 
@@ -32,7 +32,7 @@ const Blog: React.FunctionComponent<{}> = (props: {}) => {
     dispatch(toggleFilterSortBarActionCreator(false))
   }
 
-  const renderBlogs = (blogList: BlogType[]): React.ReactNode => {
+  const renderBlogLists = (blogList: BlogType[]): React.ReactNode => {
     return blogList.map((blog: BlogType) => {
       return (
         <div className="blog-items-item-wrapper" key={blog.id}></div>
@@ -77,9 +77,9 @@ const Blog: React.FunctionComponent<{}> = (props: {}) => {
         </aside>
       }
       <section className="blog-section-wrapper">
-        <h2 className="blog-title">Blogs</h2>
+        <h2 className="blog-title">BlogLists</h2>
         <div className="blog-items-wrapper">
-          {renderBlogs(getBlogTestData())}
+          {renderBlogLists(getBlogTestData())}
         </div>
         <div className="blog-pagination-wrapper">
           <button className="blog-pagination-btn blog-pagination-to-first-btn" value='1'>&laquo;</button>
@@ -96,7 +96,7 @@ const Blog: React.FunctionComponent<{}> = (props: {}) => {
   );
 }
 
-export default Blog;
+export default BlogList;
 
 
 
