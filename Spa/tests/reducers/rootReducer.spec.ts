@@ -1,9 +1,9 @@
 import { createStore } from "redux";
 import { rootReducer } from "../../src/reducers/rootReducer";
 import { initialState } from "../../src/states/state";
-import { ToggleLoginFormActionType, ToggleSignupFormActionType, ToggleNavBarActionType, ActionTypeEnum, ToggleLoginStatusActionType } from "../../src/actions/types";
+import { ToggleLoginFormActionType, ToggleSignupFormActionType, ToggleNavBarActionType, ActionTypeEnum, ToggleLoginStatusActionType, ToggleFilterSortBarActionType } from "../../src/actions/types";
 import { prettyConsole } from "../../src/utils";
-import { toggleLoginStatusActionCreator } from '../../src/actions/creators'
+import { toggleLoginStatusActionCreator, toggleFilterSortBarActionCreator } from '../../src/actions/creators'
 import { StateType } from "../../src/states/types";
 
 
@@ -56,6 +56,16 @@ describe('rr01_rootReducer', () => {
     store.dispatch(action)
 
     expect(store.getState().ui.isNavBarOpen).toEqual(false)
+  })
+
+  it('should update ui.isFilterSortBarOpen state when that action is dispatched', () => {
+
+    let store = createStore(rootReducer)
+
+    let action: ToggleFilterSortBarActionType = toggleFilterSortBarActionCreator(true)
+    store.dispatch(action)
+
+    expect(store.getState().ui.isFilterSortBarOpen).toEqual(true)
   })
 
   it('should update app.isLogin state when that action is dispatched', () => {

@@ -5,6 +5,7 @@ export const initialState: StateType = {
     isLoginFormOpen: false,
     isSignupFormOpen: false,
     isNavBarOpen: false,
+    isFilterSortBarOpen: false,
   },
   app: {
     isLogin: false
