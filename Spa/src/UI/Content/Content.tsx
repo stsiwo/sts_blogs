@@ -7,6 +7,7 @@ import Home from './Home/Home';
 import Setting from './Setting/Setting';
 import Login from './Login/Login';
 import Signup from './Signup/Signup';
+import Blog from './Blog/Blog';
 
 
 const Content: React.FunctionComponent<{}> = (props: {}) => {
@@ -17,6 +18,7 @@ const Content: React.FunctionComponent<{}> = (props: {}) => {
       <Route path="/setting" exact component={Setting} /> 
       <Route path="/login" exact component={Login} /> 
       <Route path="/signup" exact component={Signup} /> 
+      <Route path="/blog" exact component={Blog} /> 
     </section>
   );
 }
