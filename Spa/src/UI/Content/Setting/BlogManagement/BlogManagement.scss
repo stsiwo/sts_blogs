@@ -113,7 +113,22 @@
 }
 
 .blog-management-aside-wrapper {
-
+  margin: 10px;
 }
 
+.blog-management-aside-ul {
+  list-style-type: none;
+  margin-block-start: 0; 
+  margin-block-end: 0;
+  padding-inline-start: 0;
+}
+
+.blog-management-aside-filter-tags-input {
+  box-sizing: border-box;
+  border: none;
+  margin: 2px;
+  padding: 5px;
+  width: 80%;
+  border-radius: 5px;
+}
 
