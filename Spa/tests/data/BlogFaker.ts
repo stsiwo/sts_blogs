@@ -8,7 +8,7 @@ export const getBlogTestData = (num: number = 20): BlogType[] => {
   for(var i = 1; i <= num; i++) {
     blogList.push({
       id: i.toString(),
-      title: faker.name.title(),
+      title: faker.lorem.sentence(20),
       subTitle: faker.lorem.sentences(),
       content: faker.lorem.paragraphs(10),
       createdDate: faker.date.past(),
