@@ -7,7 +7,8 @@ import Icon from '../../../Base/Components/Icon/Icon';
 import { getTagTestData } from '../../../../../tests/data/TagFaker';
 import Tag from '../../../Base/Components/Tag/Tag';
 import { Link } from 'react-router-dom';
-
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 declare type TagType = {
   name: string
@@ -42,6 +43,12 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
         <Tag name={tag.name} withCancelBtn />
       )
     })
+  }
+
+  const [currentFilterDate, setFilterDate] = React.useState(new Date())
+
+  const handleDatePickerClickEvent = (selectedDate: Date): void => {
+    setFilterDate(selectedDate)
   }
 
   const handleTagInputEnterOrTabKeyClickEvent: React.EventHandler<React.KeyboardEvent<HTMLInputElement>> = (e) => {
@@ -104,7 +111,7 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
             <h3 className="blog-management-aside-filter-title">Filter Blogs</h3>
             <div className="blog-management-aside-filter-tags-wrapper" >
               <h4 className="blog-management-aside-filter-tags-title">Tags</h4>
-              <input type="text" className="blog-management-aside-filter-tags-input" onKeyDown={handleTagInputEnterOrTabKeyClickEvent} ref={tagInputRef}/>
+              <input type="text" className="blog-management-aside-filter-tags-input" onKeyDown={handleTagInputEnterOrTabKeyClickEvent} ref={tagInputRef} />
               {renderCurrentTags()}
             </div>
             <div className="blog-management-aside-filter-keyword-wrapper" >
@@ -113,6 +120,10 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
             </div>
             <div className="blog-management-aside-filter-date-wrapper" >
               <h4 className="blog-management-aside-filter-date-title">Date</h4>
+              <DatePicker
+                selected={currentFilterDate}
+                onChange={handleDatePickerClickEvent}
+              />
             </div>
           </li>
           <li className="blog-management-aside-li">
