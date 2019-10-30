@@ -1,0 +1,27 @@
+@import '../../../Base/Css/GlobalVariables';
+@import '../../../Base/Css/Mixins';
+
+.tags-item-wrapper {
+  display: inline-block;
+  background-color: rgba(255, 53, 53, 0.5);
+  box-sizing: border-box;
+  border-radius: 0px 6px 0px 6px;
+}
+
+.tags-item-name {
+  font-style: normal;
+  box-sizing: border-box;
+  display: inline-block;
+  color: white;
+  vertical-align: middle;
+  padding: 0 5px;
+}
+
+.tags-item-cancel-btn {
+  border: none;
+  background-color: transparent;
+  box-sizing: border-box;
+  vertical-align: middle;
+  color: white;
+  padding: 0 3px 0 0;
+}
