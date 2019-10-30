@@ -104,7 +104,7 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
         <ul className="blog-management-aside-ul">
           <li className="blog-management-aside-li">
             <Link to="./" className="blog-management-aside-new-blog-link">
-              Create New Blog
+              <h3 className="blog-management-aside-new-blog-label">Create New Blog</h3>
             </Link>
           </li>
           <li className="blog-management-aside-li">
@@ -128,7 +128,26 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
           </li>
           <li className="blog-management-aside-li">
             <h3 className="blog-management-aside-sort-title">Sort Blogs</h3>
-            Sort Blogs
+            <div className="blog-management-aside-sort-items-wrapper" >
+              <div className="blog-management-aside-sort-item-wrapper" >
+                Date Asc
+              </div>
+              <div className="blog-management-aside-sort-item-wrapper" >
+                Date Desc
+              </div>
+              <div className="blog-management-aside-sort-item-wrapper" >
+                Title Asc 
+              </div>
+              <div className="blog-management-aside-sort-item-wrapper" >
+                Title Desc 
+              </div>
+              <div className="blog-management-aside-sort-item-wrapper" >
+                Review Asc 
+              </div>
+              <div className="blog-management-aside-sort-item-wrapper" >
+                Review Desc 
+              </div>
+            </div>
           </li>
         </ul>
       </aside>
