@@ -54,7 +54,17 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
         </div>
       </div>
       <aside className="blog-management-aside-wrapper">
-        aside
+        <ul className="blog-management-aside-ul">
+          <li className="blog-management-aside-li">
+            Create New Blog
+          </li>
+          <li className="blog-management-aside-li">
+            Filter Blogs
+          </li>
+          <li className="blog-management-aside-li">
+            Sort Blogs
+          </li>
+        </ul>
       </aside>
     </div>
   );

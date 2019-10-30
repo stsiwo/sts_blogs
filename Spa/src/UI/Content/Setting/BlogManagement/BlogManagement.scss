@@ -2,10 +2,12 @@
 @import '../../../Base/Css/Mixins';
 
 .blog-management-wrapper {
-  position: flex;
+  display: flex;
 }
 
 .blog-management-main-wrapper {
+  flex-shrink: 0;
+  width: 600px;
 }
 
 .blog-management-title {
@@ -108,6 +110,10 @@
 }
 
 .blog-management-pagination-wrapper {
+}
+
+.blog-management-aside-wrapper {
+
 }
 
 
