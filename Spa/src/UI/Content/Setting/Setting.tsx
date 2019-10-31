@@ -2,34 +2,47 @@ import * as React from 'react';
 import './Setting.scss';
 import { useResponsiveComponent } from '../../Base/Hooks/ResponsiveComponentHook';
 import { useCssGlobalContext } from '../../Base/Context/CssGlobalContext/CssGlobalContext';
-import { Link, Route } from 'react-router-dom';
+import { Link, Route, Switch } from 'react-router-dom';
 import Profile from './Profile/Profile';
-import { SettingContentComponents, SettingContentComponentsType } from './SettingContentComponents';
+import { useRouteMatch } from 'react-router';
+import SettingHome from './SettingHome/SettingHome';
+import BlogManagement from './BlogManagement/BlogManagement';
+import BlogDetail from './BlogDetail/BlogDetail';
+
+declare type SettingNavItemType = {
+  name: string
+  label: string
+}
 
 
 const Setting: React.FunctionComponent<{}> = (props: {}) => {
 
-  const [currentSettingContent, setSettingContent] = React.useState("BlogDetail");
-
-  const renderSettingContent: (componentName: string) => React.ReactNode = (componentName) => {
-    const ComponentName: React.ComponentType = SettingContentComponents.find((settingContentComponent: SettingContentComponentsType) => settingContentComponent.label.localeCompare(componentName) === 0).component
-    return <ComponentName />;
-  }
-
-  const handleSettingListClick: React.MouseEventHandler<HTMLLIElement> = (e) => {
-    const selectedSettingItem: string = e.currentTarget.innerHTML;
-    setSettingContent(selectedSettingItem);
-  }
+  const settingNavList: SettingNavItemType[] = [
+    {
+      name: 'profile',
+      label: 'Profile'
+    },
+    {
+      name: 'blogs',
+      label: 'Blogs'
+    },
+  ]
 
   const renderSettingContentList = (): React.ReactNode => {
-    return SettingContentComponents.map((settingContentComponent: SettingContentComponentsType) => {
+    return settingNavList.map((settingItem: SettingNavItemType) => {
       return (
-          <li className="setting-list-li" onClick={handleSettingListClick} key={settingContentComponent.label}>
-            {settingContentComponent.label}
-          </li>
+        <li className="setting-list-li" key={settingItem.name}>
+          <Link to={`${url}/${settingItem.name}`}>
+            {settingItem.label}
+          </Link>
+        </li>
       )
     })
   }
+
+  let { path, url } = useRouteMatch();
+
+  console.log(path)
 
   return (
     <div className="setting-wrapper">
@@ -39,7 +52,10 @@ const Setting: React.FunctionComponent<{}> = (props: {}) => {
         </ul>
       </aside>
       <article className="setting-content">
-        {renderSettingContent(currentSettingContent)}
+        <Route exact path={`${path}`} component={SettingHome} />
+        <Route exact path={`${path}/profile`} component={Profile} />
+        <Route exact path={`${path}/blogs`} component={BlogManagement} />
+        <Route exact path={`${path}/blogs/:blogId`} component={BlogDetail} />
       </article>
     </div>
   );

@@ -14,6 +14,7 @@ import { StateType } from '../../../../states/types';
 import { toggleFilterSortBarActionCreator } from '../../../../actions/creators';
 import { useResponsiveComponent } from '../../../Base/Hooks/ResponsiveComponentHook';
 import { useCssGlobalContext } from '../../../Base/Context/CssGlobalContext/CssGlobalContext';
+import { useRouteMatch } from 'react-router';
 
 declare type TagType = {
   name: string
@@ -51,10 +52,10 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   React.useEffect(() => {
-    const handleFilterSortNavCloseWhenOutsideClickEvent  = (e: Event) => {
+    const handleFilterSortNavCloseWhenOutsideClickEvent = (e: Event) => {
       console.log('add event listener during this component is mounted')
       if (filterSortBarWrapperRef.current.contains(e.target)) {
-        
+
         return false;
       }
       dispatch(toggleFilterSortBarActionCreator(false))
@@ -118,7 +119,10 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
             <button className="blog-management-item-controller" onClick={handleBlogControllerOpenClickEvent} id={blog.id}>&hellip;</button>
           </div>
           <div className="blog-management-item-controller-wrapper" ref={divRef} id={blog.id}>
-            <button className="blog-management-item-edit-btn">Edit</button>
+
+            <Link to={`${url}/${blog.id}`} className="blog-management-aside-new-blog-link">
+              <button className="blog-management-item-edit-btn">Edit</button>
+            </Link>
             <button className="blog-management-item-delete-btn">Delete</button>
             <button className="blog-management-item-close-btn" onClick={handleBlogControllerCloseClickEvent} id={blog.id}>&#10005;</button>
           </div>
@@ -126,6 +130,8 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
       )
     })
   }
+
+  let { path, url } = useRouteMatch();
 
   return (
     <div className="blog-management-wrapper">
@@ -137,15 +143,15 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
         <div className="blog-management-pagination-wrapper">
           pagination
         </div>
-    { currentWidth <= cssGlobal.tabletSize && 
-      <Icon label="??" css="blog-management-sort-filter-icon" onClick={handleFilterSortNavClickEvent} />
-    }
+        {currentWidth <= cssGlobal.tabletSize &&
+          <Icon label="??" css="blog-management-sort-filter-icon" onClick={handleFilterSortNavClickEvent} />
+        }
       </div>
-      {( currentWidth > cssGlobal.tabletSize || (isFilterSortBarOpen && currentWidth <= cssGlobal.tabletSize)) &&
+      {(currentWidth > cssGlobal.tabletSize || (isFilterSortBarOpen && currentWidth <= cssGlobal.tabletSize)) &&
         <aside className="blog-management-aside-wrapper" ref={filterSortBarWrapperRef}>
           <ul className="blog-management-aside-ul">
             <li className="blog-management-aside-li">
-              <Link to="./" className="blog-management-aside-new-blog-link">
+              <Link to={`${url}/new`} className="blog-management-aside-new-blog-link">
                 <h3 className="blog-management-aside-new-blog-label">Create New Blog</h3>
               </Link>
             </li>
