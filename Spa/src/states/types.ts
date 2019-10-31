@@ -1,4 +1,5 @@
 import { TagType } from "../domain/tag/TagType";
+import { UserType } from "../domain/user/UserType";
 
 export declare type UiStateType = {
   isLoginFormOpen: boolean;
@@ -12,6 +13,7 @@ export declare type AppStateType = {
 }
 
 export declare type DomainStateType = {
+  user: UserType
   tags: TagType[]
 }
 

@@ -11,6 +11,11 @@ export const initialState: StateType = {
     isLogin: false
   },
   domain: {
+    user: {
+      id: null,
+      name: null,
+      avatarUrl: null,
+    },
     tags: []
   }
 }

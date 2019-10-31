@@ -1,11 +1,12 @@
 import { createStore } from "redux";
 import { rootReducer } from "../../src/reducers/rootReducer";
 import { initialState } from "../../src/states/state";
-import { ToggleLoginFormActionType, ToggleSignupFormActionType, ToggleNavBarActionType, ActionTypeEnum, ToggleLoginStatusActionType, ToggleFilterSortBarActionType, AssignTagsActionType } from "../../src/actions/types";
+import { ToggleLoginFormActionType, ToggleSignupFormActionType, ToggleNavBarActionType, ActionTypeEnum, ToggleLoginStatusActionType, ToggleFilterSortBarActionType, AssignTagsActionType, AssignUserActionType } from "../../src/actions/types";
 import { prettyConsole } from "../../src/utils";
-import { toggleLoginStatusActionCreator, toggleFilterSortBarActionCreator, assignTagsActionCreator } from '../../src/actions/creators'
+import { toggleLoginStatusActionCreator, toggleFilterSortBarActionCreator, assignTagsActionCreator, assignUserActionCreator } from '../../src/actions/creators'
 import { StateType } from "../../src/states/types";
 import { getTagTestData } from "../data/TagFaker";
+import { getUserTestData } from "../data/UserFaker";
 
 
 describe('rr01_rootReducer', () => {
@@ -88,5 +89,16 @@ describe('rr01_rootReducer', () => {
     store.dispatch(action)
 
     expect(store.getState().domain.tags).toEqual(tags)
+  })
+
+  it('should update domain.user state when that action is dispatched', () => {
+
+    let store = createStore(rootReducer)
+
+    let user = getUserTestData(1)[0]
+    let action: AssignUserActionType = assignUserActionCreator(user)
+    store.dispatch(action)
+
+    expect(store.getState().domain.user).toEqual(user)
   })
 })

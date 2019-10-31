@@ -1,5 +1,6 @@
 import { Action, AnyAction } from "redux";
 import { TagType } from "../domain/tag/TagType";
+import { UserType } from "../domain/user/UserType";
 
 /** action type type **/
 export enum ActionTypeEnum {
@@ -12,6 +13,7 @@ export enum ActionTypeEnum {
   TOGGLE_LOGIN_STATUS,
   /** domain **/
   ASSIGN_TAGS,
+  ASSIGN_USER,
 }
 
 /** action type **/
@@ -44,6 +46,10 @@ export declare type ToggleLoginStatusActionType = AppActionType & {
 export declare type AssignTagsActionType = AppActionType & {
   tags: TagType[]
 }
+
+export declare type AssignUserActionType = AppActionType & {
+  user: UserType
+}
 /** action creator type **/
 export declare type ActionCreatorType = (...args: any[]) => AnyAction
 
@@ -61,3 +67,5 @@ export declare type ToggleLoginStatusActionCreatorType = (isLogin: boolean) => T
 
 /** domain **/
 export declare type AssignTagsActionCreatorType = (tags: TagType[]) => AssignTagsActionType 
+
+export declare type AssignUserActionCreatorType = (user: UserType) => AssignUserActionType 

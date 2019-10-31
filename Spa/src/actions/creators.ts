@@ -1,4 +1,4 @@
-import { ToggleLoginFormActionCreatorType, ToggleSignupFormActionCreatorType, ToggleNavBarActionCreatorType, ActionTypeEnum, ToggleLoginStatusActionCreatorType, ToggleFilterSortBarActionCreatorType, AssignTagsActionCreatorType } from "./types";
+import { ToggleLoginFormActionCreatorType, ToggleSignupFormActionCreatorType, ToggleNavBarActionCreatorType, ActionTypeEnum, ToggleLoginStatusActionCreatorType, ToggleFilterSortBarActionCreatorType, AssignTagsActionCreatorType, AssignUserActionCreatorType } from "./types";
 
 
 /** ui **/
@@ -33,4 +33,9 @@ export const toggleLoginStatusActionCreator: ToggleLoginStatusActionCreatorType 
 export const assignTagsActionCreator: AssignTagsActionCreatorType = (tags) => ({
   type: ActionTypeEnum.ASSIGN_TAGS,
   tags: tags
+})
+
+export const assignUserActionCreator: AssignUserActionCreatorType = (user) => ({
+  type: ActionTypeEnum.ASSIGN_USER,
+  user: user
 })
