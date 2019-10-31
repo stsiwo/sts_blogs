@@ -11,6 +11,8 @@ export declare type UiStateType = {
 
 export declare type AppStateType = {
   isLogin: boolean
+  isBlogsFetching: boolean
+  isTagsFetching: boolean
 }
 
 export declare type DomainStateType = {

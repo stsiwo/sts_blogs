@@ -8,7 +8,9 @@ export const initialState: StateType = {
     isFilterSortBarOpen: false,
   },
   app: {
-    isLogin: false
+    isLogin: false,
+    isBlogsFetching: false,
+    isTagsFetching: false,
   },
   domain: {
     user: {

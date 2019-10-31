@@ -6,16 +6,18 @@ import { BlogType } from "../domain/blog/BlogType";
 /** action type type **/
 export enum ActionTypeEnum {
   /** ui **/
-  TOGGLE_LOGIN_FORM,
-  TOGGLE_SIGNUP_FORM,
-  TOGGLE_NAV_BAR,
-  TOGGLE_FILTER_SORT_BAR,
+  TOGGLE_LOGIN_FORM = 'TOGGLE_LOGIN_FORM',
+  TOGGLE_SIGNUP_FORM = 'TOGGLE_SIGNUP_FORM',
+  TOGGLE_NAV_BAR = 'TOGGLE_NAV_BAR',
+  TOGGLE_FILTER_SORT_BAR = 'TOGGLE_FILTER_SORT_BAR',
   /** app **/
-  TOGGLE_LOGIN_STATUS,
+  TOGGLE_LOGIN_STATUS = 'TOGGLE_LOGIN_STATUS',
+  TOGGLE_BLOGS_FETCHING_FLAG = 'TOGGLE_BLOGS_FETCHING_FLAG',
+  TOGGLE_TAGS_FETCHING_FLAG = 'TOGGLE_TAGS_FETCHING_FLAG',
   /** domain **/
-  ASSIGN_TAGS,
-  ASSIGN_USER,
-  ASSIGN_BLOGS,
+  ASSIGN_TAGS = 'ASSIGN_TAGS',
+  ASSIGN_USER = 'ASSIGN_USER',
+  ASSIGN_BLOGS = 'ASSIGN_BLOGS',
 }
 
 /** action type **/
@@ -44,6 +46,13 @@ export declare type ToggleLoginStatusActionType = AppActionType & {
   isLogin: boolean
 }
 
+export declare type ToggleBlogsFetchingFlagActionType = AppActionType & {
+  isBlogsFetching: boolean
+}
+
+export declare type ToggleTagsFetchingFlagActionType = AppActionType & {
+  isTagsFetching: boolean
+}
 /** domain **/
 export declare type AssignTagsActionType = AppActionType & {
   tags: TagType[]
@@ -70,6 +79,11 @@ export declare type ToggleFilterSortBarActionCreatorType = (isFilterSortBarOpen:
 
 /** app **/
 export declare type ToggleLoginStatusActionCreatorType = (isLogin: boolean) => ToggleLoginStatusActionType 
+
+export declare type ToggleBlogsFetchingFlagActionCreatorType = (isBlogsFetching: boolean) => ToggleBlogsFetchingFlagActionType 
+
+export declare type ToggleTagsFetchingFlagActionCreatorType = (isTagsFetching: boolean) => ToggleTagsFetchingFlagActionType 
+
 
 /** domain **/
 export declare type AssignTagsActionCreatorType = (tags: TagType[]) => AssignTagsActionType 

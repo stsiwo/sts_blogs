@@ -1,4 +1,4 @@
-import { ToggleLoginFormActionCreatorType, ToggleSignupFormActionCreatorType, ToggleNavBarActionCreatorType, ActionTypeEnum, ToggleLoginStatusActionCreatorType, ToggleFilterSortBarActionCreatorType, AssignTagsActionCreatorType, AssignUserActionCreatorType, AssignBlogsActionCreatorType } from "./types";
+import { ToggleLoginFormActionCreatorType, ToggleSignupFormActionCreatorType, ToggleNavBarActionCreatorType, ActionTypeEnum, ToggleLoginStatusActionCreatorType, ToggleFilterSortBarActionCreatorType, AssignTagsActionCreatorType, AssignUserActionCreatorType, AssignBlogsActionCreatorType, ToggleBlogsFetchingFlagActionCreatorType, ToggleTagsFetchingFlagActionCreatorType } from "./types";
 
 
 /** ui **/
@@ -27,6 +27,16 @@ export const toggleFilterSortBarActionCreator: ToggleFilterSortBarActionCreatorT
 export const toggleLoginStatusActionCreator: ToggleLoginStatusActionCreatorType = (isLogin) => ({
   type: ActionTypeEnum.TOGGLE_LOGIN_STATUS,
   isLogin: isLogin
+})
+
+export const toggleBlogsFetchingFlagActionCreator: ToggleBlogsFetchingFlagActionCreatorType = (isBlogsFetching) => ({
+  type: ActionTypeEnum.TOGGLE_BLOGS_FETCHING_FLAG,
+  isBlogsFetching: isBlogsFetching
+})
+
+export const toggleTagsFetchingFlagActionCreator: ToggleTagsFetchingFlagActionCreatorType = (isTagsFetching) => ({
+  type: ActionTypeEnum.TOGGLE_TAGS_FETCHING_FLAG,
+  isTagsFetching: isTagsFetching
 })
 
 /** domain **/

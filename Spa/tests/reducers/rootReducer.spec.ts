@@ -1,9 +1,9 @@
 import { createStore } from "redux";
 import { rootReducer } from "../../src/reducers/rootReducer";
 import { initialState } from "../../src/states/state";
-import { ToggleLoginFormActionType, ToggleSignupFormActionType, ToggleNavBarActionType, ActionTypeEnum, ToggleLoginStatusActionType, ToggleFilterSortBarActionType, AssignTagsActionType, AssignUserActionType, AssignBlogsActionType } from "../../src/actions/types";
+import { ToggleLoginFormActionType, ToggleSignupFormActionType, ToggleNavBarActionType, ActionTypeEnum, ToggleLoginStatusActionType, ToggleFilterSortBarActionType, AssignTagsActionType, AssignUserActionType, AssignBlogsActionType, ToggleBlogsFetchingFlagActionType, ToggleTagsFetchingFlagActionType } from "../../src/actions/types";
 import { prettyConsole } from "../../src/utils";
-import { toggleLoginStatusActionCreator, toggleFilterSortBarActionCreator, assignTagsActionCreator, assignUserActionCreator, assignBlogsActionCreator } from '../../src/actions/creators'
+import { toggleLoginStatusActionCreator, toggleFilterSortBarActionCreator, assignTagsActionCreator, assignUserActionCreator, assignBlogsActionCreator, toggleBlogsFetchingFlagActionCreator, toggleTagsFetchingFlagActionCreator } from '../../src/actions/creators'
 import { StateType } from "../../src/states/types";
 import { getTagTestData } from "../data/TagFaker";
 import { getUserTestData } from "../data/UserFaker";
@@ -79,6 +79,28 @@ describe('rr01_rootReducer', () => {
     store.dispatch(action)
 
     expect(store.getState().app.isLogin).toEqual(true)
+  })
+
+  it('should update app.isTagsFetching state when that action is dispatched', () => {
+
+    let store = createStore(rootReducer)
+
+    let action: ToggleTagsFetchingFlagActionType = toggleTagsFetchingFlagActionCreator(true)
+    console.log(action)
+    store.dispatch(action)
+
+    expect(store.getState().app.isTagsFetching).toEqual(true)
+  })
+
+  it('should update app.isBlogsFetching state when that action is dispatched', () => {
+
+    let store = createStore(rootReducer)
+
+    let action: ToggleBlogsFetchingFlagActionType = toggleBlogsFetchingFlagActionCreator(true)
+    console.log(action)
+    store.dispatch(action)
+
+    expect(store.getState().app.isBlogsFetching).toEqual(true)
   })
 
   it('should update domain.tags state when that action is dispatched', () => {
