@@ -2,12 +2,25 @@
 @import '../../../Base/Css/Mixins';
 
 .blog-management-wrapper {
-  display: flex;
+  @media only screen and (max-width: $tabletSize - 1 + "px") {
+  }
+
+  @media only screen and (min-width: $tabletSize + "px") {
+    display: flex;
+    justify-content: center;
+  }
 }
 
 .blog-management-main-wrapper {
-  flex-shrink: 0;
-  width: 600px;
+
+  @media only screen and (max-width: $tabletSize - 1 + "px") {
+  }
+
+  @media only screen and (min-width: $tabletSize + "px") {
+    flex-shrink: 0;
+    width: 600px;
+    position: relative;
+  }
 }
 
 .blog-management-title {
@@ -114,10 +127,34 @@
 .blog-management-pagination-wrapper {
 }
 
+.blog-management-sort-filter-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 5px;
+}
+
 .blog-management-aside-wrapper {
-  margin: 10px;
   text-align: center;
-  width: 200px;
+  @media only screen and (max-width: $mobileSSize + "px") {
+    width: 100%;
+  }
+
+  @media only screen and (max-width: $tabletSize - 1 + "px") {
+    box-sizing: border-box;
+    padding: 5px;
+    position: fixed;
+    top: $headerHeight;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    height: 100%;
+    color: white;
+  }
+
+  @media only screen and (min-width: $tabletSize + "px") {
+    width: 200px;
+    margin: 10px;
+  }
 }
 
 .blog-management-aside-ul {
@@ -129,20 +166,37 @@
 
 .blog-management-aside-new-blog-link {
   text-decoration: none;
-  color: #0366d6;
+  color: inherit;
 }
 
 .blog-management-aside-new-blog-label {
-  border: 1px solid #0366d6;
   border-radius: 3px;
   font-weight: normal;
   box-sizing: border-box;
   padding: 5px 0;
+  margin-left: 5px;
+  margin-right: 5px;
+
+  @media only screen and (max-width: $tabletSize - 1 + "px") {
+    border: 1px solid white;
+  }
+
+  @media only screen and (min-width: $tabletSize + "px") {
+    border: 1px solid black;
+  }
 }
 
 .blog-management-aside-new-blog-label:hover {
-  color: white;
-  background-color: #0366d6;
+
+  @media only screen and (max-width: $tabletSize - 1 + "px") {
+    color: black;
+    background-color: white;
+  }
+
+  @media only screen and (min-width: $tabletSize + "px") {
+    color: white;
+    background-color: black;
+  }
 }
 
 
@@ -164,14 +218,46 @@
   display: inline-block;
   box-sizing: border-box;
   font-size: $subTitleFontSize;
-  border: 1px solid black;
   margin: 3px;
   padding: 3px;
   border-radius: 4px;
+
+  @media only screen and (max-width: $tabletSize - 1 + "px") {
+    border: 1px solid white;
+  }
+
+  @media only screen and (min-width: $tabletSize + "px") {
+    border: 1px solid black;
+  }
 }
 
 .blog-management-aside-sort-item-wrapper:hover {
-  color: white;
-  background-color: black;
-  border: 1px solid white;
+  @media only screen and (max-width: $tabletSize - 1 + "px") {
+    color: black;
+    background-color: white;
+    border: 1px solid black;
+  }
+
+  @media only screen and (min-width: $tabletSize + "px") {
+    color: white;
+    background-color: black;
+    border: 1px solid white;
+  }
+}
+
+.blog-management-aside-filter-sort-close-icon {
+  font-size: 1.5em;
+  border-radius: 4px;
+  display: inline-block;
+  box-sizing: border-box;
+  margin: 3px;
+  padding: 3px 10px;
+
+  @media only screen and (max-width: $tabletSize - 1 + "px") {
+    border: 1px solid white; 
+  }
+
+  @media only screen and (min-width: $tabletSize + "px") {
+    border: 1px solid black; 
+  }
 }

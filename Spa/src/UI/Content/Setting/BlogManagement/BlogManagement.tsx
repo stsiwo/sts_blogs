@@ -9,6 +9,11 @@ import Tag from '../../../Base/Components/Tag/Tag';
 import { Link } from 'react-router-dom';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useSelector, useDispatch } from 'react-redux';
+import { StateType } from '../../../../states/types';
+import { toggleFilterSortBarActionCreator } from '../../../../actions/creators';
+import { useResponsiveComponent } from '../../../Base/Hooks/ResponsiveComponentHook';
+import { useCssGlobalContext } from '../../../Base/Context/CssGlobalContext/CssGlobalContext';
 
 declare type TagType = {
   name: string
@@ -22,7 +27,19 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   const controllerRefs: Map<string, React.MutableRefObject<HTMLDivElement>> = new Map()
   const tagInputRef = React.useRef(null)
 
-  console.log(currentTags)
+  const isFilterSortBarOpen = useSelector((state: StateType) => state.ui.isFilterSortBarOpen)
+  const dispatch = useDispatch()
+
+  const currentWidth = useResponsiveComponent()
+  const cssGlobal = useCssGlobalContext()
+
+  const handleFilterSortNavClickEvent: React.EventHandler<React.MouseEvent<HTMLElement>> = (e) => {
+    dispatch(toggleFilterSortBarActionCreator(true))
+  }
+
+  const handleFilterSortNavCloseClickEvent: React.EventHandler<React.MouseEvent<HTMLElement>> = (e) => {
+    dispatch(toggleFilterSortBarActionCreator(false))
+  }
 
   const handleBlogControllerOpenClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
     controllerRefs.get(e.currentTarget.id).current.style.display = 'flex';
@@ -77,12 +94,12 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
           <h3 className="blog-management-item-title">{blog.title}</h3>
           <div className="blog-management-item-created-date">{blog.createdDate.toLocaleDateString("en-US", dateFormatOption)}</div>
           <div className="blog-management-btn-wrapper">
-            <button className="blog-management-item-controller" onClick={handleBlogControllerOpenClickEvent} id={`blog-${blog.id}`}>&hellip;</button>
+            <button className="blog-management-item-controller" onClick={handleBlogControllerOpenClickEvent} id={blog.id}>&hellip;</button>
           </div>
-          <div className="blog-management-item-controller-wrapper" ref={divRef} id={`blog-${blog.id}`}>
+          <div className="blog-management-item-controller-wrapper" ref={divRef} id={blog.id}>
             <button className="blog-management-item-edit-btn">Edit</button>
             <button className="blog-management-item-delete-btn">Delete</button>
-            <button className="blog-management-item-close-btn" onClick={handleBlogControllerCloseClickEvent} id={`blog-${blog.id}`}>&#10005;</button>
+            <button className="blog-management-item-close-btn" onClick={handleBlogControllerCloseClickEvent} id={blog.id}>&#10005;</button>
           </div>
         </div>
       )
@@ -99,58 +116,64 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
         <div className="blog-management-pagination-wrapper">
           pagination
         </div>
+    { currentWidth <= cssGlobal.tabletSize && 
+      <Icon label="??" css="blog-management-sort-filter-icon" onClick={handleFilterSortNavClickEvent} />
+    }
       </div>
-      <aside className="blog-management-aside-wrapper">
-        <ul className="blog-management-aside-ul">
-          <li className="blog-management-aside-li">
-            <Link to="./" className="blog-management-aside-new-blog-link">
-              <h3 className="blog-management-aside-new-blog-label">Create New Blog</h3>
-            </Link>
-          </li>
-          <li className="blog-management-aside-li">
-            <h3 className="blog-management-aside-filter-title">Filter Blogs</h3>
-            <div className="blog-management-aside-filter-tags-wrapper" >
-              <h4 className="blog-management-aside-filter-tags-title">Tags</h4>
-              <input type="text" className="blog-management-aside-filter-tags-input" onKeyDown={handleTagInputEnterOrTabKeyClickEvent} ref={tagInputRef} />
-              {renderCurrentTags()}
-            </div>
-            <div className="blog-management-aside-filter-keyword-wrapper" >
-              <h4 className="blog-management-aside-filter-keyword-title">Keywords</h4>
-              <input type="text" className="blog-management-aside-filter-keyword-input" />
-            </div>
-            <div className="blog-management-aside-filter-date-wrapper" >
-              <h4 className="blog-management-aside-filter-date-title">Date</h4>
-              <DatePicker
-                selected={currentFilterDate}
-                onChange={handleDatePickerClickEvent}
-              />
-            </div>
-          </li>
-          <li className="blog-management-aside-li">
-            <h3 className="blog-management-aside-sort-title">Sort Blogs</h3>
-            <div className="blog-management-aside-sort-items-wrapper" >
-              <div className="blog-management-aside-sort-item-wrapper" >
-                Date Asc
+      {( currentWidth > cssGlobal.tabletSize || (isFilterSortBarOpen && currentWidth <= cssGlobal.tabletSize)) &&
+        <aside className="blog-management-aside-wrapper">
+          <ul className="blog-management-aside-ul">
+            <li className="blog-management-aside-li">
+              <Link to="./" className="blog-management-aside-new-blog-link">
+                <h3 className="blog-management-aside-new-blog-label">Create New Blog</h3>
+              </Link>
+            </li>
+            <li className="blog-management-aside-li">
+              <h3 className="blog-management-aside-filter-title">Filter Blogs</h3>
+              <div className="blog-management-aside-filter-tags-wrapper" >
+                <h4 className="blog-management-aside-filter-tags-title">Tags</h4>
+                <input type="text" className="blog-management-aside-filter-tags-input" onKeyDown={handleTagInputEnterOrTabKeyClickEvent} ref={tagInputRef} />
+                {renderCurrentTags()}
               </div>
-              <div className="blog-management-aside-sort-item-wrapper" >
-                Date Desc
+              <div className="blog-management-aside-filter-keyword-wrapper" >
+                <h4 className="blog-management-aside-filter-keyword-title">Keywords</h4>
+                <input type="text" className="blog-management-aside-filter-keyword-input" />
               </div>
-              <div className="blog-management-aside-sort-item-wrapper" >
-                Title Asc 
+              <div className="blog-management-aside-filter-date-wrapper" >
+                <h4 className="blog-management-aside-filter-date-title">Date</h4>
+                <DatePicker
+                  selected={currentFilterDate}
+                  onChange={handleDatePickerClickEvent}
+                />
               </div>
-              <div className="blog-management-aside-sort-item-wrapper" >
-                Title Desc 
+            </li>
+            <li className="blog-management-aside-li">
+              <h3 className="blog-management-aside-sort-title">Sort Blogs</h3>
+              <div className="blog-management-aside-sort-items-wrapper" >
+                <div className="blog-management-aside-sort-item-wrapper" >
+                  Date Asc
               </div>
-              <div className="blog-management-aside-sort-item-wrapper" >
-                Review Asc 
+                <div className="blog-management-aside-sort-item-wrapper" >
+                  Date Desc
               </div>
-              <div className="blog-management-aside-sort-item-wrapper" >
-                Review Desc 
+                <div className="blog-management-aside-sort-item-wrapper" >
+                  Title Asc
               </div>
-            </div>
-          </li>
-        </ul>
-      </aside>
+                <div className="blog-management-aside-sort-item-wrapper" >
+                  Title Desc
+              </div>
+                <div className="blog-management-aside-sort-item-wrapper" >
+                  Review Asc
+              </div>
+                <div className="blog-management-aside-sort-item-wrapper" >
+                  Review Desc
+              </div>
+              </div>
+            </li>
+          </ul>
+          <div className="blog-management-aside-filter-sort-close-icon" onClick={handleFilterSortNavCloseClickEvent}>&#10005;</div>
+        </aside>
+      }
     </div>
   );
 }
