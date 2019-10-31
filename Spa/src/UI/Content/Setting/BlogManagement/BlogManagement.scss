@@ -17,8 +17,9 @@
   }
 
   @media only screen and (min-width: $tabletSize + "px") {
-    flex-shrink: 0;
-    width: 600px;
+    width: 50vw;
+    max-width: 600px;
+    min-width: 500px;
     position: relative;
   }
 }

@@ -26,6 +26,7 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   const [currentBlogs, setBlogs] = React.useState(getBlogTestData())
   const controllerRefs: Map<string, React.MutableRefObject<HTMLDivElement>> = new Map()
   const tagInputRef = React.useRef(null)
+  const filterSortBarWrapperRef = React.useRef(null)
 
   const isFilterSortBarOpen = useSelector((state: StateType) => state.ui.isFilterSortBarOpen)
   const dispatch = useDispatch()
@@ -48,6 +49,26 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   const handleBlogControllerCloseClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
     controllerRefs.get(e.currentTarget.id).current.style.display = 'none';
   }
+
+  React.useEffect(() => {
+    const handleFilterSortNavCloseWhenOutsideClickEvent  = (e: Event) => {
+      console.log('add event listener during this component is mounted')
+      if (filterSortBarWrapperRef.current.contains(e.target)) {
+        
+        return false;
+      }
+      dispatch(toggleFilterSortBarActionCreator(false))
+    }
+    if (filterSortBarWrapperRef.current !== null) {
+      window.addEventListener('mousedown', handleFilterSortNavCloseWhenOutsideClickEvent);
+    }
+
+    return () => {
+      console.log('remove event listener after this component is unmounted')
+      window.removeEventListener('mousedown', handleFilterSortNavCloseWhenOutsideClickEvent);
+    }
+
+  })
 
   //  const setControllerRef = (element: HTMLDivElement) => {
   //    console.log(element)
@@ -121,7 +142,7 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
     }
       </div>
       {( currentWidth > cssGlobal.tabletSize || (isFilterSortBarOpen && currentWidth <= cssGlobal.tabletSize)) &&
-        <aside className="blog-management-aside-wrapper">
+        <aside className="blog-management-aside-wrapper" ref={filterSortBarWrapperRef}>
           <ul className="blog-management-aside-ul">
             <li className="blog-management-aside-li">
               <Link to="./" className="blog-management-aside-new-blog-link">
