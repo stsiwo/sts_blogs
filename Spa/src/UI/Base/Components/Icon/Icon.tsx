@@ -5,7 +5,7 @@ import { IconPropType } from './types';
 const Icon: React.FunctionComponent<IconPropType> = (props: IconPropType) => {
 
   return (
-    <div className={`icon-wrapper ${props.css}`}>
+    <div className={`icon-wrapper ${props.css}`} onClick={props.onClick}>
       <i className="icon-item">{props.label}</i> 
     </div>
     );
