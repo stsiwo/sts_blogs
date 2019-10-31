@@ -2,6 +2,7 @@ import SettingHome from "./SettingHome/SettingHome";
 import Profile from "./Profile/Profile";
 import { ComponentType } from "react";
 import BlogManagement from "./BlogManagement/BlogManagement";
+import BlogDetail from "./BlogDetail/BlogDetail";
 
 export declare type SettingContentComponentsType = {
   label: string
@@ -21,5 +22,9 @@ export const SettingContentComponents: SettingContentComponentsType[] = [
   {
     label: 'Blogs',
     component: BlogManagement,
+  },
+  {
+    label: 'BlogDetail',
+    component: BlogDetail,
   },
 ]

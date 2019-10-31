@@ -9,7 +9,7 @@ import { SettingContentComponents, SettingContentComponentsType } from './Settin
 
 const Setting: React.FunctionComponent<{}> = (props: {}) => {
 
-  const [currentSettingContent, setSettingContent] = React.useState("Blogs");
+  const [currentSettingContent, setSettingContent] = React.useState("BlogDetail");
 
   const renderSettingContent: (componentName: string) => React.ReactNode = (componentName) => {
     const ComponentName: React.ComponentType = SettingContentComponents.find((settingContentComponent: SettingContentComponentsType) => settingContentComponent.label.localeCompare(componentName) === 0).component
