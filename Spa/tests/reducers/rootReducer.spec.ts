@@ -1,12 +1,13 @@
 import { createStore } from "redux";
 import { rootReducer } from "../../src/reducers/rootReducer";
 import { initialState } from "../../src/states/state";
-import { ToggleLoginFormActionType, ToggleSignupFormActionType, ToggleNavBarActionType, ActionTypeEnum, ToggleLoginStatusActionType, ToggleFilterSortBarActionType, AssignTagsActionType, AssignUserActionType } from "../../src/actions/types";
+import { ToggleLoginFormActionType, ToggleSignupFormActionType, ToggleNavBarActionType, ActionTypeEnum, ToggleLoginStatusActionType, ToggleFilterSortBarActionType, AssignTagsActionType, AssignUserActionType, AssignBlogsActionType } from "../../src/actions/types";
 import { prettyConsole } from "../../src/utils";
-import { toggleLoginStatusActionCreator, toggleFilterSortBarActionCreator, assignTagsActionCreator, assignUserActionCreator } from '../../src/actions/creators'
+import { toggleLoginStatusActionCreator, toggleFilterSortBarActionCreator, assignTagsActionCreator, assignUserActionCreator, assignBlogsActionCreator } from '../../src/actions/creators'
 import { StateType } from "../../src/states/types";
 import { getTagTestData } from "../data/TagFaker";
 import { getUserTestData } from "../data/UserFaker";
+import { getBlogTestData } from "../data/BlogFaker";
 
 
 describe('rr01_rootReducer', () => {
@@ -100,5 +101,16 @@ describe('rr01_rootReducer', () => {
     store.dispatch(action)
 
     expect(store.getState().domain.user).toEqual(user)
+  })
+
+  it('should update domain.blogs state when that action is dispatched', () => {
+
+    let store = createStore(rootReducer)
+
+    let blogs = getBlogTestData()
+    let action: AssignBlogsActionType = assignBlogsActionCreator(blogs)
+    store.dispatch(action)
+
+    expect(store.getState().domain.blogs).toEqual(blogs)
   })
 })
