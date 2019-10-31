@@ -1,6 +1,7 @@
-import { ToggleLoginFormActionCreatorType, ToggleSignupFormActionCreatorType, ToggleNavBarActionCreatorType, ActionTypeEnum, ToggleLoginStatusActionCreatorType, ToggleFilterSortBarActionCreatorType } from "./types";
+import { ToggleLoginFormActionCreatorType, ToggleSignupFormActionCreatorType, ToggleNavBarActionCreatorType, ActionTypeEnum, ToggleLoginStatusActionCreatorType, ToggleFilterSortBarActionCreatorType, AssignTagsActionCreatorType } from "./types";
 
 
+/** ui **/
 export const toggleLoginFormActionCreator: ToggleLoginFormActionCreatorType = (isLoginFormOpen) => ({
   type: ActionTypeEnum.TOGGLE_LOGIN_FORM, 
   isLoginFormOpen: isLoginFormOpen
@@ -22,7 +23,14 @@ export const toggleFilterSortBarActionCreator: ToggleFilterSortBarActionCreatorT
   isFilterSortBarOpen: isFilterSortBarOpen
 })
 
+/** app **/
 export const toggleLoginStatusActionCreator: ToggleLoginStatusActionCreatorType = (isLogin) => ({
   type: ActionTypeEnum.TOGGLE_LOGIN_STATUS,
   isLogin: isLogin
+})
+
+/** domain **/
+export const assignTagsActionCreator: AssignTagsActionCreatorType = (tags) => ({
+  type: ActionTypeEnum.ASSIGN_TAGS,
+  tags: tags
 })

@@ -1,3 +1,5 @@
+import { TagType } from "../domain/tag/TagType";
+
 export declare type UiStateType = {
   isLoginFormOpen: boolean;
   isSignupFormOpen: boolean;
@@ -10,12 +12,11 @@ export declare type AppStateType = {
 }
 
 export declare type DomainStateType = {
-  domain1: boolean,
-  domain2: boolean,
-  domain3: boolean
+  tags: TagType[]
 }
 
 export declare type StateType = {
   ui: UiStateType,
   app: AppStateType,
+  domain: DomainStateType,
 }

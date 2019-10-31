@@ -9,5 +9,8 @@ export const initialState: StateType = {
   },
   app: {
     isLogin: false
+  },
+  domain: {
+    tags: []
   }
 }

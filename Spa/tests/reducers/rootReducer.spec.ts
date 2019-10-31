@@ -1,10 +1,11 @@
 import { createStore } from "redux";
 import { rootReducer } from "../../src/reducers/rootReducer";
 import { initialState } from "../../src/states/state";
-import { ToggleLoginFormActionType, ToggleSignupFormActionType, ToggleNavBarActionType, ActionTypeEnum, ToggleLoginStatusActionType, ToggleFilterSortBarActionType } from "../../src/actions/types";
+import { ToggleLoginFormActionType, ToggleSignupFormActionType, ToggleNavBarActionType, ActionTypeEnum, ToggleLoginStatusActionType, ToggleFilterSortBarActionType, AssignTagsActionType } from "../../src/actions/types";
 import { prettyConsole } from "../../src/utils";
-import { toggleLoginStatusActionCreator, toggleFilterSortBarActionCreator } from '../../src/actions/creators'
+import { toggleLoginStatusActionCreator, toggleFilterSortBarActionCreator, assignTagsActionCreator } from '../../src/actions/creators'
 import { StateType } from "../../src/states/types";
+import { getTagTestData } from "../data/TagFaker";
 
 
 describe('rr01_rootReducer', () => {
@@ -76,5 +77,16 @@ describe('rr01_rootReducer', () => {
     store.dispatch(action)
 
     expect(store.getState().app.isLogin).toEqual(true)
+  })
+
+  it('should update domain.tags state when that action is dispatched', () => {
+
+    let store = createStore(rootReducer)
+
+    let tags = getTagTestData()
+    let action: AssignTagsActionType = assignTagsActionCreator(tags)
+    store.dispatch(action)
+
+    expect(store.getState().domain.tags).toEqual(tags)
   })
 })
