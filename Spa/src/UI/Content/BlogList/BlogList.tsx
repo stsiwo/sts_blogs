@@ -37,51 +37,39 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
     return blogList.map((blog: BlogType) => {
       return (
         <Link to={`/blog/${blog.id}`} className="blog-list-items-item-wrapper" key={blog.id}>
+          <h3 className="">{blog.title}</h3>
         </Link>
       )
     })
   }
 
+  const [currentBlogs, setBlogs] = React.useState([] as BlogType[])
+  const [currentRefreshStatus, setRefreshStatus] = React.useState(0)
+
+  React.useEffect(() => {
+
+    // api fetch for blog posts 
+    console.log('calling mock api request')
+    setBlogs(getBlogTestData(30))
+
+    return () => {
+    }
+  }, [currentRefreshStatus])
+
+  const handleRefreshClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
+    const nextStatus = currentRefreshStatus + 1
+    setRefreshStatus(nextStatus)
+  }
+
   return (
     <div className="blog-list-wrapper">
-      {(currentWidth > cssGlobal.tabletSize || (isFilterSortBarOpen && currentWidth <= cssGlobal.tabletSize)) &&
-        <aside className="blog-list-aside-wrapper">
-        {currentWidth <= cssGlobal.tabletSize && 
-          <div className="blog-list-filter-sort-close-icon-wrapper">
-        <i className="blog-list-filter-sort-close-icon" onClick={handleFilterSortNavCloseClickEvent} >&#10006;</i>
-          </div>
-         }
-          <div className="blog-list-filter-wrapper">
-            <h3 className="blog-list-filter-title">Filter</h3>
-            <div className="blog-list-filter-tags-wrapper">
-              <h4 className="blog-list-filter-tags-title">Tags</h4>
-              {renderTags(getTagTestData())}
-            </div>
-            <div className="blog-list-filter-date-wrapper">
-              <h4 className="blog-list-filter-date-title">Date</h4>
-            </div>
-          </div>
-          <div className="blog-list-sort-wrapper">
-            <h3 className="blog-list-sort-title">Sort</h3>
-            <div className="blog-list-filter-sort-item-wrapper">
-              <input type="checkbox" className="blog-list-filter-sort-item-input" id="checkbox_id" value="value" />
-              <label htmlFor="checkbox_id" className="blog-list-filter-sort-item-label">Text</label>
-            </div>
-            <div className="blog-list-filter-sort-item-wrapper">
-              <input type="checkbox" className="blog-list-filter-sort-item-input" id="checkbox_id" value="value" />
-              <label htmlFor="checkbox_id" className="blog-list-filter-sort-item-label">Text</label>
-            </div>
-            <div className="blog-list-filter-sort-item-wrapper">
-              <input type="checkbox" className="blog-list-filter-sort-item-input" id="checkbox_id" value="value" />
-              <label htmlFor="checkbox_id" className="blog-list-filter-sort-item-label">Text</label>
-            </div>
-          </div>
-        </aside>
-      }
       <section className="blog-list-section-wrapper">
         <h2 className="blog-list-title">BlogLists</h2>
+        <div className="blog-list-controller-wrapper">
+          <button className="blog-list-controller-refresh-btn" onClick={handleRefreshClickEvent}>refresh</button>
+        </div>
         <div className="blog-list-items-wrapper">
-          {renderBlogLists(getBlogTestData())}
+          {renderBlogLists(currentBlogs)}
         </div>
         <div className="blog-list-pagination-wrapper">
           <button className="blog-list-pagination-btn blog-list-pagination-to-first-btn" value='1'>&laquo;</button>
@@ -93,7 +81,6 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
           <button className="blog-list-pagination-btn blog-list-pagination-to-last-btn" value='last'>&raquo;</button>
         </div>
       </section>
-      {currentWidth <= cssGlobal.tabletSize && <i className="blog-list-filter-sort-icon" onClick={handleFilterSortNavClickEvent} />}
     </div>
   );
 }
