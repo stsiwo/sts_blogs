@@ -10,6 +10,7 @@ import { useResponsiveComponent } from '../../Base/Hooks/ResponsiveComponentHook
 import { useCssGlobalContext } from '../../Base/Context/CssGlobalContext/CssGlobalContext';
 import { toggleFilterSortBarActionCreator } from '../../../actions/creators';
 import { Link } from 'react-router-dom';
+import Pagination from '../../Base/Components/Pagination/Pagination';
 
 
 const BlogList: React.FunctionComponent<{}> = (props: {}) => {
@@ -45,20 +46,33 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
 
   const [currentBlogs, setBlogs] = React.useState([] as BlogType[])
   const [currentRefreshStatus, setRefreshStatus] = React.useState(0)
+  const [currentPaginationLimit, setPaginationLimit] = React.useState(20)
+  const [currentPaginationOffset, setPaginationOffset] = React.useState(0)
 
   React.useEffect(() => {
 
-    // api fetch for blog posts 
+    // api fetch for blog posts with limit/offset state
+    // when only limit/offset or refresh status updated, this useEffect is called again besides when mounting
     console.log('calling mock api request')
     setBlogs(getBlogTestData(30))
 
     return () => {
     }
-  }, [currentRefreshStatus])
+  }, [currentRefreshStatus, currentPaginationLimit, currentPaginationOffset])
 
   const handleRefreshClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
     const nextStatus = currentRefreshStatus + 1
     setRefreshStatus(nextStatus)
+  }
+
+  const handlePageClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
+    const nextPageOffset: number = parseInt(e.currentTarget.value)
+    setPaginationOffset(nextPageOffset)
+  }
+
+  const handlePageLimitChangeEvent: React.EventHandler<React.ChangeEvent<HTMLSelectElement>> = (e) => {
+    const nextPageLimit: number = parseInt(e.currentTarget.value)
+    setPaginationLimit(nextPageLimit)
   }
 
   return (
@@ -67,18 +81,18 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
         <h2 className="blog-list-title">BlogLists</h2>
         <div className="blog-list-controller-wrapper">
           <button className="blog-list-controller-refresh-btn" onClick={handleRefreshClickEvent}>refresh</button>
+          <select value={currentPaginationLimit} onChange={handlePageLimitChangeEvent}>
+            <option value="20">20</option>
+            <option value="30">30</option>
+            <option value="40">40</option>
+            <option value="50">50</option>
+          </select>
         </div>
         <div className="blog-list-items-wrapper">
           {renderBlogLists(currentBlogs)}
         </div>
         <div className="blog-list-pagination-wrapper">
-          <button className="blog-list-pagination-btn blog-list-pagination-to-first-btn" value='1'>&laquo;</button>
-          <button className="blog-list-pagination-btn" value='1'>1</button>
-          <button className="blog-list-pagination-btn" value='2'>2</button>
-          <button className="blog-list-pagination-btn" value='3'>3</button>
-          <button className="blog-list-pagination-btn" value='4'>4</button>
-          <button className="blog-list-pagination-btn" value='5'>5</button>
-          <button className="blog-list-pagination-btn blog-list-pagination-to-last-btn" value='last'>&raquo;</button>
+          <Pagination offset={ 0 } totalCount={ 1000 } limit={ 20 } onClick={handlePageClickEvent}/>
         </div>
       </section>
     </div>
