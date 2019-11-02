@@ -65,7 +65,8 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
       offset: paginationStatus.offset,
       limit: paginationStatus.limit
     },
-    setDomainList: setBlogs
+    setDomainList: setBlogs,
+    setPaginationStatus: setPaginationStatus
   })
 
   return (

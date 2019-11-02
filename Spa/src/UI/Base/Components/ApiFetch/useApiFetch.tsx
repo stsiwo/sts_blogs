@@ -5,7 +5,7 @@ import { FetchStatusType, UseFetchStatusInputType, UseFetchStatusOutputType } fr
 import { buildQueryString } from '../../../../utils'
 
 
-export const useApiFetch =  <T extends {} = any>(input: UseFetchStatusInputType): UseFetchStatusOutputType => {
+export const useApiFetch = <T extends {} = any>(input: UseFetchStatusInputType): UseFetchStatusOutputType => {
 
   const [currentFetchStatus, setFetchStatus] = React.useState<FetchStatusType>({
     status: ResponseResultStatusEnum.INITIAL
@@ -22,7 +22,13 @@ export const useApiFetch =  <T extends {} = any>(input: UseFetchStatusInputType)
         url: input.path + buildQueryString(input.queryString),
         ...(input.method && { method: input.method })
       })
+
       const fetchedDomains: T[] = fetchResult.data ? fetchResult.data.blogs : []
+      input.setPaginationStatus({
+        offset: fetchResult.data && fetchResult.data.offset ? fetchResult.data.offset : 0,
+        limit: fetchResult.data && fetchResult.data.limit ? fetchResult.data.limit : 20,
+        totalCount: fetchResult.data && fetchResult.data.totalCount ? fetchResult.data.totalCount : 1000,
+      })
       input.setDomainList(fetchedDomains)
       setFetchStatus({
         status: fetchResult.status,
@@ -42,7 +48,7 @@ export const useApiFetch =  <T extends {} = any>(input: UseFetchStatusInputType)
 
   const handleFetchStatusCloseClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
     setFetchStatus({
-      status: ResponseResultStatusEnum.INITIAL 
+      status: ResponseResultStatusEnum.INITIAL
     })
   }
 
