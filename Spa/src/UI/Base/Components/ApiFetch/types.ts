@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { ResponseResultStatusEnum, RequestMethodEnum, QueryStringType } from '../../../../requests/types';
 
-declare type FetchStatusType = {
+export declare type FetchStatusType = {
   status: ResponseResultStatusEnum
   errorMsg?: string
 }

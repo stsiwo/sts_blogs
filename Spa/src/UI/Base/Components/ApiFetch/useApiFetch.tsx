@@ -5,7 +5,7 @@ import { FetchStatusType, UseFetchStatusInputType, UseFetchStatusOutputType } fr
 import { buildQueryString } from '../../../../utils'
 
 
-export const useApiFetch =  <T = any>(input: UseFetchStatusInputType): UseFetchStatusOutputType => {
+export const useApiFetch =  <T extends {} = any>(input: UseFetchStatusInputType): UseFetchStatusOutputType => {
 
   const [currentFetchStatus, setFetchStatus] = React.useState<FetchStatusType>({
     status: ResponseResultStatusEnum.INITIAL
@@ -33,7 +33,7 @@ export const useApiFetch =  <T = any>(input: UseFetchStatusInputType): UseFetchS
 
     return () => {
     }
-  }, [currentRefreshStatus].concat(input.queryString.values()))
+  }, [currentRefreshStatus, ...Object.values(input.queryString)])
 
   const handleRefreshClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
     const nextStatus = currentRefreshStatus + 1

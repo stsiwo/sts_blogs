@@ -31,7 +31,7 @@ export declare type ErrorResponseDataType = {
 }
 
 export declare type QueryStringType = {
-  [key:string]: string
+  [key:string]: any
   //[key:string]?: string
   // is not valid
 }

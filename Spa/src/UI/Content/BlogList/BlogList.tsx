@@ -67,18 +67,22 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
     setPaginationLimit(nextPageLimit)
   }
 
-  const { 
-    fetchStatus: FetchStatusType, 
-    handleRefreshClickEvent,
-    handleFetchStatusCloseClickEvent
-  } = useApiFetch()
+  const { fetchStatus, handleFetchStatusCloseClickEvent, handleRefreshClickEvent } = useApiFetch<BlogType>({
+    path: '/blogs',
+    method: RequestMethodEnum.GET,
+    queryString: {
+      offset: currentPaginationOffset,
+      limit: currentPaginationLimit
+    },
+    setDomainList: setBlogs
+  })
 
   return (
     <div className="blog-list-wrapper">
       <section className="blog-list-section-wrapper">
         <h2 className="blog-list-title">BlogLists</h2>
         <div className="blog-list-controller-wrapper">
-          <FetchStatus  fetchStatus={fetchStatus} onCloseClick={handleFetchStatusCloseClickEvent} />
+          <FetchStatus fetchStatus={fetchStatus} onCloseClick={handleFetchStatusCloseClickEvent} />
           <button className="blog-list-controller-refresh-btn" onClick={handleRefreshClickEvent}>refresh</button>
           <select value={currentPaginationLimit} onChange={handlePageLimitChangeEvent}>
             <option value="20">20</option>
