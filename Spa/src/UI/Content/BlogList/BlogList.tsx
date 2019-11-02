@@ -13,6 +13,8 @@ import { Link } from 'react-router-dom';
 import Pagination from '../../Base/Components/Pagination/Pagination';
 import { RequestMethodEnum, ResponseResultType, ResponseResultStatusEnum } from '../../../requests/types';
 import { request } from '../../../requests/request';
+import FetchStatus from '../../Base/Components/ApiFetch/FetchStatus';
+import { useApiFetch } from '../../Base/Components/ApiFetch/useApiFetch';
 
 declare type FetchResultType = {
   status: ResponseResultStatusEnum
@@ -52,40 +54,8 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const [currentBlogs, setBlogs] = React.useState([] as BlogType[])
-  const [currentRefreshStatus, setRefreshStatus] = React.useState(0)
   const [currentPaginationLimit, setPaginationLimit] = React.useState(20)
   const [currentPaginationOffset, setPaginationOffset] = React.useState(0)
-  const [currentFetchStatus, setFetchStatus] = React.useState<FetchResultType>({
-    status: ResponseResultStatusEnum.INITIAL
-  })
-
-  React.useEffect(() => {
-
-    async function blogsApiFetch() {
-      setFetchStatus({
-        status: ResponseResultStatusEnum.FETCHING,
-      })
-      const fetchResult: ResponseResultType = await request({
-        url: '/blogs?offset=' + currentPaginationOffset + '&limit=' + currentPaginationLimit,
-        method: RequestMethodEnum.GET
-      })
-      const fetchedBlogs: BlogType[] = fetchResult.data ? fetchResult.data.blogs : []
-      setBlogs(fetchedBlogs)
-      setFetchStatus({
-        status: fetchResult.status,
-        ...(fetchResult.errorMsg && { errorMsg: fetchResult.errorMsg }),
-      })
-    }
-    blogsApiFetch()
-
-    return () => {
-    }
-  }, [currentRefreshStatus, currentPaginationLimit, currentPaginationOffset])
-
-  const handleRefreshClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
-    const nextStatus = currentRefreshStatus + 1
-    setRefreshStatus(nextStatus)
-  }
 
   const handlePageClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
     const nextPageOffset: number = parseInt(e.currentTarget.value)
@@ -97,24 +67,18 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
     setPaginationLimit(nextPageLimit)
   }
 
-  const handleFetchStatusCloseClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
-    setFetchStatus({
-      status: ResponseResultStatusEnum.INITIAL 
-    })
-  }
+  const { 
+    fetchStatus: FetchStatusType, 
+    handleRefreshClickEvent,
+    handleFetchStatusCloseClickEvent
+  } = useApiFetch()
 
   return (
     <div className="blog-list-wrapper">
       <section className="blog-list-section-wrapper">
         <h2 className="blog-list-title">BlogLists</h2>
         <div className="blog-list-controller-wrapper">
-          <div className="blog-list-controller-fetch-status-wrapper">
-            {(currentFetchStatus.status === ResponseResultStatusEnum.FETCHING && <h3 className="blog-list-controller-fetch-status-title">fetching ...</h3>)}
-            {(currentFetchStatus.status === ResponseResultStatusEnum.SUCCESS && <h3 className="blog-list-controller-fetch-status-title">fetching success</h3>)}
-            {(currentFetchStatus.status === ResponseResultStatusEnum.FAILURE && <h3 className="blog-list-controller-fetch-status-title">fetching failed</h3>)}
-            {(currentFetchStatus.errorMsg && <p>{currentFetchStatus.errorMsg}</p>)}
-            <button className="blog-list-controller-fetch-status-close-btn" onClick={handleFetchStatusCloseClickEvent}>&#10006;</button>
-          </div>
+          <FetchStatus  fetchStatus={fetchStatus} onCloseClick={handleFetchStatusCloseClickEvent} />
           <button className="blog-list-controller-refresh-btn" onClick={handleRefreshClickEvent}>refresh</button>
           <select value={currentPaginationLimit} onChange={handlePageLimitChangeEvent}>
             <option value="20">20</option>
