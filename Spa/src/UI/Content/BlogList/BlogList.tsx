@@ -11,6 +11,13 @@ import { useCssGlobalContext } from '../../Base/Context/CssGlobalContext/CssGlob
 import { toggleFilterSortBarActionCreator } from '../../../actions/creators';
 import { Link } from 'react-router-dom';
 import Pagination from '../../Base/Components/Pagination/Pagination';
+import { RequestMethodEnum, ResponseResultType, ResponseResultStatusEnum } from '../../../requests/types';
+import { request } from '../../../requests/request';
+
+declare type FetchResultType = {
+  status: ResponseResultStatusEnum
+  errorMsg?: string
+}
 
 
 const BlogList: React.FunctionComponent<{}> = (props: {}) => {
@@ -48,13 +55,28 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   const [currentRefreshStatus, setRefreshStatus] = React.useState(0)
   const [currentPaginationLimit, setPaginationLimit] = React.useState(20)
   const [currentPaginationOffset, setPaginationOffset] = React.useState(0)
+  const [currentFetchStatus, setFetchStatus] = React.useState<FetchResultType>({
+    status: ResponseResultStatusEnum.INITIAL
+  })
 
   React.useEffect(() => {
 
-    // api fetch for blog posts with limit/offset state
-    // when only limit/offset or refresh status updated, this useEffect is called again besides when mounting
-    console.log('calling mock api request')
-    setBlogs(getBlogTestData(30))
+    async function blogsApiFetch() {
+      setFetchStatus({
+        status: ResponseResultStatusEnum.FETCHING,
+      })
+      const fetchResult: ResponseResultType = await request({
+        url: '/blogs?offset=' + currentPaginationOffset + '&limit=' + currentPaginationLimit,
+        method: RequestMethodEnum.GET
+      })
+      const fetchedBlogs: BlogType[] = fetchResult.data ? fetchResult.data.blogs : []
+      setBlogs(fetchedBlogs)
+      setFetchStatus({
+        status: fetchResult.status,
+        ...(fetchResult.errorMsg && { errorMsg: fetchResult.errorMsg }),
+      })
+    }
+    blogsApiFetch()
 
     return () => {
     }
@@ -75,11 +97,24 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
     setPaginationLimit(nextPageLimit)
   }
 
+  const handleFetchStatusCloseClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
+    setFetchStatus({
+      status: ResponseResultStatusEnum.INITIAL 
+    })
+  }
+
   return (
     <div className="blog-list-wrapper">
       <section className="blog-list-section-wrapper">
         <h2 className="blog-list-title">BlogLists</h2>
         <div className="blog-list-controller-wrapper">
+          <div className="blog-list-controller-fetch-status-wrapper">
+            {(currentFetchStatus.status === ResponseResultStatusEnum.FETCHING && <h3 className="blog-list-controller-fetch-status-title">fetching ...</h3>)}
+            {(currentFetchStatus.status === ResponseResultStatusEnum.SUCCESS && <h3 className="blog-list-controller-fetch-status-title">fetching success</h3>)}
+            {(currentFetchStatus.status === ResponseResultStatusEnum.FAILURE && <h3 className="blog-list-controller-fetch-status-title">fetching failed</h3>)}
+            {(currentFetchStatus.errorMsg && <p>{currentFetchStatus.errorMsg}</p>)}
+            <button className="blog-list-controller-fetch-status-close-btn" onClick={handleFetchStatusCloseClickEvent}>&#10006;</button>
+          </div>
           <button className="blog-list-controller-refresh-btn" onClick={handleRefreshClickEvent}>refresh</button>
           <select value={currentPaginationLimit} onChange={handlePageLimitChangeEvent}>
             <option value="20">20</option>
@@ -89,7 +124,8 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
           </select>
         </div>
         <div className="blog-list-items-wrapper">
-          {renderBlogLists(currentBlogs)}
+          {(currentBlogs.length === 0 && <p>blogs are empty</p>)}
+          {(currentBlogs.length !== 0 && renderBlogLists(currentBlogs))}
         </div>
         <div className="blog-list-pagination-wrapper">
           <Pagination offset={ 0 } totalCount={ 1000 } limit={ 20 } onClick={handlePageClickEvent}/>
