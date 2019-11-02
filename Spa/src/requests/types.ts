@@ -30,3 +30,8 @@ export declare type ErrorResponseDataType = {
   status: number
 }
 
+export declare type QueryStringType = {
+  [key:string]: string
+  //[key:string]?: string
+  // is not valid
+}
