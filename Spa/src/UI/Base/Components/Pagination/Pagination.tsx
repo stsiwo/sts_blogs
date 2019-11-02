@@ -1,11 +1,11 @@
 import * as React from 'react';
 import './Pagination.scss';
-import { PaginationPropType, UsePaginationResultType, PageType } from './types';
-import { usePagination } from './usePagination';
+import { PaginationPropType, BuildPaginationResultType, PageType } from './types';
+import { buildPagination } from './buildPagination';
 
 const Pagination: React.FunctionComponent<PaginationPropType> = (props: PaginationPropType) => {
 
-  const pageResult: UsePaginationResultType = usePagination(props.offset, props.totalCount, props.limit) 
+  const pageResult: BuildPaginationResultType = buildPagination(props.offset, props.totalCount, props.limit) 
 
   if (pageResult.pageList.length !== 0) {
     return (

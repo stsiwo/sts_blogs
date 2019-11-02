@@ -10,7 +10,23 @@ export declare type PaginationPropType = {
   hoverPageCss?: string
 }
 
-export declare type UsePaginationResultType = {
+export declare type PaginationStatusType = {
+  offset: number
+  limit: number
+  totalCount: number
+}
+
+export declare type UsePaginationInputType = {
+}
+
+export declare type UsePaginationOutputType = {
+  paginationStatus: PaginationStatusType
+  setPaginationStatus: React.Dispatch<React.SetStateAction<PaginationStatusType>>
+  handlePageClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>>
+  handlePageLimitChangeEvent: React.EventHandler<React.ChangeEvent<HTMLSelectElement>>
+}
+
+export declare type BuildPaginationResultType = {
   pageList: PageType[]
   maxPageNum: number
   maxPageNumOffset: number

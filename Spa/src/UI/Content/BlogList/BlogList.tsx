@@ -15,6 +15,7 @@ import { RequestMethodEnum, ResponseResultType, ResponseResultStatusEnum } from 
 import { request } from '../../../requests/request';
 import FetchStatus from '../../Base/Components/ApiFetch/FetchStatus';
 import { useApiFetch } from '../../Base/Components/ApiFetch/useApiFetch';
+import { usePagination } from '../../Base/Components/Pagination/usePagination';
 
 declare type FetchResultType = {
   status: ResponseResultStatusEnum
@@ -54,25 +55,15 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const [currentBlogs, setBlogs] = React.useState([] as BlogType[])
-  const [currentPaginationLimit, setPaginationLimit] = React.useState(20)
-  const [currentPaginationOffset, setPaginationOffset] = React.useState(0)
 
-  const handlePageClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
-    const nextPageOffset: number = parseInt(e.currentTarget.value)
-    setPaginationOffset(nextPageOffset)
-  }
-
-  const handlePageLimitChangeEvent: React.EventHandler<React.ChangeEvent<HTMLSelectElement>> = (e) => {
-    const nextPageLimit: number = parseInt(e.currentTarget.value)
-    setPaginationLimit(nextPageLimit)
-  }
+  const { paginationStatus, setPaginationStatus, handlePageClickEvent, handlePageLimitChangeEvent } = usePagination({})
 
   const { fetchStatus, handleFetchStatusCloseClickEvent, handleRefreshClickEvent } = useApiFetch<BlogType>({
     path: '/blogs',
     method: RequestMethodEnum.GET,
     queryString: {
-      offset: currentPaginationOffset,
-      limit: currentPaginationLimit
+      offset: paginationStatus.offset,
+      limit: paginationStatus.limit
     },
     setDomainList: setBlogs
   })
@@ -84,7 +75,7 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
         <div className="blog-list-controller-wrapper">
           <FetchStatus fetchStatus={fetchStatus} onCloseClick={handleFetchStatusCloseClickEvent} />
           <button className="blog-list-controller-refresh-btn" onClick={handleRefreshClickEvent}>refresh</button>
-          <select value={currentPaginationLimit} onChange={handlePageLimitChangeEvent}>
+          <select value={paginationStatus.limit} onChange={handlePageLimitChangeEvent}>
             <option value="20">20</option>
             <option value="30">30</option>
             <option value="40">40</option>

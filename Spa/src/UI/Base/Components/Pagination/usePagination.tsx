@@ -1,64 +1,36 @@
-import { UsePaginationResultType, PageType } from "./types";
-import range = require('lodash/range');
+import * as React from 'react'
+import { UsePaginationInputType, UsePaginationOutputType, PaginationStatusType } from "./types";
 
-/**
- * helper hook for pagination 
- *
- **/
-export const usePagination: (offset: number, totalCount: number, limit: number) => UsePaginationResultType = (offset, totalCount, limit) => {
-  const pageNumList: number[] = generatePageNumList(totalCount, limit, offset);
-  const pageList: PageType[] = pageNumList.map((pageNum) => {
-    const currentPageNum = calculateCurrentPageNum(offset, limit);
-    return {
-      pageNum: pageNum,
-      offset: calculateOffset(pageNum, limit),
-      ...(currentPageNum === pageNum && { css: "pagination-btn pagination-btn-selected" }),
-      ...(currentPageNum !== pageNum && { css: "pagination-btn" }),
-    } as PageType;
+
+export const usePagination = (input: UsePaginationInputType): UsePaginationOutputType => {
+  const [currentPaginationStatus, setPaginationStatus] = React.useState<PaginationStatusType>({
+    offset: 0,
+    limit: 20,
+    totalCount: 0
   })
-  const maxPageNum: number = calculateMaxPageNum(totalCount, limit);
-  const maxPageNumOffset: number = calculateOffset(maxPageNum, limit);
+
+  const handlePageClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
+    const nextPageOffset: number = parseInt(e.currentTarget.value)
+    setPaginationStatus({
+      offset: nextPageOffset,
+      limit: currentPaginationStatus.limit,
+      totalCount: currentPaginationStatus.totalCount
+    })
+  }
+
+  const handlePageLimitChangeEvent: React.EventHandler<React.ChangeEvent<HTMLSelectElement>> = (e) => {
+    const nextPageLimit: number = parseInt(e.currentTarget.value)
+    setPaginationStatus({
+      offset: currentPaginationStatus.offset,
+      limit: nextPageLimit, 
+      totalCount: currentPaginationStatus.totalCount
+    })
+  }
 
   return {
-    pageList: pageList,
-    maxPageNum: maxPageNum,
-    maxPageNumOffset: maxPageNumOffset
+    paginationStatus: currentPaginationStatus,
+    setPaginationStatus: setPaginationStatus,
+    handlePageClickEvent: handlePageClickEvent,
+    handlePageLimitChangeEvent: handlePageLimitChangeEvent
   }
-}
-
-const generatePageNumList: (totalCount: number, limit: number, offset: number) => number[] = (totalCount, limit, offset) => {
-
-  const btnNum = 5;
-  const leftBtnNum = 2;
-  const rightBtnNum = 2;
-  const currentPageNum = (offset !== 0) ? offset / limit : 1;
-  const maxPageNum = calculateMaxPageNum(totalCount, limit);
-
-  if (totalCount <= limit) return [];
-
-  if (currentPageNum <= leftBtnNum + 1) {
-    const upperPageNum = (maxPageNum - btnNum > 0) ? btnNum : maxPageNum;
-    return range(1, upperPageNum + 1);
-  }
-  else if (maxPageNum - currentPageNum < rightBtnNum + 1) {
-    return range(maxPageNum - (btnNum - 1), maxPageNum + 1);
-  }
-  else {
-    const lowerPageNum = (currentPageNum - 2 < 0) ? 1 : currentPageNum - 2;
-    const upperPageNum = (currentPageNum + 2 > maxPageNum) ? maxPageNum : (currentPageNum + 2);
-
-    return range(lowerPageNum, upperPageNum + 1);
-  }
-}
-
-const calculateOffset: (pageNum: number, limit: number) => number = (pageNum, limit) => {
-  return (pageNum - 1) * limit;
-}
-
-const calculateMaxPageNum: (totalCount: number, limit: number) => number = (totalCount, limit) => {
-  return Math.ceil(totalCount / limit);
-}
-
-const calculateCurrentPageNum: (offset: number, limit: number) => number = (offset, limit) => {
-  return (offset !== 0) ? offset / limit : 1;
 }
