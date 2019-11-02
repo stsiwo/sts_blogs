@@ -25,6 +25,8 @@ class BlogService(object):
 
         blogs: List[Blog] = self._blogRepository.getAll()
 
+        # need to refactor not to throw exception when blog is empty
+        # this should not be exception and should return 200 and empty data
         if len(blogs) == 0:
             raise BlogNotFoundException
 
