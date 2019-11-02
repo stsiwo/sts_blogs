@@ -1,3 +1,5 @@
+import { QueryStringType } from "./requests/types";
+
 export const prettyConsole = (target: any): void => {
   var cache: any[] = []
   console.log(JSON.stringify(target, function(key, value) {
@@ -15,3 +17,10 @@ export const prettyConsole = (target: any): void => {
 }
 
 export const dateFormatOption =  { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}
+
+export const buildQueryString = (queryStringObject: QueryStringType): string => {
+  const esc = encodeURIComponent
+  return '?' + Object.keys(queryStringObject)
+    .map(key => esc(key) + '=' + esc(queryStringObject[key]))
+    .join('&')
+}
