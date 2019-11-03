@@ -69,7 +69,9 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
 
   /** lifecycle **/
   React.useEffect(() => {
+    /** must enable componentdidupdate also, otherwise not close when click outside **/
     const handleFilterSortNavCloseWhenOutsideClickEvent = (e: Event) => {
+      
       console.log('add event listener during this component is mounted')
       if (filterSortBarWrapperRef.current.contains(e.target)) {
 
@@ -85,8 +87,7 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
       console.log('remove event listener after this component is unmounted')
       window.removeEventListener('mousedown', handleFilterSortNavCloseWhenOutsideClickEvent);
     }
-
-  },[])
+  })
 
   /** anything else **/
   const sortList: SortType[] = [
