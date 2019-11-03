@@ -98,7 +98,7 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
           {(currentBlogs.length !== 0 && renderBlogLists(currentBlogs))}
         </div>
         <div className="blog-list-pagination-wrapper">
-          <Pagination offset={ 0 } totalCount={ 1000 } limit={ 20 } onClick={handlePageClickEvent}/>
+          <Pagination offset={ paginationStatus.offset } totalCount={ paginationStatus.totalCount } limit={ paginationStatus.limit } onClick={handlePageClickEvent}/>
         </div>
       </section>
       <BlogFilterSort filters={filters} sort={sort} setFilters={setFilters} setSort={setSort}/>
