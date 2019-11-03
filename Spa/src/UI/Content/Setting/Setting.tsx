@@ -52,6 +52,7 @@ const Setting: React.FunctionComponent<{}> = (props: {}) => {
         </ul>
       </aside>
       <article className="setting-content">
+        {/** update for PrivateRoute for authenticated user to access **/}
         <Route exact path={`${path}`} component={SettingHome} />
         <Route exact path={`${path}/profile`} component={Profile} />
         <Route exact path={`${path}/blogs`} component={BlogManagement} />
