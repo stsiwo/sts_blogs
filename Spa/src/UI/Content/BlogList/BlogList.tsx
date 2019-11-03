@@ -45,10 +45,10 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
     queryString: {
       offset: paginationStatus.offset,
       limit: paginationStatus.limit,
-      tags: filters.tags,
-      startDate: filters.creationDate.start,
-      endDate: filters.creationDate.end,
-      keyword: filters.keyword
+      ...(filters.tags.length !== 0 && { tags: Object.values(filters.tags)}),
+      ...(filters.creationDate.start && { startDate: filters.creationDate.start.toJSON()}),
+      ...(filters.creationDate.start && { startDate: filters.creationDate.start.toJSON()}),
+      ...(filters.keyword && { keyword: filters.keyword }),
     },
     setDomainList: setBlogs,
     setPaginationStatus: setPaginationStatus,
