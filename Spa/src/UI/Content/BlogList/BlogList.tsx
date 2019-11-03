@@ -16,6 +16,8 @@ import { request } from '../../../requests/request';
 import FetchStatus from '../../Base/Components/ApiFetch/FetchStatus';
 import { useApiFetch } from '../../Base/Components/ApiFetch/useApiFetch';
 import { usePagination } from '../../Base/Components/Pagination/usePagination';
+import BlogFilterSort from '../../Base/Components/BlogFilterSort/BlogFilterSort';
+import { useBlogFilterSort } from '../../Base/Components/BlogFilterSort/useBlogFilterSort';
 
 declare type FetchResultType = {
   status: ResponseResultStatusEnum
@@ -25,17 +27,34 @@ declare type FetchResultType = {
 
 const BlogList: React.FunctionComponent<{}> = (props: {}) => {
 
+  /** state **/
+  const [currentBlogs, setBlogs] = React.useState([] as BlogType[])
+
+  /** redux **/
   const isFilterSortBarOpen = useSelector((state: StateType) => state.ui.isFilterSortBarOpen)
 
-  const renderTags = (tagList: TagType[]): React.ReactNode => {
-    return tagList.map((tag: TagType) => <div className="blog-list-filter-tags-tag" key={tag.id}>{tag.name}</div>)
-  }
-
+  /** hooks **/
   const currentWidth = useResponsiveComponent()
   const cssGlobal = useCssGlobalContext()
-
   const dispatch = useDispatch()
+  const { paginationStatus, setPaginationStatus, handlePageClickEvent, handlePageLimitChangeEvent } = usePagination({})
+  const { filters, sort, setFilters, setSort } = useBlogFilterSort({})
+  const { fetchStatus, handleFetchStatusCloseClickEvent, handleRefreshClickEvent } = useApiFetch<BlogType>({
+    path: '/blogs',
+    method: RequestMethodEnum.GET,
+    queryString: {
+      offset: paginationStatus.offset,
+      limit: paginationStatus.limit,
+      tags: filters.tags,
+      startDate: filters.creationDate.start,
+      endDate: filters.creationDate.end,
+      keyword: filters.keyword
+    },
+    setDomainList: setBlogs,
+    setPaginationStatus: setPaginationStatus,
+  })
 
+  /** EH **/
   const handleFilterSortNavClickEvent: React.EventHandler<React.MouseEvent<HTMLElement>> = (e) => {
     dispatch(toggleFilterSortBarActionCreator(true))
   }
@@ -44,6 +63,7 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
     dispatch(toggleFilterSortBarActionCreator(false))
   }
 
+  /** render **/
   const renderBlogLists = (blogList: BlogType[]): React.ReactNode => {
     return blogList.map((blog: BlogType) => {
       return (
@@ -54,20 +74,9 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
     })
   }
 
-  const [currentBlogs, setBlogs] = React.useState([] as BlogType[])
-
-  const { paginationStatus, setPaginationStatus, handlePageClickEvent, handlePageLimitChangeEvent } = usePagination({})
-
-  const { fetchStatus, handleFetchStatusCloseClickEvent, handleRefreshClickEvent } = useApiFetch<BlogType>({
-    path: '/blogs',
-    method: RequestMethodEnum.GET,
-    queryString: {
-      offset: paginationStatus.offset,
-      limit: paginationStatus.limit
-    },
-    setDomainList: setBlogs,
-    setPaginationStatus: setPaginationStatus
-  })
+  const renderTags = (tagList: TagType[]): React.ReactNode => {
+    return tagList.map((tag: TagType) => <div className="blog-list-filter-tags-tag" key={tag.id}>{tag.name}</div>)
+  }
 
   return (
     <div className="blog-list-wrapper">
@@ -90,6 +99,7 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
         <div className="blog-list-pagination-wrapper">
           <Pagination offset={ 0 } totalCount={ 1000 } limit={ 20 } onClick={handlePageClickEvent}/>
         </div>
+        <BlogFilterSort filters={filters} sort={sort} setFilters={setFilters} setSort={setSort}/>
       </section>
     </div>
   );
