@@ -57,6 +57,5 @@ export const useApiFetch = <T extends {} = any>(input: UseFetchStatusInputType):
     refreshStatus: currentRefreshStatus,
     handleRefreshClickEvent: handleRefreshClickEvent,
     handleFetchStatusCloseClickEvent: handleFetchStatusCloseClickEvent,
-
   }
 }
