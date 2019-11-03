@@ -86,7 +86,7 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
       window.removeEventListener('mousedown', handleFilterSortNavCloseWhenOutsideClickEvent);
     }
 
-  })
+  },[])
 
   /** anything else **/
   const sortList: SortType[] = [
@@ -121,7 +121,7 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
   const renderCurrentTags = () => {
     return props.filters.tags.map((tag: TagType) => {
       return (
-        <Tag name={tag.name} withCancelBtn />
+        <Tag name={tag.name} withCancelBtn key={tag.name}/>
       )
     })
   }
@@ -129,7 +129,7 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
   const renderSortList = () => {
     return sortList.map((sort: SortType) => {
       return (
-        <div className="aside-sort-item-wrapper">
+        <div className="aside-sort-item-wrapper" key={sort.value}>
           <input type='radio' className="" value={sort.value} key={sort.value} checked={sort.value === props.sort} onChange={handleSortChangeEvent}/>
           <span>{sort.title}</span>
         </div>
