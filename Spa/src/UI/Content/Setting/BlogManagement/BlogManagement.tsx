@@ -1,33 +1,59 @@
 import * as React from 'react';
-import './BlogManagement.scss';
-import { BlogType } from '../../../../domain/blog/BlogType';
-import { getBlogTestData } from '../../../../../tests/data/BlogFaker';
-import { dateFormatOption } from '../../../../utils';
-import Icon from '../../../Base/Components/Icon/Icon';
-import { getTagTestData } from '../../../../../tests/data/TagFaker';
-import Tag from '../../../Base/Components/Tag/Tag';
-import { Link } from 'react-router-dom';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { useSelector, useDispatch } from 'react-redux';
-import { StateType } from '../../../../states/types';
-import { toggleFilterSortBarActionCreator } from '../../../../actions/creators';
-import { useResponsiveComponent } from '../../../Base/Hooks/ResponsiveComponentHook';
-import { useCssGlobalContext } from '../../../Base/Context/CssGlobalContext/CssGlobalContext';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router';
+import { Link } from 'react-router-dom';
+import { toggleFilterSortBarActionCreator } from '../../../../actions/creators';
+import { BlogType } from '../../../../domain/blog/BlogType';
+import { RequestMethodEnum } from '../../../../requests/types';
+import { StateType } from '../../../../states/types';
+import { dateFormatOption } from '../../../../utils';
+import FetchStatus from '../../../Base/Components/ApiFetch/FetchStatus';
+import { useApiFetch } from '../../../Base/Components/ApiFetch/useApiFetch';
+import BlogFilterSort from '../../../Base/Components/BlogFilterSort/BlogFilterSort';
+import { useBlogFilterSort } from '../../../Base/Components/BlogFilterSort/useBlogFilterSort';
+import Pagination from '../../../Base/Components/Pagination/Pagination';
+import { usePagination } from '../../../Base/Components/Pagination/usePagination';
+import { useCssGlobalContext } from '../../../Base/Context/CssGlobalContext/CssGlobalContext';
+import { useResponsiveComponent } from '../../../Base/Hooks/ResponsiveComponentHook';
+import './BlogManagement.scss';
 
 const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
 
 
-  const [currentBlogs, setBlogs] = React.useState(getBlogTestData())
+  /** refs **/
   const controllerRefs: Map<string, React.MutableRefObject<HTMLDivElement>> = new Map()
 
-  const isFilterSortBarOpen = useSelector((state: StateType) => state.ui.isFilterSortBarOpen)
-  const dispatch = useDispatch()
+  /** state **/
+  const [currentBlogs, setBlogs] = React.useState([] as BlogType[])
 
+  /** redux **/
+  const isFilterSortBarOpen = useSelector((state: StateType) => state.ui.isFilterSortBarOpen)
+
+  /** hooks **/
+  const dispatch = useDispatch()
   const currentWidth = useResponsiveComponent()
   const cssGlobal = useCssGlobalContext()
+  const { path, url } = useRouteMatch();
+  const { paginationStatus, setPaginationStatus, handlePageClickEvent, handlePageLimitChangeEvent } = usePagination({})
+  const { filters, sort, setFilters, setSort } = useBlogFilterSort({})
+  const { fetchStatus, handleFetchStatusCloseClickEvent, handleRefreshClickEvent } = useApiFetch<BlogType>({
+    path: '/blogs',
+    method: RequestMethodEnum.GET,
+    queryString: {
+      offset: paginationStatus.offset,
+      limit: paginationStatus.limit,
+      tags: Object.values(filters.tags),
+      startDate: filters.creationDate.start ? filters.creationDate.start.toJSON(): null,
+      endDate: filters.creationDate.end ? filters.creationDate.end.toJSON(): null,
+      keyword: filters.keyword,
+      sort: sort,
+    },
+    setDomainList: setBlogs,
+    setPaginationStatus: setPaginationStatus,
+  })
 
+  /** EH **/
   const handleBlogControllerOpenClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
     controllerRefs.get(e.currentTarget.id).current.style.display = 'flex';
   }
@@ -36,19 +62,15 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
     controllerRefs.get(e.currentTarget.id).current.style.display = 'none';
   }
 
-
-  //  const setControllerRef = (element: HTMLDivElement) => {
-  //    console.log(element)
-  //    controllerRefs.set(element.id, element)
-  //  }
-
-  const [currentFilterDate, setFilterDate] = React.useState(new Date())
-
-  const handleDatePickerClickEvent = (selectedDate: Date): void => {
-    setFilterDate(selectedDate)
+  const handleFilterSortNavClickEvent: React.EventHandler<React.MouseEvent<HTMLElement>> = (e) => {
+    dispatch(toggleFilterSortBarActionCreator(true))
   }
 
+  const handleFilterSortNavCloseClickEvent: React.EventHandler<React.MouseEvent<HTMLElement>> = (e) => {
+    dispatch(toggleFilterSortBarActionCreator(false))
+  }
 
+  /** render **/
   const renderBlogs = (blogs: BlogType[]): React.ReactNode => {
 
     return blogs.map((blog: BlogType) => {
@@ -75,21 +97,26 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
     })
   }
 
-  let { path, url } = useRouteMatch();
-
   return (
     <div className="blog-management-wrapper">
       <div className="blog-management-main-wrapper">
         <h2 className="blog-management-title">Blog Management</h2>
+        <div className="blog-management-controller-wrapper">
+          <FetchStatus fetchStatus={fetchStatus} onCloseClick={handleFetchStatusCloseClickEvent} />
+          <button className="blog-management-controller-refresh-btn" onClick={handleRefreshClickEvent}>refresh</button>
+          <select value={paginationStatus.limit} onChange={handlePageLimitChangeEvent}>
+            <option value="20">20</option>
+            <option value="30">30</option>
+            <option value="40">40</option>
+            <option value="50">50</option>
+          </select>
+        </div>
         <div className="blog-management-items-wrapper">
           {renderBlogs(currentBlogs)}
         </div>
-        <div className="blog-management-pagination-wrapper">
-          pagination
-        </div>
+          <Pagination offset={ paginationStatus.offset } totalCount={ paginationStatus.totalCount } limit={ paginationStatus.limit } onClick={handlePageClickEvent}/>
       </div>
-      {/**(currentWidth > cssGlobal.tabletSize || (isFilterSortBarOpen && currentWidth <= cssGlobal.tabletSize)) &&
-      **/}
+      <BlogFilterSort filters={filters} sort={sort} setFilters={setFilters} setSort={setSort}/>
     </div>
   );
 }

@@ -1,23 +1,20 @@
 import * as React from 'react';
-import './BlogList.scss';
-import { TagType } from '../../../domain/tag/TagType';
-import { getTagTestData } from '../../../../tests/data/TagFaker';
-import { BlogType } from '../../../domain/blog/BlogType';
-import { getBlogTestData } from '../../../../tests/data/BlogFaker';
-import { useSelector, useDispatch } from 'react-redux';
-import { StateType } from '../../../states/types';
-import { useResponsiveComponent } from '../../Base/Hooks/ResponsiveComponentHook';
-import { useCssGlobalContext } from '../../Base/Context/CssGlobalContext/CssGlobalContext';
-import { toggleFilterSortBarActionCreator } from '../../../actions/creators';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import Pagination from '../../Base/Components/Pagination/Pagination';
-import { RequestMethodEnum, ResponseResultType, ResponseResultStatusEnum } from '../../../requests/types';
-import { request } from '../../../requests/request';
+import { toggleFilterSortBarActionCreator } from '../../../actions/creators';
+import { BlogType } from '../../../domain/blog/BlogType';
+import { TagType } from '../../../domain/tag/TagType';
+import { RequestMethodEnum, ResponseResultStatusEnum } from '../../../requests/types';
+import { StateType } from '../../../states/types';
 import FetchStatus from '../../Base/Components/ApiFetch/FetchStatus';
 import { useApiFetch } from '../../Base/Components/ApiFetch/useApiFetch';
-import { usePagination } from '../../Base/Components/Pagination/usePagination';
 import BlogFilterSort from '../../Base/Components/BlogFilterSort/BlogFilterSort';
 import { useBlogFilterSort } from '../../Base/Components/BlogFilterSort/useBlogFilterSort';
+import Pagination from '../../Base/Components/Pagination/Pagination';
+import { usePagination } from '../../Base/Components/Pagination/usePagination';
+import { useCssGlobalContext } from '../../Base/Context/CssGlobalContext/CssGlobalContext';
+import { useResponsiveComponent } from '../../Base/Hooks/ResponsiveComponentHook';
+import './BlogList.scss';
 
 declare type FetchResultType = {
   status: ResponseResultStatusEnum
