@@ -34,8 +34,7 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
     if (e.currentTarget.value === "") return false
 
     if (e.key == 'Enter' || e.key == 'Tab') {
-      console.log("you entered")
-      console.log(e.currentTarget.value)
+      console.log("updating tag filters")
       props.filters.tags.push({ name: e.currentTarget.value })
       props.setFilters({
         ...props.filters,
@@ -56,6 +55,15 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
 
   const handleSortChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
     props.setSort(parseInt(e.currentTarget.value))
+  }
+
+  const handleKeywordChangeEvent: React.EventHandler<React.KeyboardEvent<HTMLInputElement>> = (e) => {
+    if (e.currentTarget.value === "") return false
+
+    if (e.key == 'Enter' || e.key == 'Tab') {
+      props.filters.keyword = e.currentTarget.value
+      props.setFilters(props.filters)
+    }
   }
 
   const handleFilterSortNavClickEvent: React.EventHandler<React.MouseEvent<HTMLElement>> = (e) => {
@@ -159,7 +167,7 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
           </div>
           <div className="aside-filter-keyword-wrapper" >
             <h4 className="aside-filter-keyword-title">Keywords</h4>
-            <input type="text" className="aside-filter-keyword-input" />
+            <input type="text" className="aside-filter-keyword-input" onKeyDown={handleKeywordChangeEvent}/>
           </div>
           <div className="aside-filter-date-wrapper" >
             <h4 className="aside-filter-date-title">Date</h4>
