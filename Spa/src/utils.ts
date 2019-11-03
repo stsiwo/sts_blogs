@@ -21,6 +21,8 @@ export const dateFormatOption =  { weekday: 'long', year: 'numeric', month: 'lon
 export const buildQueryString = (queryStringObject: QueryStringType): string => {
   const esc = encodeURIComponent
   return '?' + Object.keys(queryStringObject)
+    .filter(key => queryStringObject[key] !== null && queryStringObject[key] !== undefined && queryStringObject[key].lenth != 0 && queryStringObject[key] != '')
     .map(key => esc(key) + '=' + esc(queryStringObject[key]))
     .join('&')
 }
+
