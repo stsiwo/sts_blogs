@@ -7,7 +7,6 @@ export const getTagTestData = (num: number = 10): TagType[] => {
 
   for(var i = 1; i <= num; i++) {
     tagList.push({
-      id: i.toString(),
       name: faker.lorem.word()
     })
   }
