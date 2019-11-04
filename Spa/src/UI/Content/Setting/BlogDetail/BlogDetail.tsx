@@ -3,25 +3,19 @@ import './BlogDetail.scss';
 import { useParams } from 'react-router';
 import { RequestMethodEnum, ResponseResultType, ResponseResultStatusEnum } from '../../../../requests/types';
 import { useApiFetch } from '../../../Base/Components/ApiFetch/useApiFetch';
-import { BlogType } from '../../../../domain/blog/BlogType';
+import { BlogType, initialBlogState } from '../../../../domain/blog/BlogType';
 import { request } from '../../../../requests/request';
 import { TagType } from '../../../../domain/tag/TagType';
+import * as yup from 'yup'
+import { BlogValidationType, initialBlogValidationState } from '../../../../domain/blog/BlogValidationType';
 
 const BlogDetail: React.FunctionComponent<{}> = (props: {}) => {
 
   /** ref **/
   const tagInputRef = React.useRef(null)
   /** state **/
-  const [currentBlog, setBlog] = React.useState<BlogType>({
-    id: '',
-    title: 'test-title',
-    subTitle: 'test-subTitle',
-    mainImage: null,
-    mainImageUrl: 'main-image-url',
-    content: 'test-content',
-    tags: [{ name: 'testtag' }, { name: 'testtag1'}],
-    createdDate: new Date() 
-  })
+  const [currentBlog, setBlog] = React.useState<BlogType>(initialBlogState)
+  const [currentValidationError, setValidationError] = React.useState<BlogValidationType>(initialBlogValidationState)
   /** redux **/
   /** hooks **/
   const { blogId } = useParams();
@@ -30,7 +24,7 @@ const BlogDetail: React.FunctionComponent<{}> = (props: {}) => {
   /** anything else **/
   let path: string = null
   let method: RequestMethodEnum = null
-  
+
   if (blogId == 'new') {
     path = '/users/' + userId + '/blogs/'
     method = RequestMethodEnum.POST
@@ -45,6 +39,39 @@ const BlogDetail: React.FunctionComponent<{}> = (props: {}) => {
     if (fetchStatus.data) setBlog(fetchStatus.data.blog)
   }
 
+  let schema = yup.object().shape<BlogType>({
+    id: yup.string(),
+    title: yup.string().required(),
+    subTitle: yup.string().required(),
+    content: yup.string().required(),
+    createdDate: yup.date().required(),
+  });
+
+  /** lifecycle **/
+  React.useEffect(() => {
+    function validateFormInput() {
+      schema
+        .validate(currentBlog)
+        .then(() => {
+          console.log('validation passed')
+          setValidationError({
+            ...initialBlogValidationState
+          })  
+        })
+        .catch((error: yup.ValidationError) => {
+          console.log('validation error detected')
+          currentValidationError[error.path as keyof BlogType] = error.message
+          setValidationError({
+            ...currentValidationError
+          })
+        })
+    }
+    console.log('validating input.... should be called only mount and when input is updated')
+    validateFormInput()
+    return () => {
+    };
+  }, [...Object.values(currentBlog)]);
+
 
   /** EH **/
   const mapStateToFormData = (state: BlogType): FormData => {
@@ -55,21 +82,21 @@ const BlogDetail: React.FunctionComponent<{}> = (props: {}) => {
     formData.set('mainImage', state.mainImage)
     formData.set('mainImageUrl', state.mainImageUrl)
     formData.set('content', state.content)
-    formData.set('createDate', state.createdDate.toJSON())
+    formData.set('createdDate', state.createdDate.toJSON())
     formData.set('tags', JSON.stringify(state.tags))
     return formData
   }
- 
+
   const handleSaveBlogClickEvent: React.EventHandler<React.MouseEvent<HTMLInputElement>> = async (e) => {
     // validation here?
     console.log('skipping validation ...')
-   
+
     // initialize FormData and map state to items of FormDate
     const formData: FormData = mapStateToFormData(currentBlog)
-    
+
     // set headers (multipart/form-data)
     const headers: {} = { 'content-type': 'multipart/form-data' }
-    
+
     // send request
     const responseResult: ResponseResultType = await request({
       url: path,
@@ -79,17 +106,24 @@ const BlogDetail: React.FunctionComponent<{}> = (props: {}) => {
     })
   }
 
+//  const handleInputChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
+//    currentBlog[e.currentTarget.name] = e.currentTarget.value
+//    setBlog({
+//      ...currentBlog 
+//    })
+//  }
+
   const handleTitleChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
     setBlog({
       ...currentBlog,
-      title: e.currentTarget.value 
+      title: e.currentTarget.value
     })
   }
 
   const handleSubTitleChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
     setBlog({
       ...currentBlog,
-      subTitle: e.currentTarget.value 
+      subTitle: e.currentTarget.value
     })
   }
 
@@ -110,7 +144,7 @@ const BlogDetail: React.FunctionComponent<{}> = (props: {}) => {
   const handleContentChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
     setBlog({
       ...currentBlog,
-      content: e.currentTarget.value 
+      content: e.currentTarget.value
     })
   }
 
@@ -133,34 +167,38 @@ const BlogDetail: React.FunctionComponent<{}> = (props: {}) => {
       <form className="blog-detail-form">
         <div className="blog-detail-form-title-wrapper" >
           <label htmlFor="title" className="blog-detail-form-title-label">Title</label>
-          <input type="text" name="title" id="title" className="blog-detail-form-title-input" placeholder="enter blog title..." value={currentBlog.title} onChange={handleTitleChangeEvent}/>
+          <input type="text" name="title" id="title" className="blog-detail-form-title-input" placeholder="enter blog title..." value={currentBlog.title} onChange={handleTitleChangeEvent} />
+          {(currentValidationError.title && <div className="input-error">{currentValidationError.title}</div>)}
         </div>
         <div className="blog-detail-form-subtitle-wrapper" >
-          <label htmlFor="subtitle" className="blog-detail-form-subtitle-label">Sub Title</label>
-          <input type="text" name="subtitle" id="subtitle" className="blog-detail-form-subtitle-input" placeholder="enter blog subtitle..." value={currentBlog.subTitle} onChange={handleSubTitleChangeEvent}/>
+          <label htmlFor="subTitle" className="blog-detail-form-subtitle-label">Sub Title</label>
+          <input type="text" name="subTitle" id="subTitle" className="blog-detail-form-subtitle-input" placeholder="enter blog subtitle..." value={currentBlog.subTitle} onChange={handleSubTitleChangeEvent} />
+          {(currentValidationError.subTitle && <div className="input-error">{currentValidationError.subTitle}</div>)}
         </div>
         <div className="blog-detail-form-tags-wrapper" >
           <label htmlFor="tags" className="blog-detail-form-tags-label">Tags</label>
           {(
-            currentBlog.tags.map(( tag: TagType ) => {
+            currentBlog.tags.map((tag: TagType) => {
               console.log('rendering tags')
-              return <input type="text" name="tags[]" id="tags" className="blog-detail-form-tags-input" value={tag.name} readOnly key={tag.name}/>
+              return <input type="text" name="tags[]" id="tags" className="blog-detail-form-tags-input" value={tag.name} readOnly key={tag.name} />
             })
           )}
           <input type="text" id="tags" className="blog-detail-form-tags-input" placeholder="enter blog tags..." onKeyDown={handleTagInputEnterOrTabKeyClickEvent} ref={tagInputRef} />
+          {(currentValidationError.tags && <div className="input-error">{currentValidationError.tags}</div>)}
         </div>
         <div className="blog-detail-form-image-wrapper" >
           <label htmlFor="tags" className="blog-detail-form-image-label">Main Image</label>
-          <input type="file" name="tags" id="tags" className="blog-detail-form-image-input" placeholder="enter blog image..." onChange={handleImageUploadChange}/>
-          <img src={currentBlog.mainImageUrl} className="" onLoad={handleRevokeObjectURLOnLoad} alt="selected image ..." width={100} height={100}/>
+          <input type="file" name="tags" id="tags" className="blog-detail-form-image-input" placeholder="enter blog image..." onChange={handleImageUploadChange} />
+          <img src={currentBlog.mainImageUrl} className="" onLoad={handleRevokeObjectURLOnLoad} alt="selected image ..." width={100} height={100} />
         </div>
         <div className="blog-detail-form-content-wrapper" >
           <label htmlFor="content" className="blog-detail-form-content-label">Content</label>
-          <input type="text" name="content" id="content" className="blog-detail-form-content-input" placeholder="enter blog content..." value={currentBlog.content} onChange={handleContentChangeEvent}/>
+          <input type="text" name="content" id="content" className="blog-detail-form-content-input" placeholder="enter blog content..." value={currentBlog.content} onChange={handleContentChangeEvent} />
+          {(currentValidationError.content && <div className="input-error">{currentValidationError.content}</div>)}
         </div>
         <input type="hidden" name='creationDate' value={currentBlog.createdDate.toJSON()} />
         <div className="blog-detail-btns-wrapper">
-          <input type="button" className="blog-detail-btns-save" value="Save" onClick={handleSaveBlogClickEvent}/>
+          <input type="button" className="blog-detail-btns-save" value="Save" onClick={handleSaveBlogClickEvent} />
         </div>
       </form>
     </div>
