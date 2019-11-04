@@ -16,7 +16,7 @@ export const useApiFetch = (input: UseFetchStatusInputType): UseFetchStatusOutpu
 
   React.useEffect(() => {
 
-    async function blogsApiFetch() {
+    async function fetchData() {
       setFetchStatus({
         status: ResponseResultStatusEnum.FETCHING,
       })
@@ -30,7 +30,7 @@ export const useApiFetch = (input: UseFetchStatusInputType): UseFetchStatusOutpu
         ...(fetchResult.errorMsg && { errorMsg: fetchResult.errorMsg }),
       })
     }
-    blogsApiFetch()
+    fetchData()
 
     return () => {
     }
