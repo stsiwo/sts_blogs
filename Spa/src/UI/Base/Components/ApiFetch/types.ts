@@ -3,6 +3,7 @@ import { ResponseResultStatusEnum, RequestMethodEnum, QueryStringType } from '..
 import { PaginationStatusType } from '../Pagination/types';
 
 export declare type FetchStatusType = {
+  data?: any
   status: ResponseResultStatusEnum
   errorMsg?: string
 }
@@ -15,9 +16,7 @@ export declare type FetchStatusPropType = {
 export declare type UseFetchStatusInputType<T = any> = {
   path: string
   method?: RequestMethodEnum
-  queryString: QueryStringType
-  setDomainList: React.Dispatch<React.SetStateAction<T>>
-  setPaginationStatus?: React.Dispatch<React.SetStateAction<PaginationStatusType>> 
+  queryString?: QueryStringType
 }
 
 export declare type UseFetchStatusOutputType = {

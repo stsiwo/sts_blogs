@@ -5,7 +5,7 @@ import { FetchStatusType, UseFetchStatusInputType, UseFetchStatusOutputType } fr
 import { buildQueryString } from '../../../../utils'
 
 
-export const useApiFetch = <T extends {} = any>(input: UseFetchStatusInputType): UseFetchStatusOutputType => {
+export const useApiFetch = (input: UseFetchStatusInputType): UseFetchStatusOutputType => {
 
   const [currentFetchStatus, setFetchStatus] = React.useState<FetchStatusType>({
     status: ResponseResultStatusEnum.INITIAL
@@ -21,32 +21,23 @@ export const useApiFetch = <T extends {} = any>(input: UseFetchStatusInputType):
         status: ResponseResultStatusEnum.FETCHING,
       })
       const fetchResult: ResponseResultType = await request({
-        url: input.path + encodedQueryString, 
+        url: input.path + encodedQueryString,
         ...(input.method && { method: input.method })
       })
-
-      const fetchedDomains: T[] = fetchResult.data ? fetchResult.data.blogs : []
-      input.setPaginationStatus({
-        offset: fetchResult.data && fetchResult.data.offset ? fetchResult.data.offset : 0,
-        limit: fetchResult.data && fetchResult.data.limit ? fetchResult.data.limit : 20,
-        totalCount: fetchResult.data && fetchResult.data.totalCount ? fetchResult.data.totalCount : 1000,
-      })
-      console.log(input.queryString)
-      input.setDomainList(fetchedDomains)
       setFetchStatus({
         status: fetchResult.status,
+        ...(fetchResult.data && { data: fetchResult.data }),
         ...(fetchResult.errorMsg && { errorMsg: fetchResult.errorMsg }),
       })
     }
-    console.log(input.queryString)
     blogsApiFetch()
 
     return () => {
     }
   }, [
-    currentRefreshStatus,
-    encodedQueryString 
-  ])
+      currentRefreshStatus,
+      encodedQueryString
+    ])
 
   const handleRefreshClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
     const nextStatus = currentRefreshStatus + 1

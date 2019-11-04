@@ -15,7 +15,7 @@ const Blog: React.FunctionComponent<{}> = (props: {}) => {
   const testTags: TagType[] = getTagTestData(20)
 
   const renderTags = (tagList: TagType[]): React.ReactNode => {
-    return tagList.map((tag: TagType) => <div className="tag-icon" key={tag.id}>{tag.name}</div>)
+    return tagList.map((tag: TagType) => <div className="tag-icon" key={tag.name}>{tag.name}</div>)
   }
 
   return (

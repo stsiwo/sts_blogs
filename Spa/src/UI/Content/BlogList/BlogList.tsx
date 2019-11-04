@@ -36,7 +36,7 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   const dispatch = useDispatch()
   const { paginationStatus, setPaginationStatus, handlePageClickEvent, handlePageLimitChangeEvent } = usePagination({})
   const { filters, sort, setFilters, setSort } = useBlogFilterSort({})
-  const { fetchStatus, handleFetchStatusCloseClickEvent, handleRefreshClickEvent } = useApiFetch<BlogType>({
+  const { fetchStatus, handleFetchStatusCloseClickEvent, handleRefreshClickEvent } = useApiFetch({
     path: '/blogs',
     method: RequestMethodEnum.GET,
     queryString: {
@@ -48,8 +48,6 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
       keyword: filters.keyword,
       sort: sort,
     },
-    setDomainList: setBlogs,
-    setPaginationStatus: setPaginationStatus,
   })
 
   /** EH **/
@@ -73,7 +71,7 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const renderTags = (tagList: TagType[]): React.ReactNode => {
-    return tagList.map((tag: TagType) => <div className="blog-list-filter-tags-tag" key={tag.id}>{tag.name}</div>)
+    return tagList.map((tag: TagType) => <div className="blog-list-filter-tags-tag" key={tag.name}>{tag.name}</div>)
   }
 
   return (

@@ -20,8 +20,10 @@ export declare type ResponseResultType = {
 }
 
 export declare type RequestContentType = {
-  url: string,
+  url: string
   method?: RequestMethodEnum
+  headers?: any
+  data?: any
 }
 
 export declare type ErrorResponseDataType = {

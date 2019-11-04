@@ -6,6 +6,8 @@ import { buildPagination } from './buildPagination';
 const Pagination: React.FunctionComponent<PaginationPropType> = (props: PaginationPropType) => {
 
   const pageResult: BuildPaginationResultType = buildPagination(props.offset, props.totalCount, props.limit) 
+  /** REFACTOR **/
+  // setter should be done here (not inside api fetch component)
 
   if (pageResult.pageList.length !== 0) {
     return (

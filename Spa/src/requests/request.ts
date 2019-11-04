@@ -6,7 +6,9 @@ import { AxiosResponse, AxiosError } from "axios";
 export const request = async (request: RequestContentType): Promise<ResponseResultType> => {
   return await api.request({
     url: encodeURI(request.url),
-    ...(request.method !== undefined && { method: request.method })
+    ...(request.method !== undefined && { method: request.method }),
+    ...(request.headers !== undefined && { headers: request.headers }),
+    ...(request.data !== undefined && { data: request.data})
   }).then((response: AxiosResponse) => {
     /** success response **/
     return {

@@ -37,7 +37,7 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   const { path, url } = useRouteMatch();
   const { paginationStatus, setPaginationStatus, handlePageClickEvent, handlePageLimitChangeEvent } = usePagination({})
   const { filters, sort, setFilters, setSort } = useBlogFilterSort({})
-  const { fetchStatus, handleFetchStatusCloseClickEvent, handleRefreshClickEvent } = useApiFetch<BlogType>({
+  const { fetchStatus, handleFetchStatusCloseClickEvent, handleRefreshClickEvent } = useApiFetch({
     path: '/blogs',
     method: RequestMethodEnum.GET,
     queryString: {
@@ -49,8 +49,6 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
       keyword: filters.keyword,
       sort: sort,
     },
-    setDomainList: setBlogs,
-    setPaginationStatus: setPaginationStatus,
   })
 
   /** EH **/
