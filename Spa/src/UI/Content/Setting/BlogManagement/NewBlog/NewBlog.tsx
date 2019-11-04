@@ -1,15 +1,14 @@
 import * as React from 'react';
-import './BlogDetail.scss';
+import './NewBlog.scss';
 import { useParams } from 'react-router';
-import { RequestMethodEnum, ResponseResultType, ResponseResultStatusEnum } from '../../../../requests/types';
-import { useApiFetch } from '../../../Base/Components/ApiFetch/useApiFetch';
-import { BlogType, initialBlogState } from '../../../../domain/blog/BlogType';
-import { request } from '../../../../requests/request';
-import { TagType } from '../../../../domain/tag/TagType';
 import * as yup from 'yup'
-import { BlogValidationType, initialBlogValidationState } from '../../../../domain/blog/BlogValidationType';
+import { BlogType, initialBlogState } from '../../../../../domain/blog/BlogType';
+import { BlogValidationType, initialBlogValidationState } from '../../../../../domain/blog/BlogValidationType';
+import { RequestMethodEnum, ResponseResultType } from '../../../../../requests/types';
+import { request } from '../../../../../requests/request';
+import { TagType } from '../../../../../domain/tag/TagType';
 
-const BlogDetail: React.FunctionComponent<{}> = (props: {}) => {
+const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
 
   /** ref **/
   const tagInputRef = React.useRef(null)
@@ -18,26 +17,11 @@ const BlogDetail: React.FunctionComponent<{}> = (props: {}) => {
   const [currentValidationError, setValidationError] = React.useState<BlogValidationType>(initialBlogValidationState)
   /** redux **/
   /** hooks **/
-  const { blogId } = useParams();
-  const userId = 1 // need to get from somewhere
+  const userId = 1
 
   /** anything else **/
-  let path: string = null
-  let method: RequestMethodEnum = null
-
-  if (blogId == 'new') {
-    path = '/users/' + userId + '/blogs/'
-    method = RequestMethodEnum.POST
-  } else {
-    // 1. get specified blog from server
-    path = '/blogs/' + blogId
-    method = RequestMethodEnum.GET
-    const { fetchStatus } = useApiFetch({
-      path: path,
-      method: method
-    })
-    if (fetchStatus.data) setBlog(fetchStatus.data.blog)
-  }
+  const path: string = '/users/' + userId + '/blogs/' 
+  const method: RequestMethodEnum = RequestMethodEnum.POST 
 
   let schema = yup.object().shape<BlogType>({
     id: yup.string(),
@@ -56,7 +40,7 @@ const BlogDetail: React.FunctionComponent<{}> = (props: {}) => {
           console.log('validation passed')
           setValidationError({
             ...initialBlogValidationState
-          })  
+          })
         })
         .catch((error: yup.ValidationError) => {
           console.log('validation error detected')
@@ -71,7 +55,6 @@ const BlogDetail: React.FunctionComponent<{}> = (props: {}) => {
     return () => {
     };
   }, [...Object.values(currentBlog)]);
-
 
   /** EH **/
   const mapStateToFormData = (state: BlogType): FormData => {
@@ -106,12 +89,12 @@ const BlogDetail: React.FunctionComponent<{}> = (props: {}) => {
     })
   }
 
-//  const handleInputChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
-//    currentBlog[e.currentTarget.name] = e.currentTarget.value
-//    setBlog({
-//      ...currentBlog 
-//    })
-//  }
+  //  const handleInputChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
+  //    currentBlog[e.currentTarget.name] = e.currentTarget.value
+  //    setBlog({
+  //      ...currentBlog 
+  //    })
+  //  }
 
   const handleTitleChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
     setBlog({
@@ -161,6 +144,7 @@ const BlogDetail: React.FunctionComponent<{}> = (props: {}) => {
     }
   }
   /** render **/
+  /** should separate 'new' and 'update' component **/
   return (
     <div className="blog-detail-wrapper">
       <h2 className="blog-detail-title">New/Update Blog</h2>
@@ -205,7 +189,8 @@ const BlogDetail: React.FunctionComponent<{}> = (props: {}) => {
   );
 }
 
-export default BlogDetail;
+export default NewBlog;
+
 
 
 

@@ -7,7 +7,8 @@ import Profile from './Profile/Profile';
 import { useRouteMatch } from 'react-router';
 import SettingHome from './SettingHome/SettingHome';
 import BlogManagement from './BlogManagement/BlogManagement';
-import BlogDetail from './BlogDetail/BlogDetail';
+import NewBlog from './BlogManagement/NewBlog/NewBlog';
+import UpdateBlog from './BlogManagement/UpdateBlog/UpdateBlog';
 
 declare type SettingNavItemType = {
   name: string
@@ -56,7 +57,8 @@ const Setting: React.FunctionComponent<{}> = (props: {}) => {
         <Route exact path={`${path}`} component={SettingHome} />
         <Route exact path={`${path}/profile`} component={Profile} />
         <Route exact path={`${path}/blogs`} component={BlogManagement} />
-        <Route exact path={`${path}/blogs/:blogId`} component={BlogDetail} />
+        <Route exact path={`${path}/blogs/new`} component={NewBlog} />
+        <Route exact path={`${path}/blogs/update/:blogId`} component={UpdateBlog} />
       </article>
     </div>
   );
