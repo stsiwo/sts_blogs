@@ -1,4 +1,5 @@
 import { QueryStringType } from "./requests/types";
+import isEmpty = require('lodash/isEmpty');
 
 export const prettyConsole = (target: any): void => {
   var cache: any[] = []
@@ -18,7 +19,10 @@ export const prettyConsole = (target: any): void => {
 
 export const dateFormatOption =  { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}
 
-export const buildQueryString = (queryStringObject: QueryStringType): string => {
+export const buildQueryString = (queryStringObject: QueryStringType = {}): string => {
+
+  if (isEmpty(queryStringObject)) return ''
+
   const esc = encodeURIComponent
   return '?' + Object.keys(queryStringObject)
     .filter(key => queryStringObject[key] !== null && queryStringObject[key] !== undefined && queryStringObject[key].lenth != 0 && queryStringObject[key] != '')
