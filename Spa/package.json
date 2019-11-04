@@ -16,6 +16,7 @@
     "@babel/polyfill": "^7.4.4",
     "@types/events": "^3.0.0",
     "@types/lodash": "^4.14.138",
+    "@types/yup": "^0.26.24",
     "axios": "^0.19.0",
     "events": "^3.0.0",
     "inversify": "^5.0.1",
@@ -30,7 +31,8 @@
     "reflect-metadata": "^0.1.13",
     "request": "^2.88.0",
     "sass": "^1.22.12",
-    "use-react-router": "^1.0.7"
+    "use-react-router": "^1.0.7",
+    "yup": "^0.27.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
