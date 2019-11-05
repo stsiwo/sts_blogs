@@ -1,6 +1,7 @@
 import { RequestContentType, ResponseResultType, ResponseResultStatusEnum, ErrorResponseDataType } from "./types";
 import { api } from "./api";
 import { AxiosResponse, AxiosError } from "axios";
+import { removeUserInfo } from "../storages/user";
 
 
 export const request = async (request: RequestContentType): Promise<ResponseResultType> => {
@@ -22,6 +23,9 @@ export const request = async (request: RequestContentType): Promise<ResponseResu
      **/
     /** 4xx, 5xx status code error handling **/
     if (error.response) {
+      // if 401 (unauthorized error), remove userInfo from localStorage
+      if (error.response.status === 401) removeUserInfo()
+
       return {
         status: ResponseResultStatusEnum.FAILURE,
         errorMsg: error.response.data.message

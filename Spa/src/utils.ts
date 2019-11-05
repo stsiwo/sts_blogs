@@ -29,4 +29,3 @@ export const buildQueryString = (queryStringObject: QueryStringType = {}): strin
     .map(key => esc(key) + '=' + esc(queryStringObject[key]))
     .join('&')
 }
-

@@ -9,6 +9,7 @@ import SettingHome from './SettingHome/SettingHome';
 import BlogManagement from './BlogManagement/BlogManagement';
 import NewBlog from './BlogManagement/NewBlog/NewBlog';
 import UpdateBlog from './BlogManagement/UpdateBlog/UpdateBlog';
+import { AuthRoute } from '../../Base/Components/AuthRoute';
 
 declare type SettingNavItemType = {
   name: string
@@ -53,12 +54,12 @@ const Setting: React.FunctionComponent<{}> = (props: {}) => {
         </ul>
       </aside>
       <article className="setting-content">
-        {/** update for PrivateRoute for authenticated user to access **/}
-        <Route exact path={`${path}`} component={SettingHome} />
-        <Route exact path={`${path}/profile`} component={Profile} />
-        <Route exact path={`${path}/blogs`} component={BlogManagement} />
-        <Route exact path={`${path}/blogs/new`} component={NewBlog} />
-        <Route exact path={`${path}/blogs/update/:blogId`} component={UpdateBlog} />
+        {/** update for PrivateAuthRoute for authenticated user to access **/}
+        <AuthRoute exact path={`${path}`} component={SettingHome} />
+        <AuthRoute exact path={`${path}/profile`} component={Profile} />
+        <AuthRoute exact path={`${path}/blogs`} component={BlogManagement} />
+        <AuthRoute exact path={`${path}/blogs/new`} component={NewBlog} />
+        <AuthRoute exact path={`${path}/blogs/update/:blogId`} component={UpdateBlog} />
       </article>
     </div>
   );

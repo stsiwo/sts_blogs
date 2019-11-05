@@ -10,7 +10,11 @@ import './UI/Base/Css/Common.scss';
 import { createStore } from 'redux';
 import { rootReducer } from './reducers/rootReducer';
 import { store } from './configs/storeConfig';
+import { storeUserInfo } from './storages/user';
+import { getUserTestData } from '../tests/data/UserFaker';
 
+// test user login
+storeUserInfo(getUserTestData(1)[0])
 
 const App = (props: any) => {
   return (
