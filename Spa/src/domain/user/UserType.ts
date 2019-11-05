@@ -2,5 +2,18 @@
 export declare type UserType = {
   id: string, 
   name: string,
-  avatarUrl: string,
+  email?: string,
+  password?: string,
+  confirm?: string,
+  avatarUrl?: string,
+  avatarImage?: Blob,
+}
+
+export const initialUserState: UserType = {
+  id: '', 
+  name: '',
+  email: '',
+  password: '',
+  avatarUrl: '',
+  avatarImage: null,
 }

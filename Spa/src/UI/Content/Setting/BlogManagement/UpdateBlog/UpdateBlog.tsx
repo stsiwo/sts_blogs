@@ -74,6 +74,7 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
             status: responseResult.status,
             data: responseResult.data,
           })
+          setBlog(responseResult.data.blog)
         })
         .catch((responseResult: ResponseResultType) => {
           setGetFetchStatus({
@@ -102,9 +103,6 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const handleSaveBlogClickEvent: React.EventHandler<React.MouseEvent<HTMLInputElement>> = async (e) => {
-    // validation here?
-    console.log('skipping validation ...')
-
     // initialize FormData and map state to items of FormDate
     const formData: FormData = mapStateToFormData(currentBlog)
 
