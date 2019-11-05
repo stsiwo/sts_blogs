@@ -9,6 +9,7 @@ import Login from './Login/Login';
 import Signup from './Signup/Signup';
 import BlogList from './BlogList/BlogList';
 import Blog from './Blog/Blog';
+import Logout from './Logout/Logout';
 
 
 const Content: React.FunctionComponent<{}> = (props: {}) => {
@@ -19,6 +20,7 @@ const Content: React.FunctionComponent<{}> = (props: {}) => {
       {/** siince setting has route, remove 'exact' **/}
       <Route path="/setting" component={Setting} /> 
       <Route path="/login" exact component={Login} /> 
+      <Route path="/logout" exact component={Logout} /> 
       <Route path="/signup" exact component={Signup} /> 
       <Route path="/blog" exact component={BlogList} /> 
       <Route path="/blog/:id" exact component={Blog} /> 

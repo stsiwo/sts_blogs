@@ -6,6 +6,8 @@ import { ResponseResultType, ResponseResultStatusEnum, RequestMethodEnum } from 
 import * as yup from 'yup'
 import { request } from '../../../requests/request';
 import { storeUserInfo } from '../../../storages/user';
+import { useDispatch } from 'react-redux';
+import { toggleLoginStatusActionCreator } from '../../../actions/creators';
 
 
 const Signup: React.FunctionComponent<{}> = (props: {}) => {
@@ -105,6 +107,8 @@ const Signup: React.FunctionComponent<{}> = (props: {}) => {
             // this is to identify user is login or not (redux is not useful when reload)
             // assuming data.user exists in response
             if (responseResult.data) storeUserInfo(responseResult.data.user as UserType)
+            const dispatch = useDispatch()
+            dispatch(toggleLoginStatusActionCreator(false))
           })
           .catch((responseResult: ResponseResultType) => {
             setSignupRequestStatus({

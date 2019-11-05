@@ -2,6 +2,8 @@ import { RequestContentType, ResponseResultType, ResponseResultStatusEnum, Error
 import { api } from "./api";
 import { AxiosResponse, AxiosError } from "axios";
 import { removeUserInfo } from "../storages/user";
+import { useDispatch } from "react-redux";
+import { toggleLoginStatusActionCreator } from "../actions/creators";
 
 
 export const request = async (request: RequestContentType): Promise<ResponseResultType> => {
@@ -9,7 +11,7 @@ export const request = async (request: RequestContentType): Promise<ResponseResu
     url: encodeURI(request.url),
     ...(request.method !== undefined && { method: request.method }),
     ...(request.headers !== undefined && { headers: request.headers }),
-    ...(request.data !== undefined && { data: request.data})
+    ...(request.data !== undefined && { data: request.data })
   }).then((response: AxiosResponse) => {
     /** success response **/
     return {
@@ -24,7 +26,11 @@ export const request = async (request: RequestContentType): Promise<ResponseResu
     /** 4xx, 5xx status code error handling **/
     if (error.response) {
       // if 401 (unauthorized error), remove userInfo from localStorage
-      if (error.response.status === 401) removeUserInfo()
+      if (error.response.status === 401) {
+        removeUserInfo()
+        const dispatch = useDispatch()
+        dispatch(toggleLoginStatusActionCreator(false))
+      }
 
       return {
         status: ResponseResultStatusEnum.FAILURE,

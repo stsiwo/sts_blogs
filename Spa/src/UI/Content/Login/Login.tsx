@@ -6,6 +6,8 @@ import { ResponseResultType, ResponseResultStatusEnum, RequestMethodEnum } from 
 import * as yup from 'yup'
 import { request } from '../../../requests/request';
 import { storeUserInfo } from '../../../storages/user';
+import { useDispatch } from 'react-redux';
+import { toggleLoginStatusActionCreator } from '../../../actions/creators';
 
 const Login: React.FunctionComponent<{}> = (props: {}) => {
 
@@ -79,7 +81,7 @@ const Login: React.FunctionComponent<{}> = (props: {}) => {
     console.log('clicked update butuon')
     // final check validation ...
     schema.validate(currentUserLoginStatus, {
-      abortEarly: false 
+      abortEarly: false
     })
       .then(async () => {
         console.log('validation passed')
@@ -105,6 +107,8 @@ const Login: React.FunctionComponent<{}> = (props: {}) => {
             // this is to identify user is login or not (redux is not useful when reload)
             // assuming data.user exists in response
             if (responseResult.data) storeUserInfo(responseResult.data.user as UserType)
+            const dispatch = useDispatch()
+            dispatch(toggleLoginStatusActionCreator(false))
           })
           .catch((responseResult: ResponseResultType) => {
             setLoginRequestStatus({
@@ -135,21 +139,21 @@ const Login: React.FunctionComponent<{}> = (props: {}) => {
       <form className="login-form-content">
         <div className="login-form-content-item login-form-content-email">
           <label htmlFor="email" className="login-form-content-item-label">Email</label>
-          <input type="email" name="email" id="email" className="login-form-content-item-input" placeholder="enter your email..." value={currentUserLoginStatus.email} onFocus={handleInitialFocusEvent} onChange={handleInputChangeEvent}/>
-        {(currentValidationError.email && <div className="input-error">{currentValidationError.email}</div>)}
+          <input type="email" name="email" id="email" className="login-form-content-item-input" placeholder="enter your email..." value={currentUserLoginStatus.email} onFocus={handleInitialFocusEvent} onChange={handleInputChangeEvent} />
+          {(currentValidationError.email && <div className="input-error">{currentValidationError.email}</div>)}
         </div>
         <div className="login-form-content-item login-form-content-password">
           <label htmlFor="password" className="login-form-content-item-label">Password</label>
-          <input type="password" name="password" id="password" className="login-form-content-item-input" placeholder="enter your password..." value={currentUserLoginStatus.password} onFocus={handleInitialFocusEvent} onChange={handleInputChangeEvent}/>
-        {(currentValidationError.password && <div className="input-error">{currentValidationError.password}</div>)}
+          <input type="password" name="password" id="password" className="login-form-content-item-input" placeholder="enter your password..." value={currentUserLoginStatus.password} onFocus={handleInitialFocusEvent} onChange={handleInputChangeEvent} />
+          {(currentValidationError.password && <div className="input-error">{currentValidationError.password}</div>)}
         </div>
         <div className="login-form-content-item login-form-content-password-confirm">
           <label htmlFor="confirm" className="login-form-content-item-label">Password Confirm</label>
-          <input type="password" name="confirm" id="confirm" className="login-form-content-item-input" placeholder="enter your password again..." value={currentUserLoginStatus.confirm} onFocus={handleInitialFocusEvent} onChange={handleInputChangeEvent}/>
-        {(currentValidationError.confirm && <div className="input-error">{currentValidationError.confirm}</div>)}
+          <input type="password" name="confirm" id="confirm" className="login-form-content-item-input" placeholder="enter your password again..." value={currentUserLoginStatus.confirm} onFocus={handleInitialFocusEvent} onChange={handleInputChangeEvent} />
+          {(currentValidationError.confirm && <div className="input-error">{currentValidationError.confirm}</div>)}
         </div>
         <div className="login-form-content-btn-wrapper">
-          <input className="regular-btn signup-form-content-btn" type="button" onClick={handleSubmitClickEvent} value="Login"/>
+          <input className="regular-btn signup-form-content-btn" type="button" onClick={handleSubmitClickEvent} value="Login" />
         </div>
       </form>
     </div>

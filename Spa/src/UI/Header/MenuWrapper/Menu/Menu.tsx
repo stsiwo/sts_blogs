@@ -33,15 +33,15 @@ const Menu: React.FunctionComponent<{}> = (props: {}) => {
       </li>
       {isLogin &&
         <li className="header-menu-li">
-          <Link className="header-menu-li-link" to="./logout" >Logout</Link>
+          <Link className="header-menu-li-link" to="/logout" >Logout</Link>
         </li>}
       {!isLogin &&
         <React.Fragment>
           <li className="header-menu-li">
-            <Link className="header-menu-li-link" to="./signup" >Signup</Link>
+            <Link className="header-menu-li-link" to="/signup" >Signup</Link>
           </li>
           <li className="header-menu-li">
-            <Link className="header-menu-li-link" to="./login" >Login</Link>
+            <Link className="header-menu-li-link" to="/login" >Login</Link>
           </li>
         </React.Fragment>
       }
