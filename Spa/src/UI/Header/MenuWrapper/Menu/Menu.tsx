@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import MenuCloseIcon from './MenuCloseIcon/MenuCloseIcon';
 import { useSelector } from 'react-redux';
 import { StateType } from '../../../../states/types';
+import { isUserLoggedIn } from '../../../../storages/user';
 
 
 const Menu: React.FunctionComponent<{}> = (props: {}) => {
@@ -13,7 +14,7 @@ const Menu: React.FunctionComponent<{}> = (props: {}) => {
     e.stopPropagation()
   }
 
-  const isLogin = useSelector((state: StateType) => state.app.isLogin)
+  const isLogin = isUserLoggedIn() 
 
   return isNavBarOpen && (
     <ul className="header-menu-ul" onClick={handleStopPropagationClickEvent}>

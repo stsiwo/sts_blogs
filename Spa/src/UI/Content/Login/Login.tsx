@@ -1,10 +1,11 @@
 import * as React from 'react';
 import './Login.scss';
-import { UserLoginType, initialUserLoginStatus } from '../../../domain/user/UserType';
+import { UserLoginType, initialUserLoginStatus, UserType } from '../../../domain/user/UserType';
 import { UserLoginValidationType, UserLoginInputTouchedType, initialUserLoginInputTouchedState, initialUserLoginValidationState } from '../../../domain/user/UserValidationType';
 import { ResponseResultType, ResponseResultStatusEnum, RequestMethodEnum } from '../../../requests/types';
 import * as yup from 'yup'
 import { request } from '../../../requests/request';
+import { storeUserInfo } from '../../../storages/user';
 
 const Login: React.FunctionComponent<{}> = (props: {}) => {
 
@@ -100,6 +101,10 @@ const Login: React.FunctionComponent<{}> = (props: {}) => {
             setLoginRequestStatus({
               status: responseResult.status
             })
+            // save user info in response data to localStorage
+            // this is to identify user is login or not (redux is not useful when reload)
+            // assuming data.user exists in response
+            if (responseResult.data) storeUserInfo(responseResult.data.user as UserType)
           })
           .catch((responseResult: ResponseResultType) => {
             setLoginRequestStatus({

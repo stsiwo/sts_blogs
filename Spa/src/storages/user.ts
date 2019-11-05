@@ -11,3 +11,7 @@ export const removeUserInfo = () => {
 export const getUserInfo = (): UserType => {
   return JSON.parse(localStorage.getItem('auth-user')) as UserType
 }
+
+export const isUserLoggedIn = (): boolean => {
+  return localStorage.getItem('auth-user') !== null ? true : false
+}
