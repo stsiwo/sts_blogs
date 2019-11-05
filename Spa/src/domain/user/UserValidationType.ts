@@ -1,4 +1,4 @@
-import { UserType, UserLoginType } from "./UserType";
+import { UserType, UserLoginType, UserSignupType } from "./UserType";
 
 export declare type UserValidationType = {
   [P in keyof UserType]: string
@@ -43,6 +43,28 @@ export declare type UserLoginInputTouchedType = {
 }
 
 export const initialUserLoginInputTouchedState: UserLoginInputTouchedType = {
+  email: false,
+  password: false,
+  confirm: false,
+}
+
+export declare type UserSignupValidationType = {
+  [P in keyof UserSignupType]: string
+}
+
+export const initialUserSignupValidationState: UserSignupValidationType = {
+  name: '',
+  email: '',
+  password: '',
+  confirm: '',
+}
+
+export declare type UserSignupInputTouchedType = {
+  [P in keyof UserSignupType]: boolean
+}
+
+export const initialUserSignupInputTouchedState: UserSignupInputTouchedType = {
+  name: false,
   email: false,
   password: false,
   confirm: false,

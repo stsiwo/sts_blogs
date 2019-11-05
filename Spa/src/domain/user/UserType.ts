@@ -30,3 +30,17 @@ export const initialUserLoginStatus: UserLoginType = {
   confirm: '',
 }
 
+export declare type UserSignupType = {
+  name: string
+  email: string
+  password: string
+  confirm: string
+}
+
+export const initialUserSignupStatus: UserSignupType = {
+  name: '',
+  email: '',
+  password: '',
+  confirm: '',
+}
+
