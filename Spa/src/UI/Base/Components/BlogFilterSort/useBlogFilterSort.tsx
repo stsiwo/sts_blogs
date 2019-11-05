@@ -12,8 +12,8 @@ export const useBlogFilterSort = (input: UseBlogFilterSortInput): UseBlogFilterS
   const [currentSort, setSort] = React.useState<number>(0)
 
   return {
-    filters: currentFilters,
-    sort: currentSort,
+    currentFilters: currentFilters,
+    currentSort: currentSort,
     setFilters: setFilters,
     setSort: setSort
   }

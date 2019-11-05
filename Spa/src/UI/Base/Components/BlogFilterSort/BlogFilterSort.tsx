@@ -35,22 +35,22 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
 
     if (e.key == 'Enter' || e.key == 'Tab') {
       console.log("updating tag filters")
-      props.filters.tags.push({ name: e.currentTarget.value })
+      props.currentFilters.tags.push({ name: e.currentTarget.value })
       props.setFilters({
-        ...props.filters,
+        ...props.currentFilters,
       })
       e.currentTarget.value = ""
     }
   }
 
   const handleFilterCreationDateStartChangeEvent = (startDate: Date): void => {
-    props.filters.creationDate.start = startDate
-    props.setFilters(props.filters)
+    props.currentFilters.creationDate.start = startDate
+    props.setFilters(props.currentFilters)
   }
 
   const handleFilterCreationDateEndChangeEvent = (endDate: Date): void => {
-    props.filters.creationDate.end = endDate
-    props.setFilters(props.filters)
+    props.currentFilters.creationDate.end = endDate
+    props.setFilters(props.currentFilters)
   }
 
   const handleSortChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
@@ -61,8 +61,8 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
     if (e.currentTarget.value === "") return false
 
     if (e.key == 'Enter' || e.key == 'Tab') {
-      props.filters.keyword = e.currentTarget.value
-      props.setFilters(props.filters)
+      props.currentFilters.keyword = e.currentTarget.value
+      props.setFilters(props.currentFilters)
     }
   }
 
@@ -128,7 +128,7 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
 
   /** render **/
   const renderCurrentTags = () => {
-    return props.filters.tags.map((tag: TagType) => {
+    return props.currentFilters.tags.map((tag: TagType) => {
       return (
         <Tag name={tag.name} withCancelBtn key={tag.name}/>
       )
@@ -139,7 +139,7 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
     return sortList.map((sort: SortType) => {
       return (
         <div className="aside-sort-item-wrapper" key={sort.value}>
-          <input type='radio' className="" value={sort.value} key={sort.value} checked={sort.value === props.sort} onChange={handleSortChangeEvent}/>
+          <input type='radio' className="" value={sort.value} key={sort.value} checked={sort.value === props.currentSort} onChange={handleSortChangeEvent}/>
           <span>{sort.title}</span>
         </div>
       )
@@ -172,18 +172,18 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
           <div className="aside-filter-date-wrapper" >
             <h4 className="aside-filter-date-title">Date</h4>
             <DatePicker
-              selected={props.filters.creationDate.start}
+              selected={props.currentFilters.creationDate.start}
               onChange={handleFilterCreationDateStartChangeEvent}
               selectsStart
-              startDate={props.filters.creationDate.start}
-              maxDate={props.filters.creationDate.end}
+              startDate={props.currentFilters.creationDate.start}
+              maxDate={props.currentFilters.creationDate.end}
             />
             <DatePicker
-              selected={props.filters.creationDate.end}
+              selected={props.currentFilters.creationDate.end}
               onChange={handleFilterCreationDateEndChangeEvent}
               selectsEnd
-              endDate={props.filters.creationDate.end}
-              minDate={props.filters.creationDate.start}
+              endDate={props.currentFilters.creationDate.end}
+              minDate={props.currentFilters.creationDate.start}
             />
           </div>
         </li>

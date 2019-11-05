@@ -9,20 +9,21 @@ export declare type FetchStatusType = {
 }
 
 export declare type FetchStatusPropType = {
-  fetchStatus: FetchStatusType,
-  onCloseClick: React.EventHandler<React.MouseEvent<HTMLButtonElement>>
+  currentFetchStatus: FetchStatusType
+  setFetchStatus: React.Dispatch<React.SetStateAction<FetchStatusType>>
 }
 
 export declare type UseFetchStatusInputType<T = any> = {
   path: string
   method?: RequestMethodEnum
   queryString?: QueryStringType
+  callback?: (data: any) => void
 }
 
 export declare type UseFetchStatusOutputType = {
-  fetchStatus: FetchStatusType
-  refreshStatus: number
-  handleRefreshClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>>
-  handleFetchStatusCloseClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>>
+  currentFetchStatus: FetchStatusType
+  currentRefreshStatus: number
+  setFetchStatus: React.Dispatch<React.SetStateAction<FetchStatusType>>
+  setRefreshStatus: React.Dispatch<React.SetStateAction<number>>
 }
 

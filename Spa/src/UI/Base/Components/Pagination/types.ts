@@ -1,13 +1,16 @@
 import * as React from 'react'
 
 export declare type PaginationPropType = {
-  offset: number
-  totalCount: number
-  limit: number
-  onClick: React.EventHandler<React.MouseEvent<HTMLButtonElement>>
+  currentPaginationStatus: PaginationStatusType
+  setPaginationStatus: React.Dispatch<React.SetStateAction<PaginationStatusType>>
   pageCss?: string
   currentPageCss?: string
   hoverPageCss?: string
+}
+
+export declare type PageLimitSelectPropType = {
+  currentPaginationStatus: PaginationStatusType
+  setPaginationStatus: React.Dispatch<React.SetStateAction<PaginationStatusType>>
 }
 
 export declare type PaginationStatusType = {
@@ -20,10 +23,8 @@ export declare type UsePaginationInputType = {
 }
 
 export declare type UsePaginationOutputType = {
-  paginationStatus: PaginationStatusType
+  currentPaginationStatus: PaginationStatusType
   setPaginationStatus: React.Dispatch<React.SetStateAction<PaginationStatusType>>
-  handlePageClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>>
-  handlePageLimitChangeEvent: React.EventHandler<React.ChangeEvent<HTMLSelectElement>>
 }
 
 export declare type BuildPaginationResultType = {

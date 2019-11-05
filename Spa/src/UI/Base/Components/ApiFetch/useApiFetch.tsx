@@ -3,6 +3,7 @@ import { request } from '../../../../requests/request';
 import { ResponseResultStatusEnum, ResponseResultType, QueryStringType } from "../../../../requests/types";
 import { FetchStatusType, UseFetchStatusInputType, UseFetchStatusOutputType } from "./types";
 import { buildQueryString } from '../../../../utils'
+import { AxiosError } from 'axios';
 
 
 export const useApiFetch = (input: UseFetchStatusInputType): UseFetchStatusOutputType => {
@@ -10,7 +11,7 @@ export const useApiFetch = (input: UseFetchStatusInputType): UseFetchStatusOutpu
   const [currentFetchStatus, setFetchStatus] = React.useState<FetchStatusType>({
     status: ResponseResultStatusEnum.INITIAL
   })
-  const [currentRefreshStatus, setRefreshStatus] = React.useState(0)
+  const [currentRefreshStatus, setRefreshStatus] = React.useState<number>(0)
 
   const encodedQueryString = buildQueryString(input.queryString)
 
@@ -20,15 +21,32 @@ export const useApiFetch = (input: UseFetchStatusInputType): UseFetchStatusOutpu
       setFetchStatus({
         status: ResponseResultStatusEnum.FETCHING,
       })
-      const fetchResult: ResponseResultType = await request({
+      await request({
         url: input.path + encodedQueryString,
         ...(input.method && { method: input.method })
       })
-      setFetchStatus({
-        status: fetchResult.status,
-        ...(fetchResult.data && { data: fetchResult.data }),
-        ...(fetchResult.errorMsg && { errorMsg: fetchResult.errorMsg }),
-      })
+        .then((responseResult: ResponseResultType) => {
+          /** this include 'catch' clause of 'requests' method **/
+          setFetchStatus({
+            status: responseResult.status,
+            data: responseResult.data,
+            errorMsg: responseResult.errorMsg
+          })
+          /**
+           * any callback when response is secceeded 
+           * e.g., assign domain data
+           * e.g., assign new total count of pagination
+           **/
+          input.callback(responseResult.data)
+        })
+        .catch((error: AxiosError) => {
+          /** this is called when above 'then' caluse failed **/
+          /** esp, 'input.callback' internal error **/
+          setFetchStatus({
+            status: ResponseResultStatusEnum.FAILURE,
+            errorMsg: error.message 
+          })
+        })
     }
     fetchData()
 
@@ -39,22 +57,11 @@ export const useApiFetch = (input: UseFetchStatusInputType): UseFetchStatusOutpu
       encodedQueryString
     ])
 
-  const handleRefreshClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
-    const nextStatus = currentRefreshStatus + 1
-    setRefreshStatus(nextStatus)
-  }
-
-  const handleFetchStatusCloseClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
-    setFetchStatus({
-      status: ResponseResultStatusEnum.INITIAL
-    })
-  }
-
   return {
-    fetchStatus: currentFetchStatus,
-    refreshStatus: currentRefreshStatus,
-    handleRefreshClickEvent: handleRefreshClickEvent,
-    handleFetchStatusCloseClickEvent: handleFetchStatusCloseClickEvent,
+    currentFetchStatus: currentFetchStatus,
+    currentRefreshStatus: currentRefreshStatus,
+    setFetchStatus: setFetchStatus,
+    setRefreshStatus: setRefreshStatus,
   }
 }
 

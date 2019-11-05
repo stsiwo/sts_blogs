@@ -1,8 +1,8 @@
 import * as React from 'react'
 
 export declare type BlogFilterSortPropType = {
-  filters: FilterType
-  sort: number
+  currentFilters: FilterType
+  currentSort: number
   setFilters: React.Dispatch<React.SetStateAction<FilterType>>
   setSort: React.Dispatch<React.SetStateAction<number>>
 }
@@ -31,8 +31,8 @@ export declare type UseBlogFilterSortInput = {
 }
 
 export declare type UseBlogFilterSortOutput = {
-  filters: FilterType
-  sort: number
+  currentFilters: FilterType
+  currentSort: number
   setFilters: React.Dispatch<React.SetStateAction<FilterType>>
   setSort: React.Dispatch<React.SetStateAction<number>>
 }

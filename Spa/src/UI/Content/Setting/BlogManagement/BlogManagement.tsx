@@ -17,6 +17,7 @@ import { usePagination } from '../../../Base/Components/Pagination/usePagination
 import { useCssGlobalContext } from '../../../Base/Context/CssGlobalContext/CssGlobalContext';
 import { useResponsiveComponent } from '../../../Base/Hooks/ResponsiveComponentHook';
 import './BlogManagement.scss';
+import PageLimitSelect from '../../../Base/Components/Pagination/PageLimitSelect';
 
 const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
 
@@ -35,20 +36,33 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   const currentWidth = useResponsiveComponent()
   const cssGlobal = useCssGlobalContext()
   const { path, url } = useRouteMatch();
-  const { paginationStatus, setPaginationStatus, handlePageClickEvent, handlePageLimitChangeEvent } = usePagination({})
-  const { filters, sort, setFilters, setSort } = useBlogFilterSort({})
-  const { fetchStatus, handleFetchStatusCloseClickEvent, handleRefreshClickEvent } = useApiFetch({
+  const { currentPaginationStatus, setPaginationStatus } = usePagination({})
+  const { currentFilters, currentSort, setFilters, setSort } = useBlogFilterSort({})
+  const callbackAfterApiFetch = (data: any): void => {
+    // assign fetched blogs data to this state
+    if (data) {
+      setBlogs(data.blogs)
+
+      // assign new total count of pagination
+      setPaginationStatus({
+        ...currentPaginationStatus,
+        totalCount: data.totalCount
+      })
+    }
+  }
+  const { currentFetchStatus, setFetchStatus, currentRefreshStatus, setRefreshStatus } = useApiFetch({
     path: '/blogs',
     method: RequestMethodEnum.GET,
     queryString: {
-      offset: paginationStatus.offset,
-      limit: paginationStatus.limit,
-      tags: Object.values(filters.tags),
-      startDate: filters.creationDate.start ? filters.creationDate.start.toJSON(): null,
-      endDate: filters.creationDate.end ? filters.creationDate.end.toJSON(): null,
-      keyword: filters.keyword,
-      sort: sort,
+      offset: currentPaginationStatus.offset,
+      limit: currentPaginationStatus.limit,
+      tags: Object.values(currentFilters.tags),
+      startDate: currentFilters.creationDate.start ? currentFilters.creationDate.start.toJSON(): null,
+      endDate: currentFilters.creationDate.end ? currentFilters.creationDate.end.toJSON(): null,
+      keyword: currentFilters.keyword,
+      sort: currentSort,
     },
+    callback: callbackAfterApiFetch
   })
 
   /** EH **/
@@ -66,6 +80,11 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
 
   const handleFilterSortNavCloseClickEvent: React.EventHandler<React.MouseEvent<HTMLElement>> = (e) => {
     dispatch(toggleFilterSortBarActionCreator(false))
+  }
+
+  const handleRefreshClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
+    const nextStatus = currentRefreshStatus + 1
+    setRefreshStatus(nextStatus)
   }
 
   /** render **/
@@ -100,21 +119,16 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
       <div className="blog-management-main-wrapper">
         <h2 className="blog-management-title">Blog Management</h2>
         <div className="blog-management-controller-wrapper">
-          <FetchStatus fetchStatus={fetchStatus} onCloseClick={handleFetchStatusCloseClickEvent} />
+          <FetchStatus currentFetchStatus={currentFetchStatus} setFetchStatus={setFetchStatus}/>
           <button className="blog-management-controller-refresh-btn" onClick={handleRefreshClickEvent}>refresh</button>
-          <select value={paginationStatus.limit} onChange={handlePageLimitChangeEvent}>
-            <option value="20">20</option>
-            <option value="30">30</option>
-            <option value="40">40</option>
-            <option value="50">50</option>
-          </select>
+          <PageLimitSelect currentPaginationStatus={currentPaginationStatus} setPaginationStatus={setPaginationStatus} />
         </div>
         <div className="blog-management-items-wrapper">
           {renderBlogs(currentBlogs)}
         </div>
-          <Pagination offset={ paginationStatus.offset } totalCount={ paginationStatus.totalCount } limit={ paginationStatus.limit } onClick={handlePageClickEvent}/>
+          <Pagination currentPaginationStatus={currentPaginationStatus} setPaginationStatus={setPaginationStatus}/>
       </div>
-      <BlogFilterSort filters={filters} sort={sort} setFilters={setFilters} setSort={setSort}/>
+      <BlogFilterSort currentFilters={currentFilters} currentSort={currentSort} setFilters={setFilters} setSort={setSort}/>
     </div>
   );
 }
