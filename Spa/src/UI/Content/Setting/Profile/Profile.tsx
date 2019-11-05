@@ -161,7 +161,9 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
   const handleSaveUserClickEvent: React.EventHandler<React.MouseEvent<HTMLInputElement>> = async (e) => {
     console.log('clicked update butuon')
     // final check validation ...
-    schema.validate(currentUser)
+    schema.validate(currentUser, {
+      abortEarly: false 
+    })
       .then(async () => {
         console.log('validation passed')
         // initialize FormData and map state to items of FormDate
@@ -194,9 +196,9 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
       })
       .catch((error: yup.ValidationError) => {
         console.log('validation failed')
+        console.log(error)
         error.inner.forEach((eachError: yup.ValidationError) => {
-          if (currentInputTouched[eachError.path as keyof UserType])
-            currentValidationError[eachError.path as keyof UserType] = eachError.message
+          currentValidationError[eachError.path as keyof UserType] = eachError.message
         })
         setValidationError({
           ...currentValidationError
