@@ -17,3 +17,16 @@ export const initialUserState: UserType = {
   avatarUrl: '',
   avatarImage: null,
 }
+
+export declare type UserLoginType = {
+  email: string
+  password: string
+  confirm: string
+}
+
+export const initialUserLoginStatus: UserLoginType = {
+  email: '',
+  password: '',
+  confirm: '',
+}
+
