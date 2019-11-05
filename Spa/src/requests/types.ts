@@ -19,6 +19,14 @@ export declare type ResponseResultType = {
   errorMsg?: string 
 }
 
+/** content (data) type of response **/
+export declare type ResponseDataType = {
+  offset: number
+  limit: number
+  totalCount: number
+  [key: string]: any
+}
+
 export declare type RequestContentType = {
   url: string
   method?: RequestMethodEnum
