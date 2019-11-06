@@ -16,6 +16,7 @@ import { useCssGlobalContext } from '../../Base/Context/CssGlobalContext/CssGlob
 import { useResponsiveComponent } from '../../Base/Hooks/ResponsiveComponentHook';
 import './BlogList.scss';
 import PageLimitSelect from '../../Base/Components/Pagination/PageLimitSelect';
+import RefreshBtn from '../../Base/Components/ApiFetch/RefreshBtn';
 
 declare type FetchResultType = {
   status: ResponseResultStatusEnum
@@ -50,7 +51,7 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
       })
     }
   }
-  const { currentFetchStatus, setFetchStatus, currentRefreshStatus, setRefreshStatus } = useApiFetch({
+  const { currentFetchStatus, setFetchStatus, currentRefreshStatus, setRefreshStatus, cancelSource } = useApiFetch({
     path: '/blogs',
     method: RequestMethodEnum.GET,
     queryString: {
@@ -74,11 +75,6 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
     dispatch(toggleFilterSortBarActionCreator(false))
   }
 
-  const handleRefreshClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
-    const nextStatus = currentRefreshStatus + 1
-    setRefreshStatus(nextStatus)
-  }
-
   /** render **/
   const renderBlogLists = (blogList: BlogType[]): React.ReactNode => {
     return blogList.map((blog: BlogType) => {
@@ -100,7 +96,7 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
         <h2 className="blog-list-title">BlogLists</h2>
         <div className="blog-list-controller-wrapper">
           <FetchStatus currentFetchStatus={currentFetchStatus} setFetchStatus={setFetchStatus} />
-          <button className="blog-list-controller-refresh-btn" onClick={handleRefreshClickEvent}>refresh</button>
+          <RefreshBtn currentFetchStatus={currentFetchStatus} setFetchStatus={setFetchStatus} currentRefreshStatus={currentRefreshStatus} setRefreshStatus={setRefreshStatus} cancelSource={cancelSource}/>
           <PageLimitSelect currentPaginationStatus={currentPaginationStatus} setPaginationStatus={setPaginationStatus} />
         </div>
         <div className="blog-list-items-wrapper">

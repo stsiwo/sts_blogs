@@ -1,10 +1,12 @@
 import { BlogType } from "../domain/blog/BlogType";
+import { CancelToken } from "axios";
 
 export enum ResponseResultStatusEnum {
   INITIAL,
   FETCHING,
   SUCCESS,
   FAILURE,
+  CANCEL,
 }
 
 export enum RequestMethodEnum {
@@ -37,6 +39,7 @@ export declare type RequestContentType = {
   method?: RequestMethodEnum
   headers?: any
   data?: any
+  cancelToken?: CancelToken
 }
 
 export declare type ErrorResponseDataType = {

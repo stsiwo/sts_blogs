@@ -4,6 +4,7 @@ import { ResponseResultStatusEnum, ResponseResultType, QueryStringType } from ".
 import { FetchStatusType, UseFetchStatusInputType, UseFetchStatusOutputType } from "./types";
 import { buildQueryString } from '../../../../utils'
 import { AxiosError } from 'axios';
+import { CancelTokenStaticClass } from '../../../../requests/api';
 
 
 export const useApiFetch = (input: UseFetchStatusInputType): UseFetchStatusOutputType => {
@@ -15,6 +16,8 @@ export const useApiFetch = (input: UseFetchStatusInputType): UseFetchStatusOutpu
 
   const encodedQueryString = buildQueryString(input.queryString)
 
+  const cancelSource = input.enableCancel ? CancelTokenStaticClass.source(): null 
+
   React.useEffect(() => {
 
     async function fetchData() {
@@ -23,7 +26,8 @@ export const useApiFetch = (input: UseFetchStatusInputType): UseFetchStatusOutpu
       })
       await request({
         url: input.path + encodedQueryString,
-        ...(input.method && { method: input.method })
+        ...(input.method && { method: input.method }),
+        ...(cancelSource && { cancelToken: cancelSource.token })
       })
         .then((responseResult: ResponseResultType) => {
           /** this include 'catch' clause of 'requests' method **/
@@ -62,6 +66,7 @@ export const useApiFetch = (input: UseFetchStatusInputType): UseFetchStatusOutpu
     currentRefreshStatus: currentRefreshStatus,
     setFetchStatus: setFetchStatus,
     setRefreshStatus: setRefreshStatus,
+    ...(cancelSource && { cancelSource: cancelSource })
   }
 }
 

@@ -1,3 +1,4 @@
+import axios  from 'axios'
 import { RequestContentType, ResponseResultType, ResponseResultStatusEnum, ErrorResponseDataType } from "./types";
 import { api } from "./api";
 import { AxiosResponse, AxiosError } from "axios";
@@ -12,7 +13,8 @@ export const request = async (request: RequestContentType): Promise<ResponseResu
     url: encodeURI(request.url),
     ...(request.method !== undefined && { method: request.method }),
     ...(request.headers !== undefined && { headers: request.headers }),
-    ...(request.data !== undefined && { data: request.data })
+    ...(request.data !== undefined && { data: request.data }),
+    ...(request.cancelToken !== undefined && { cancelToken: request.cancelToken })
   }).then((response: AxiosResponse) => {
     /** success response **/
     console.log('api request succeeded.')
@@ -22,6 +24,14 @@ export const request = async (request: RequestContentType): Promise<ResponseResu
     } as ResponseResultType
   }).catch((error: AxiosError<ErrorResponseDataType>) => {
     console.log('api request failed.')
+
+    /** handle when cancel request **/
+    if (axios.isCancel(error)) {
+      return {
+        status: ResponseResultStatusEnum.CANCEL,
+        errorMsg: error.message
+      }
+    }
     /**
      * https://github.com/axios/axios/issues/960
      * axiox status code 4xx, 5xx code handling is in catch clause??
@@ -36,7 +46,6 @@ export const request = async (request: RequestContentType): Promise<ResponseResu
         dispatch({
           type: 'logout'
         })
-
       }
 
       return {
