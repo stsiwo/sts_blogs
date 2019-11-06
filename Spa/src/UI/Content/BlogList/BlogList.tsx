@@ -39,6 +39,7 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   const { currentFilters, currentSort, setFilters, setSort } = useBlogFilterSort({})
   const callbackAfterApiFetch = (data: any): void => {
     // assign fetched blogs data to this state
+    console.log('now callback of useApiFetch is called...')
     if (data) {
       setBlogs(data.blogs)
 

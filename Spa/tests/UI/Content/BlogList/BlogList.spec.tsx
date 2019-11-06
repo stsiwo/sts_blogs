@@ -76,13 +76,14 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
   })
 
   /** test for use case which does not matter screen size  here**/
-  test('a2. (lifecycle) should start api request when this component is mounted', () => {
+  test('a2. (lifecycle) should start api request when this component is mounted', async () => {
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
     const wrapper = mount(<ContextWrapperComponent component={BlogList} />)
+    await Promise.resolve();
 
 
 
-    expect(api.get).toHaveBeenCalled()
+    expect(api.request).toHaveBeenCalled()
 
   })
 

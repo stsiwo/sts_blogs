@@ -15,17 +15,20 @@ export const request = async (request: RequestContentType): Promise<ResponseResu
     ...(request.data !== undefined && { data: request.data })
   }).then((response: AxiosResponse) => {
     /** success response **/
+    console.log('api request succeeded.')
     return {
       data: response.data,
       status: ResponseResultStatusEnum.SUCCESS,
     } as ResponseResultType
   }).catch((error: AxiosError<ErrorResponseDataType>) => {
+    console.log('api request failed.')
     /**
      * https://github.com/axios/axios/issues/960
      * axiox status code 4xx, 5xx code handling is in catch clause??
      **/
     /** 4xx, 5xx status code error handling **/
     if (error.response) {
+      console.log('api request failed because of 4xx, 5xx status code')
       // if 401 (unauthorized error), remove userInfo from localStorage
       if (error.response.status === 401) {
         // is it ok to use hook inside catch clause?? #DOUBT
@@ -42,6 +45,7 @@ export const request = async (request: RequestContentType): Promise<ResponseResu
       }
     }
     /** connection (network) error handling **/
+    console.log('api request failed because of network error')
     return {
       status: ResponseResultStatusEnum.FAILURE,
       errorMsg: error.message
