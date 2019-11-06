@@ -7,6 +7,7 @@ import { useAuthContext } from "../UI/Base/Context/AuthContext/AuthContext";
 
 
 export const request = async (request: RequestContentType): Promise<ResponseResultType> => {
+  console.log('received request and start processing the request...')
   return await api.request({
     url: encodeURI(request.url),
     ...(request.method !== undefined && { method: request.method }),

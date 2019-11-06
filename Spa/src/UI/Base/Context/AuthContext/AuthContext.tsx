@@ -30,6 +30,7 @@ const updateAuthContextReducer: Reducer<AuthType, AuthContextActionType> = (stat
       return state
   }
 }
+
 export const useUpdateAuthContextReducer = (): [ReducerState<Reducer<AuthType, AuthContextActionType>>, Dispatch<ReducerAction<Reducer<AuthType, AuthContextActionType>>>] => {
   return useReducer(updateAuthContextReducer, { authed: false })
 }
