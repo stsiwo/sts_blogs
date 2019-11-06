@@ -5,9 +5,9 @@ import { UserLoginValidationType, UserLoginInputTouchedType, initialUserLoginInp
 import { ResponseResultType, ResponseResultStatusEnum, RequestMethodEnum } from '../../../requests/types';
 import * as yup from 'yup'
 import { request } from '../../../requests/request';
-import { storeUserInfo } from '../../../storages/user';
 import { useDispatch } from 'react-redux';
 import { toggleLoginStatusActionCreator } from '../../../actions/creators';
+import { useAuthContext } from '../../Base/Context/AuthContext/AuthContext';
 
 const Login: React.FunctionComponent<{}> = (props: {}) => {
 
@@ -18,6 +18,7 @@ const Login: React.FunctionComponent<{}> = (props: {}) => {
   const [currentLoginRequestStatus, setLoginRequestStatus] = React.useState<ResponseResultType>({
     status: ResponseResultStatusEnum.INITIAL
   })
+  const { dispatch } = useAuthContext()
 
   let schema = yup.object().shape<UserLoginType>({
     email: yup.string().email().required(),
@@ -106,9 +107,12 @@ const Login: React.FunctionComponent<{}> = (props: {}) => {
             // save user info in response data to localStorage
             // this is to identify user is login or not (redux is not useful when reload)
             // assuming data.user exists in response
-            if (responseResult.data) storeUserInfo(responseResult.data.user as UserType)
-            const dispatch = useDispatch()
-            dispatch(toggleLoginStatusActionCreator(false))
+            if (responseResult.data) {
+              dispatch({
+                type: 'login',
+                user: responseResult.data.user as UserType
+              })
+            }
           })
           .catch((responseResult: ResponseResultType) => {
             setLoginRequestStatus({

@@ -1,9 +1,9 @@
 import { RequestContentType, ResponseResultType, ResponseResultStatusEnum, ErrorResponseDataType } from "./types";
 import { api } from "./api";
 import { AxiosResponse, AxiosError } from "axios";
-import { removeUserInfo } from "../storages/user";
 import { useDispatch } from "react-redux";
 import { toggleLoginStatusActionCreator } from "../actions/creators";
+import { useAuthContext } from "../UI/Base/Context/AuthContext/AuthContext";
 
 
 export const request = async (request: RequestContentType): Promise<ResponseResultType> => {
@@ -27,9 +27,12 @@ export const request = async (request: RequestContentType): Promise<ResponseResu
     if (error.response) {
       // if 401 (unauthorized error), remove userInfo from localStorage
       if (error.response.status === 401) {
-        removeUserInfo()
-        const dispatch = useDispatch()
-        dispatch(toggleLoginStatusActionCreator(false))
+        // is it ok to use hook inside catch clause?? #DOUBT
+        const { dispatch } = useAuthContext()
+        dispatch({
+          type: 'logout'
+        })
+
       }
 
       return {

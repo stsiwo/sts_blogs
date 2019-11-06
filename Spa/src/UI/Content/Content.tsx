@@ -10,6 +10,7 @@ import Signup from './Signup/Signup';
 import BlogList from './BlogList/BlogList';
 import Blog from './Blog/Blog';
 import Logout from './Logout/Logout';
+import { useAuthContext } from '../Base/Context/AuthContext/AuthContext';
 
 
 const Content: React.FunctionComponent<{}> = (props: {}) => {

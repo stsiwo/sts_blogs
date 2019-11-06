@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Route, Redirect, RouteProps } from 'react-router-dom';
-import { getUserInfo } from '../../../storages/user';
+import { useAuthContext } from '../Context/AuthContext/AuthContext';
 
 export declare type AuthRoutePropType = {
   component: React.ComponentType,
@@ -10,9 +10,9 @@ export declare type AuthRoutePropType = {
 export const AuthRoute: React.FunctionComponent<AuthRoutePropType> = ({ component: Component, ...rest }) => (
   <Route {...rest} render={(props: RouteProps) => {
 
-    const authUser = getUserInfo()
+    const { auth } = useAuthContext()
 
-    if (authUser === null) return <Redirect to='/login' />
+    if (!auth.authed) return <Redirect to='/login' />
 
     return <Component {...props} />
   }} />
