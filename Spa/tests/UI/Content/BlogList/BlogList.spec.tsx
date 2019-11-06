@@ -77,16 +77,26 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
   /** test for use case which does not matter screen size  here**/
   test('a2. (lifecycle) should start api request when this component is mounted', async () => {
+
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
     const wrapper = mount(<ContextWrapperComponent component={BlogList} />)
-    await Promise.resolve();
 
-
+    await Promise.resolve(); // to wait any async function inside component is done
 
     expect(api.request).toHaveBeenCalled()
-
   })
 
+  test('a3. (lifecycle) should not the request when this component is updated', async () => {
+
+    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
+    const wrapper = mount(<ContextWrapperComponent component={BlogList} />)
+
+    await Promise.resolve(); // to wait any async function inside component is done
+
+    wrapper.update() // force update to make sure api request is not called when updating
+
+    expect(api.request).toHaveBeenCalledTimes(1)
+  })
 
 
   describe('bl-c1: <= tablet screen size', () => {
