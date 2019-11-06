@@ -1,24 +1,34 @@
 import { AxiosResponse } from "axios";
 import { getBlogTestData } from "../data/BlogFaker";
-import { ErrorResponseDataType } from "../../src/requests/types";
+import { ErrorResponseDataType, BlogListResponseDataType } from "../../src/requests/types";
 
-export const blogGET200NonEmptyResponse: AxiosResponse = {
-  data: getBlogTestData(40),
+export const blogGET200NonEmptyResponse: AxiosResponse<BlogListResponseDataType> = {
+  data: {
+    offset: 0,
+    limit: 20,
+    totalCount: 10000,
+    blogs: getBlogTestData(40)
+  },
   status: 200,
   statusText: 'OK',
   headers: {},
   config: {},
 }
 
-export const blogGET200EmptyResponse: AxiosResponse = {
-  data: [],
+export const blogGET200EmptyResponse: AxiosResponse<BlogListResponseDataType> = {
+  data: {
+    offset: 0,
+    limit: 20,
+    totalCount: 10000,
+    blogs: []
+  },
   status: 200,
   statusText: 'OK',
   headers: {},
   config: {},
 }
 
-export const blogGET500Response: AxiosResponse = {
+export const blogGET500Response: AxiosResponse<ErrorResponseDataType> = {
   data: {
     title: 'network or internal server error',
     message: 'some network/internal server error occurred',

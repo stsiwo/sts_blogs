@@ -1,3 +1,5 @@
+import { BlogType } from "../domain/blog/BlogType";
+
 export enum ResponseResultStatusEnum {
   INITIAL,
   FETCHING,
@@ -20,11 +22,14 @@ export declare type ResponseResultType = {
 }
 
 /** content (data) type of response **/
-export declare type ResponseDataType = {
+export declare type ResponseBaseDataType = {
   offset: number
   limit: number
   totalCount: number
-  [key: string]: any
+}
+
+export declare type BlogListResponseDataType = ResponseBaseDataType & {
+  blogs: BlogType[]
 }
 
 export declare type RequestContentType = {
