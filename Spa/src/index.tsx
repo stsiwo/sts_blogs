@@ -1,17 +1,14 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { store } from './configs/storeConfig';
+import { AuthContext, useUpdateAuthContextReducer } from './UI/Base/Context/AuthContext/AuthContext';
 import { CssGlobalContext } from './UI/Base/Context/CssGlobalContext/CssGlobalContext';
 import { CssGlobalContextDefaultState } from './UI/Base/Context/CssGlobalContext/CssGlobalContextDefaultState';
-import { BrowserRouter as Router } from 'react-router-dom';
-import Header from './UI/Header/Header';
-import Content from './UI/Content/Content';
 import './UI/Base/Css/Common.scss';
-import { createStore } from 'redux';
-import { rootReducer } from './reducers/rootReducer';
-import { store } from './configs/storeConfig';
-import { getUserTestData } from '../tests/data/UserFaker';
-import { AuthContext, useUpdateAuthContextReducer } from './UI/Base/Context/AuthContext/AuthContext';
+import Content from './UI/Content/Content';
+import Header from './UI/Header/Header';
 
 // test user login
 

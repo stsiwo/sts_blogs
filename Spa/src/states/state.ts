@@ -1,4 +1,5 @@
 import { StateType } from "./types";
+import { RoleEnum } from "../domain/user/UserType";
 
 export const initialState: StateType = {
   ui: {
@@ -17,6 +18,7 @@ export const initialState: StateType = {
       id: null,
       name: null,
       avatarUrl: null,
+      role: null, 
     },
     tags: [],
     blogs: [],

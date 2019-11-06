@@ -7,6 +7,12 @@ export declare type UserType = {
   confirm?: string,
   avatarUrl?: string,
   avatarImage?: Blob,
+  role?: RoleEnum
+}
+
+export enum RoleEnum {
+  ADMIN = 'admin',
+  MEMBER = 'member',
 }
 
 export const initialUserState: UserType = {
@@ -16,6 +22,7 @@ export const initialUserState: UserType = {
   password: '',
   avatarUrl: '',
   avatarImage: null,
+  role: null, 
 }
 
 export declare type UserLoginType = {
