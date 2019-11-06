@@ -98,6 +98,20 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
     expect(api.request).toHaveBeenCalledTimes(1)
   })
 
+  test("a4. (EH) should start api request when 'refresh' button is clicked", async () => {
+
+    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
+    const wrapper = mount(<ContextWrapperComponent component={BlogList} />)
+
+    await Promise.resolve(); // to wait any async function inside component is done
+
+    const refreshBtn = wrapper.find('.blog-list-controller-refresh-btn')
+    refreshBtn.simulate('click')
+
+    await Promise.resolve(); // to wait any async function inside component is done
+
+    expect(api.request).toHaveBeenCalledTimes(2)
+  })
 
   describe('bl-c1: <= tablet screen size', () => {
 
