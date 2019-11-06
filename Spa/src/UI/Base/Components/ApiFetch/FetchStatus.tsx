@@ -5,6 +5,10 @@ import { ResponseResultStatusEnum } from '../../../../requests/types';
 
 const FetchStatus: React.FunctionComponent<FetchStatusPropType> = (props: FetchStatusPropType) => {
 
+  /** 
+   * re-implement this
+   * close btn should be close this <FetchStatus> component. not for modify any currentFetchStatus
+   **/
   const handleFetchStatusCloseClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
     props.setFetchStatus({
       status: ResponseResultStatusEnum.INITIAL
