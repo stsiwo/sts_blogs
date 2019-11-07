@@ -5,7 +5,7 @@ import BlogList from "../../../../src/UI/Content/BlogList/BlogList";
 import { AuthContext } from "../../../../src/UI/Base/Context/AuthContext/AuthContext";
 import * as React from 'react'
 import { api } from "../../../../src/requests/api";
-import { blogGET200NonEmptyResponse } from "../../../requests/fixtures";
+import { blogGET200NonEmptyResponse, delay } from "../../../requests/fixtures";
 import { act } from 'react-dom/test-utils';
 jest.mock('../../../../src/requests/api')
 
@@ -28,7 +28,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
    * a2. (lifecycle) should start api request when this component is mounted
    * a3. (lifecycle) should not the request when this component is updated
    * a4. (EH) should start api request when 'refresh' button is clicked
-   * a5. (EH) should cancel api request when 'cancel' button is clicked after 'refresh' button is clicked (need to impl; maybe switch 'refresh
+   * a5. (EH) should cancel api request when 'cancel' button is clicked after 'refresh' button is clicked
    * a6. (EH) should start api request with new limit value when page limit selector is changed
    * a7. (responsive) should display a list of blog after successful api request when blog exists
    * a8. (responsive) should display 'no blog' message after successful api request when blog does not exist
@@ -113,18 +113,50 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
     expect(api.request).toHaveBeenCalledTimes(2)
   })
 
-  test("a5. (EH) should cancel api request when 'cancel' button is clicked after 'refresh' button is clicked (need to impl; maybe switch 'refresh", async () => {
+  /**
+   *
+        .then((data) => new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(data)
+          }, 3000)
+        })).then((data) => {
+          console.log(data)
+          return data
+        })
+      )
+   **/
+
+  test("a5. (EH) should cancel api request when 'cancel' button is clicked after 'refresh' button is clicked", async () => {
+
+    api.request = jest.fn()
+      .mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse)
+        .then((data) => new Promise(resolve => setTimeout(() => {
+          resolve(data)
+        }, 3000))))
+
+    const wrapper = mount(<ContextWrapperComponent component={BlogList} />)
+    await Promise.resolve(); // to wait any async function inside component is done
+
+    expect(1).toBe(0)
+
+  })
+
+  test("a6. (EH) should start api request with new limit value when page limit selector is changed", async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
-    const wrapper = mount(<ContextWrapperComponent component={BlogList} />)
+    await act(async () => {
+      const wrapper = mount(<ContextWrapperComponent component={BlogList} />)
 
-    await Promise.resolve(); // to wait any async function inside component is done
+      await Promise.resolve(); // to wait any async function inside component is done
 
-    const refreshBtn = wrapper.find('.blog-list-controller-refresh-btn')
-    refreshBtn.simulate('click')
+      const pageLimitSelect = wrapper.find('.page-limit-select')
+      // use below when 'mount'. don't use 'simulate'
+      pageLimitSelect.props().onChange({ currentTarget: { value: '40' } } as React.ChangeEvent<HTMLSelectElement>)
+      await wrapper.update()
+      await Promise.resolve(); // to wait any async function inside component is done
 
-    await Promise.resolve(); // to wait any async function inside component is done
-
+      console.log('start asserting...')
+    })
     expect(api.request).toHaveBeenCalledTimes(2)
   })
 

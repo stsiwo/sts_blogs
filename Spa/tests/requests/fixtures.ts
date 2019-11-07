@@ -38,3 +38,16 @@ export const blogGET500Response: AxiosResponse<ErrorResponseDataType> = {
   headers: {},
   config: {},
 }
+
+declare global {
+  interface Promise<T> {
+    delay: (t: number) => Promise<any>
+  }
+}
+
+/** promise delay **/
+export function delay(t: number, v: any) {
+   return new Promise(function(resolve) {
+       setTimeout(resolve.bind(null, v), t)
+   });
+}
