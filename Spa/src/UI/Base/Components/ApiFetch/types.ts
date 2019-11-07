@@ -14,27 +14,16 @@ export declare type FetchStatusPropType = {
   setFetchStatus: React.Dispatch<React.SetStateAction<FetchStatusType>>
 }
 
-export declare type RefreshBtnPropType = {
-  currentFetchStatus: FetchStatusType
-  setFetchStatus: React.Dispatch<React.SetStateAction<FetchStatusType>>
-  currentRefreshStatus: number
-  setRefreshStatus: React.Dispatch<React.SetStateAction<number>>
-  cancelSource?: CancelTokenSource
-}
 
 export declare type UseFetchStatusInputType<T = any> = {
   path: string
   method?: RequestMethodEnum
   queryString?: QueryStringType
-  enableCancel?: boolean
   callback?: (data: any) => void
 }
 
 export declare type UseFetchStatusOutputType = {
   currentFetchStatus: FetchStatusType
-  currentRefreshStatus: number
   setFetchStatus: React.Dispatch<React.SetStateAction<FetchStatusType>>
-  setRefreshStatus: React.Dispatch<React.SetStateAction<number>>
-  cancelSource?: CancelTokenSource
 }
 

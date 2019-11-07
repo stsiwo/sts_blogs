@@ -1,4 +1,4 @@
-import axios, { CancelTokenSource }  from 'axios'
+import axios, { CancelTokenSource, CancelTokenStatic }  from 'axios'
 import { RequestContentType, ResponseResultType, ResponseResultStatusEnum, ErrorResponseDataType } from "./types";
 import { api } from "./api";
 import { AxiosResponse, AxiosError } from "axios";
@@ -9,7 +9,7 @@ import { useAuthContext } from "../UI/Base/Context/AuthContext/AuthContext";
 
 const cancelSource = api.CancelToken.source()
 
-export const getCancelSource: () => CancelTokenSource = () => {
+export const getCancelTokenSource: () => CancelTokenSource = () => {
   return api.CancelToken.source()
 }
 

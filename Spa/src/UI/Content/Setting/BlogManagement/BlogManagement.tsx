@@ -50,7 +50,7 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
       })
     }
   }
-  const { currentFetchStatus, setFetchStatus, currentRefreshStatus, setRefreshStatus } = useApiFetch({
+  const { currentFetchStatus, setFetchStatus } = useApiFetch({
     path: '/blogs',
     method: RequestMethodEnum.GET,
     queryString: {
@@ -83,8 +83,8 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const handleRefreshClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
-    const nextStatus = currentRefreshStatus + 1
-    setRefreshStatus(nextStatus)
+    //const nextStatus = currentRefreshStatus + 1
+    //setRefreshStatus(nextStatus)
   }
 
   /** render **/

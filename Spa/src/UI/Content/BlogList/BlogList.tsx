@@ -16,7 +16,8 @@ import { useCssGlobalContext } from '../../Base/Context/CssGlobalContext/CssGlob
 import { useResponsiveComponent } from '../../Base/Hooks/ResponsiveComponentHook';
 import './BlogList.scss';
 import PageLimitSelect from '../../Base/Components/Pagination/PageLimitSelect';
-import RefreshBtn from '../../Base/Components/ApiFetch/RefreshBtn';
+import RefreshBtn from '../../Base/Components/RefreshBtn/RefreshBtn';
+import { useRefreshBtn } from '../../Base/Components/RefreshBtn/useRefreshBtn';
 
 declare type FetchResultType = {
   status: ResponseResultStatusEnum
@@ -26,6 +27,7 @@ declare type FetchResultType = {
 
 const BlogList: React.FunctionComponent<{}> = (props: {}) => {
 
+  const path = '/blogs'
   /** state **/
   const [currentBlogs, setBlogs] = React.useState([] as BlogType[])
 
@@ -38,6 +40,8 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   const dispatch = useDispatch()
   const { currentPaginationStatus, setPaginationStatus } = usePagination({})
   const { currentFilters, currentSort, setFilters, setSort } = useBlogFilterSort({})
+  const { currentRefreshStatus, setRefreshStatus } = useRefreshBtn({})
+
   const callbackAfterApiFetch = (data: any): void => {
     // assign fetched blogs data to this state
     console.log('now callback of useApiFetch is called...')
@@ -51,20 +55,20 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
       })
     }
   }
-  const { currentFetchStatus, setFetchStatus, currentRefreshStatus, setRefreshStatus, cancelSource } = useApiFetch({
-    path: '/blogs',
+  const queryString = {
+    offset: currentPaginationStatus.offset,
+    limit: currentPaginationStatus.limit,
+    tags: Object.values(currentFilters.tags),
+    startDate: currentFilters.creationDate.start ? currentFilters.creationDate.start.toJSON() : null,
+    endDate: currentFilters.creationDate.end ? currentFilters.creationDate.end.toJSON() : null,
+    keyword: currentFilters.keyword,
+    sort: currentSort,
+  }
+  const { currentFetchStatus, setFetchStatus } = useApiFetch({
+    path: path,
     method: RequestMethodEnum.GET,
-    queryString: {
-      offset: currentPaginationStatus.offset,
-      limit: currentPaginationStatus.limit,
-      tags: Object.values(currentFilters.tags),
-      startDate: currentFilters.creationDate.start ? currentFilters.creationDate.start.toJSON() : null,
-      endDate: currentFilters.creationDate.end ? currentFilters.creationDate.end.toJSON() : null,
-      keyword: currentFilters.keyword,
-      sort: currentSort,
-    },
+    queryString: queryString, 
     callback: callbackAfterApiFetch,
-    enableCancel: true
   })
 
   /** EH **/
@@ -97,7 +101,15 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
         <h2 className="blog-list-title">BlogLists</h2>
         <div className="blog-list-controller-wrapper">
           <FetchStatus currentFetchStatus={currentFetchStatus} setFetchStatus={setFetchStatus} />
-          <RefreshBtn currentFetchStatus={currentFetchStatus} setFetchStatus={setFetchStatus} currentRefreshStatus={currentRefreshStatus} setRefreshStatus={setRefreshStatus} cancelSource={cancelSource}/>
+          <RefreshBtn 
+            currentRefreshStatus={currentRefreshStatus}
+            setRefreshStatus={setRefreshStatus}
+            path={path} 
+            method={RequestMethodEnum.GET} 
+            queryString={queryString} 
+            callback={callbackAfterApiFetch} 
+            enableCancel
+          />
           <PageLimitSelect currentPaginationStatus={currentPaginationStatus} setPaginationStatus={setPaginationStatus} />
         </div>
         <div className="blog-list-items-wrapper">
