@@ -1,4 +1,4 @@
-import axios  from 'axios'
+import axios, { CancelTokenSource }  from 'axios'
 import { RequestContentType, ResponseResultType, ResponseResultStatusEnum, ErrorResponseDataType } from "./types";
 import { api } from "./api";
 import { AxiosResponse, AxiosError } from "axios";
@@ -7,14 +7,25 @@ import { toggleLoginStatusActionCreator } from "../actions/creators";
 import { useAuthContext } from "../UI/Base/Context/AuthContext/AuthContext";
 
 
+const cancelSource = api.CancelToken.source()
+
+export const getCancelSource: () => CancelTokenSource = () => {
+  return api.CancelToken.source()
+}
+
+export const cancelRequest: () => void = () => {
+  cancelSource.cancel('request is canceled')
+}
+
 export const request = async (request: RequestContentType): Promise<ResponseResultType> => {
   console.log('received request and start processing the request...')
+  console.log(request)
   return await api.request({
     url: encodeURI(request.url),
     ...(request.method !== undefined && { method: request.method }),
     ...(request.headers !== undefined && { headers: request.headers }),
     ...(request.data !== undefined && { data: request.data }),
-    ...(request.cancelToken !== undefined && { cancelToken: request.cancelToken })
+    ...(request.cancelToken && { cancelToken: request.cancelToken }) 
   }).then((response: AxiosResponse) => {
     /** success response **/
     console.log('api request succeeded.')
@@ -22,11 +33,13 @@ export const request = async (request: RequestContentType): Promise<ResponseResu
       data: response.data,
       status: ResponseResultStatusEnum.SUCCESS,
     } as ResponseResultType
+
   }).catch((error: AxiosError<ErrorResponseDataType>) => {
     console.log('api request failed.')
 
     /** handle when cancel request **/
-    if (axios.isCancel(error)) {
+    if (api.isCancel(error)) {
+      console.log('request is cancaled')
       return {
         status: ResponseResultStatusEnum.CANCEL,
         errorMsg: error.message

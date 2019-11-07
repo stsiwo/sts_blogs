@@ -2,9 +2,9 @@ import * as React from 'react';
 import './RefreshBtn.scss';
 import { RefreshBtnPropType } from './types';
 import { ResponseResultStatusEnum } from '../../../../requests/types';
+import { cancelRequest } from '../../../../requests/request';
 
 const RefreshBtn: React.FunctionComponent<RefreshBtnPropType> = (props: RefreshBtnPropType) => {
-
 
   const handleRefreshClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
     const nextStatus = props.currentRefreshStatus + 1
@@ -12,7 +12,8 @@ const RefreshBtn: React.FunctionComponent<RefreshBtnPropType> = (props: RefreshB
   }
 
   const handleCancelClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
-    props.cancelSource.cancel('refresh is canceled')
+    console.log('cancel button is clicked')
+    props.cancelSource.cancel("refresh request is canceled")
   }
 
   if (props.currentFetchStatus.status !== ResponseResultStatusEnum.FETCHING) 

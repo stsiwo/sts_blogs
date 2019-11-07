@@ -8,7 +8,7 @@ api.get = jest.fn().mockReturnValue(Promise.resolve(blogGET500Response))
 
 
 
-describe('am-1: MenuToogleIcon Component testing', () => {
+describe('am-1: request mock testing', () => {
 
   beforeAll(() => {
     console.log('am-1: beforeAll ')

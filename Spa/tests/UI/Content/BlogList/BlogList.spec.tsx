@@ -113,6 +113,21 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
     expect(api.request).toHaveBeenCalledTimes(2)
   })
 
+  test("a5. (EH) should cancel api request when 'cancel' button is clicked after 'refresh' button is clicked (need to impl; maybe switch 'refresh", async () => {
+
+    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
+    const wrapper = mount(<ContextWrapperComponent component={BlogList} />)
+
+    await Promise.resolve(); // to wait any async function inside component is done
+
+    const refreshBtn = wrapper.find('.blog-list-controller-refresh-btn')
+    refreshBtn.simulate('click')
+
+    await Promise.resolve(); // to wait any async function inside component is done
+
+    expect(api.request).toHaveBeenCalledTimes(2)
+  })
+
   describe('bl-c1: <= tablet screen size', () => {
 
     beforeAll(() => {

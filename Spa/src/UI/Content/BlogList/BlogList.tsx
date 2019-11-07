@@ -63,7 +63,8 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
       keyword: currentFilters.keyword,
       sort: currentSort,
     },
-    callback: callbackAfterApiFetch
+    callback: callbackAfterApiFetch,
+    enableCancel: true
   })
 
   /** EH **/

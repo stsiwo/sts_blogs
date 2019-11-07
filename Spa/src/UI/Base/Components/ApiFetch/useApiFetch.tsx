@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { request } from '../../../../requests/request';
+import { request, getCancelSource } from '../../../../requests/request';
 import { ResponseResultStatusEnum, ResponseResultType, QueryStringType } from "../../../../requests/types";
 import { FetchStatusType, UseFetchStatusInputType, UseFetchStatusOutputType } from "./types";
 import { buildQueryString } from '../../../../utils'
-import { AxiosError } from 'axios';
-import { CancelTokenStaticClass } from '../../../../requests/api';
+import { AxiosError, CancelTokenSource } from 'axios';
+import { api } from '../../../../requests/api';
 
 
 export const useApiFetch = (input: UseFetchStatusInputType): UseFetchStatusOutputType => {
@@ -13,21 +13,29 @@ export const useApiFetch = (input: UseFetchStatusInputType): UseFetchStatusOutpu
     status: ResponseResultStatusEnum.INITIAL
   })
   const [currentRefreshStatus, setRefreshStatus] = React.useState<number>(0)
+  const cancelSource = input.enableCancel ? getCancelSource() : null
+  const [currentCancelSource, setCancelSource] = React.useState<CancelTokenSource>(cancelSource)
 
   const encodedQueryString = buildQueryString(input.queryString)
 
-  const cancelSource = input.enableCancel ? CancelTokenStaticClass.source(): null 
-
   React.useEffect(() => {
+
+    if (input.enableCancel) setCancelSource(getCancelSource())
 
     async function fetchData() {
       setFetchStatus({
         status: ResponseResultStatusEnum.FETCHING,
       })
+      console.log('inside useEffect and before request function')
+      console.log(input)
+
+      console.log('currentCAncelSource')
+      console.log(currentCancelSource)
+
       await request({
         url: input.path + encodedQueryString,
         ...(input.method && { method: input.method }),
-        ...(cancelSource && { cancelToken: cancelSource.token })
+        ...(currentCancelSource && { cancelToken: currentCancelSource.token })
       })
         .then((responseResult: ResponseResultType) => {
           /** this include 'catch' clause of 'requests' method **/
@@ -48,7 +56,7 @@ export const useApiFetch = (input: UseFetchStatusInputType): UseFetchStatusOutpu
           /** esp, 'input.callback' internal error **/
           setFetchStatus({
             status: ResponseResultStatusEnum.FAILURE,
-            errorMsg: error.message 
+            errorMsg: error.message
           })
         })
     }
@@ -61,12 +69,15 @@ export const useApiFetch = (input: UseFetchStatusInputType): UseFetchStatusOutpu
       encodedQueryString
     ])
 
+  console.log('before return')
+  console.log(currentCancelSource)
+
   return {
     currentFetchStatus: currentFetchStatus,
     currentRefreshStatus: currentRefreshStatus,
     setFetchStatus: setFetchStatus,
     setRefreshStatus: setRefreshStatus,
-    ...(cancelSource && { cancelSource: cancelSource })
+    ...(currentCancelSource && { cancelSource: currentCancelSource })
   }
 }
 
