@@ -159,6 +159,18 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
     })
   })
 
+  test("a9. (responsive) (guest) should display 'member only' message at 'create new blog' button", async () => {
+    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200EmptyResponse))
+
+    await act(async () => {
+      const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
+        <ContextWrapperComponent component={BlogList} />
+      )
+      await waitForElement(() => getByText('blogs are empty'))
+      expect(getByText('Member Only')).toBeInTheDocument()
+    })
+  })
+
   describe('bl-c1: <= tablet screen size', () => {
 
     beforeAll(() => {
