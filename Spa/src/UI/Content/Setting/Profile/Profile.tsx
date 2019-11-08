@@ -67,8 +67,8 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
     return () => {
     };
   }, [
-      ...Object.values(currentUser),
-      ...Object.values(currentInputTouched) // for update when input focus
+      ...Object.keys(currentUser).map(key => currentUser[key as keyof UserType]),
+      ...Object.keys(currentInputTouched).map(key => currentInputTouched[key as keyof UserInputTouchedType]) // for update when input focus
     ]);
 
   React.useEffect(() => {

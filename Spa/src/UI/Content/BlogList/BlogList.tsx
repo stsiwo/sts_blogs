@@ -116,8 +116,9 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
           <PageLimitSelect currentPaginationStatus={currentPaginationStatus} setPaginationStatus={setPaginationStatus} />
         </div>
         <div className="blog-list-items-wrapper">
-          {(currentBlogs.length === 0 && <p>blogs are empty</p>)}
-          {(currentBlogs.length !== 0 && renderBlogLists(currentBlogs))}
+          {(currentFetchStatus.status === ResponseResultStatusEnum.FETCHING || currentRefreshStatus.status === ResponseResultStatusEnum.FETCHING && <p>fetching ... </p>)}
+          {(currentFetchStatus.status !== ResponseResultStatusEnum.FETCHING && currentRefreshStatus.status !== ResponseResultStatusEnum.FETCHING && currentBlogs.length === 0 && <p>blogs are empty</p>)}
+          {(currentFetchStatus.status !== ResponseResultStatusEnum.FETCHING && currentRefreshStatus.status !== ResponseResultStatusEnum.FETCHING && currentBlogs.length !== 0 && renderBlogLists(currentBlogs))}
         </div>
         <div className="blog-list-pagination-wrapper">
           <Pagination currentPaginationStatus={currentPaginationStatus} setPaginationStatus={setPaginationStatus} />

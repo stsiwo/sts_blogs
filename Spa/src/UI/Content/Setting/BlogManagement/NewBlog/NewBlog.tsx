@@ -54,7 +54,7 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
     validateFormInput()
     return () => {
     };
-  }, [...Object.values(currentBlog)]);
+  }, [...Object.keys(currentBlog).map((key: string) => currentBlog[key as keyof BlogType])]);
 
   /** EH **/
   const mapStateToFormData = (state: BlogType): FormData => {

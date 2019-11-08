@@ -4,7 +4,7 @@ import BlogList from "../../../../src/UI/Content/BlogList/BlogList";
 import { AuthContext } from "../../../../src/UI/Base/Context/AuthContext/AuthContext";
 import * as React from 'react'
 import { api } from "../../../../src/requests/api";
-import { blogGET200NonEmptyResponse, delay } from "../../../requests/fixtures";
+import { blogGET200NonEmptyResponse, delay, blogGET200EmptyResponse } from "../../../requests/fixtures";
 import { act } from 'react-dom/test-utils';
 // import react-testing methods
 import { render, fireEvent, waitForElement } from '@testing-library/react'
@@ -129,7 +129,6 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
           value: '40'
         }
       })
-      
     })
     expect(api.request).toHaveBeenCalledTimes(2)
     expect((api.request as any).mock.calls[1][0].url).toContain('limit=40')
@@ -137,6 +136,18 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
   test("a7. (responsive) should display a list of blog after successful api request when blog exists", async () => {
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
+
+    await act(async () => {
+      const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
+        <ContextWrapperComponent component={BlogList} />
+      )
+      const blogListNode = await waitForElement(() => getAllByRole('blog-item'))
+      expect(blogListNode.length).toBeGreaterThan(0)
+    })
+  })
+
+  test("a8. (responsive) should display 'no blog' message after successful api request when blog does not exist", async () => {
+    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200EmptyResponse))
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(

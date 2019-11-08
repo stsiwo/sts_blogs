@@ -58,7 +58,7 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
     validateFormInput()
     return () => {
     };
-  }, [...Object.values(currentBlog)]);
+  }, [...Object.keys(currentBlog).map((key: string) => currentBlog[key as keyof BlogType])]);
 
   React.useEffect(() => {
     async function fetchBlogData() {

@@ -58,8 +58,8 @@ const Login: React.FunctionComponent<{}> = (props: {}) => {
     return () => {
     };
   }, [
-      ...Object.values(currentUserLoginStatus),
-      ...Object.values(currentInputTouched) // for update when input focus
+      ...Object.keys(currentUserLoginStatus).map(key => currentUserLoginStatus[key as keyof UserLoginType]),
+      ...Object.keys(currentInputTouched).map(key => currentInputTouched[key as keyof UserLoginInputTouchedType]) // for update when input focus
     ]);
 
   const handleInputChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {

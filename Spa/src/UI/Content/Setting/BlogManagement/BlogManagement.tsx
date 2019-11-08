@@ -18,6 +18,7 @@ import { useCssGlobalContext } from '../../../Base/Context/CssGlobalContext/CssG
 import { useResponsiveComponent } from '../../../Base/Hooks/ResponsiveComponentHook';
 import './BlogManagement.scss';
 import PageLimitSelect from '../../../Base/Components/Pagination/PageLimitSelect';
+import { TagType } from '../../../../domain/tag/TagType';
 
 const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
 
@@ -56,7 +57,7 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
     queryString: {
       offset: currentPaginationStatus.offset,
       limit: currentPaginationStatus.limit,
-      tags: Object.values(currentFilters.tags),
+      tags: currentFilters.tags.map((tag: TagType) => tag.name),
       startDate: currentFilters.creationDate.start ? currentFilters.creationDate.start.toJSON(): null,
       endDate: currentFilters.creationDate.end ? currentFilters.creationDate.end.toJSON(): null,
       keyword: currentFilters.keyword,
