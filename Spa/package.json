@@ -27,6 +27,7 @@
     "redux": "^4.0.1",
     "reflect-metadata": "^0.1.13",
     "request": "^2.88.0",
+    "rxjs": "^6.5.3",
     "sass": "^1.22.12",
     "use-react-router": "^1.0.7",
     "yup": "^0.27.0"
