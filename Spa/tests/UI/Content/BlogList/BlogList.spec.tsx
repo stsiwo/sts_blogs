@@ -171,6 +171,18 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
     })
   })
 
+  test("a10. (Route) (guest) should route guest user to login/signup when 'create new blog' is clicked (just only check url string at Link component)", async () => {
+    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200EmptyResponse))
+
+    await act(async () => {
+      const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
+        <ContextWrapperComponent component={BlogList} />
+      )
+      expect(document.getElementsByClassName('aside-new-blog-link')[0].getAttribute('href')).toBe('/login')
+
+    })
+  })
+
   describe('bl-c1: <= tablet screen size', () => {
 
     beforeAll(() => {
