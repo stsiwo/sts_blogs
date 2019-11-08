@@ -46,7 +46,7 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   const callbackAfterApiFetch = (data: any): void => {
     // assign fetched blogs data to this state
     console.log('now callback of useApiFetch is called...')
-    setBlogs(getBlogTestData())
+    //setBlogs(getBlogTestData())
     if (data) {
       console.log('response data is available')
       setBlogs(data.blogs)
@@ -116,7 +116,7 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
           <PageLimitSelect currentPaginationStatus={currentPaginationStatus} setPaginationStatus={setPaginationStatus} />
         </div>
         <div className="blog-list-items-wrapper">
-          {(currentFetchStatus.status === ResponseResultStatusEnum.FETCHING || currentRefreshStatus.status === ResponseResultStatusEnum.FETCHING && <p>fetching ... </p>)}
+          {(currentFetchStatus.status === ResponseResultStatusEnum.FETCHING || currentRefreshStatus.status === ResponseResultStatusEnum.FETCHING && <p role="fetching">fetching ... </p>)}
           {(currentFetchStatus.status !== ResponseResultStatusEnum.FETCHING && currentRefreshStatus.status !== ResponseResultStatusEnum.FETCHING && currentBlogs.length === 0 && <p>blogs are empty</p>)}
           {(currentFetchStatus.status !== ResponseResultStatusEnum.FETCHING && currentRefreshStatus.status !== ResponseResultStatusEnum.FETCHING && currentBlogs.length !== 0 && renderBlogLists(currentBlogs))}
         </div>

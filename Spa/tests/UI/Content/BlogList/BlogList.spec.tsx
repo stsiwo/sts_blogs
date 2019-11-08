@@ -8,6 +8,7 @@ import { blogGET200NonEmptyResponse, delay, blogGET200EmptyResponse } from "../.
 import { act } from 'react-dom/test-utils';
 // import react-testing methods
 import { render, fireEvent, waitForElement } from '@testing-library/react'
+import '@testing-library/jest-dom/extend-expect'
 jest.mock('../../../../src/requests/api')
 
 
@@ -153,8 +154,8 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
         <ContextWrapperComponent component={BlogList} />
       )
-      const blogListNode = await waitForElement(() => getAllByRole('blog-item'))
-      expect(blogListNode.length).toBeGreaterThan(0)
+      await waitForElement(() => getByText('blogs are empty'))
+      expect(getByText('blogs are empty')).toBeInTheDocument()
     })
   })
 
