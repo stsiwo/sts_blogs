@@ -37,15 +37,16 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
    * a10. (Route) (guest) should route guest user to login/signup when 'create new blog' is clicked
    * a11. (DOM) (member) should not display 'member only' message at 'create new blog' button
    * a12. (Route) (member) should route member user to /blogs/new  when 'create new blog' is clicked
-   * a13. (EH) should start api request when new tag is entered and url must contain the tag name
-   * a14. (EH) should start api request when new keyword is entered and url must contain the keyword 
-   * a15. (EH) should start api request when new startDate is entered and url must contain the startDate 
-   * a16. (EH) should start api request when new endDate is entered and url must contain the endDate 
-   * a17. (EH) should start api request when new sort is selected and url must contain the sort 
-   * a18. (Route) should route user to specified blog detail page when one of blog is clicked
-   * a19. (EH) should start api request when new page number is click and url must contain the number
-   * a20. (EH) should start api request when 1st page number is click and url must contain the number
-   * a21. (EH) should start api request when last page number is click and url must contain the number
+   * a13. (DOM) should display new tag when user enter new tag in tag input
+   * a14. (EH) should start api request when new tag is entered and url must contain the tag name
+   * a15. (EH) should start api request when new keyword is entered and url must contain the keyword 
+   * a16. (EH) should start api request when new startDate is entered and url must contain the startDate 
+   * a17. (EH) should start api request when new endDate is entered and url must contain the endDate 
+   * a18. (EH) should start api request when new sort is selected and url must contain the sort 
+   * a19. (Route) should route user to specified blog detail page when one of blog is clicked
+   * a20. (EH) should start api request when new page number is click and url must contain the number
+   * a21. (EH) should start api request when 1st page number is click and url must contain the number
+   * a22. (EH) should start api request when last page number is click and url must contain the number
    *
    * ** <= tablet **
    *
@@ -231,7 +232,26 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
     })
   })
 
-  test("a14.", async () => {
+  test("a14. (EH) should start api request when new tag is entered and url must contain the tag name", async () => {
+    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200EmptyResponse))
+
+    await act(async () => {
+      const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
+        <ContextWrapperComponent component={BlogList} />
+      )
+      await waitForElement(() => getByText('blogs are empty'))
+      const tagInput = getByLabelText('Tags')
+      fireEvent.keyDown(tagInput,
+        {
+          target:
+          {
+            value: 'test-tag',
+          },
+          key: 'Enter'
+        })
+
+    })
+    expect(api.request).toHaveBeenCalledTimes(2)
   })
 
   describe('bl-c1: <= tablet screen size', () => {
