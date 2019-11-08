@@ -94,7 +94,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
       // wait for initial fetch finish and render blog list
       await waitForElement(() => getAllByRole('blog-item'))
-      
+
       fireEvent.click(getByText('refresh'))
 
       await waitForElement(() => getAllByRole('blog-item'))
@@ -106,11 +106,11 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
   test("a5. (EH) should cancel api request when 'cancel' button is clicked after 'refresh' button is clicked", async () => {
 
-   // api.request = jest.fn()
-   //   .mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse)
-   //     .then((data) => new Promise(resolve => setTimeout(() => {
-   //       resolve(data)
-   //     }, 3000))))
+    // api.request = jest.fn()
+    //   .mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse)
+    //     .then((data) => new Promise(resolve => setTimeout(() => {
+    //       resolve(data)
+    //     }, 3000))))
 
     expect(1).toBe(0)
 
@@ -188,7 +188,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
-        <ContextWrapperComponent component={BlogList} isAuth/>
+        <ContextWrapperComponent component={BlogList} isAuth />
       )
       const memberOnlyNode = queryByText(container, 'Member Only')
       expect(memberOnlyNode).toBeNull()
@@ -201,10 +201,37 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
-        <ContextWrapperComponent component={BlogList} isAuth/>
+        <ContextWrapperComponent component={BlogList} isAuth />
       )
       expect(document.getElementsByClassName('aside-new-blog-link')[0].getAttribute('href')).toBe('/new')
     })
+  })
+
+  test("a13. (DOM) should display new tag when user enter new tag in tag input", async () => {
+    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200EmptyResponse))
+
+    await act(async () => {
+      const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
+        <ContextWrapperComponent component={BlogList} />
+      )
+      await waitForElement(() => getByText('blogs are empty'))
+      const tagInput = getByLabelText('Tags')
+      fireEvent.keyDown(tagInput,
+        {
+          target:
+          {
+            value: 'test-tag',
+          },
+          key: 'Enter'
+        })
+
+      const tagIconNode = await waitForElement(() => getByRole('tag-icon'))
+      console.log(debug())
+      expect(tagIconNode).toBeInTheDocument()
+    })
+  })
+
+  test("a14.", async () => {
   })
 
   describe('bl-c1: <= tablet screen size', () => {

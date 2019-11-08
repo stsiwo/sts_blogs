@@ -31,6 +31,8 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
 
   /** EH **/
   const handleTagInputEnterOrTabKeyClickEvent: React.EventHandler<React.KeyboardEvent<HTMLInputElement>> = (e) => {
+    console.log('start handling new tag input')
+    console.log(e.currentTarget.value)
 
     if (e.currentTarget.value === "") return false
 
@@ -166,8 +168,8 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
         <li className="aside-li">
           <h3 className="aside-filter-title">Filter Blogs</h3>
           <div className="aside-filter-tags-wrapper" >
-            <h4 className="aside-filter-tags-title">Tags</h4>
-            <input type="text" className="aside-filter-tags-input" onKeyDown={handleTagInputEnterOrTabKeyClickEvent} ref={tagInputRef} />
+            <label htmlFor="tag" className="aside-filter-tags-label">Tags</label>
+            <input type="text" id='tag' name='tag' className="aside-filter-tags-input" onKeyDown={handleTagInputEnterOrTabKeyClickEvent} ref={tagInputRef} />
             {renderCurrentTags()}
           </div>
           <div className="aside-filter-keyword-wrapper" >
