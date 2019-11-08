@@ -18,6 +18,7 @@ import './BlogList.scss';
 import PageLimitSelect from '../../Base/Components/Pagination/PageLimitSelect';
 import RefreshBtn from '../../Base/Components/RefreshBtn/RefreshBtn';
 import { useRefreshBtn } from '../../Base/Components/RefreshBtn/useRefreshBtn';
+import { getBlogTestData } from '../../../../tests/data/BlogFaker';
 
 declare type FetchResultType = {
   status: ResponseResultStatusEnum
@@ -45,7 +46,9 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   const callbackAfterApiFetch = (data: any): void => {
     // assign fetched blogs data to this state
     console.log('now callback of useApiFetch is called...')
+    setBlogs(getBlogTestData())
     if (data) {
+      console.log('response data is available')
       setBlogs(data.blogs)
 
       // assign new total count of pagination
@@ -67,7 +70,7 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   const { currentFetchStatus, setFetchStatus } = useApiFetch({
     path: path,
     method: RequestMethodEnum.GET,
-    queryString: queryString, 
+    queryString: queryString,
     callback: callbackAfterApiFetch,
   })
 
@@ -85,7 +88,7 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
     return blogList.map((blog: BlogType) => {
       return (
         <Link to={`/blog/${blog.id}`} className="blog-list-items-item-wrapper" key={blog.id}>
-          <h3 className="">{blog.title}</h3>
+          <h3 className="blog-list-items-item-title">{blog.title}</h3>
         </Link>
       )
     })
@@ -101,13 +104,13 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
         <h2 className="blog-list-title">BlogLists</h2>
         <div className="blog-list-controller-wrapper">
           <FetchStatus currentFetchStatus={currentFetchStatus} setFetchStatus={setFetchStatus} />
-          <RefreshBtn 
+          <RefreshBtn
             currentRefreshStatus={currentRefreshStatus}
             setRefreshStatus={setRefreshStatus}
-            path={path} 
-            method={RequestMethodEnum.GET} 
-            queryString={queryString} 
-            callback={callbackAfterApiFetch} 
+            path={path}
+            method={RequestMethodEnum.GET}
+            queryString={queryString}
+            callback={callbackAfterApiFetch}
             enableCancel
           />
           <PageLimitSelect currentPaginationStatus={currentPaginationStatus} setPaginationStatus={setPaginationStatus} />
