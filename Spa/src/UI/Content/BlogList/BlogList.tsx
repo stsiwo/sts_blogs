@@ -61,7 +61,7 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   const queryString = {
     offset: currentPaginationStatus.offset,
     limit: currentPaginationStatus.limit,
-    tags: Object.values(currentFilters.tags),
+    tags: currentFilters.tags.map((tag: TagType) => tag.name), 
     startDate: currentFilters.creationDate.start ? currentFilters.creationDate.start.toJSON() : null,
     endDate: currentFilters.creationDate.end ? currentFilters.creationDate.end.toJSON() : null,
     keyword: currentFilters.keyword,
@@ -87,7 +87,7 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   const renderBlogLists = (blogList: BlogType[]): React.ReactNode => {
     return blogList.map((blog: BlogType) => {
       return (
-        <Link to={`/blog/${blog.id}`} className="blog-list-items-item-wrapper" key={blog.id}>
+        <Link to={`/blog/${blog.id}`} className="blog-list-items-item-wrapper" key={blog.id} role="blog-item">
           <h3 className="blog-list-items-item-title">{blog.title}</h3>
         </Link>
       )

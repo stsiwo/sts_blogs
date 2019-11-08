@@ -14,7 +14,7 @@ const PageLimitSelect: React.FunctionComponent<PageLimitSelectPropType> = (props
   }
 
   return (
-    <select className="page-limit-select" name='page-limit-select' value={props.currentPaginationStatus.limit} onChange={handlePageLimitChangeEvent}>
+    <select className="page-limit-select" name='page-limit-select' role="page-limit-select" value={props.currentPaginationStatus.limit} onChange={handlePageLimitChangeEvent}>
       <option className="page-limit-option" value="20">20</option>
       <option className="page-limit-option" value="30">30</option>
       <option className="page-limit-option" value="40">40</option>
