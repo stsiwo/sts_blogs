@@ -31,7 +31,14 @@ const updateAuthContextReducer: Reducer<AuthType, AuthContextActionType> = (stat
   }
 }
 
-export const useUpdateAuthContextReducer = (): [ReducerState<Reducer<AuthType, AuthContextActionType>>, Dispatch<ReducerAction<Reducer<AuthType, AuthContextActionType>>>] => {
-  return useReducer(updateAuthContextReducer, { authed: false })
+
+export const useUpdateAuthContextReducer = (initialAuth: AuthType = null): [ReducerState<Reducer<AuthType, AuthContextActionType>>, Dispatch<ReducerAction<Reducer<AuthType, AuthContextActionType>>>] => {
+
+  const defaultAuth = initialAuth ? initialAuth : { authed: false }
+  return useReducer(updateAuthContextReducer, defaultAuth)
 }
 
+/**
+ * #REFACTOR #DOUBT
+ * need some ways to detect jwt token is in httponly cookie otherwise there is gap btw auth state in app and cookie
+ **/

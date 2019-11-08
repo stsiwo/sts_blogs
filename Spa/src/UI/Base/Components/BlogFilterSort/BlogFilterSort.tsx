@@ -12,6 +12,7 @@ import { useResponsiveComponent } from '../../Hooks/ResponsiveComponentHook';
 import { useCssGlobalContext } from '../../Context/CssGlobalContext/CssGlobalContext';
 import Icon from '../Icon/Icon';
 import { StateType } from '../../../../states/types';
+import { useAuthContext } from '../../Context/AuthContext/AuthContext';
 
 const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: BlogFilterSortPropType) => {
 
@@ -150,13 +151,17 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
     return <Icon label="??" css="blog-management-sort-filter-icon" onClick={handleFilterSortNavClickEvent} />
   } 
 
+  const { auth } = useAuthContext()
+  const newLink = auth.authed ? url + '/new' : '/login'
+
   return (
     <aside className="aside-wrapper" ref={filterSortBarWrapperRef}>
       <ul className="aside-ul">
         <li className="aside-li">
-          <Link to={`${url}/new`} className="aside-new-blog-link">
+          <Link to={`${url}new`} className="aside-new-blog-link">
             <h3 className="aside-new-blog-label">Create New Blog</h3>
           </Link>
+          {(!auth.authed && <p>Member Only</p>)}
         </li>
         <li className="aside-li">
           <h3 className="aside-filter-title">Filter Blogs</h3>
