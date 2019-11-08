@@ -1,5 +1,4 @@
 import { CssGlobalContextDefaultState } from "../../../../src/UI/Base/Context/CssGlobalContext/CssGlobalContextDefaultState";
-import { mount, ReactWrapper } from "enzyme";
 import { getAllContextComponent, ContextWrapperComponent } from "../../fixtures";
 import BlogList from "../../../../src/UI/Content/BlogList/BlogList";
 import { AuthContext } from "../../../../src/UI/Base/Context/AuthContext/AuthContext";
@@ -7,7 +6,8 @@ import * as React from 'react'
 import { api } from "../../../../src/requests/api";
 import { blogGET200NonEmptyResponse, delay } from "../../../requests/fixtures";
 import { act } from 'react-dom/test-utils';
-import ReactDOM = require("react-dom");
+// import react-testing methods
+import { render, fireEvent, waitForElement } from '@testing-library/react'
 jest.mock('../../../../src/requests/api')
 
 
@@ -27,7 +27,6 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
    *
    * a1. (css) should not have any overflown element. <- this is impossible 
    * a2. (lifecycle) should start api request when this component is mounted
-   * a3. (lifecycle) should not the request when this component is updated
    * a4. (EH) should start api request when 'refresh' button is clicked
    * a5. (EH) should cancel api request when 'cancel' button is clicked after 'refresh' button is clicked
    * a6. (EH) should start api request with new limit value when page limit selector is changed
@@ -49,9 +48,10 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
    *
    * ** <= tablet **
    *
-   * 2. (responsive) should display sort filter icon
-   * 3. (responsive) should not display sort filter aside 
-   * 4. (EH) should display sort filter aisde when sort filter icon is clicked
+   * ltt1. (responsive) should display sort filter icon
+   * ltt2. (responsive) should not display sort filter aside 
+   * ltt3. (EH) should display sort filter aisde when sort filter icon is clicked
+   * ltt4. (lifecycle) should not the request when this component is updated
    *
    * ** > tablet **
    *
@@ -73,40 +73,31 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
     await act(async () => {
-      const wrapper = mount(<ContextWrapperComponent component={BlogList} />)
-      await Promise.resolve(); // to wait any async function inside component is done
+      render(
+        <ContextWrapperComponent component={BlogList} />
+      )
     })
 
     expect(api.request).toHaveBeenCalled()
   })
 
-  test('a3. (lifecycle) should not the request when this component is updated', async () => {
-
-    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
-    await act(async () => {
-      const wrapper = mount(<ContextWrapperComponent component={BlogList} />)
-
-      await Promise.resolve(); // to wait any async function inside component is done
-
-      wrapper.update() // force update to make sure api request is not called when updating
-    })
-
-    expect(api.request).toHaveBeenCalledTimes(1)
-  })
-
   test("a4. (EH) should start api request when 'refresh' button is clicked", async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
+    // should replace mock with real one
+    api.CancelToken.source = jest.fn().mockReturnValue('cancel-token')
     await act(async () => {
-      const wrapper = mount(<ContextWrapperComponent component={BlogList} />)
+      const { getByText, getByRole, getAllByRole } = render(
+        <ContextWrapperComponent component={BlogList} />
+      )
 
-      await Promise.resolve(); // to wait any async function inside component is done
+      // wait for initial fetch finish and render blog list
+      await waitForElement(() => getAllByRole('blog-item'))
+      
+      fireEvent.click(getByText('refresh'))
 
-      const refreshBtn = wrapper.find('.blog-list-controller-refresh-btn')
-      refreshBtn.simulate('click')
+      await waitForElement(() => getAllByRole('blog-item'))
 
-      await wrapper.update() // wait component update
-      await Promise.resolve(); // to wait any async function inside component is done
     })
     expect(api.request).toHaveBeenCalledTimes(2)
 
@@ -114,14 +105,11 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
   test("a5. (EH) should cancel api request when 'cancel' button is clicked after 'refresh' button is clicked", async () => {
 
-    api.request = jest.fn()
-      .mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse)
-        .then((data) => new Promise(resolve => setTimeout(() => {
-          resolve(data)
-        }, 3000))))
-
-    const wrapper = mount(<ContextWrapperComponent component={BlogList} />)
-    await Promise.resolve(); // to wait any async function inside component is done
+   // api.request = jest.fn()
+   //   .mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse)
+   //     .then((data) => new Promise(resolve => setTimeout(() => {
+   //       resolve(data)
+   //     }, 3000))))
 
     expect(1).toBe(0)
 
@@ -131,15 +119,17 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
     await act(async () => {
-      const wrapper = mount(<ContextWrapperComponent component={BlogList} />)
+      const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
+        <ContextWrapperComponent component={BlogList} />
+      )
+      await waitForElement(() => getAllByRole('blog-item'))
 
-      await Promise.resolve(); // to wait any async function inside component is done
-
-      const pageLimitSelect = wrapper.find('.page-limit-select')
-      // use below when 'mount'. don't use 'simulate'
-      pageLimitSelect.props().onChange({ currentTarget: { value: '40' } } as React.ChangeEvent<HTMLSelectElement>)
-      await wrapper.update() // wait component update
-      await Promise.resolve(); // to wait any async function inside component is done
+      fireEvent.change(getByRole('page-limit-select'), {
+        target: {
+          value: '40'
+        }
+      })
+      
     })
     expect(api.request).toHaveBeenCalledTimes(2)
     expect((api.request as any).mock.calls[1][0].url).toContain('limit=40')
@@ -147,11 +137,14 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
   test("a7. (responsive) should display a list of blog after successful api request when blog exists", async () => {
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
-    let container: Element;
-    act(() => {
-      ReactDOM.render(<ContextWrapperComponent component={BlogList}/>, container);
-    });
-    console.log(container)
+
+    await act(async () => {
+      const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
+        <ContextWrapperComponent component={BlogList} />
+      )
+      const blogListNode = await waitForElement(() => getAllByRole('blog-item'))
+      expect(blogListNode.length).toBeGreaterThan(0)
+    })
   })
 
   describe('bl-c1: <= tablet screen size', () => {
@@ -168,7 +161,6 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
     /** test for use case for small screen size here**/
     test('small screen size proto test', () => {
-      expect(false).toBeTruthy()
     })
 
     afterEach(() => {
