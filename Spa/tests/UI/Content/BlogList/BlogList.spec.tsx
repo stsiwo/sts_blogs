@@ -7,7 +7,7 @@ import { api } from "../../../../src/requests/api";
 import { blogGET200NonEmptyResponse, delay, blogGET200EmptyResponse } from "../../../requests/fixtures";
 import { act } from 'react-dom/test-utils';
 // import react-testing methods
-import { render, fireEvent, waitForElement } from '@testing-library/react'
+import { render, fireEvent, waitForElement, queryByText } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 jest.mock('../../../../src/requests/api')
 
@@ -35,17 +35,17 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
    * a8. (responsive) should display 'no blog' message after successful api request when blog does not exist
    * a9. (responsive) (guest) should display 'member only' message at 'create new blog' button
    * a10. (Route) (guest) should route guest user to login/signup when 'create new blog' is clicked
-   * a10. (responsive) (member) should not display 'member only' message at 'create new blog' button
-   * a11. (Route) (member) should route member user to /blogs/new  when 'create new blog' is clicked
-   * a12. (EH) should start api request when new tag is entered and url must contain the tag name
-   * a13. (EH) should start api request when new keyword is entered and url must contain the keyword 
-   * a14. (EH) should start api request when new startDate is entered and url must contain the startDate 
-   * a15. (EH) should start api request when new endDate is entered and url must contain the endDate 
-   * a16. (EH) should start api request when new sort is selected and url must contain the sort 
-   * a17. (Route) should route user to specified blog detail page when one of blog is clicked
-   * a18. (EH) should start api request when new page number is click and url must contain the number
-   * a19. (EH) should start api request when 1st page number is click and url must contain the number
-   * a20. (EH) should start api request when last page number is click and url must contain the number
+   * a11. (DOM) (member) should not display 'member only' message at 'create new blog' button
+   * a12. (Route) (member) should route member user to /blogs/new  when 'create new blog' is clicked
+   * a13. (EH) should start api request when new tag is entered and url must contain the tag name
+   * a14. (EH) should start api request when new keyword is entered and url must contain the keyword 
+   * a15. (EH) should start api request when new startDate is entered and url must contain the startDate 
+   * a16. (EH) should start api request when new endDate is entered and url must contain the endDate 
+   * a17. (EH) should start api request when new sort is selected and url must contain the sort 
+   * a18. (Route) should route user to specified blog detail page when one of blog is clicked
+   * a19. (EH) should start api request when new page number is click and url must contain the number
+   * a20. (EH) should start api request when 1st page number is click and url must contain the number
+   * a21. (EH) should start api request when last page number is click and url must contain the number
    *
    * ** <= tablet **
    *
@@ -179,6 +179,19 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
         <ContextWrapperComponent component={BlogList} />
       )
       expect(document.getElementsByClassName('aside-new-blog-link')[0].getAttribute('href')).toBe('/login')
+
+    })
+  })
+
+  test("a11. (DOM) (member) should not display 'member only' message at 'create new blog' button", async () => {
+    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200EmptyResponse))
+
+    await act(async () => {
+      const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
+        <ContextWrapperComponent component={BlogList} isAuth/>
+      )
+      const memberOnlyNode = queryByText(container, 'Member Only')
+      expect(memberOnlyNode).toBeNull()
 
     })
   })
