@@ -161,7 +161,7 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
   }
 
   if (currentWidth <= cssGlobal.tabletSize && !isFilterSortBarOpen) {
-    return <Icon label="??" css="blog-management-sort-filter-icon" onClick={handleFilterSortNavClickEvent} />
+    return <Icon role='filter-sort-icon' label="??" css="blog-management-sort-filter-icon" onClick={handleFilterSortNavClickEvent} />
   }
 
   const { auth } = useAuthContext()

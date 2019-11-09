@@ -45,8 +45,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
    * a18. (EH) should start api request when new sort is selected and url must contain the sort 
    * a19. (Route) should route user to specified blog detail page when one of blog is clicked
    * a20. (EH) should start api request when new page number is click and url must contain the number
-   * a21. (EH) should start api request when 1st page number is click and url must contain the number
-   * a22. (EH) should start api request when last page number is click and url must contain the number
+   * a21. (EH) should start api request when last page number is click and url must contain the number
    *
    * ** <= tablet **
    *
@@ -402,7 +401,18 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
     })
 
     /** test for use case for small screen size here**/
-    test('small screen size proto test', () => {
+    test("ltt1. (responsive) should display sort filter icon", async () => {
+      api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
+
+      await act(async () => {
+        const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
+          <ContextWrapperComponent component={BlogList} />
+        )
+
+        await wait(() => {
+          expect(getByRole('filter-sort-icon')).toBeInTheDocument()
+        })
+      })
     })
 
     afterEach(() => {
