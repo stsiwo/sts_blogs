@@ -485,6 +485,21 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
     })
 
     /** test for use case for medium screen size here**/
+    test("gtt1. (responsive) should not display sort filter icon", async () => {
+      api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
+
+      await act(async () => {
+        const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
+          <ContextWrapperComponent component={BlogList} />
+        )
+
+        await wait(() => {
+          const filterSortAside = queryByRole(container, 'filter-sort-icon')
+          expect(filterSortAside).toBeNull()
+        })
+      })
+    })
+
 
     afterEach(() => {
       console.log('bl-c1: afterEach: medium screen size')
