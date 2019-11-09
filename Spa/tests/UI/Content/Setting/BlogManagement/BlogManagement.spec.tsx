@@ -86,7 +86,7 @@ describe('bm-c1: BlogManagement Component testing', () => {
     api.CancelToken.source = jest.fn().mockReturnValue('cancel-token')
     await act(async () => {
       const { getByText, getByRole, getAllByRole } = render(
-        <ContextWrapperComponent component={BlogManagement} />
+        <ContextWrapperComponent component={BlogManagement} isAuth/>
       )
 
       // wait for initial fetch finish and render blog list

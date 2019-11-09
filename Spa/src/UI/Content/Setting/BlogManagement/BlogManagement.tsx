@@ -97,7 +97,7 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
       }
       controllerRefs.set(blog.id, divRef)
       return (
-        <div className="blog-management-item-wrapper" key={blog.id}>
+        <div className="blog-management-item-wrapper" key={blog.id} role='blog-item'>
           <img src="" alt="blog item" className="blog-management-item-img" />
           <h3 className="blog-management-item-title">{blog.title}</h3>
           <div className="blog-management-item-created-date">{blog.createdDate.toLocaleDateString("en-US", dateFormatOption)}</div>
