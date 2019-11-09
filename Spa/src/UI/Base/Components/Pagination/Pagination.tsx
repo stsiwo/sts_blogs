@@ -9,7 +9,8 @@ const Pagination: React.FunctionComponent<PaginationPropType> = (props: Paginati
   /** REFACTOR **/
   // setter should be done here (not inside api fetch component)
   const handlePageClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
-    props.currentPaginationStatus.limit = parseInt(e.currentTarget.value)
+    console.log('start new page click event')
+    props.currentPaginationStatus.offset = parseInt(e.currentTarget.value)
     props.setPaginationStatus({
       ...props.currentPaginationStatus
     })
@@ -19,7 +20,7 @@ const Pagination: React.FunctionComponent<PaginationPropType> = (props: Paginati
   if (pageResult.pageList.length !== 0) {
     return (
       <React.Fragment>
-        <button className='pagination-btn' value="0" onClick={handlePageClickEvent}>&laquo;</button>
+        <button className='pagination-btn' role='first-page-btn' value="0" onClick={handlePageClickEvent}>&laquo;</button>
         {(pageResult.pageList.map((page: PageType) => {
           return (
             <button className={page.css} value={page.offset} key={page.pageNum} onClick={handlePageClickEvent}>{page.pageNum}</button>

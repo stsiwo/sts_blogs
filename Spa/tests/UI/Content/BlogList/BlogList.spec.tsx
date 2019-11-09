@@ -361,6 +361,19 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
     expect(document.getElementsByClassName('blog-list-items-item-wrapper')[0].getAttribute('href')).toBe('/blog/1')
   })
 
+  test("a20.  (EH) should start api request when new page number is click and url must contain the number", async () => {
+    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
+
+    await act(async () => {
+      const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
+        <ContextWrapperComponent component={BlogList} />
+      )
+      const thirdPageBtn = await waitForElement(() => getByText('3'))
+      fireEvent.click(thirdPageBtn)
+    })
+    expect(api.request).toHaveBeenCalledTimes(2)
+    expect((api.request as any).mock.calls[1][0].url).toContain('offset=40')
+  })
 
   describe('bl-c1: <= tablet screen size', () => {
 
