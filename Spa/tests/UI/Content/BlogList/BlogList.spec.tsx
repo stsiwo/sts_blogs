@@ -277,6 +277,29 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
     expect((api.request as any).mock.calls[1][0].url).toContain('keyword=test-keyword')
   })
 
+  test("a16 (EH) should start api request when new startDate is entered and url must contain the startDate ", async () => {
+    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200EmptyResponse))
+
+    await act(async () => {
+      const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
+        <ContextWrapperComponent component={BlogList} />
+      )
+      await waitForElement(() => getByText('blogs are empty'))
+      const startDateInput = getByLabelText('Start Date')
+      
+      fireEvent.change(startDateInput,
+        {
+          target:
+          {
+            value: '11/13/2019',
+          },
+        })
+
+    })
+    expect(api.request).toHaveBeenCalledTimes(2)
+    expect((api.request as any).mock.calls[1][0].url).toContain('startDate=2019-11-13')
+  })
+
   describe('bl-c1: <= tablet screen size', () => {
 
     beforeAll(() => {

@@ -48,12 +48,16 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
 
   const handleFilterCreationDateStartChangeEvent = (startDate: Date): void => {
     props.currentFilters.creationDate.start = startDate
-    props.setFilters(props.currentFilters)
+    props.setFilters({
+      ...props.currentFilters
+    })
   }
 
   const handleFilterCreationDateEndChangeEvent = (endDate: Date): void => {
     props.currentFilters.creationDate.end = endDate
-    props.setFilters(props.currentFilters)
+    props.setFilters({
+      ...props.currentFilters
+    })
   }
 
   const handleSortChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
@@ -181,19 +185,24 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
           </div>
           <div className="aside-filter-date-wrapper" >
             <h4 className="aside-filter-date-title">Date</h4>
+            <label htmlFor="start-date-input" className="aside-filter-start-date-label">Start Date</label>
             <DatePicker
               selected={props.currentFilters.creationDate.start}
               onChange={handleFilterCreationDateStartChangeEvent}
               selectsStart
               startDate={props.currentFilters.creationDate.start}
               maxDate={props.currentFilters.creationDate.end}
+              id='start-date-input'
+              
             />
+            <label htmlFor="end-date-input" className="aside-filter-end-date-label">End Date</label>
             <DatePicker
               selected={props.currentFilters.creationDate.end}
               onChange={handleFilterCreationDateEndChangeEvent}
               selectsEnd
               endDate={props.currentFilters.creationDate.end}
               minDate={props.currentFilters.creationDate.start}
+              id="end-date-input"
             />
           </div>
         </li>
