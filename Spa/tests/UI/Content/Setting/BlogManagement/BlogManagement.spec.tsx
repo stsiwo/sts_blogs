@@ -50,8 +50,7 @@ describe('bm-c1: BlogManagement Component testing', () => {
    *
    * ltt1. (responsive) should display sort filter icon
    * ltt2. (responsive) should not display sort filter aside 
-   * ltt3. (EH) should display sort filter aisde when sort filter icon is clicked
-   * ltt4. (lifecycle) should not api request when this component is updated
+   * ltt3.  (EH) should display sort filter aisde when sort filter icon is clicked and should not start api request
    *
    * ** > tablet **
    *
@@ -153,9 +152,9 @@ describe('bm-c1: BlogManagement Component testing', () => {
         <ContextWrapperComponent component={BlogManagement} isAuth />
       )
       // ?? can't getByText event if debug show it is there
-      const blogEmptyNode = await waitForElement(() => getByText('blogs are empty'))
-      console.log(blogEmptyNode)
-      expect(blogEmptyNode).toBeInTheDocument()
+      await wait(() => {
+        expect(getByText('blogs are empty')).toBeInTheDocument()
+      })
     })
   })
 
@@ -177,7 +176,7 @@ describe('bm-c1: BlogManagement Component testing', () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
         <ContextWrapperComponent component={BlogManagement} isAuth />
       )
-      const deleteBtns = await waitForElement(() => getAllByRole('blog-delete-link'))
+      const deleteBtns = await waitForElement(() => getAllByRole('blog-edit-link'))
       expect(deleteBtns[0].getAttribute('href')).toContain('1')
     })
   })
@@ -241,7 +240,6 @@ describe('bm-c1: BlogManagement Component testing', () => {
         })
 
       const tagIconNode = await waitForElement(() => getByRole('tag-icon'))
-      console.log(debug())
       expect(tagIconNode).toBeInTheDocument()
     })
   })
@@ -391,7 +389,7 @@ describe('bm-c1: BlogManagement Component testing', () => {
     expect((api.request as any).mock.calls[1][0].url).toContain('offset=9980')
   })
 
-  describe('bm-c1: <= tablet screen size', () => {
+  describe('bm-t-c1: <= tablet screen size', () => {
 
     beforeAll(() => {
       console.log('bm-c1: beforeAll: small screen size')
@@ -431,7 +429,7 @@ describe('bm-c1: BlogManagement Component testing', () => {
       })
     })
 
-    test("ltt3.  (EH) should display sort filter aisde when sort filter icon is clicked", async () => {
+    test("ltt3.  (EH) should display sort filter aisde when sort filter icon is clicked and should not start api request", async () => {
       api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
 
       await act(async () => {
@@ -444,24 +442,33 @@ describe('bm-c1: BlogManagement Component testing', () => {
         const filterSortAside = await waitForElement(() => getByRole('filter-sort-aside'))
         await wait(() => {
           expect(filterSortAside).toBeInTheDocument()
+          expect(api.request).toHaveBeenCalledTimes(1)
         })
       })
     })
 
-    test("ltt4. (lifecycle) should not the request when this component is updated", async () => {
-      api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
+    /** fail when run tests together but pass when individual **/
+    /** reason is screen size was reset or have different value **/
+    /** for now, merge this test with 'ltt3' test **/
+    //test("ltt4. (lifecycle) should not the request when this component is updated", async () => {
+    //  api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200EmptyResponse))
 
-      await act(async () => {
-        const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-          <ContextWrapperComponent component={BlogManagement} isAuth />
-        )
-        const filterSortIcon = getByRole('filter-sort-icon')
-        fireEvent.click(filterSortIcon) // this is the cause of async time out
+    //  await act(async () => {
+    //    const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
+    //      <ContextWrapperComponent component={BlogManagement} isAuth />
+    //    )
 
-        const filterSortAside = await waitForElement(() => getByRole('filter-sort-aside'))
-        expect(api.request).toHaveBeenCalledTimes(1)
-      })
-    })
+    //    console.log(debug())
+    //    console.log(window.innerWidth)
+
+    //    const filterSortIcon = await waitForElement(() => getByRole('filter-sort-icon'))
+    //    fireEvent.click(filterSortIcon) // this is the cause of async time out
+
+    //    await wait(() => {
+    //      expect(api.request).toHaveBeenCalledTimes(1)
+    //    })
+    //  })
+    //})
 
 
     afterEach(() => {
