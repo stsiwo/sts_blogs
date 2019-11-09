@@ -91,8 +91,13 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
     path: path,
     method: RequestMethodEnum.GET,
     callback: (data: UserResponseDataType) => {
+      console.log('api fetch callback start')
       if (data) {
-        setUser(data.user)
+        console.log('data is available')
+        console.log(data)
+        setUser({ 
+          ...data.user 
+        })
       }
     }
   })

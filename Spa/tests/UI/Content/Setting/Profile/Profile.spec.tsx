@@ -25,14 +25,15 @@ describe('bm-c1: Profile Component testing', () => {
    * ** all **
    *
    * a1. (api fetch) should start api request when this component is mounted
-   * a2. (api fetch) should not start api request when this component is updated
-   * a3. (validation) should not allow to update when user name is null/empty 
-   * a4. (validation) should not allow to update when email is null/empty 
-   * a5. (validation) should not allow to update when password is null/empty 
-   * a6. (validation) should not allow to update when confirm is null/empty 
-   * a7. (EH) should start update request when 'update' is clicked 
-   * a8. (DOM) should show 'update success' message when update completed 
-   * a9. (DOM) should show 'update failure' message when update failed 
+   * a2. (DOM) should display user data in each input field after initial api request 
+   * a3. (api fetch) should not start api request when this component is updated
+   * a4. (validation) should not allow to update when user name is null/empty 
+   * a5. (validation) should not allow to update when email is null/empty 
+   * a6. (validation) should not allow to update when password is null/empty 
+   * a7. (validation) should not allow to update when confirm is null/empty 
+   * a8. (EH) should start update request when 'update' is clicked 
+   * a9. (DOM) should show 'update success' message when update completed 
+   * a10. (DOM) should show 'update failure' message when update failed 
    *
    **/
 
@@ -56,7 +57,21 @@ describe('bm-c1: Profile Component testing', () => {
     expect(api.request).toHaveBeenCalled()
   })
 
-  test('a2. (api fetch) should not start api request when this component is updated', async () => {
+  test('a2. (DOM) should display user data in each input field after initial api request ', async () => {
+
+    api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={Profile} isAuth />
+      )
+
+      await wait(() => {
+        expect(getByLabelText('Name:').getAttribute('value')).toBeTruthy()
+      })
+    })
+  })
+
+  test('a3. (api fetch) should not start api request when this component is updated', async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
     await act(async () => {
@@ -72,6 +87,27 @@ describe('bm-c1: Profile Component testing', () => {
         })
       await wait(() => {
         expect(api.request).toHaveBeenCalledTimes(1)
+      })
+    })
+  })
+
+  test('a4. (validation) should not allow to update when user name is null/empty', async () => {
+
+    api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={Profile} isAuth />
+      )
+      const nameInput = await waitForElement(() => getByLabelText('Name:'))
+      debug()
+      fireEvent.change(nameInput,
+        {
+          target: {
+            value: ''
+          }
+        })
+      await wait(() => {
+
       })
     })
   })
