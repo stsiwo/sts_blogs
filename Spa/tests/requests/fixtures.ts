@@ -1,6 +1,17 @@
 import { AxiosResponse } from "axios";
 import { getBlogTestData } from "../data/BlogFaker";
-import { ErrorResponseDataType, BlogListResponseDataType } from "../../src/requests/types";
+import { ErrorResponseDataType, BlogListResponseDataType, UserResponseDataType } from "../../src/requests/types";
+import { getUserTestData } from "../data/UserFaker";
+
+export const userGET200Response: AxiosResponse<UserResponseDataType> = {
+  data: {
+    user: getUserTestData(1, true)[0]
+  },
+  status: 200,
+  statusText: 'OK',
+  headers: {},
+  config: {},
+}
 
 export const blogGET200NonEmptyResponse: AxiosResponse<BlogListResponseDataType> = {
   data: {

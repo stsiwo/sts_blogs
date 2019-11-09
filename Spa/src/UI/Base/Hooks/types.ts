@@ -13,18 +13,22 @@ export declare type RequestStatusPropType = {
   setRequestStatus: React.Dispatch<React.SetStateAction<RequestStatusType>>
 }
 
-
-export declare type UseRequestStatusInputType<T = any> = {
+export declare type FetchDataArgType = {
   path: string
   method?: RequestMethodEnum
+  headers?: any
+  data?: any
   queryString?: QueryStringType
   callback?: (data: any) => void
+}
+
+export declare type UseRequestStatusInputType<T = any> = {
 }
 
 export declare type UseRequestStatusOutputType = {
   currentRequestStatus: RequestStatusType
   setRequestStatus: React.Dispatch<React.SetStateAction<RequestStatusType>>
-  fetchData: () => void
+  fetchData: (args: FetchDataArgType) => void
 }
 
 

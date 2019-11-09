@@ -1,5 +1,6 @@
 import { BlogType } from "../domain/blog/BlogType";
 import { CancelToken } from "axios";
+import { UserType } from "../domain/user/UserType";
 
 export enum ResponseResultStatusEnum {
   INITIAL,
@@ -32,6 +33,10 @@ export declare type ResponseBaseDataType = {
 
 export declare type BlogListResponseDataType = ResponseBaseDataType & {
   blogs: BlogType[]
+}
+
+export declare type UserResponseDataType = {
+  user: UserType
 }
 
 export declare type RequestContentType = {

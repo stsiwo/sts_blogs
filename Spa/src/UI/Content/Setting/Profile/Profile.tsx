@@ -3,8 +3,11 @@ import * as yup from 'yup';
 import { initialUserState, UserType } from '../../../../domain/user/UserType';
 import { initialUserInputTouchedState, initialUserValidationState, UserInputTouchedType, UserValidationType } from '../../../../domain/user/UserValidationType';
 import { request } from '../../../../requests/request';
-import { RequestMethodEnum, ResponseResultStatusEnum, ResponseResultType } from '../../../../requests/types';
+import { RequestMethodEnum, ResponseResultStatusEnum, ResponseResultType, UserResponseDataType } from '../../../../requests/types';
 import './Profile.scss';
+import { useAuthContext } from '../../../Base/Context/AuthContext/AuthContext';
+import { useApiFetch } from '../../../Base/Components/ApiFetch/useApiFetch';
+import { useRequest } from '../../../Base/Hooks/useRequest';
 
 
 const Profile: React.FunctionComponent<{}> = (props: {}) => {
@@ -21,10 +24,10 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
     status: ResponseResultStatusEnum.INITIAL
   })
 
-  const userId = 1 // need to get from somewhere
-
-  const path: string = '/users/' + userId
+  const path: string = '/users/' + currentUser.id
   const method: RequestMethodEnum = RequestMethodEnum.PUT
+
+  const { currentRequestStatus, setRequestStatus, fetchData } = useRequest({})
 
   let schema = yup.object().shape<UserType>({
     id: yup.string(),
@@ -67,37 +70,12 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
     return () => {
     };
   }, [
-      ...Object.keys(currentUser).map(key => currentUser[key as keyof UserType]),
+      currentUser.name,
+      currentUser.email,
+      currentUser.password,
+      currentUser.confirm,
       ...Object.keys(currentInputTouched).map(key => currentInputTouched[key as keyof UserInputTouchedType]) // for update when input focus
     ]);
-
-  React.useEffect(() => {
-    async function fetchUserData() {
-      setGetFetchStatus({
-        status: ResponseResultStatusEnum.FETCHING
-      })
-      await request({
-        url: '/users/' + userId,
-        method: RequestMethodEnum.GET
-      })
-        .then((responseResult: ResponseResultType) => {
-          setGetFetchStatus({
-            status: responseResult.status,
-            data: responseResult.data,
-          })
-          setUser(responseResult.data.user)
-        })
-        .catch((responseResult: ResponseResultType) => {
-          setGetFetchStatus({
-            status: responseResult.status,
-            errorMsg: responseResult.errorMsg,
-          })
-        })
-    }
-    fetchUserData()
-    return () => {
-    };
-  }, []);
 
   const mapStateToFormData = (state: UserType): FormData => {
     const formData = new FormData()
@@ -108,6 +86,16 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
     formData.set('avatarImage', state.avatarImage)
     return formData
   }
+
+  const { currentFetchStatus, setFetchStatus } = useApiFetch({
+    path: path,
+    method: RequestMethodEnum.GET,
+    callback: (data: UserResponseDataType) => {
+      if (data) {
+        setUser(data.user)
+      }
+    }
+  })
 
   const handleImageUploadChange: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
     const imgFile: File = e.currentTarget.files[0]
@@ -162,37 +150,17 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
     console.log('clicked update butuon')
     // final check validation ...
     schema.validate(currentUser, {
-      abortEarly: false 
+      abortEarly: false
     })
       .then(async () => {
         console.log('validation passed')
-        // initialize FormData and map state to items of FormDate
-        const formData: FormData = mapStateToFormData(currentUser)
 
-        // set headers (multipart/form-data)
-        const headers: {} = { 'content-type': 'multipart/form-data' }
-
-        setPutRequestStatus({
-          status: ResponseResultStatusEnum.FETCHING
-        })
-        // send request
-        await request({
-          url: path,
+        fetchData({
+          path: path,
           method: method,
-          headers: headers,
-          data: formData
+          headers: { 'content-type': 'multipart/form-data' },
+          data: mapStateToFormData(currentUser)
         })
-          .then((responseResult: ResponseResultType) => {
-            setPutRequestStatus({
-              status: responseResult.status
-            })
-          })
-          .catch((responseResult: ResponseResultType) => {
-            setPutRequestStatus({
-              status: responseResult.status,
-              errorMsg: responseResult.errorMsg
-            })
-          })
       })
       .catch((error: yup.ValidationError) => {
         console.log('validation failed')
@@ -225,7 +193,9 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
         <p className="profile-user-name-description">
           Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.
         </p>
-        <input type="text" name="name" placeholder="enter new user name..." className="input-text profile-user-name-input" value={currentUser.name} onChange={handleNameChangeEvent} onFocus={handleInitialFocusEvent} />
+        <label htmlFor="name" className="profile-user-name-label ">
+          <input type="text" name="name" placeholder="enter new user name..." className="input-text profile-user-name-input" value={currentUser.name} onChange={handleNameChangeEvent} onFocus={handleInitialFocusEvent} />
+        </label>
         {(currentValidationError.name && <div className="input-error">{currentValidationError.name}</div>)}
       </div>
       <div className="profile-email-wrapper">
@@ -233,7 +203,9 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
         <p className="profile-email-description">
           Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.
         </p>
-        <input type="text" name="email" placeholder="enter new email..." className="input-text profile-email-input" value={currentUser.email} onChange={handleEmailChangeEvent} onFocus={handleInitialFocusEvent} />
+        <label htmlFor="email" className="profile-user-email-label ">
+          <input type="text" name="email" placeholder="enter new email..." className="input-text profile-email-input" value={currentUser.email} onChange={handleEmailChangeEvent} onFocus={handleInitialFocusEvent} />
+        </label>
         {(currentValidationError.email && <div className="input-error">{currentValidationError.email}</div>)}
       </div>
       <div className="profile-password-wrapper">
@@ -241,8 +213,12 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
         <p className="profile-password-description">
           Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.
         </p>
-        <input type="password" name="password" placeholder="enter new password..." className="input-text profile-password-input" value={currentUser.password} onChange={handlePasswordChangeEvent} onFocus={handleInitialFocusEvent} />
-        <input type="password" name="confirm" placeholder="enter new password again..." className="input-text profile-password-confirm-input" value={currentUser.confirm} onChange={handleConfirmChangeEvent} onFocus={handleInitialFocusEvent} />
+        <label htmlFor="password" className="profile-user-password-label ">
+          <input type="password" name="password" placeholder="enter new password..." className="input-text profile-password-input" value={currentUser.password} onChange={handlePasswordChangeEvent} onFocus={handleInitialFocusEvent} />
+        </label>
+        <label htmlFor="confirm" className="profile-user-confirm-label ">
+          <input type="password" name="confirm" placeholder="enter new password again..." className="input-text profile-password-confirm-input" value={currentUser.confirm} onChange={handleConfirmChangeEvent} onFocus={handleInitialFocusEvent} />
+        </label>
         {(currentValidationError.password && <div className="input-error">{currentValidationError.password}</div>)}
         {(currentValidationError.confirm && <div className="input-error">{currentValidationError.confirm}</div>)}
       </div>

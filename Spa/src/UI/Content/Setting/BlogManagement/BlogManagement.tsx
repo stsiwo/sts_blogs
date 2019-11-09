@@ -48,11 +48,6 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   const { currentFilters, currentSort, setFilters, setSort } = useBlogFilterSort({})
   const { currentRefreshStatus, setRefreshStatus } = useRefreshBtn({})
   const { currentRequestStatus, setRequestStatus, fetchData } = useRequest({
-    path: '/users/' + userId + '/blogs',
-    method: RequestMethodEnum.DELETE,
-    callback: (data: BlogListResponseDataType): void => {
-      // operation after successful delete request
-    }
   })
   const callbackAfterApiFetch = (data: BlogListResponseDataType): void => {
     // assign fetched blogs data to this state
@@ -101,7 +96,13 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const handleDeleteBlogClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
-    fetchData()
+    fetchData({
+      path: '/users/' + userId + '/blogs',
+      method: RequestMethodEnum.DELETE,
+      callback: (data: BlogListResponseDataType): void => {
+        // operation after successful delete request
+      }
+    })
   }
   /** render **/
   const renderBlogs = (blogs: BlogType[]): React.ReactNode => {

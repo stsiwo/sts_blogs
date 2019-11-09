@@ -1,9 +1,10 @@
 import * as React from 'react'
-import { UseRequestStatusInputType, UseRequestStatusOutputType, RequestStatusType } from "./types";
-import { ResponseResultStatusEnum, ResponseResultType } from '../../../requests/types';
+import { UseRequestStatusInputType, UseRequestStatusOutputType, RequestStatusType, FetchDataArgType } from "./types";
+import { ResponseResultStatusEnum, ResponseResultType, QueryStringType, RequestMethodEnum } from '../../../requests/types';
 import { buildQueryString } from '../../../utils';
 import { request } from '../../../requests/request';
 import { AxiosError } from 'axios';
+
 
 export const useRequest = (input: UseRequestStatusInputType): UseRequestStatusOutputType => {
 
@@ -11,15 +12,15 @@ export const useRequest = (input: UseRequestStatusInputType): UseRequestStatusOu
     status: ResponseResultStatusEnum.INITIAL
   })
 
-  const encodedQueryString = buildQueryString(input.queryString)
-
-  async function fetchData() {
+  async function fetchData(args: FetchDataArgType) {
     setRequestStatus({
       status: ResponseResultStatusEnum.FETCHING,
     })
     await request({
-      url: input.path + encodedQueryString,
-      ...(input.method && { method: input.method }),
+      url: args.path + buildQueryString(args.queryString),
+      ...(args.method && { method: args.method }),
+      ...(args.headers && { headers: args.headers }),
+      ...(args.data && { data: args.data })
     })
       .then((responseResult: ResponseResultType) => {
         /** this include 'catch' clause of 'requests' method **/
@@ -33,11 +34,11 @@ export const useRequest = (input: UseRequestStatusInputType): UseRequestStatusOu
          * e.g., assign domain data
          * e.g., assign new total count of pagination
          **/
-        input.callback(responseResult.data)
+        args.callback(responseResult.data)
       })
       .catch((error: AxiosError) => {
         /** this is called when above 'then' caluse failed **/
-        /** esp, 'input.callback' internal error **/
+        /** esp, 'args.callback' internal error **/
         setRequestStatus({
           status: ResponseResultStatusEnum.FAILURE,
           errorMsg: error.message
