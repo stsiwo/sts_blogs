@@ -7,7 +7,7 @@ import { api } from "../../../../src/requests/api";
 import { blogGET200NonEmptyResponse, delay, blogGET200EmptyResponse } from "../../../requests/fixtures";
 import { act } from 'react-dom/test-utils';
 // import react-testing methods
-import { render, fireEvent, waitForElement, queryByText, wait } from '@testing-library/react'
+import { render, fireEvent, waitForElement, queryByText, wait, queryByRole } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 jest.mock('../../../../src/requests/api')
 
@@ -411,6 +411,21 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
         await wait(() => {
           expect(getByRole('filter-sort-icon')).toBeInTheDocument()
+        })
+      })
+    })
+
+    test("ltt2. (responsive) should not display sort filter aside ", async () => {
+      api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
+
+      await act(async () => {
+        const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
+          <ContextWrapperComponent component={BlogList} />
+        )
+
+        await wait(() => {
+          const filterSortAside = queryByRole(container, 'filter-sort-aside')
+          expect(filterSortAside).toBeNull()
         })
       })
     })

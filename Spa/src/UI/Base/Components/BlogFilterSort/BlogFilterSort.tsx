@@ -168,7 +168,7 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
   const newLink = auth.authed ? url + 'new' : '/login'
 
   return (
-    <aside className="aside-wrapper" ref={filterSortBarWrapperRef}>
+    <aside role="filter-sort-aside" className="aside-wrapper" ref={filterSortBarWrapperRef}>
       <ul className="aside-ul">
         <li className="aside-li">
           <Link to={newLink} className="aside-new-blog-link" role='new-blog-link'>
