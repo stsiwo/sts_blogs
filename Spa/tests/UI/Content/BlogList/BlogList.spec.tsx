@@ -447,6 +447,21 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
       })
     })
 
+    test("ltt4. (lifecycle) should not the request when this component is updated", async () => {
+      api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
+
+      await act(async () => {
+        const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
+          <ContextWrapperComponent component={BlogList} />
+        )
+        const filterSortIcon = getByRole('filter-sort-icon')
+        fireEvent.click(filterSortIcon)
+
+        const filterSortAside = await waitForElement(() => getByRole('filter-sort-aside'))
+      })
+      expect(api.request).toHaveBeenCalledTimes(1)
+    })
+
     afterEach(() => {
       console.log('bl-c1: afterEach: small screen size ')
     })

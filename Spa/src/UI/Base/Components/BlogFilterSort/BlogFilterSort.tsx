@@ -160,12 +160,12 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
     })
   }
 
+  const { auth } = useAuthContext()
+  const newLink = auth.authed ? url + 'new' : '/login'
+
   if (currentWidth <= cssGlobal.tabletSize && !isFilterSortBarOpen) {
     return <Icon role='filter-sort-icon' label="??" css="blog-management-sort-filter-icon" onClick={handleFilterSortNavClickEvent} />
   }
-
-  const { auth } = useAuthContext()
-  const newLink = auth.authed ? url + 'new' : '/login'
 
   return (
     <aside role="filter-sort-aside" className="aside-wrapper" ref={filterSortBarWrapperRef}>
