@@ -9,21 +9,25 @@ import { CssGlobalContextDefaultState } from './UI/Base/Context/CssGlobalContext
 import './UI/Base/Css/Common.scss';
 import Content from './UI/Content/Content';
 import Header from './UI/Header/Header';
+import { getUserTestData } from '../tests/data/UserFaker';
 
 // test user login
 
 const App = (props: any) => {
-  const [ auth, dispatch ] = useUpdateAuthContextReducer()
+  const [auth, dispatch] = useUpdateAuthContextReducer({
+    authed: true,
+    user: getUserTestData(1)[0]
+  })
   return (
     <div>
       <CssGlobalContext.Provider value={CssGlobalContextDefaultState}>
         <AuthContext.Provider value={{ auth, dispatch }}>
-        <Provider store={store}>
-          <Router>
-            <Header />
-            <Content />
-          </Router>
-        </Provider>
+          <Provider store={store}>
+            <Router>
+              <Header />
+              <Content />
+            </Router>
+          </Provider>
         </AuthContext.Provider>
       </CssGlobalContext.Provider>
     </div>

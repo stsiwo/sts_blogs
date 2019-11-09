@@ -7,13 +7,9 @@ export declare type AuthRoutePropType = {
   [key: string]: any
 }
 
-export const AuthRoute: React.FunctionComponent<AuthRoutePropType> = ({ component: Component, ...rest }) => (
-  <Route {...rest} render={(props: RouteProps) => {
-
+export const AuthRoute: React.FunctionComponent<AuthRoutePropType> = ({ component: Component, ...rest }) => {
     const { auth } = useAuthContext()
-
+  console.log(auth)
     if (!auth.authed) return <Redirect to='/login' />
-
-    return <Component {...props} />
-  }} />
-)
+    return <Route {...rest} render={(props: RouteProps) => <Component {...props} />} /> 
+}
