@@ -10,6 +10,7 @@ import { act } from 'react-dom/test-utils';
 import { render, fireEvent, waitForElement, queryByText, wait, queryByRole } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 jest.mock('../../../../src/requests/api')
+jest.setTimeout(30000);
 
 
 describe('bl-c1: MenuToogleIcon Component testing', () => {
@@ -148,8 +149,10 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
   })
 
   test("a8. (responsive) should display 'no blog' message after successful api request when blog does not exist", async () => {
+    (api.request as any).mockClear()
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200EmptyResponse))
 
+    console.log(api.request)
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
         <ContextWrapperComponent component={BlogList} />
@@ -409,9 +412,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
           <ContextWrapperComponent component={BlogList} />
         )
 
-        await wait(() => {
-          expect(getByRole('filter-sort-icon')).toBeInTheDocument()
-        })
+        expect(getByRole('filter-sort-icon')).toBeInTheDocument()
       })
     })
 
@@ -455,12 +456,13 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
           <ContextWrapperComponent component={BlogList} />
         )
         const filterSortIcon = getByRole('filter-sort-icon')
-        fireEvent.click(filterSortIcon)
+        fireEvent.click(filterSortIcon) // this is the cause of async time out
 
         const filterSortAside = await waitForElement(() => getByRole('filter-sort-aside'))
+        expect(api.request).toHaveBeenCalledTimes(1)
       })
-      expect(api.request).toHaveBeenCalledTimes(1)
     })
+
 
     afterEach(() => {
       console.log('bl-c1: afterEach: small screen size ')
