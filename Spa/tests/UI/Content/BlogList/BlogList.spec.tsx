@@ -252,6 +252,29 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
     })
     expect(api.request).toHaveBeenCalledTimes(2)
+    expect((api.request as any).mock.calls[1][0].url).toContain('tags=test-tag')
+  })
+
+  test("a15. (EH) should start api request when new keyword is entered and url must contain the keyword", async () => {
+    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200EmptyResponse))
+
+    await act(async () => {
+      const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
+        <ContextWrapperComponent component={BlogList} />
+      )
+      await waitForElement(() => getByText('blogs are empty'))
+      const keywordInput = getByLabelText('Keyword')
+      fireEvent.change(keywordInput,
+        {
+          target:
+          {
+            value: 'test-keyword',
+          },
+        })
+
+    })
+    expect(api.request).toHaveBeenCalledTimes(2)
+    expect((api.request as any).mock.calls[1][0].url).toContain('keyword=test-keyword')
   })
 
   describe('bl-c1: <= tablet screen size', () => {

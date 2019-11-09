@@ -60,13 +60,16 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
     props.setSort(parseInt(e.currentTarget.value))
   }
 
-  const handleKeywordChangeEvent: React.EventHandler<React.KeyboardEvent<HTMLInputElement>> = (e) => {
+  const handleKeywordChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
+    console.log('handling keyword change ...')
     if (e.currentTarget.value === "") return false
 
-    if (e.key == 'Enter' || e.key == 'Tab') {
-      props.currentFilters.keyword = e.currentTarget.value
-      props.setFilters(props.currentFilters)
-    }
+    console.log(e.currentTarget.value)
+
+    props.currentFilters.keyword = e.currentTarget.value
+    props.setFilters({
+      ...props.currentFilters
+    })
   }
 
   const handleFilterSortNavClickEvent: React.EventHandler<React.MouseEvent<HTMLElement>> = (e) => {
@@ -82,7 +85,7 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
   React.useEffect(() => {
     /** must enable componentdidupdate also, otherwise not close when click outside **/
     const handleFilterSortNavCloseWhenOutsideClickEvent = (e: Event) => {
-      
+
       console.log('add event listener during this component is mounted')
       if (filterSortBarWrapperRef.current.contains(e.target)) {
 
@@ -133,7 +136,7 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
   const renderCurrentTags = () => {
     return props.currentFilters.tags.map((tag: TagType) => {
       return (
-        <Tag name={tag.name} withCancelBtn key={tag.name}/>
+        <Tag name={tag.name} withCancelBtn key={tag.name} />
       )
     })
   }
@@ -142,7 +145,7 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
     return sortList.map((sort: SortType) => {
       return (
         <div className="aside-sort-item-wrapper" key={sort.value}>
-          <input type='radio' className="" value={sort.value} key={sort.value} checked={sort.value === props.currentSort} onChange={handleSortChangeEvent}/>
+          <input type='radio' className="" value={sort.value} key={sort.value} checked={sort.value === props.currentSort} onChange={handleSortChangeEvent} />
           <span>{sort.title}</span>
         </div>
       )
@@ -151,7 +154,7 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
 
   if (currentWidth <= cssGlobal.tabletSize && !isFilterSortBarOpen) {
     return <Icon label="??" css="blog-management-sort-filter-icon" onClick={handleFilterSortNavClickEvent} />
-  } 
+  }
 
   const { auth } = useAuthContext()
   const newLink = auth.authed ? url + 'new' : '/login'
@@ -173,8 +176,8 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
             {renderCurrentTags()}
           </div>
           <div className="aside-filter-keyword-wrapper" >
-            <h4 className="aside-filter-keyword-title">Keywords</h4>
-            <input type="text" className="aside-filter-keyword-input" onKeyDown={handleKeywordChangeEvent}/>
+            <label htmlFor="keyword" className="aside-filter-keyword-label">Keyword</label>
+            <input type="text" name="keyword" id="keyword" className="aside-filter-keyword-input" onChange={handleKeywordChangeEvent} value={props.currentFilters.keyword}/>
           </div>
           <div className="aside-filter-date-wrapper" >
             <h4 className="aside-filter-date-title">Date</h4>
@@ -201,7 +204,7 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
           </div>
         </li>
       </ul>
-    {( currentWidth <= cssGlobal.tabletSize && <div className="aside-filter-sort-close-icon" onClick={handleFilterSortNavCloseClickEvent}>&#10005;</div>)}
+      {(currentWidth <= cssGlobal.tabletSize && <div className="aside-filter-sort-close-icon" onClick={handleFilterSortNavCloseClickEvent}>&#10005;</div>)}
     </aside>
   );
 }
