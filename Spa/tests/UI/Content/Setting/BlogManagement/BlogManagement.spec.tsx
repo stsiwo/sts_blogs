@@ -177,12 +177,26 @@ describe('bm-c1: BlogManagement Component testing', () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
         <ContextWrapperComponent component={BlogManagement} isAuth />
       )
-      const editLinks = await waitForElement(() => getAllByRole('blog-edit-link'))
-      expect(editLinks[0].getAttribute('href')).toContain('1')
+      const deleteBtns = await waitForElement(() => getAllByRole('blog-delete-link'))
+      expect(deleteBtns[0].getAttribute('href')).toContain('1')
     })
   })
 
   test("a10. (blog mangement) should should start api request for deleting when 'delete' is click at controller element", async () => {
+    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
+    await act(async () => {
+      const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
+        <ContextWrapperComponent component={BlogManagement} isAuth />
+      )
+      const deleteBtns = await waitForElement(() => getAllByRole('blog-delete-btn'))
+      fireEvent.click(deleteBtns[0])
+      
+      await wait(() => {
+        expect(api.request).toHaveBeenCalledTimes(2)
+        expect((api.request as any).mock.calls[1][0].url).toContain('1')
+        expect((api.request as any).mock.calls[1][0].method).toContain('delete')
+      })
+    })
   })
 
   test("a11. (filter sort) should not display 'member only' message at 'create new blog' button", async () => {
