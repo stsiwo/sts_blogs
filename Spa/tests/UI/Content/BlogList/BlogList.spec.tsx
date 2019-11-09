@@ -500,6 +500,20 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
       })
     })
 
+    test("gtt2. (responsive) should display sort filter aside ", async () => {
+      api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
+
+      await act(async () => {
+        const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
+          <ContextWrapperComponent component={BlogList} />
+        )
+
+        await wait(() => {
+          expect(getByRole('filter-sort-aside')).toBeInTheDocument()
+        })
+      })
+    })
+
 
     afterEach(() => {
       console.log('bl-c1: afterEach: medium screen size')
