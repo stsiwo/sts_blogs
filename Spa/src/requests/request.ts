@@ -35,6 +35,12 @@ export const request = async (request: RequestContentType): Promise<ResponseResu
     } as ResponseResultType
 
   }).catch((error: AxiosError<ErrorResponseDataType>) => {
+    /**
+     * # REFACTOR
+     * need to re-implement this to throw error so that client's 'then' and 'catch' receive appropriate object from here: 
+     * - 'then' receive above successful object with 'data'
+     * - 'catch' receive below failed object with 'errorMsg'
+     **/
     console.log('api request failed.')
 
     /** handle when cancel request **/
