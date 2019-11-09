@@ -50,8 +50,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
    *
    * ltt1. (responsive) should display sort filter icon
    * ltt2. (responsive) should not display sort filter aside 
-   * ltt3. (EH) should display sort filter aisde when sort filter icon is clicked
-   * ltt4. (lifecycle) should not the request when this component is updated
+   * ltt3.  (EH) should display sort filter aisde when sort filter icon is clicked and should not start api request
    *
    * ** > tablet **
    *
@@ -147,16 +146,16 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
   })
 
   test("a8. (responsive) should display 'no blog' message after successful api request when blog does not exist", async () => {
-    (api.request as any).mockClear()
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200EmptyResponse))
 
-    console.log(api.request)
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
         <ContextWrapperComponent component={BlogList} />
       )
-      await waitForElement(() => getByText('blogs are empty'))
-      expect(getByText('blogs are empty')).toBeInTheDocument()
+      // ?? can't getByText event if debug show it is there
+      await wait(() => {
+        expect(getByText('blogs are empty')).toBeInTheDocument()
+      })
     })
   })
 
@@ -429,7 +428,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
       })
     })
 
-    test("ltt3.  (EH) should display sort filter aisde when sort filter icon is clicked", async () => {
+    test("ltt3.  (EH) should display sort filter aisde when sort filter icon is clicked and should not start api request", async () => {
       api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
 
       await act(async () => {
@@ -442,25 +441,10 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
         const filterSortAside = await waitForElement(() => getByRole('filter-sort-aside'))
         await wait(() => {
           expect(filterSortAside).toBeInTheDocument()
+          expect(api.request).toHaveBeenCalledTimes(1)
         })
       })
     })
-
-    test("ltt4. (lifecycle) should not the request when this component is updated", async () => {
-      api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
-
-      await act(async () => {
-        const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-          <ContextWrapperComponent component={BlogList} />
-        )
-        const filterSortIcon = getByRole('filter-sort-icon')
-        fireEvent.click(filterSortIcon) // this is the cause of async time out
-
-        const filterSortAside = await waitForElement(() => getByRole('filter-sort-aside'))
-        expect(api.request).toHaveBeenCalledTimes(1)
-      })
-    })
-
 
     afterEach(() => {
       console.log('bl-c1: afterEach: small screen size ')
