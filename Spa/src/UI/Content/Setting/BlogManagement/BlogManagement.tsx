@@ -23,6 +23,7 @@ import { useRefreshBtn } from '../../../Base/Components/RefreshBtn/useRefreshBtn
 import RefreshBtn from '../../../Base/Components/RefreshBtn/RefreshBtn';
 import { getBlogTestData } from '../../../../../tests/data/BlogFaker';
 import { useAuthContext } from '../../../Base/Context/AuthContext/AuthContext';
+import { useRequest } from '../../../Base/Hooks/useRequest';
 
 const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
 
@@ -46,6 +47,13 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   const { currentPaginationStatus, setPaginationStatus } = usePagination({})
   const { currentFilters, currentSort, setFilters, setSort } = useBlogFilterSort({})
   const { currentRefreshStatus, setRefreshStatus } = useRefreshBtn({})
+  const { currentRequestStatus, setRequestStatus, fetchData } = useRequest({
+    path: '/users/' + userId + '/blogs',
+    method: RequestMethodEnum.DELETE,
+    callback: (data: BlogListResponseDataType): void => {
+      // operation after successful delete request
+    }
+  })
   const callbackAfterApiFetch = (data: BlogListResponseDataType): void => {
     // assign fetched blogs data to this state
     if (data) {
@@ -92,6 +100,9 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
     dispatch(toggleFilterSortBarActionCreator(false))
   }
 
+  const handleDeleteBlogClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
+    fetchData()
+  }
   /** render **/
   const renderBlogs = (blogs: BlogType[]): React.ReactNode => {
 
@@ -109,11 +120,10 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
             <button className="blog-management-item-controller" onClick={handleBlogControllerOpenClickEvent} id={blog.id}>&hellip;</button>
           </div>
           <div className="blog-management-item-controller-wrapper" ref={divRef} id={blog.id}>
-
-            <Link to={`${url}/${blog.id}`} className="blog-management-aside-new-blog-link">
-              <button className="blog-management-item-edit-btn" onClick={}>Edit</button>
+            <Link to={`./update/${blog.id}`} className="blog-management-blog-edit-link" role='blog-edit-link'>
+              <button className="blog-management-item-edit-btn">Edit</button>
             </Link>
-            <button className="blog-management-item-delete-btn" onClick={}>Delete</button>
+            <button role='blog-delete-btn' className="blog-management-item-delete-btn" onClick={handleDeleteBlogClickEvent}>Delete</button>
             <button className="blog-management-item-close-btn" onClick={handleBlogControllerCloseClickEvent} id={blog.id} >&#10005;</button>
           </div>
         </div>
