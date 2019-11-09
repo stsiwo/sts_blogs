@@ -21,6 +21,8 @@ import PageLimitSelect from '../../../Base/Components/Pagination/PageLimitSelect
 import { TagType } from '../../../../domain/tag/TagType';
 import { useRefreshBtn } from '../../../Base/Components/RefreshBtn/useRefreshBtn';
 import RefreshBtn from '../../../Base/Components/RefreshBtn/RefreshBtn';
+import { getBlogTestData } from '../../../../../tests/data/BlogFaker';
+import { useAuthContext } from '../../../Base/Context/AuthContext/AuthContext';
 
 const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
 
@@ -35,6 +37,8 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   const isFilterSortBarOpen = useSelector((state: StateType) => state.ui.isFilterSortBarOpen)
 
   /** hooks **/
+  const { auth } = useAuthContext()
+  const userId = auth.user.id
   const dispatch = useDispatch()
   const currentWidth = useResponsiveComponent()
   const cssGlobal = useCssGlobalContext()
@@ -65,7 +69,7 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
     sort: currentSort,
   }
   const { currentFetchStatus, setFetchStatus } = useApiFetch({
-    path: '/blogs',
+    path: '/users/' + userId + '/blogs',
     method: RequestMethodEnum.GET,
     queryString: queryString,
     callback: callbackAfterApiFetch
@@ -97,7 +101,7 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
       }
       controllerRefs.set(blog.id, divRef)
       return (
-        <div className="blog-management-item-wrapper" key={blog.id} role='blog-item'>
+        <div className="blog-management-item-wrapper" key={blog.id} role='blog-item' >
           <img src="" alt="blog item" className="blog-management-item-img" />
           <h3 className="blog-management-item-title">{blog.title}</h3>
           <div className="blog-management-item-created-date">{blog.createdDate.toLocaleDateString("en-US", dateFormatOption)}</div>
@@ -107,10 +111,10 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
           <div className="blog-management-item-controller-wrapper" ref={divRef} id={blog.id}>
 
             <Link to={`${url}/${blog.id}`} className="blog-management-aside-new-blog-link">
-              <button className="blog-management-item-edit-btn">Edit</button>
+              <button className="blog-management-item-edit-btn" onClick={}>Edit</button>
             </Link>
-            <button className="blog-management-item-delete-btn">Delete</button>
-            <button className="blog-management-item-close-btn" onClick={handleBlogControllerCloseClickEvent} id={blog.id}>&#10005;</button>
+            <button className="blog-management-item-delete-btn" onClick={}>Delete</button>
+            <button className="blog-management-item-close-btn" onClick={handleBlogControllerCloseClickEvent} id={blog.id} >&#10005;</button>
           </div>
         </div>
       )

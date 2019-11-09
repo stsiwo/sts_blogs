@@ -16,7 +16,7 @@ describe('bm-c1: BlogManagement Component testing', () => {
   /**
    * prerequisite 
    * 1. mock api request and return dummy blog list
-   * 2. role: guest and member
+   * 2. role: member only 
    * 3. reponsive screen 
    **/
 
@@ -25,32 +25,33 @@ describe('bm-c1: BlogManagement Component testing', () => {
    *
    * ** all **
    *
-   * a2. (lifecycle) should start api request when this component is mounted
-   * a4. (EH) should start api request when 'refresh' button is clicked
-   * a5. (EH) should cancel api request when 'cancel' button is clicked after 'refresh' button is clicked
-   * a6. (EH) should start api request with new limit value when page limit selector is changed
-   * a7. (responsive) should display a list of blog after successful api request when blog exists
-   * a8. (responsive) should display 'no blog' message after successful api request when blog does not exist
-   * a9. (responsive) (guest) should display 'member only' message at 'create new blog' button
-   * a10. (Route) (guest) should route guest user to login/signup when 'create new blog' is clicked
-   * a11. (DOM) (member) should not display 'member only' message at 'create new blog' button
-   * a12. (Route) (member) should route member user to /blogs/new  when 'create new blog' is clicked
-   * a13. (DOM) should display new tag when user enter new tag in tag input
-   * a14. (EH) should start api request when new tag is entered and url must contain the tag name
-   * a15. (EH) should start api request when new keyword is entered and url must contain the keyword 
-   * a16. (EH) should start api request when new startDate is entered and url must contain the startDate 
-   * a17. (EH) should start api request when new endDate is entered and url must contain the endDate 
-   * a18. (EH) should start api request when new sort is selected and url must contain the sort 
-   * a19. (Route) should route user to specified blog detail page when one of blog is clicked
-   * a20. (EH) should start api request when new page number is click and url must contain the number
-   * a21. (EH) should start api request when last page number is click and url must contain the number
+   * a1. (api fetch) should start api request when this component is mounted
+   * a2. (refresh) should start api request when 'refresh' button is clicked
+   * a3. (cancel) should cancel api request when 'cancel' button is clicked after 'refresh' button is clicked
+   * a4. (pagination) should start api request with new limit value when page limit selector is changed
+   * a5. (api fetch) should display a list of blog after successful api request when blog exists
+   * a6. (api fetch) should display 'no blog' message after successful api request when blog does not exist
+   * a7. (blog management) should display controller element when option icon is clicked at blog item row
+   * a8. (blog management) should close controller element when close icon is clicked at controller element 
+   * a9. (Route) should route member user to /blogs/{id}  when 'Edit' is clicked at controller element
+   * a10. (blog mangement) should should start api request for deleting when 'delete' is click at controller element 
+   * a11. (filter sort) should not display 'member only' message at 'create new blog' button
+   * a12. (filter sort) should route member user to /blogs/new  when 'create new blog' is clicked
+   * a13. (filter sort) should display new tag when user enter new tag in tag input
+   * a14. (filter sort) should start api request when new tag is entered and url must contain the tag name
+   * a15. (filter sort) should start api request when new keyword is entered and url must contain the keyword 
+   * a16. (filter sort) should start api request when new startDate is entered and url must contain the startDate 
+   * a17. (filter sort) should start api request when new endDate is entered and url must contain the endDate 
+   * a18. (filter sort) should start api request when new sort is selected and url must contain the sort 
+   * a19. (EH) should start api request when new page number is click and url must contain the number
+   * a20. (EH) should start api request when last page number is click and url must contain the number
    *
    * ** <= tablet **
    *
    * ltt1. (responsive) should display sort filter icon
    * ltt2. (responsive) should not display sort filter aside 
    * ltt3. (EH) should display sort filter aisde when sort filter icon is clicked
-   * ltt4. (lifecycle) should not the request when this component is updated
+   * ltt4. (lifecycle) should not api request when this component is updated
    *
    * ** > tablet **
    *
@@ -68,7 +69,7 @@ describe('bm-c1: BlogManagement Component testing', () => {
   })
 
   /** test for use case which does not matter screen size  here**/
-  test('a2. (lifecycle) should start api request when this component is mounted', async () => {
+  test('a1. (lifecycle) should start api request when this component is mounted', async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
     await act(async () => {
@@ -79,14 +80,14 @@ describe('bm-c1: BlogManagement Component testing', () => {
     expect(api.request).toHaveBeenCalled()
   })
 
-  test("a4. (EH) should start api request when 'refresh' button is clicked", async () => {
+  test("a2. (EH) should start api request when 'refresh' button is clicked", async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
     // should replace mock with real one
     api.CancelToken.source = jest.fn().mockReturnValue('cancel-token')
     await act(async () => {
       const { getByText, getByRole, getAllByRole } = render(
-        <ContextWrapperComponent component={BlogManagement} isAuth/>
+        <ContextWrapperComponent component={BlogManagement} isAuth />
       )
 
       // wait for initial fetch finish and render blog list
@@ -101,7 +102,7 @@ describe('bm-c1: BlogManagement Component testing', () => {
 
   })
 
-  test("a5. (EH) should cancel api request when 'cancel' button is clicked after 'refresh' button is clicked", async () => {
+  test("a3. (EH) should cancel api request when 'cancel' button is clicked after 'refresh' button is clicked", async () => {
 
     // api.request = jest.fn()
     //   .mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse)
@@ -113,12 +114,12 @@ describe('bm-c1: BlogManagement Component testing', () => {
 
   })
 
-  test("a6. (EH) should start api request with new limit value when page limit selector is changed", async () => {
+  test("a4. (EH) should start api request with new limit value when page limit selector is changed", async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
-        <ContextWrapperComponent component={BlogManagement} />
+        <ContextWrapperComponent component={BlogManagement} isAuth />
       )
       await waitForElement(() => getAllByRole('blog-item'))
 
@@ -132,57 +133,54 @@ describe('bm-c1: BlogManagement Component testing', () => {
     expect((api.request as any).mock.calls[1][0].url).toContain('limit=40')
   })
 
-  test("a7. (responsive) should display a list of blog after successful api request when blog exists", async () => {
+  test("a5. (responsive) should display a list of blog after successful api request when blog exists", async () => {
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
-        <ContextWrapperComponent component={BlogManagement} />
+        <ContextWrapperComponent component={BlogManagement} isAuth />
       )
       const blogListNode = await waitForElement(() => getAllByRole('blog-item'))
       expect(blogListNode.length).toBeGreaterThan(0)
     })
   })
 
-  test("a8. (responsive) should display 'no blog' message after successful api request when blog does not exist", async () => {
-    (api.request as any).mockClear()
-    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200EmptyResponse))
-
-    console.log(api.request)
-    await act(async () => {
-      const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
-        <ContextWrapperComponent component={BlogManagement} />
-      )
-      await waitForElement(() => getByText('blogs are empty'))
-      expect(getByText('blogs are empty')).toBeInTheDocument()
-    })
-  })
-
-  test("a9. (responsive) (guest) should display 'member only' message at 'create new blog' button", async () => {
+  test("a6. (responsive) should display 'no blog' message after successful api request when blog does not exist", async () => {
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200EmptyResponse))
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
-        <ContextWrapperComponent component={BlogManagement} />
+        <ContextWrapperComponent component={BlogManagement} isAuth />
       )
-      await waitForElement(() => getByText('blogs are empty'))
-      expect(getByText('Member Only')).toBeInTheDocument()
+      // ?? can't getByText event if debug show it is there
+      const blogEmptyNode = await waitForElement(() => getByText('blogs are empty'))
+      console.log(blogEmptyNode)
+      expect(blogEmptyNode).toBeInTheDocument()
     })
   })
 
-  test("a10. (Route) (guest) should route guest user to login/signup when 'create new blog' is clicked (just only check url string at Link component)", async () => {
-    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200EmptyResponse))
+  test("a7. (blog management) should display controller element when option icon is clicked at blog item row", async () => {
+    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
-        <ContextWrapperComponent component={BlogManagement} />
+        <ContextWrapperComponent component={BlogManagement} isAuth />
       )
-      expect(document.getElementsByClassName('aside-new-blog-link')[0].getAttribute('href')).toBe('/login')
-
+      const optionIcons = await waitForElement(() => getAllByRole('controller-option-icon'))
+      fireEvent.click(optionIcons[0])
     })
   })
 
-  test("a11. (DOM) (member) should not display 'member only' message at 'create new blog' button", async () => {
+  test("a8. (blog management) should close controller element when close icon is clicked at controller element", async () => {
+  })
+
+  test("a9. (Route) should route member user to /blogs/{id}  when 'Edit' is clicked at controller element", async () => {
+  })
+
+  test("a10. (blog mangement) should should start api request for deleting when 'delete' is click at controller element", async () => {
+  })
+
+  test("a11. (filter sort) should not display 'member only' message at 'create new blog' button", async () => {
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200EmptyResponse))
 
     await act(async () => {
@@ -191,11 +189,10 @@ describe('bm-c1: BlogManagement Component testing', () => {
       )
       const memberOnlyNode = queryByText(container, 'Member Only')
       expect(memberOnlyNode).toBeNull()
-
     })
   })
 
-  test("a12. (Route) (member) should route member user to /blogs/new  when 'create new blog' is clicked (just only check url string at Link component)", async () => {
+  test("a12. (filter sort) should route member user to /blogs/new  when 'create new blog' is clicked", async () => {
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200EmptyResponse))
 
     await act(async () => {
@@ -206,12 +203,12 @@ describe('bm-c1: BlogManagement Component testing', () => {
     })
   })
 
-  test("a13. (DOM) should display new tag when user enter new tag in tag input", async () => {
+  test("a13 (filter sort) should display new tag when user enter new tag in tag input", async () => {
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200EmptyResponse))
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-        <ContextWrapperComponent component={BlogManagement} />
+        <ContextWrapperComponent component={BlogManagement} isAuth />
       )
       await waitForElement(() => getByText('blogs are empty'))
       const tagInput = getByLabelText('Tags')
@@ -230,12 +227,12 @@ describe('bm-c1: BlogManagement Component testing', () => {
     })
   })
 
-  test("a14. (EH) should start api request when new tag is entered and url must contain the tag name", async () => {
+  test("a14. (filter sort) should start api request when new tag is entered and url must contain the tag name", async () => {
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200EmptyResponse))
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-        <ContextWrapperComponent component={BlogManagement} />
+        <ContextWrapperComponent component={BlogManagement} isAuth />
       )
       await waitForElement(() => getByText('blogs are empty'))
       const tagInput = getByLabelText('Tags')
@@ -253,12 +250,12 @@ describe('bm-c1: BlogManagement Component testing', () => {
     expect((api.request as any).mock.calls[1][0].url).toContain('tags=test-tag')
   })
 
-  test("a15. (EH) should start api request when new keyword is entered and url must contain the keyword", async () => {
+  test("a15. (filter sort) should start api request when new keyword is entered and url must contain the keyword", async () => {
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200EmptyResponse))
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-        <ContextWrapperComponent component={BlogManagement} />
+        <ContextWrapperComponent component={BlogManagement} isAuth />
       )
       await waitForElement(() => getByText('blogs are empty'))
       const keywordInput = getByLabelText('Keyword')
@@ -275,12 +272,12 @@ describe('bm-c1: BlogManagement Component testing', () => {
     expect((api.request as any).mock.calls[1][0].url).toContain('keyword=test-keyword')
   })
 
-  test("a16 (EH) should start api request when new startDate is entered and url must contain the startDate ", async () => {
+  test("a16. (filter sort) should start api request when new startDate is entered and url must contain the startDate", async () => {
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200EmptyResponse))
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-        <ContextWrapperComponent component={BlogManagement} />
+        <ContextWrapperComponent component={BlogManagement} isAuth />
       )
       await waitForElement(() => getByText('blogs are empty'))
       const startDateInput = getByLabelText('Start Date')
@@ -298,17 +295,17 @@ describe('bm-c1: BlogManagement Component testing', () => {
     expect((api.request as any).mock.calls[1][0].url).toContain('startDate=2019-11-13')
   })
 
-  test("a17. (EH) should start api request when new endDate is entered and url must contain the endDate", async () => {
+  test("a17. (filter sort) should start api request when new endDate is entered and url must contain the endDate", async () => {
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200EmptyResponse))
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-        <ContextWrapperComponent component={BlogManagement} />
+        <ContextWrapperComponent component={BlogManagement} isAuth />
       )
       await waitForElement(() => getByText('blogs are empty'))
-      const sortInput = getByLabelText('End Date')
+      const endDateInput = getByLabelText('End Date')
 
-      fireEvent.change(sortInput,
+      fireEvent.change(endDateInput,
         {
           target:
           {
@@ -321,12 +318,12 @@ describe('bm-c1: BlogManagement Component testing', () => {
     expect((api.request as any).mock.calls[1][0].url).toContain('endDate=2019-11-13')
   })
 
-  test("a18. (EH) should start api request when new sort is selected and url must contain the sort", async () => {
+  test("a18. (filter sort) should start api request when new sort is selected and url must contain the sort", async () => {
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200EmptyResponse))
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-        <ContextWrapperComponent component={BlogManagement} />
+        <ContextWrapperComponent component={BlogManagement} isAuth />
       )
       await waitForElement(() => getByText('blogs are empty'))
       const sortInput = getByLabelText('Title Desc')
@@ -347,24 +344,12 @@ describe('bm-c1: BlogManagement Component testing', () => {
     expect((api.request as any).mock.calls[1][0].url).toContain('sort=3')
   })
 
-  test("a19. (Route) should route user to specified blog detail page when one of blog is clicked (just only check url string at Link component)", async () => {
+  test("a19. (EH) should start api request when new page number is click and url must contain the number", async () => {
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-        <ContextWrapperComponent component={BlogManagement} />
-      )
-      await waitForElement(() => getAllByRole('blog-item'))
-    })
-    expect(document.getElementsByClassName('blog-list-items-item-wrapper')[0].getAttribute('href')).toBe('/blog/1')
-  })
-
-  test("a20.  (EH) should start api request when new page number is click and url must contain the number", async () => {
-    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
-
-    await act(async () => {
-      const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-        <ContextWrapperComponent component={BlogManagement} />
+        <ContextWrapperComponent component={BlogManagement} isAuth />
       )
       const thirdPageBtn = await waitForElement(() => getByText('3'))
       fireEvent.click(thirdPageBtn)
@@ -373,12 +358,12 @@ describe('bm-c1: BlogManagement Component testing', () => {
     expect((api.request as any).mock.calls[1][0].url).toContain('offset=40')
   })
 
-  test("a21. (EH) should start api request when last page number is click and url must contain the number", async () => {
+  test("a20. (EH) should start api request when last page number is click and url must contain the number", async () => {
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-        <ContextWrapperComponent component={BlogManagement} />
+        <ContextWrapperComponent component={BlogManagement} isAuth />
       )
       const lastPageBtn = await waitForElement(() => getByRole('last-page-btn'))
       fireEvent.click(lastPageBtn)
@@ -405,7 +390,7 @@ describe('bm-c1: BlogManagement Component testing', () => {
 
       await act(async () => {
         const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-          <ContextWrapperComponent component={BlogManagement} />
+          <ContextWrapperComponent component={BlogManagement} isAuth />
         )
 
         expect(getByRole('filter-sort-icon')).toBeInTheDocument()
@@ -417,7 +402,7 @@ describe('bm-c1: BlogManagement Component testing', () => {
 
       await act(async () => {
         const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-          <ContextWrapperComponent component={BlogManagement} />
+          <ContextWrapperComponent component={BlogManagement} isAuth />
         )
 
         await wait(() => {
@@ -432,7 +417,7 @@ describe('bm-c1: BlogManagement Component testing', () => {
 
       await act(async () => {
         const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-          <ContextWrapperComponent component={BlogManagement} />
+          <ContextWrapperComponent component={BlogManagement} isAuth />
         )
         const filterSortIcon = getByRole('filter-sort-icon')
         fireEvent.click(filterSortIcon)
@@ -449,7 +434,7 @@ describe('bm-c1: BlogManagement Component testing', () => {
 
       await act(async () => {
         const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-          <ContextWrapperComponent component={BlogManagement} />
+          <ContextWrapperComponent component={BlogManagement} isAuth />
         )
         const filterSortIcon = getByRole('filter-sort-icon')
         fireEvent.click(filterSortIcon) // this is the cause of async time out
@@ -488,7 +473,7 @@ describe('bm-c1: BlogManagement Component testing', () => {
 
       await act(async () => {
         const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-          <ContextWrapperComponent component={BlogManagement} />
+          <ContextWrapperComponent component={BlogManagement} isAuth />
         )
 
         await wait(() => {
@@ -503,7 +488,7 @@ describe('bm-c1: BlogManagement Component testing', () => {
 
       await act(async () => {
         const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-          <ContextWrapperComponent component={BlogManagement} />
+          <ContextWrapperComponent component={BlogManagement} isAuth />
         )
 
         await wait(() => {
