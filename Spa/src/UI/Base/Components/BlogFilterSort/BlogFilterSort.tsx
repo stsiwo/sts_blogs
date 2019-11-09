@@ -61,6 +61,8 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
   }
 
   const handleSortChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
+    console.log('handling sort change ...')
+    console.log(e.currentTarget.value)
     props.setSort(parseInt(e.currentTarget.value))
   }
 
@@ -149,8 +151,10 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
     return sortList.map((sort: SortType) => {
       return (
         <div className="aside-sort-item-wrapper" key={sort.value}>
-          <input type='radio' className="" value={sort.value} key={sort.value} checked={sort.value === props.currentSort} onChange={handleSortChangeEvent} />
-          <span>{sort.title}</span>
+          <label htmlFor={`sort-${sort.value}`} className="aside-filter-tags-label">
+            <input type='radio' id={`sort-${sort.value}`} name='sort' className="" value={sort.value} key={sort.value} checked={sort.value === props.currentSort} onChange={handleSortChangeEvent} />
+            {sort.title}
+          </label>
         </div>
       )
     })
@@ -181,7 +185,7 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
           </div>
           <div className="aside-filter-keyword-wrapper" >
             <label htmlFor="keyword" className="aside-filter-keyword-label">Keyword</label>
-            <input type="text" name="keyword" id="keyword" className="aside-filter-keyword-input" onChange={handleKeywordChangeEvent} value={props.currentFilters.keyword}/>
+            <input type="text" name="keyword" id="keyword" className="aside-filter-keyword-input" onChange={handleKeywordChangeEvent} value={props.currentFilters.keyword} />
           </div>
           <div className="aside-filter-date-wrapper" >
             <h4 className="aside-filter-date-title">Date</h4>
@@ -193,7 +197,7 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
               startDate={props.currentFilters.creationDate.start}
               maxDate={props.currentFilters.creationDate.end}
               id='start-date-input'
-              
+
             />
             <label htmlFor="end-date-input" className="aside-filter-end-date-label">End Date</label>
             <DatePicker

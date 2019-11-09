@@ -7,7 +7,7 @@ import { api } from "../../../../src/requests/api";
 import { blogGET200NonEmptyResponse, delay, blogGET200EmptyResponse } from "../../../requests/fixtures";
 import { act } from 'react-dom/test-utils';
 // import react-testing methods
-import { render, fireEvent, waitForElement, queryByText } from '@testing-library/react'
+import { render, fireEvent, waitForElement, queryByText, wait } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 jest.mock('../../../../src/requests/api')
 
@@ -308,9 +308,9 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
         <ContextWrapperComponent component={BlogList} />
       )
       await waitForElement(() => getByText('blogs are empty'))
-      const endDateInput = getByLabelText('End Date')
+      const sortInput = getByLabelText('End Date')
       
-      fireEvent.change(endDateInput,
+      fireEvent.change(sortInput,
         {
           target:
           {
@@ -322,6 +322,33 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
     expect(api.request).toHaveBeenCalledTimes(2)
     expect((api.request as any).mock.calls[1][0].url).toContain('endDate=2019-11-13')
   })
+
+  test("a18. (EH) should start api request when new sort is selected and url must contain the sort", async () => {
+    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200EmptyResponse))
+
+    await act(async () => {
+      const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
+        <ContextWrapperComponent component={BlogList} />
+      )
+      await waitForElement(() => getByText('blogs are empty'))
+      const sortInput = getByLabelText('Title Desc')
+
+      /** 
+       * #BUG??: fireEvent.change does not trigger event on radio input
+       **/
+      fireEvent.change(sortInput,
+        {
+          target:
+          {
+            value: '3',
+          },
+        })
+
+    })
+    expect(api.request).toHaveBeenCalledTimes(2)
+    expect((api.request as any).mock.calls[1][0].url).toContain('sort=3')
+  })
+
 
   describe('bl-c1: <= tablet screen size', () => {
 
