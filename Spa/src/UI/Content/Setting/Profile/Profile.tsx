@@ -194,7 +194,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
           Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.
         </p>
         <label htmlFor="name" className="profile-user-name-label ">
-          <input type="text" name="name" placeholder="enter new user name..." className="input-text profile-user-name-input" value={currentUser.name} onChange={handleNameChangeEvent} onFocus={handleInitialFocusEvent} />
+          Name: <input type="text" id="name" placeholder="enter new user name..." className="input-text profile-user-name-input" value={currentUser.name} onChange={handleNameChangeEvent} onFocus={handleInitialFocusEvent} />
         </label>
         {(currentValidationError.name && <div className="input-error">{currentValidationError.name}</div>)}
       </div>
@@ -204,7 +204,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
           Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.
         </p>
         <label htmlFor="email" className="profile-user-email-label ">
-          <input type="text" name="email" placeholder="enter new email..." className="input-text profile-email-input" value={currentUser.email} onChange={handleEmailChangeEvent} onFocus={handleInitialFocusEvent} />
+          Email: <input type="text" id="email" placeholder="enter new email..." className="input-text profile-email-input" value={currentUser.email} onChange={handleEmailChangeEvent} onFocus={handleInitialFocusEvent} />
         </label>
         {(currentValidationError.email && <div className="input-error">{currentValidationError.email}</div>)}
       </div>
@@ -214,10 +214,10 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
           Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.
         </p>
         <label htmlFor="password" className="profile-user-password-label ">
-          <input type="password" name="password" placeholder="enter new password..." className="input-text profile-password-input" value={currentUser.password} onChange={handlePasswordChangeEvent} onFocus={handleInitialFocusEvent} />
+          Password: <input type="password" id="password" placeholder="enter new password..." className="input-text profile-password-input" value={currentUser.password} onChange={handlePasswordChangeEvent} onFocus={handleInitialFocusEvent} />
         </label>
         <label htmlFor="confirm" className="profile-user-confirm-label ">
-          <input type="password" name="confirm" placeholder="enter new password again..." className="input-text profile-password-confirm-input" value={currentUser.confirm} onChange={handleConfirmChangeEvent} onFocus={handleInitialFocusEvent} />
+          Confirm: <input type="password" id="confirm" placeholder="enter new password again..." className="input-text profile-password-confirm-input" value={currentUser.confirm} onChange={handleConfirmChangeEvent} onFocus={handleInitialFocusEvent} />
         </label>
         {(currentValidationError.password && <div className="input-error">{currentValidationError.password}</div>)}
         {(currentValidationError.confirm && <div className="input-error">{currentValidationError.confirm}</div>)}

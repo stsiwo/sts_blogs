@@ -60,10 +60,19 @@ describe('bm-c1: Profile Component testing', () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
     await act(async () => {
-      const { getByText, getByRole, getAllByRole, debug } = render(
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Profile} isAuth />
       )
-      debug()
+      const nameInput = await waitForElement(() => getByLabelText('Name:'))
+      fireEvent.change(nameInput,
+        {
+          target: {
+            value: 'test'
+          }
+        })
+      await wait(() => {
+        expect(api.request).toHaveBeenCalledTimes(1)
+      })
     })
   })
 
