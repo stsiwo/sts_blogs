@@ -286,7 +286,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
       )
       await waitForElement(() => getByText('blogs are empty'))
       const startDateInput = getByLabelText('Start Date')
-      
+
       fireEvent.change(startDateInput,
         {
           target:
@@ -309,7 +309,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
       )
       await waitForElement(() => getByText('blogs are empty'))
       const sortInput = getByLabelText('End Date')
-      
+
       fireEvent.change(sortInput,
         {
           target:
@@ -347,6 +347,18 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
     })
     expect(api.request).toHaveBeenCalledTimes(2)
     expect((api.request as any).mock.calls[1][0].url).toContain('sort=3')
+  })
+
+  test("a19. (Route) should route user to specified blog detail page when one of blog is clicked (just only check url string at Link component)", async () => {
+    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
+
+    await act(async () => {
+      const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
+        <ContextWrapperComponent component={BlogList} />
+      )
+      await waitForElement(() => getAllByRole('blog-item'))
+    })
+    expect(document.getElementsByClassName('blog-list-items-item-wrapper')[0].getAttribute('href')).toBe('/blog/1')
   })
 
 
