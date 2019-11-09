@@ -26,7 +26,7 @@ const Pagination: React.FunctionComponent<PaginationPropType> = (props: Paginati
             <button className={page.css} value={page.offset} key={page.pageNum} onClick={handlePageClickEvent}>{page.pageNum}</button>
           );
         }))}
-        <button className='pagination-btn' value={pageResult.maxPageNumOffset} onClick={handlePageClickEvent}>&raquo;</button>
+        <button className='pagination-btn' role='last-page-btn' value={pageResult.maxPageNumOffset} onClick={handlePageClickEvent}>&raquo;</button>
       </React.Fragment>
     );
   } else {

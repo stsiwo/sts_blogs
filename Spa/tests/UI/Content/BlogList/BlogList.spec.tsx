@@ -375,6 +375,20 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
     expect((api.request as any).mock.calls[1][0].url).toContain('offset=40')
   })
 
+  test("a21. (EH) should start api request when last page number is click and url must contain the number", async () => {
+    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
+
+    await act(async () => {
+      const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
+        <ContextWrapperComponent component={BlogList} />
+      )
+      const lastPageBtn = await waitForElement(() => getByRole('last-page-btn'))
+      fireEvent.click(lastPageBtn)
+    })
+    expect(api.request).toHaveBeenCalledTimes(2)
+    expect((api.request as any).mock.calls[1][0].url).toContain('offset=9980')
+  })
+
   describe('bl-c1: <= tablet screen size', () => {
 
     beforeAll(() => {
