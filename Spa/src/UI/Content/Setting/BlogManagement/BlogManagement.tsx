@@ -5,7 +5,7 @@ import { useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
 import { toggleFilterSortBarActionCreator } from '../../../../actions/creators';
 import { BlogType } from '../../../../domain/blog/BlogType';
-import { RequestMethodEnum } from '../../../../requests/types';
+import { RequestMethodEnum, ResponseResultStatusEnum, BlogListResponseDataType } from '../../../../requests/types';
 import { StateType } from '../../../../states/types';
 import { dateFormatOption } from '../../../../utils';
 import FetchStatus from '../../../Base/Components/ApiFetch/FetchStatus';
@@ -19,6 +19,8 @@ import { useResponsiveComponent } from '../../../Base/Hooks/ResponsiveComponentH
 import './BlogManagement.scss';
 import PageLimitSelect from '../../../Base/Components/Pagination/PageLimitSelect';
 import { TagType } from '../../../../domain/tag/TagType';
+import { useRefreshBtn } from '../../../Base/Components/RefreshBtn/useRefreshBtn';
+import RefreshBtn from '../../../Base/Components/RefreshBtn/RefreshBtn';
 
 const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
 
@@ -39,7 +41,8 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   const { path, url } = useRouteMatch();
   const { currentPaginationStatus, setPaginationStatus } = usePagination({})
   const { currentFilters, currentSort, setFilters, setSort } = useBlogFilterSort({})
-  const callbackAfterApiFetch = (data: any): void => {
+  const { currentRefreshStatus, setRefreshStatus } = useRefreshBtn({})
+  const callbackAfterApiFetch = (data: BlogListResponseDataType): void => {
     // assign fetched blogs data to this state
     if (data) {
       setBlogs(data.blogs)
@@ -51,18 +54,20 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
       })
     }
   }
+
+  const queryString = {
+    offset: currentPaginationStatus.offset,
+    limit: currentPaginationStatus.limit,
+    tags: currentFilters.tags.map((tag: TagType) => tag.name),
+    startDate: currentFilters.creationDate.start ? currentFilters.creationDate.start.toJSON() : null,
+    endDate: currentFilters.creationDate.end ? currentFilters.creationDate.end.toJSON() : null,
+    keyword: currentFilters.keyword,
+    sort: currentSort,
+  }
   const { currentFetchStatus, setFetchStatus } = useApiFetch({
     path: '/blogs',
     method: RequestMethodEnum.GET,
-    queryString: {
-      offset: currentPaginationStatus.offset,
-      limit: currentPaginationStatus.limit,
-      tags: currentFilters.tags.map((tag: TagType) => tag.name),
-      startDate: currentFilters.creationDate.start ? currentFilters.creationDate.start.toJSON(): null,
-      endDate: currentFilters.creationDate.end ? currentFilters.creationDate.end.toJSON(): null,
-      keyword: currentFilters.keyword,
-      sort: currentSort,
-    },
+    queryString: queryString,
     callback: callbackAfterApiFetch
   })
 
@@ -83,16 +88,13 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
     dispatch(toggleFilterSortBarActionCreator(false))
   }
 
-  const handleRefreshClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
-    //const nextStatus = currentRefreshStatus + 1
-    //setRefreshStatus(nextStatus)
-  }
-
   /** render **/
   const renderBlogs = (blogs: BlogType[]): React.ReactNode => {
 
     return blogs.map((blog: BlogType) => {
-      const divRef = React.useRef(null)
+      const divRef: React.MutableRefObject<HTMLDivElement> = {
+        current: null
+      }
       controllerRefs.set(blog.id, divRef)
       return (
         <div className="blog-management-item-wrapper" key={blog.id}>
@@ -120,16 +122,26 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
       <div className="blog-management-main-wrapper">
         <h2 className="blog-management-title">Blog Management</h2>
         <div className="blog-management-controller-wrapper">
-          <FetchStatus currentFetchStatus={currentFetchStatus} setFetchStatus={setFetchStatus}/>
-          <button className="blog-management-controller-refresh-btn" onClick={handleRefreshClickEvent}>refresh</button>
+          <FetchStatus currentFetchStatus={currentFetchStatus} setFetchStatus={setFetchStatus} />
+          <RefreshBtn
+            currentRefreshStatus={currentRefreshStatus}
+            setRefreshStatus={setRefreshStatus}
+            path={path}
+            method={RequestMethodEnum.GET}
+            queryString={queryString}
+            callback={callbackAfterApiFetch}
+            enableCancel
+          />
           <PageLimitSelect currentPaginationStatus={currentPaginationStatus} setPaginationStatus={setPaginationStatus} />
         </div>
         <div className="blog-management-items-wrapper">
-          {renderBlogs(currentBlogs)}
+          {(currentFetchStatus.status === ResponseResultStatusEnum.FETCHING || currentRefreshStatus.status === ResponseResultStatusEnum.FETCHING && <p role="fetching">fetching ... </p>)}
+          {(currentFetchStatus.status !== ResponseResultStatusEnum.FETCHING && currentRefreshStatus.status !== ResponseResultStatusEnum.FETCHING && currentBlogs.length === 0 && <p>blogs are empty</p>)}
+          {(currentFetchStatus.status !== ResponseResultStatusEnum.FETCHING && currentRefreshStatus.status !== ResponseResultStatusEnum.FETCHING && currentBlogs.length !== 0 && renderBlogs(currentBlogs))}
         </div>
-          <Pagination currentPaginationStatus={currentPaginationStatus} setPaginationStatus={setPaginationStatus}/>
+        <Pagination currentPaginationStatus={currentPaginationStatus} setPaginationStatus={setPaginationStatus} />
       </div>
-      <BlogFilterSort currentFilters={currentFilters} currentSort={currentSort} setFilters={setFilters} setSort={setSort}/>
+      <BlogFilterSort currentFilters={currentFilters} currentSort={currentSort} setFilters={setFilters} setSort={setSort} />
     </div>
   );
 }

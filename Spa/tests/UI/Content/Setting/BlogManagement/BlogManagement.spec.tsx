@@ -3,15 +3,15 @@ import '@testing-library/jest-dom/extend-expect';
 import { fireEvent, queryByRole, queryByText, render, wait, waitForElement } from '@testing-library/react';
 import * as React from 'react';
 import { act } from 'react-dom/test-utils';
-import { api } from "../../../../src/requests/api";
-import { CssGlobalContextDefaultState } from "../../../../src/UI/Base/Context/CssGlobalContext/CssGlobalContextDefaultState";
-import BlogList from "../../../../src/UI/Content/BlogList/BlogList";
-import { blogGET200EmptyResponse, blogGET200NonEmptyResponse } from "../../../requests/fixtures";
-import { ContextWrapperComponent } from "../../fixtures";
-jest.mock('../../../../src/requests/api')
+import { api } from '../../../../../src/requests/api';
+import { blogGET200NonEmptyResponse, blogGET200EmptyResponse } from '../../../../requests/fixtures';
+import { ContextWrapperComponent } from '../../../fixtures';
+import BlogManagement from '../../../../../src/UI/Content/Setting/BlogManagement/BlogManagement';
+import { CssGlobalContextDefaultState } from '../../../../../src/UI/Base/Context/CssGlobalContext/CssGlobalContextDefaultState';
+jest.mock('../../../../../src/requests/api')
 
 
-describe('bl-c1: MenuToogleIcon Component testing', () => {
+describe('bm-c1: BlogManagement Component testing', () => {
 
   /**
    * prerequisite 
@@ -25,7 +25,6 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
    *
    * ** all **
    *
-   * a1. (css) should not have any overflown element. <- this is impossible 
    * a2. (lifecycle) should start api request when this component is mounted
    * a4. (EH) should start api request when 'refresh' button is clicked
    * a5. (EH) should cancel api request when 'cancel' button is clicked after 'refresh' button is clicked
@@ -61,11 +60,11 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
    **/
 
   beforeAll(() => {
-    console.log('bl-c1: beforeAll ')
+    console.log('bm-c1: beforeAll ')
   })
 
   beforeEach(() => {
-    console.log('bl-c1: beforeEach ')
+    console.log('bm-c1: beforeEach ')
   })
 
   /** test for use case which does not matter screen size  here**/
@@ -74,10 +73,9 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
     await act(async () => {
       render(
-        <ContextWrapperComponent component={BlogList} />
+        <ContextWrapperComponent component={BlogManagement} isAuth />
       )
     })
-
     expect(api.request).toHaveBeenCalled()
   })
 
@@ -88,7 +86,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
     api.CancelToken.source = jest.fn().mockReturnValue('cancel-token')
     await act(async () => {
       const { getByText, getByRole, getAllByRole } = render(
-        <ContextWrapperComponent component={BlogList} />
+        <ContextWrapperComponent component={BlogManagement} />
       )
 
       // wait for initial fetch finish and render blog list
@@ -120,7 +118,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
-        <ContextWrapperComponent component={BlogList} />
+        <ContextWrapperComponent component={BlogManagement} />
       )
       await waitForElement(() => getAllByRole('blog-item'))
 
@@ -139,7 +137,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
-        <ContextWrapperComponent component={BlogList} />
+        <ContextWrapperComponent component={BlogManagement} />
       )
       const blogListNode = await waitForElement(() => getAllByRole('blog-item'))
       expect(blogListNode.length).toBeGreaterThan(0)
@@ -153,7 +151,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
     console.log(api.request)
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
-        <ContextWrapperComponent component={BlogList} />
+        <ContextWrapperComponent component={BlogManagement} />
       )
       await waitForElement(() => getByText('blogs are empty'))
       expect(getByText('blogs are empty')).toBeInTheDocument()
@@ -165,7 +163,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
-        <ContextWrapperComponent component={BlogList} />
+        <ContextWrapperComponent component={BlogManagement} />
       )
       await waitForElement(() => getByText('blogs are empty'))
       expect(getByText('Member Only')).toBeInTheDocument()
@@ -177,7 +175,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
-        <ContextWrapperComponent component={BlogList} />
+        <ContextWrapperComponent component={BlogManagement} />
       )
       expect(document.getElementsByClassName('aside-new-blog-link')[0].getAttribute('href')).toBe('/login')
 
@@ -189,7 +187,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
-        <ContextWrapperComponent component={BlogList} isAuth />
+        <ContextWrapperComponent component={BlogManagement} isAuth />
       )
       const memberOnlyNode = queryByText(container, 'Member Only')
       expect(memberOnlyNode).toBeNull()
@@ -202,7 +200,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
-        <ContextWrapperComponent component={BlogList} isAuth />
+        <ContextWrapperComponent component={BlogManagement} isAuth />
       )
       expect(document.getElementsByClassName('aside-new-blog-link')[0].getAttribute('href')).toBe('/new')
     })
@@ -213,7 +211,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-        <ContextWrapperComponent component={BlogList} />
+        <ContextWrapperComponent component={BlogManagement} />
       )
       await waitForElement(() => getByText('blogs are empty'))
       const tagInput = getByLabelText('Tags')
@@ -237,7 +235,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-        <ContextWrapperComponent component={BlogList} />
+        <ContextWrapperComponent component={BlogManagement} />
       )
       await waitForElement(() => getByText('blogs are empty'))
       const tagInput = getByLabelText('Tags')
@@ -260,7 +258,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-        <ContextWrapperComponent component={BlogList} />
+        <ContextWrapperComponent component={BlogManagement} />
       )
       await waitForElement(() => getByText('blogs are empty'))
       const keywordInput = getByLabelText('Keyword')
@@ -282,7 +280,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-        <ContextWrapperComponent component={BlogList} />
+        <ContextWrapperComponent component={BlogManagement} />
       )
       await waitForElement(() => getByText('blogs are empty'))
       const startDateInput = getByLabelText('Start Date')
@@ -305,7 +303,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-        <ContextWrapperComponent component={BlogList} />
+        <ContextWrapperComponent component={BlogManagement} />
       )
       await waitForElement(() => getByText('blogs are empty'))
       const sortInput = getByLabelText('End Date')
@@ -328,7 +326,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-        <ContextWrapperComponent component={BlogList} />
+        <ContextWrapperComponent component={BlogManagement} />
       )
       await waitForElement(() => getByText('blogs are empty'))
       const sortInput = getByLabelText('Title Desc')
@@ -354,7 +352,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-        <ContextWrapperComponent component={BlogList} />
+        <ContextWrapperComponent component={BlogManagement} />
       )
       await waitForElement(() => getAllByRole('blog-item'))
     })
@@ -366,7 +364,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-        <ContextWrapperComponent component={BlogList} />
+        <ContextWrapperComponent component={BlogManagement} />
       )
       const thirdPageBtn = await waitForElement(() => getByText('3'))
       fireEvent.click(thirdPageBtn)
@@ -380,7 +378,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-        <ContextWrapperComponent component={BlogList} />
+        <ContextWrapperComponent component={BlogManagement} />
       )
       const lastPageBtn = await waitForElement(() => getByRole('last-page-btn'))
       fireEvent.click(lastPageBtn)
@@ -389,16 +387,16 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
     expect((api.request as any).mock.calls[1][0].url).toContain('offset=9980')
   })
 
-  describe('bl-c1: <= tablet screen size', () => {
+  describe('bm-c1: <= tablet screen size', () => {
 
     beforeAll(() => {
-      console.log('bl-c1: beforeAll: small screen size')
+      console.log('bm-c1: beforeAll: small screen size')
       Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: CssGlobalContextDefaultState.tabletSize })
       window.dispatchEvent(new Event('resize'));
     })
 
     beforeEach(() => {
-      console.log('bl-c1: beforeEach: small screen size ')
+      console.log('bm-c1: beforeEach: small screen size ')
     })
 
     /** test for use case for small screen size here**/
@@ -407,7 +405,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
       await act(async () => {
         const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-          <ContextWrapperComponent component={BlogList} />
+          <ContextWrapperComponent component={BlogManagement} />
         )
 
         expect(getByRole('filter-sort-icon')).toBeInTheDocument()
@@ -419,7 +417,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
       await act(async () => {
         const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-          <ContextWrapperComponent component={BlogList} />
+          <ContextWrapperComponent component={BlogManagement} />
         )
 
         await wait(() => {
@@ -434,7 +432,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
       await act(async () => {
         const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-          <ContextWrapperComponent component={BlogList} />
+          <ContextWrapperComponent component={BlogManagement} />
         )
         const filterSortIcon = getByRole('filter-sort-icon')
         fireEvent.click(filterSortIcon)
@@ -451,7 +449,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
       await act(async () => {
         const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-          <ContextWrapperComponent component={BlogList} />
+          <ContextWrapperComponent component={BlogManagement} />
         )
         const filterSortIcon = getByRole('filter-sort-icon')
         fireEvent.click(filterSortIcon) // this is the cause of async time out
@@ -463,25 +461,25 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
 
     afterEach(() => {
-      console.log('bl-c1: afterEach: small screen size ')
+      console.log('bm-c1: afterEach: small screen size ')
     })
 
     afterAll(() => {
-      console.log('bl-c1: afterAll: small screen size ')
+      console.log('bm-c1: afterAll: small screen size ')
     })
 
   })
 
-  describe('bl-c1: > tablet screen size', () => {
+  describe('bm-c1: > tablet screen size', () => {
 
     beforeAll(() => {
-      console.log('bl-c1: beforeAll: medium screen size')
+      console.log('bm-c1: beforeAll: medium screen size')
       Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: CssGlobalContextDefaultState.tabletSize + 1 })
       window.dispatchEvent(new Event('resize'));
     })
 
     beforeEach(() => {
-      console.log('bl-c1: beforeEach: medium screen size')
+      console.log('bm-c1: beforeEach: medium screen size')
     })
 
     /** test for use case for medium screen size here**/
@@ -490,7 +488,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
       await act(async () => {
         const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-          <ContextWrapperComponent component={BlogList} />
+          <ContextWrapperComponent component={BlogManagement} />
         )
 
         await wait(() => {
@@ -505,7 +503,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
       await act(async () => {
         const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
-          <ContextWrapperComponent component={BlogList} />
+          <ContextWrapperComponent component={BlogManagement} />
         )
 
         await wait(() => {
@@ -516,22 +514,23 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
 
     afterEach(() => {
-      console.log('bl-c1: afterEach: medium screen size')
+      console.log('bm-c1: afterEach: medium screen size')
     })
 
     afterAll(() => {
-      console.log('bl-c1: afterAll: medium screen size')
+      console.log('bm-c1: afterAll: medium screen size')
     })
 
   })
 
   afterEach(() => {
-    console.log('bl-c1: afterEach ')
+    console.log('bm-c1: afterEach ')
   })
 
   afterAll(() => {
-    console.log('bl-c1: afterAll ')
+    console.log('bm-c1: afterAll ')
   })
 
 })
+
 
