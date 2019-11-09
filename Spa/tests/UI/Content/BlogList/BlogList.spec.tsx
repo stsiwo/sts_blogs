@@ -430,6 +430,23 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
       })
     })
 
+    test("ltt3.  (EH) should display sort filter aisde when sort filter icon is clicked", async () => {
+      api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
+
+      await act(async () => {
+        const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
+          <ContextWrapperComponent component={BlogList} />
+        )
+        const filterSortIcon = getByRole('filter-sort-icon')
+        fireEvent.click(filterSortIcon)
+
+        const filterSortAside = await waitForElement(() => getByRole('filter-sort-aside'))
+        await wait(() => {
+          expect(filterSortAside).toBeInTheDocument()
+        })
+      })
+    })
+
     afterEach(() => {
       console.log('bl-c1: afterEach: small screen size ')
     })
