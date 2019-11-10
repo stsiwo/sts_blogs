@@ -99,16 +99,25 @@ describe('bm-c1: Profile Component testing', () => {
         <ContextWrapperComponent component={Profile} isAuth />
       )
       const nameInput = await waitForElement(() => getByLabelText('Name:'))
-      debug()
-      fireEvent.change(nameInput,
-        {
-          target: {
-            value: ''
-          }
-        })
-      await wait(() => {
+      fireEvent.focus(nameInput) // need to focus to enable to display validation error on dom
+      fireEvent.change(nameInput,{ target: { value: '' }})
+      const nameErrorNode = await waitForElement(() => getByText('name is a required field'))
+      expect(nameErrorNode).toBeInTheDocument()
+    })
+  })
 
-      })
+  test('a5. (validation) should not allow to update when email is null/empty ', async () => {
+
+    api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={Profile} isAuth />
+      )
+      const emailInput = await waitForElement(() => getByLabelText('Email:'))
+      fireEvent.focus(emailInput) // need to focus to enable to display validation error on dom
+      fireEvent.change(emailInput,{ target: { value: '' }})
+      const emailErrorNode = await waitForElement(() => getByText('email is a required field'))
+      expect(emailErrorNode).toBeInTheDocument()
     })
   })
 

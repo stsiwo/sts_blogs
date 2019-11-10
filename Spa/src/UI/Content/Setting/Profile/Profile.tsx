@@ -17,12 +17,6 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
   const [currentUser, setUser] = React.useState<UserType>(initialUserState)
   const [currentValidationError, setValidationError] = React.useState<UserValidationType>(initialUserValidationState)
   const [currentInputTouched, setInputTouched] = React.useState<UserInputTouchedType>(initialUserInputTouchedState)
-  const [currentGetFetchStatus, setGetFetchStatus] = React.useState<ResponseResultType>({
-    status: ResponseResultStatusEnum.INITIAL
-  })
-  const [currentPutRequestStatus, setPutRequestStatus] = React.useState<ResponseResultType>({
-    status: ResponseResultStatusEnum.INITIAL
-  })
 
   const path: string = '/users/' + currentUser.id
   const method: RequestMethodEnum = RequestMethodEnum.PUT
@@ -54,11 +48,11 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
           console.log('validation error detected')
           console.log(error)
           // clear all of error message first
-          for (let key in currentValidationError) delete currentValidationError[key as keyof UserType]
+          for (let key in currentValidationError) delete currentValidationError[key as keyof UserValidationType]
           // assign new error message 
           error.inner.forEach((eachError: yup.ValidationError) => {
-            if (currentInputTouched[eachError.path as keyof UserType])
-              currentValidationError[eachError.path as keyof UserType] = eachError.message
+            if (currentInputTouched[eachError.path as keyof UserInputTouchedType])
+              currentValidationError[eachError.path as keyof UserValidationType] = eachError.message
           })
           setValidationError({
             ...currentValidationError
@@ -83,6 +77,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
     formData.set('name', state.name)
     formData.set('email', state.email)
     formData.set('password', state.password)
+    formData.set('confirm', state.confirm)
     formData.set('avatarImage', state.avatarImage)
     return formData
   }
@@ -95,8 +90,8 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
       if (data) {
         console.log('data is available')
         console.log(data)
-        setUser({ 
-          ...data.user 
+        setUser({
+          ...data.user
         })
       }
     }
@@ -124,6 +119,8 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const handleNameChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
+    console.log('handling name change event')
+    console.log(e.currentTarget.value)
     setUser({
       ...currentUser,
       name: e.currentTarget.value
@@ -171,7 +168,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
         console.log('validation failed')
         console.log(error)
         error.inner.forEach((eachError: yup.ValidationError) => {
-          currentValidationError[eachError.path as keyof UserType] = eachError.message
+          currentValidationError[eachError.path as keyof UserValidationType] = eachError.message
         })
         setValidationError({
           ...currentValidationError
@@ -180,12 +177,23 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
       })
   }
 
-  return (
+  console.log(currentValidationError)
+
+  if (currentFetchStatus.status === ResponseResultStatusEnum.FETCHING) return (<p>fetching your data</p>)
+
+  if (currentFetchStatus.status === ResponseResultStatusEnum.FAILURE) return (<p>sorry.. your data is not available now</p>)
+
+
+  /**
+   * IMPORTANT NOTE: input name and user state key must be matched otherwise, validation won't work
+   *  - esp cause error of 'useEffect' 2nd argument inconsistency array element 
+   **/
+  return (currentFetchStatus.status === ResponseResultStatusEnum.SUCCESS &&
     <div className="profile-wrapper">
       <h2 className="profile-title">Profile Management</h2>
-      {(currentPutRequestStatus.status === ResponseResultStatusEnum.FETCHING && <p>updating user profile ...</p>)}
-      {(currentPutRequestStatus.status === ResponseResultStatusEnum.SUCCESS && <p>updating user profile success</p>)}
-      {(currentPutRequestStatus.status === ResponseResultStatusEnum.FAILURE && <p>updating user profile failed</p>)}
+      {(currentRequestStatus.status === ResponseResultStatusEnum.FETCHING && <p>updating user profile ...</p>)}
+      {(currentRequestStatus.status === ResponseResultStatusEnum.SUCCESS && <p>updating user profile success</p>)}
+      {(currentRequestStatus.status === ResponseResultStatusEnum.FAILURE && <p>updating user profile failed</p>)}
       <div className="profile-picture-wrapper">
         <img src={currentUser.avatarUrl} className="profile-picture-img" onLoad={handleRevokeObjectURLOnLoad} width={150} height={150} />
         <div className="profile-picture-input-wrapper">
@@ -199,7 +207,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
           Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.
         </p>
         <label htmlFor="name" className="profile-user-name-label ">
-          Name: <input type="text" id="name" placeholder="enter new user name..." className="input-text profile-user-name-input" value={currentUser.name} onChange={handleNameChangeEvent} onFocus={handleInitialFocusEvent} />
+          Name: <input type="text" id="name" name="name" placeholder="enter new user name..." className="input-text profile-user-name-input" value={currentUser.name} onChange={handleNameChangeEvent} onFocus={handleInitialFocusEvent} />
         </label>
         {(currentValidationError.name && <div className="input-error">{currentValidationError.name}</div>)}
       </div>
@@ -209,7 +217,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
           Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.
         </p>
         <label htmlFor="email" className="profile-user-email-label ">
-          Email: <input type="text" id="email" placeholder="enter new email..." className="input-text profile-email-input" value={currentUser.email} onChange={handleEmailChangeEvent} onFocus={handleInitialFocusEvent} />
+          Email: <input type="text" id="email" name="email" placeholder="enter new email..." className="input-text profile-email-input" value={currentUser.email} onChange={handleEmailChangeEvent} onFocus={handleInitialFocusEvent} />
         </label>
         {(currentValidationError.email && <div className="input-error">{currentValidationError.email}</div>)}
       </div>
@@ -219,10 +227,10 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
           Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.
         </p>
         <label htmlFor="password" className="profile-user-password-label ">
-          Password: <input type="password" id="password" placeholder="enter new password..." className="input-text profile-password-input" value={currentUser.password} onChange={handlePasswordChangeEvent} onFocus={handleInitialFocusEvent} />
+          Password: <input type="password" id="password" name="password" placeholder="enter new password..." className="input-text profile-password-input" value={currentUser.password} onChange={handlePasswordChangeEvent} onFocus={handleInitialFocusEvent} />
         </label>
         <label htmlFor="confirm" className="profile-user-confirm-label ">
-          Confirm: <input type="password" id="confirm" placeholder="enter new password again..." className="input-text profile-password-confirm-input" value={currentUser.confirm} onChange={handleConfirmChangeEvent} onFocus={handleInitialFocusEvent} />
+          Confirm: <input type="password" id="confirm" name="confirm" placeholder="enter new password again..." className="input-text profile-password-confirm-input" value={currentUser.confirm} onChange={handleConfirmChangeEvent} onFocus={handleInitialFocusEvent} />
         </label>
         {(currentValidationError.password && <div className="input-error">{currentValidationError.password}</div>)}
         {(currentValidationError.confirm && <div className="input-error">{currentValidationError.confirm}</div>)}
