@@ -28,7 +28,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
     name: yup.string().required(),
     email: yup.string().email().required(),
     password: yup.string().required(),
-    confirm: yup.string().oneOf([yup.ref('password'), null], 'passwords must match')
+    confirm: yup.string().required().oneOf([yup.ref('password'), null], 'passwords must match')
   });
 
   /** lifecycle **/
