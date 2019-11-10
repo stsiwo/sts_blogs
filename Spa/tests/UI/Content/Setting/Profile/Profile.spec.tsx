@@ -4,7 +4,7 @@ import { fireEvent, queryByRole, queryByText, render, wait, waitForElement } fro
 import * as React from 'react';
 import { act } from 'react-dom/test-utils';
 import { api } from '../../../../../src/requests/api';
-import { blogGET200NonEmptyResponse, blogGET200EmptyResponse, userGET200Response } from '../../../../requests/fixtures';
+import { blogGET200NonEmptyResponse, blogGET200EmptyResponse, userGET200Response, noDateGET200Response } from '../../../../requests/fixtures';
 import { ContextWrapperComponent } from '../../../fixtures';
 import Profile from '../../../../../src/UI/Content/Setting/Profile/Profile';
 import { CssGlobalContextDefaultState } from '../../../../../src/UI/Base/Context/CssGlobalContext/CssGlobalContextDefaultState';
@@ -265,6 +265,40 @@ describe('bm-c1: Profile Component testing', () => {
     })
   })
 
+  test('a14. (EH) should start update request when "update" is clicked', async () => {
+
+    api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={Profile} isAuth />
+      )
+      // must wait until fetch is completed
+      const updateBtn = await waitForElement(() => getByText('Update'))
+      fireEvent.click(updateBtn)
+      // wait until below expectation is met otherwise, timeout
+      await wait(() => {
+        expect(api.request).toHaveBeenCalledTimes(2)
+      })
+    })
+  })
+
+  test('a15. (DOM) should show "update success" message when update completed', async () => {
+
+    api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={Profile} isAuth />
+      )
+      // must wait until fetch is completed
+      const updateBtn = await waitForElement(() => getByText('Update'))
+      // mock response of update request
+      api.request = jest.fn().mockReturnValue(Promise.resolve(noDateGET200Response))
+      fireEvent.click(updateBtn)
+      await wait(() => {
+        expect(getByText('updating user profile success')).toBeInTheDocument()
+      })
+    })
+  })
 
   afterEach(() => {
     console.log('bm-c1: afterEach ')

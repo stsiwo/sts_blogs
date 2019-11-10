@@ -9,7 +9,8 @@ export const getUserTestData = (num: number = 20, credential: boolean = false): 
     userList.push({
       id: i.toString(),
       ...(credential && { email: faker.internet.email() }),
-      ...(credential && { password: faker.random.alphaNumeric(8) }),
+      ...(credential && { password: 'test-password' }),
+      ...(credential && { confirm: 'test-password' }),
       name: faker.name.firstName().concat(" ").concat(faker.name.lastName()),
       avatarUrl: faker.image.avatar()
     })

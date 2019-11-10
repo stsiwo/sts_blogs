@@ -13,6 +13,8 @@ export const useRequest = (input: UseRequestStatusInputType): UseRequestStatusOu
   })
 
   async function fetchData(args: FetchDataArgType) {
+    console.log('start handling fetch data function')
+    console.log(args)
     setRequestStatus({
       status: ResponseResultStatusEnum.FETCHING,
     })
@@ -23,6 +25,8 @@ export const useRequest = (input: UseRequestStatusInputType): UseRequestStatusOu
       ...(args.data && { data: args.data })
     })
       .then((responseResult: ResponseResultType) => {
+        console.log('fetch data function receive response successfully')
+        console.log(responseResult)
         /** this include 'catch' clause of 'requests' method **/
         setRequestStatus({
           status: responseResult.status,
@@ -34,9 +38,10 @@ export const useRequest = (input: UseRequestStatusInputType): UseRequestStatusOu
          * e.g., assign domain data
          * e.g., assign new total count of pagination
          **/
-        args.callback(responseResult.data)
+        if (args.callback) args.callback(responseResult.data)
       })
       .catch((error: AxiosError) => {
+        console.log('fetch data then clause failed')
         /** this is called when above 'then' caluse failed **/
         /** esp, 'args.callback' internal error **/
         setRequestStatus({

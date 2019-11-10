@@ -3,6 +3,14 @@ import { getBlogTestData } from "../data/BlogFaker";
 import { ErrorResponseDataType, BlogListResponseDataType, UserResponseDataType } from "../../src/requests/types";
 import { getUserTestData } from "../data/UserFaker";
 
+export const noDateGET200Response: AxiosResponse<{}> = {
+  data: '',
+  status: 200,
+  statusText: 'OK',
+  headers: {},
+  config: {},
+}
+
 export const userGET200Response: AxiosResponse<UserResponseDataType> = {
   data: {
     user: getUserTestData(1, true)[0]
