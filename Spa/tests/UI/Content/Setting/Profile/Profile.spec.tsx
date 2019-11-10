@@ -207,8 +207,10 @@ describe('bm-c1: Profile Component testing', () => {
         <ContextWrapperComponent component={Profile} isAuth />
       )
       const confirmInput = await waitForElement(() => getByLabelText('Confirm:'))
-      fireEvent.focus(confirmInput) // need to focus to enable to display validation error on dom
+      const passwordInput = await waitForElement(() => getByLabelText('Password:'))
       fireEvent.change(confirmInput,{ target: { value: '' }})
+      fireEvent.change(passwordInput,{ target: { value: '' }})
+      fireEvent.focus(confirmInput) // need to focus to enable to display validation error on dom
       const confirmErrorNode = await waitForElement(() => getByText('confirm is a required field'))
       expect(confirmErrorNode).toBeInTheDocument()
     })
