@@ -4,7 +4,7 @@ import { fireEvent, queryByRole, queryByText, render, wait, waitForElement } fro
 import * as React from 'react';
 import { act } from 'react-dom/test-utils';
 import { api } from '../../../../../src/requests/api';
-import { blogGET200NonEmptyResponse, blogGET200EmptyResponse, userGET200Response, noDateGET200Response } from '../../../../requests/fixtures';
+import { blogGET200NonEmptyResponse, blogGET200EmptyResponse, userGET200Response, noDateGET200Response, internalServerError500Response } from '../../../../requests/fixtures';
 import { ContextWrapperComponent } from '../../../fixtures';
 import Profile from '../../../../../src/UI/Content/Setting/Profile/Profile';
 import { CssGlobalContextDefaultState } from '../../../../../src/UI/Base/Context/CssGlobalContext/CssGlobalContextDefaultState';
@@ -39,7 +39,7 @@ describe('bm-c1: Profile Component testing', () => {
    * a13. (validation) should not allow to update when password and confirm does not match
    * a14. (EH) should start update request when 'update' is clicked 
    * a15. (DOM) should show 'update success' message when update completed 
-   * a16. (DOM) should show 'update failure' message when update failed 
+   * a16. a16. (DOM) should show "update failure" message when update failed because of network issue or 4xx or 5xx error
    *
    **/
 
@@ -300,6 +300,23 @@ describe('bm-c1: Profile Component testing', () => {
     })
   })
 
+  test('a16. (DOM) should show "update failure" message when update failed because of network issue or 4xx or 5xx error', async () => {
+
+    api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={Profile} isAuth />
+      )
+      // must wait until fetch is completed
+      const updateBtn = await waitForElement(() => getByText('Update'))
+      // mock response of update request
+      api.request = jest.fn().mockReturnValue(Promise.reject(internalServerError500Response))
+      fireEvent.click(updateBtn)
+      await wait(() => {
+        expect(getByText('updating user profile failed')).toBeInTheDocument()
+      })
+    })
+  })
   afterEach(() => {
     console.log('bm-c1: afterEach ')
   })
