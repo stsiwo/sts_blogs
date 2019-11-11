@@ -209,6 +209,41 @@ describe('bm-c1: Signup Component testing', () => {
       expect(loginNode.getAttribute('href')).toBe('/login')
     })
   })
+
+  // the order of values must match node array
+  const seedInputTestValues = (targetNodes: HTMLElement[], values: string[]): void => {
+    targetNodes.forEach((node: HTMLElement, index: number) => {
+      fireEvent.focus(node)
+        fireEvent.change(node, { target: { value: values[index] }}) 
+    })
+  }
+
+  test('a12. (EH) should start signup request when "signup" is clicked', async () => {
+    api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={Signup} isAuth />
+      )
+      const inputs = await waitForElement(() => [
+        getByLabelText('User Name'),
+        getByLabelText('Email'),
+        getByLabelText('Password'),
+        getByLabelText('Password Confirm'),
+      ])
+
+      seedInputTestValues(inputs, [
+        'test-user',
+        'test@test.com',
+        'test-password',
+        'test-password'
+      ])
+
+      fireEvent.click(getByText('Signup'))
+      await wait(() => {
+        expect(api.request).toHaveBeenCalledTimes(1)
+      })
+    })
+  })
   afterEach(() => {
     console.log('bm-c1: afterEach ')
   })
