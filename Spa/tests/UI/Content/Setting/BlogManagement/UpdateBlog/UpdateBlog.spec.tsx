@@ -87,8 +87,8 @@ describe('ub-c1: UpdateBlog Component testing', () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={UpdateBlog} isAuth />
       )
-      const nameInput = await waitForElement(() => getByLabelText('Name:'))
-      fireEvent.change(nameInput,
+      const titleInput = await waitForElement(() => getByLabelText('Title'))
+      fireEvent.change(titleInput,
         {
           target: {
             value: 'test'
@@ -100,18 +100,18 @@ describe('ub-c1: UpdateBlog Component testing', () => {
     })
   })
 
-  test('a4. (validation) should display error msg when blog name is null/empty', async () => {
+  test('a4. (validation) should display error msg when blog title is null/empty', async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
     await act(async () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={UpdateBlog} isAuth />
       )
-      const nameInput = await waitForElement(() => getByLabelText('Name:'))
-      fireEvent.focus(nameInput) // need to focus to enable to display validation error on dom
-      fireEvent.change(nameInput, { target: { value: '' } })
-      const nameErrorNode = await waitForElement(() => getByText('name is a required field'))
-      expect(nameErrorNode).toBeInTheDocument()
+      const titleInput = await waitForElement(() => getByLabelText('Title'))
+      fireEvent.focus(titleInput) // need to focus to enable to display validation error on dom
+      fireEvent.change(titleInput, { target: { value: '' } })
+      const titleErrorNode = await waitForElement(() => getByText('title is a required field'))
+      expect(titleErrorNode).toBeInTheDocument()
     })
   })
 

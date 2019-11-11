@@ -108,11 +108,15 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
     }
   }
 
+  const handleInitialFocusEvent: React.EventHandler<React.FocusEvent<HTMLInputElement>> = (e) => {
+    touch(e.currentTarget.name)
+  }
+  
+
   if (currentBlogFetchStatus.status === ResponseResultStatusEnum.FETCHING) return (<p>fetching your data</p>)
 
   if (currentBlogFetchStatus.status === ResponseResultStatusEnum.FAILURE) return (<p>sorry.. your data is not available now</p>)
-  /** render **/
-  /** should separate 'new' and 'update' component **/
+
   return (currentBlogFetchStatus.status === ResponseResultStatusEnum.SUCCESS &&
     <div className="blog-detail-wrapper">
       <h2 className="blog-detail-title">Update Blog</h2>
@@ -122,12 +126,12 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
       <form className="blog-detail-form">
         <div className="blog-detail-form-title-wrapper" >
           <label htmlFor="title" className="blog-detail-form-title-label">Title</label>
-          <input type="text" name="title" id="title" className="blog-detail-form-title-input" placeholder="enter blog title..." value={currentBlog.title} onChange={handleTitleChangeEvent} />
+          <input type="text" name="title" id="title" className="blog-detail-form-title-input" placeholder="enter blog title..." value={currentBlog.title} onChange={handleTitleChangeEvent}  onFocus={handleInitialFocusEvent}/>
           {(currentValidationError.title && <div className="input-error">{currentValidationError.title}</div>)}
         </div>
         <div className="blog-detail-form-subtitle-wrapper" >
           <label htmlFor="subTitle" className="blog-detail-form-subtitle-label">Sub Title</label>
-          <input type="text" name="subTitle" id="subTitle" className="blog-detail-form-subtitle-input" placeholder="enter blog subtitle..." value={currentBlog.subTitle} onChange={handleSubTitleChangeEvent} />
+          <input type="text" name="subTitle" id="subTitle" className="blog-detail-form-subtitle-input" placeholder="enter blog subtitle..." value={currentBlog.subTitle} onChange={handleSubTitleChangeEvent} onFocus={handleInitialFocusEvent}/>
           {(currentValidationError.subTitle && <div className="input-error">{currentValidationError.subTitle}</div>)}
         </div>
         <div className="blog-detail-form-tags-wrapper" >
@@ -143,12 +147,12 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
         </div>
         <div className="blog-detail-form-image-wrapper" >
           <label htmlFor="tags" className="blog-detail-form-image-label">Main Image</label>
-          <input type="file" name="tags" id="tags" className="blog-detail-form-image-input" placeholder="enter blog image..." onChange={handleImageUploadChange} />
+          <input type="file" name="tags" id="tags" className="blog-detail-form-image-input" placeholder="enter blog image..." onChange={handleImageUploadChange} onFocus={handleInitialFocusEvent}/>
           <img src={currentBlog.mainImageUrl} className="" onLoad={handleRevokeObjectURLOnLoad} alt="selected image ..." width={100} height={100} />
         </div>
         <div className="blog-detail-form-content-wrapper" >
           <label htmlFor="content" className="blog-detail-form-content-label">Content</label>
-          <input type="text" name="content" id="content" className="blog-detail-form-content-input" placeholder="enter blog content..." value={currentBlog.content} onChange={handleContentChangeEvent} />
+          <input type="text" name="content" id="content" className="blog-detail-form-content-input" placeholder="enter blog content..." value={currentBlog.content} onChange={handleContentChangeEvent} onFocus={handleInitialFocusEvent}/>
           {(currentValidationError.content && <div className="input-error">{currentValidationError.content}</div>)}
         </div>
         <input type="hidden" name='creationDate' value={currentBlog.createdDate.toJSON()} />
