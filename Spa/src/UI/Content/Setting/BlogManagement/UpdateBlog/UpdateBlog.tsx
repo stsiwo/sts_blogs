@@ -138,7 +138,7 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
               return <input type="text" name="tags[]" id="tags" className="blog-detail-form-tags-input" value={tag.name} readOnly key={tag.name} />
             })
           )}
-          <input type="text" id="tags" className="blog-detail-form-tags-input" placeholder="enter blog tags..." onKeyDown={handleTagInputEnterOrTabKeyClickEvent} ref={tagInputRef} />
+          <input type="text" id="tag-entry" className="blog-detail-form-tags-input" placeholder="enter blog tags..." onKeyDown={handleTagInputEnterOrTabKeyClickEvent} ref={tagInputRef} />
           {(currentValidationError.tags && <div className="input-error">{currentValidationError.tags}</div>)}
         </div>
         <div className="blog-detail-form-image-wrapper" >

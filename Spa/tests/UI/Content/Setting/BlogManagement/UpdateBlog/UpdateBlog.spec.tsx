@@ -73,7 +73,9 @@ describe('ub-c1: UpdateBlog Component testing', () => {
       )
 
       await wait(() => {
-        expect(getByLabelText('Name:').getAttribute('value')).toBeTruthy()
+        expect(getByLabelText('Title').getAttribute('value')).toBeTruthy()
+        expect(getByLabelText('Sub Title').getAttribute('value')).toBeTruthy()
+        expect(getByLabelText('Content').getAttribute('value')).toBeTruthy()
       })
     })
   })
