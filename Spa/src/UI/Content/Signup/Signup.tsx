@@ -8,14 +8,14 @@ import { request } from '../../../requests/request';
 import { useDispatch } from 'react-redux';
 import { toggleLoginStatusActionCreator } from '../../../actions/creators';
 import { useAuthContext } from '../../Base/Context/AuthContext/AuthContext';
-import { useRequest } from '../../Base/Hooks/useRequest';
 import { useUserSignupValidation } from '../../Base/Hooks/Validation/UserSignup/useUserSignupValidation';
+import { useRequest } from '../../Base/Hooks/Request/useRequest';
 
 
 const Signup: React.FunctionComponent<{}> = (props: {}) => {
 
   const [currentUserSignupStatus, setUserSignupStatus] = React.useState<UserSignupType>(initialUserSignupStatus)
-  const { currentRequestStatus, setRequestStatus, fetchData } = useRequest({})
+  const { currentRequestStatus, setRequestStatus, sendRequest } = useRequest({})
   const { currentValidationError, touch, validate } = useUserSignupValidation({ domain: currentUserSignupStatus })
   const { dispatch } = useAuthContext()
 
@@ -25,7 +25,6 @@ const Signup: React.FunctionComponent<{}> = (props: {}) => {
       ...currentUserSignupStatus
     })
   }
-
   const handleInitialFocusEvent: React.EventHandler<React.FocusEvent<HTMLInputElement>> = (e) => {
     touch(e.currentTarget.name)
   }
@@ -36,20 +35,15 @@ const Signup: React.FunctionComponent<{}> = (props: {}) => {
     validate()
       .then(() => {
         console.log('validation passed')
-        fetchData({
+        sendRequest({
           path: '/signup',
           method: RequestMethodEnum.POST,
           headers: { 'content-type': 'application/json' },
           data: JSON.stringify(currentUserSignupStatus),
-          callback: (data: UserResponseDataType) => {
-            if (data) {
-              dispatch({
-                type: 'login',
-                user: data.user as UserType
-              })
-            }
-          }
         })
+          .then((data: UserResponseDataType) => {
+            dispatch({ type: 'login', user: data.user as UserType })
+          })
       })
   }
 

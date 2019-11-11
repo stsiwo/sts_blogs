@@ -23,7 +23,7 @@ import { useRefreshBtn } from '../../../Base/Components/RefreshBtn/useRefreshBtn
 import RefreshBtn from '../../../Base/Components/RefreshBtn/RefreshBtn';
 import { getBlogTestData } from '../../../../../tests/data/BlogFaker';
 import { useAuthContext } from '../../../Base/Context/AuthContext/AuthContext';
-import { useRequest } from '../../../Base/Hooks/useRequest';
+import { useRequest } from '../../../Base/Hooks/Request/useRequest';
 
 const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
 
@@ -47,8 +47,7 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   const { currentPaginationStatus, setPaginationStatus } = usePagination({})
   const { currentFilters, currentSort, setFilters, setSort } = useBlogFilterSort({})
   const { currentRefreshStatus, setRefreshStatus } = useRefreshBtn({})
-  const { currentRequestStatus, setRequestStatus, fetchData } = useRequest({
-  })
+  const { currentRequestStatus, setRequestStatus, sendRequest } = useRequest({})
   const callbackAfterApiFetch = (data: BlogListResponseDataType): void => {
     // assign fetched blogs data to this state
     if (data) {
@@ -96,13 +95,13 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const handleDeleteBlogClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
-    fetchData({
+    sendRequest({
       path: '/users/' + userId + '/blogs',
       method: RequestMethodEnum.DELETE,
-      callback: (data: BlogListResponseDataType): void => {
-        // operation after successful delete request
-      }
     })
+      .then((data: BlogListResponseDataType) => {
+        // operation after successful delete request
+      })
   }
   /** render **/
   const renderBlogs = (blogs: BlogType[]): React.ReactNode => {

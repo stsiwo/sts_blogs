@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { UseRequestStatusInputType, UseRequestStatusOutputType, RequestStatusType, FetchDataArgType } from "./types";
-import { ResponseResultStatusEnum, ResponseResultType, QueryStringType, RequestMethodEnum } from '../../../requests/types';
-import { buildQueryString } from '../../../utils';
-import { request } from '../../../requests/request';
 import { AxiosError } from 'axios';
+import { ResponseResultStatusEnum, ResponseResultType } from '../../../../requests/types';
+import { request } from '../../../../requests/request';
+import { buildQueryString } from '../../../../utils';
 
 
 export const useRequest = (input: UseRequestStatusInputType): UseRequestStatusOutputType => {
@@ -12,13 +12,13 @@ export const useRequest = (input: UseRequestStatusInputType): UseRequestStatusOu
     status: ResponseResultStatusEnum.INITIAL
   })
 
-  async function fetchData(args: FetchDataArgType) {
+  async function sendRequest(args: FetchDataArgType) {
     console.log('start handling fetch data function')
     console.log(args)
     setRequestStatus({
       status: ResponseResultStatusEnum.FETCHING,
     })
-    await request({
+    return await request({
       url: args.path + buildQueryString(args.queryString),
       ...(args.method && { method: args.method }),
       ...(args.headers && { headers: args.headers }),
@@ -34,11 +34,10 @@ export const useRequest = (input: UseRequestStatusInputType): UseRequestStatusOu
           errorMsg: responseResult.errorMsg
         })
         /**
-         * any callback when response is secceeded 
-         * e.g., assign domain data
-         * e.g., assign new total count of pagination
+         * return promise with responseResult
+         *  - avoid using 'callback'
          **/
-        if (args.callback) args.callback(responseResult.data)
+        return Promise.resolve(responseResult.data)
       })
       .catch((error: AxiosError) => {
         console.log('fetch data then clause failed')
@@ -48,13 +47,14 @@ export const useRequest = (input: UseRequestStatusInputType): UseRequestStatusOu
           status: ResponseResultStatusEnum.FAILURE,
           errorMsg: error.message
         })
+        return Promise.reject()
       })
   }
 
   return {
     currentRequestStatus: currentRequestStatus,
     setRequestStatus: setRequestStatus,
-    fetchData: fetchData
+    sendRequest: sendRequest
   }
 }
 

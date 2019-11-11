@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { CancelTokenSource } from 'axios';
-import { ResponseResultStatusEnum, RequestMethodEnum, QueryStringType } from '../../../requests/types';
+import { ResponseResultStatusEnum, RequestMethodEnum, QueryStringType, ResponseResultType } from '../../../../requests/types';
 
 export declare type RequestStatusType = {
   data?: any
@@ -19,7 +19,6 @@ export declare type FetchDataArgType = {
   headers?: any
   data?: any
   queryString?: QueryStringType
-  callback?: (data: any) => void
 }
 
 export declare type UseRequestStatusInputType<T = any> = {
@@ -28,7 +27,7 @@ export declare type UseRequestStatusInputType<T = any> = {
 export declare type UseRequestStatusOutputType = {
   currentRequestStatus: RequestStatusType
   setRequestStatus: React.Dispatch<React.SetStateAction<RequestStatusType>>
-  fetchData: (args: FetchDataArgType) => void
+  sendRequest: (args: FetchDataArgType) => Promise<any | void >
 }
 
 

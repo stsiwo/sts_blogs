@@ -7,7 +7,7 @@ import { RequestMethodEnum, ResponseResultStatusEnum, ResponseResultType, UserRe
 import './Profile.scss';
 import { useAuthContext } from '../../../Base/Context/AuthContext/AuthContext';
 import { useApiFetch } from '../../../Base/Components/ApiFetch/useApiFetch';
-import { useRequest } from '../../../Base/Hooks/useRequest';
+import { useRequest } from '../../../Base/Hooks/Request/useRequest';
 
 
 const Profile: React.FunctionComponent<{}> = (props: {}) => {
@@ -21,7 +21,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
   const path: string = '/users/' + currentUser.id
   const method: RequestMethodEnum = RequestMethodEnum.PUT
 
-  const { currentRequestStatus, setRequestStatus, fetchData } = useRequest({})
+  const { currentRequestStatus, setRequestStatus, sendRequest } = useRequest({})
 
   let schema = yup.object().shape<UserType>({
     id: yup.string(),
@@ -157,7 +157,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
       .then(async () => {
         console.log('validation passed')
 
-        fetchData({
+        sendRequest({
           path: path,
           method: method,
           headers: { 'content-type': 'multipart/form-data' },
