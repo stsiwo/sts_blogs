@@ -244,6 +244,34 @@ describe('bm-c1: Signup Component testing', () => {
       })
     })
   })
+
+  test('a13. (DOM) should show "signup success" message when signup completed', async () => {
+    api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={Signup} isAuth />
+      )
+      const inputs = await waitForElement(() => [
+        getByLabelText('User Name'),
+        getByLabelText('Email'),
+        getByLabelText('Password'),
+        getByLabelText('Password Confirm'),
+      ])
+
+      seedInputTestValues(inputs, [
+        'test-user',
+        'test@test.com',
+        'test-password',
+        'test-password'
+      ])
+
+      fireEvent.click(getByText('Signup'))
+      // wait for expectation meet otherwise async timeout
+      await wait(() => {
+        expect(getByText('requesting user signup success')).toBeInTheDocument()
+      })
+    })
+  })
   afterEach(() => {
     console.log('bm-c1: afterEach ')
   })
