@@ -14,10 +14,11 @@ import { getUserTestData } from '../tests/data/UserFaker';
 // test user login
 
 const App = (props: any) => {
-  const [auth, dispatch] = useUpdateAuthContextReducer({
-    authed: true,
-    user: getUserTestData(1)[0]
-  })
+  //const [auth, dispatch] = useUpdateAuthContextReducer({
+  //  authed: true,
+  //  user: getUserTestData(1)[0]
+  //})
+  const [auth, dispatch] = useUpdateAuthContextReducer()
   return (
     <div>
       <CssGlobalContext.Provider value={CssGlobalContextDefaultState}>
