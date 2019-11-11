@@ -1,4 +1,4 @@
-import { AxiosResponse } from "axios";
+import { AxiosResponse, AxiosError } from "axios";
 import { getBlogTestData } from "../data/BlogFaker";
 import { ErrorResponseDataType, BlogListResponseDataType, UserResponseDataType } from "../../src/requests/types";
 import { getUserTestData } from "../data/UserFaker";
@@ -58,10 +58,17 @@ export const blogGET500Response: AxiosResponse<ErrorResponseDataType> = {
   config: {},
 }
 
+export const networkError: AxiosError = {
+  config: null,
+  name: 'Error',
+  isAxiosError: true,
+  message: 'netowrk error'
+}
+
 export const internalServerError500Response: AxiosResponse<ErrorResponseDataType> = {
   data: {
     title: 'internal server error',
-    message: 'a filed must be xxxxxx',
+    message: 'internal server error message',
   } as ErrorResponseDataType,
   status: 500,
   statusText: 'Internal Server Error',

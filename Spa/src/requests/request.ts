@@ -36,7 +36,6 @@ export const request = async (request: RequestContentType): Promise<ResponseResu
 
   }).catch((error: AxiosError<ErrorResponseDataType>) => {
     console.log('api request failed. at request func')
-
     /** handle when cancel request **/
     if (api.isCancel(error)) {
       console.log('request is cancaled')
