@@ -4,94 +4,39 @@ import { useParams } from 'react-router';
 import * as yup from 'yup'
 import { BlogType, initialBlogState } from '../../../../../domain/blog/BlogType';
 import { BlogValidationType, initialBlogValidationState } from '../../../../../domain/blog/BlogValidationType';
-import { ResponseResultType, ResponseResultStatusEnum, RequestMethodEnum } from '../../../../../requests/types';
+import { ResponseResultType, ResponseResultStatusEnum, RequestMethodEnum, BlogResponseDataType, UserResponseDataType } from '../../../../../requests/types';
 import { request } from '../../../../../requests/request';
 import { TagType } from '../../../../../domain/tag/TagType';
+import { useRequest } from '../../../../Base/Hooks/Request/useRequest';
+import { useBlogValidation } from '../../../../Base/Hooks/Validation/Blog/useBlogValidation'
+import { useAuthContext } from '../../../../Base/Context/AuthContext/AuthContext';
 
 const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
 
-  /** ref **/
   const tagInputRef = React.useRef(null)
-  /** state **/
+
   const [currentBlog, setBlog] = React.useState<BlogType>(initialBlogState)
-  const [currentValidationError, setValidationError] = React.useState<BlogValidationType>(initialBlogValidationState)
-  const [currentGetFetchStatus, setGetFetchStatus] = React.useState<ResponseResultType>({
-    status: ResponseResultStatusEnum.INITIAL
-  })
-  /** redux **/
-  /** hooks **/
+  const { currentValidationError, touch, validate } = useBlogValidation({ domain: currentBlog })
+  const { currentRequestStatus: currentBlogUpdateStatus, setRequestStatus: setBlogUpdateStatus, sendRequest: updateRequest } = useRequest({})
+  const { currentRequestStatus: currentBlogFetchStatus, setRequestStatus: setBlogFetchStatus, sendRequest: fetchBlog } = useRequest({})
   const { blogId } = useParams();
-  const userId = 1 // need to get from somewhere
-
-  /** anything else **/
-  const path: string = '/blogs/' + blogId
-  const method: RequestMethodEnum = RequestMethodEnum.PUT
-
-  let schema = yup.object().shape<BlogType>({
-    id: yup.string(),
-    title: yup.string().required(),
-    subTitle: yup.string().required(),
-    content: yup.string().required(),
-    createdDate: yup.date().required(),
-  });
+  const userId = useAuthContext()
 
   /** lifecycle **/
   React.useEffect(() => {
-    function validateFormInput() {
-      schema
-        .validate(currentBlog)
-        .then(() => {
-          console.log('validation passed')
-          setValidationError({
-            ...initialBlogValidationState
-          })
-        })
-        .catch((error: yup.ValidationError) => {
-          console.log('validation error detected')
-          currentValidationError[error.path as keyof BlogType] = error.message
-          setValidationError({
-            ...currentValidationError
-          })
-        })
-    }
-    console.log('validating input.... should be called only mount and when input is updated')
-    validateFormInput()
-    return () => {
-    };
-  }, [...Object.keys(currentBlog).map((key: string) => currentBlog[key as keyof BlogType])]);
-
-  React.useEffect(() => {
-    async function fetchBlogData() {
-      setGetFetchStatus({
-        status: ResponseResultStatusEnum.FETCHING
+    fetchBlog({
+      path: '/blogs/' + blogId,
+      method: RequestMethodEnum.GET
+    })
+      .then((data: BlogResponseDataType) => {
+        if (data) setBlog(data.blog)
       })
-      await request({
-        url: '/blogs/' + blogId,
-        method: RequestMethodEnum.GET
-      })
-        .then((responseResult: ResponseResultType) => {
-          setGetFetchStatus({
-            status: responseResult.status,
-            data: responseResult.data,
-          })
-          setBlog(responseResult.data.blog)
-        })
-        .catch((responseResult: ResponseResultType) => {
-          setGetFetchStatus({
-            status: responseResult.status,
-            errorMsg: responseResult.errorMsg,
-          })
-        })
-    }
-    fetchBlogData()
-    return () => {
-    };
   }, []);
 
   /** EH **/
   const mapStateToFormData = (state: BlogType): FormData => {
     const formData = new FormData()
-    if (state.id) formData.append('id', state.id)
+    formData.append('id', state.id)
     formData.set('title', state.title)
     formData.set('subTitle', state.subTitle)
     formData.set('mainImage', state.mainImage)
@@ -103,27 +48,17 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const handleSaveBlogClickEvent: React.EventHandler<React.MouseEvent<HTMLInputElement>> = async (e) => {
-    // initialize FormData and map state to items of FormDate
-    const formData: FormData = mapStateToFormData(currentBlog)
-
-    // set headers (multipart/form-data)
-    const headers: {} = { 'content-type': 'multipart/form-data' }
-
-    // send request
-    const responseResult: ResponseResultType = await request({
-      url: path,
-      method: method,
-      headers: headers,
-      data: formData
-    })
+    validate()
+      .then(() => {
+        console.log('validation passed')
+        updateRequest({
+          path: '/blogs/' + blogId,
+          method: RequestMethodEnum.PUT,
+          headers: { 'content-type': 'multipart/form-data' },
+          data: mapStateToFormData(currentBlog),
+        })
+      })
   }
-
-  //  const handleInputChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
-  //    currentBlog[e.currentTarget.name] = e.currentTarget.value
-  //    setBlog({
-  //      ...currentBlog 
-  //    })
-  //  }
 
   const handleTitleChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
     setBlog({
@@ -172,51 +107,55 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
       e.currentTarget.value = ""
     }
   }
+
+  if (currentBlogFetchStatus.status === ResponseResultStatusEnum.FETCHING) return (<p>fetching your data</p>)
+
+  if (currentBlogFetchStatus.status === ResponseResultStatusEnum.FAILURE) return (<p>sorry.. your data is not available now</p>)
   /** render **/
   /** should separate 'new' and 'update' component **/
-  return (
+  return (currentBlogFetchStatus.status === ResponseResultStatusEnum.SUCCESS &&
     <div className="blog-detail-wrapper">
-      <h2 className="blog-detail-title">New/Update Blog</h2>
-      {(currentGetFetchStatus.status === ResponseResultStatusEnum.FETCHING && <p>fetching ...</p>)}
-      {(currentGetFetchStatus.status === ResponseResultStatusEnum.FAILURE && <p>fetching failed</p>)}
-      {(currentGetFetchStatus.status === ResponseResultStatusEnum.SUCCESS &&
-        <form className="blog-detail-form">
-          <div className="blog-detail-form-title-wrapper" >
-            <label htmlFor="title" className="blog-detail-form-title-label">Title</label>
-            <input type="text" name="title" id="title" className="blog-detail-form-title-input" placeholder="enter blog title..." value={currentBlog.title} onChange={handleTitleChangeEvent} />
-            {(currentValidationError.title && <div className="input-error">{currentValidationError.title}</div>)}
-          </div>
-          <div className="blog-detail-form-subtitle-wrapper" >
-            <label htmlFor="subTitle" className="blog-detail-form-subtitle-label">Sub Title</label>
-            <input type="text" name="subTitle" id="subTitle" className="blog-detail-form-subtitle-input" placeholder="enter blog subtitle..." value={currentBlog.subTitle} onChange={handleSubTitleChangeEvent} />
-            {(currentValidationError.subTitle && <div className="input-error">{currentValidationError.subTitle}</div>)}
-          </div>
-          <div className="blog-detail-form-tags-wrapper" >
-            <label htmlFor="tags" className="blog-detail-form-tags-label">Tags</label>
-            {(
-              currentBlog.tags.map((tag: TagType) => {
-                console.log('rendering tags')
-                return <input type="text" name="tags[]" id="tags" className="blog-detail-form-tags-input" value={tag.name} readOnly key={tag.name} />
-              })
-            )}
-            <input type="text" id="tags" className="blog-detail-form-tags-input" placeholder="enter blog tags..." onKeyDown={handleTagInputEnterOrTabKeyClickEvent} ref={tagInputRef} />
-            {(currentValidationError.tags && <div className="input-error">{currentValidationError.tags}</div>)}
-          </div>
-          <div className="blog-detail-form-image-wrapper" >
-            <label htmlFor="tags" className="blog-detail-form-image-label">Main Image</label>
-            <input type="file" name="tags" id="tags" className="blog-detail-form-image-input" placeholder="enter blog image..." onChange={handleImageUploadChange} />
-            <img src={currentBlog.mainImageUrl} className="" onLoad={handleRevokeObjectURLOnLoad} alt="selected image ..." width={100} height={100} />
-          </div>
-          <div className="blog-detail-form-content-wrapper" >
-            <label htmlFor="content" className="blog-detail-form-content-label">Content</label>
-            <input type="text" name="content" id="content" className="blog-detail-form-content-input" placeholder="enter blog content..." value={currentBlog.content} onChange={handleContentChangeEvent} />
-            {(currentValidationError.content && <div className="input-error">{currentValidationError.content}</div>)}
-          </div>
-          <input type="hidden" name='creationDate' value={currentBlog.createdDate.toJSON()} />
-          <div className="blog-detail-btns-wrapper">
-            <input type="button" className="blog-detail-btns-save" value="Save" onClick={handleSaveBlogClickEvent} />
-          </div>
-        </form>
+      <h2 className="blog-detail-title">Update Blog</h2>
+      {(currentBlogUpdateStatus.status === ResponseResultStatusEnum.FETCHING && <p>updating ...</p>)}
+      {(currentBlogUpdateStatus.status === ResponseResultStatusEnum.FAILURE && <p>updating failed</p>)}
+      {(currentBlogUpdateStatus.status === ResponseResultStatusEnum.SUCCESS && <p>updating success</p>)}
+      <form className="blog-detail-form">
+        <div className="blog-detail-form-title-wrapper" >
+          <label htmlFor="title" className="blog-detail-form-title-label">Title</label>
+          <input type="text" name="title" id="title" className="blog-detail-form-title-input" placeholder="enter blog title..." value={currentBlog.title} onChange={handleTitleChangeEvent} />
+          {(currentValidationError.title && <div className="input-error">{currentValidationError.title}</div>)}
+        </div>
+        <div className="blog-detail-form-subtitle-wrapper" >
+          <label htmlFor="subTitle" className="blog-detail-form-subtitle-label">Sub Title</label>
+          <input type="text" name="subTitle" id="subTitle" className="blog-detail-form-subtitle-input" placeholder="enter blog subtitle..." value={currentBlog.subTitle} onChange={handleSubTitleChangeEvent} />
+          {(currentValidationError.subTitle && <div className="input-error">{currentValidationError.subTitle}</div>)}
+        </div>
+        <div className="blog-detail-form-tags-wrapper" >
+          <label htmlFor="tags" className="blog-detail-form-tags-label">Tags</label>
+          {(
+            currentBlog.tags.length !== 0 && currentBlog.tags.map((tag: TagType) => {
+              console.log('rendering tags')
+              return <input type="text" name="tags[]" id="tags" className="blog-detail-form-tags-input" value={tag.name} readOnly key={tag.name} />
+            })
+          )}
+          <input type="text" id="tags" className="blog-detail-form-tags-input" placeholder="enter blog tags..." onKeyDown={handleTagInputEnterOrTabKeyClickEvent} ref={tagInputRef} />
+          {(currentValidationError.tags && <div className="input-error">{currentValidationError.tags}</div>)}
+        </div>
+        <div className="blog-detail-form-image-wrapper" >
+          <label htmlFor="tags" className="blog-detail-form-image-label">Main Image</label>
+          <input type="file" name="tags" id="tags" className="blog-detail-form-image-input" placeholder="enter blog image..." onChange={handleImageUploadChange} />
+          <img src={currentBlog.mainImageUrl} className="" onLoad={handleRevokeObjectURLOnLoad} alt="selected image ..." width={100} height={100} />
+        </div>
+        <div className="blog-detail-form-content-wrapper" >
+          <label htmlFor="content" className="blog-detail-form-content-label">Content</label>
+          <input type="text" name="content" id="content" className="blog-detail-form-content-input" placeholder="enter blog content..." value={currentBlog.content} onChange={handleContentChangeEvent} />
+          {(currentValidationError.content && <div className="input-error">{currentValidationError.content}</div>)}
+        </div>
+        <input type="hidden" name='creationDate' value={currentBlog.createdDate.toJSON()} />
+        <div className="blog-detail-btns-wrapper">
+          <input type="button" className="blog-detail-btns-save" value="Save" onClick={handleSaveBlogClickEvent} />
+        </div>
+      </form>
       )}
     </div>
   );

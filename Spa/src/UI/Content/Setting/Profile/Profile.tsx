@@ -183,7 +183,6 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
 
   if (currentFetchStatus.status === ResponseResultStatusEnum.FAILURE) return (<p>sorry.. your data is not available now</p>)
 
-
   /**
    * IMPORTANT NOTE: input name and user state key must be matched otherwise, validation won't work
    *  - esp cause error of 'useEffect' 2nd argument inconsistency array element 

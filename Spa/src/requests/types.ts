@@ -35,6 +35,10 @@ export declare type BlogListResponseDataType = ResponseBaseDataType & {
   blogs: BlogType[]
 }
 
+export declare type BlogResponseDataType = {
+  blog: BlogType
+}
+
 export declare type UserResponseDataType = {
   user: UserType
 }
