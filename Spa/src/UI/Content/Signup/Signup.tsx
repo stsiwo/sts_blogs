@@ -43,7 +43,7 @@ const Signup: React.FunctionComponent<{}> = (props: {}) => {
           data: JSON.stringify(currentUserSignupStatus),
         })
           .then((data: UserResponseDataType) => {
-            dispatch({ type: 'login', user: data.user as UserType })
+            if (data) dispatch({ type: 'login', user: data.user as UserType })
           })
       })
   }
@@ -55,7 +55,6 @@ const Signup: React.FunctionComponent<{}> = (props: {}) => {
       {(currentRequestStatus.status === ResponseResultStatusEnum.SUCCESS && <p>requesting user signup success</p>)}
       {(currentRequestStatus.status === ResponseResultStatusEnum.FAILURE && <p>requesting user signup failed</p>)}
       <form className="signup-form-content">
-
         <div className="signup-form-content-item signup-form-content-name">
           <label htmlFor="name" className="signup-form-content-item-label">User Name</label>
           <input type="text" name="name" id="name" className="signup-form-content-item-input" placeholder="enter your name..." value={currentUserSignupStatus.name} onFocus={handleInitialFocusEvent} onChange={handleInputChangeEvent} />

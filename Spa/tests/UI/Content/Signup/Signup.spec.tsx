@@ -4,7 +4,7 @@ import { fireEvent, queryByRole, queryByText, render, wait, waitForElement } fro
 import * as React from 'react';
 import { act } from 'react-dom/test-utils';
 import { api } from '../../../../src/requests/api';
-import { userGET200Response } from '../../../requests/fixtures';
+import { userGET200Response, internalServerError500Response } from '../../../requests/fixtures';
 import { ContextWrapperComponent } from '../../fixtures';
 import Signup from '../../../../src/UI/Content/Signup/Signup';
 jest.mock('../../../../src/requests/api')
@@ -35,7 +35,7 @@ describe('bm-c1: Signup Component testing', () => {
    * a11. (Route) should display element to lead users to login page (login button)
    * a12. (EH) should start signup request when 'signup' is clicked 
    * a13. (DOM) should show 'signup success' message when signup completed 
-   * a14. a16. (DOM) should show "signup failure" message when signup failed because of network issue or 4xx or 5xx error
+   * a14. (DOM) should show "signup failure" message when signup failed because of network issue or 4xx or 5xx error
    *
    **/
 
@@ -269,6 +269,34 @@ describe('bm-c1: Signup Component testing', () => {
       // wait for expectation meet otherwise async timeout
       await wait(() => {
         expect(getByText('requesting user signup success')).toBeInTheDocument()
+      })
+    })
+  })
+  
+  test('a14. (DOM) should show "signup failure" message when signup failed because of network issue or 4xx or 5xx error', async () => {
+    api.request = jest.fn().mockReturnValue(Promise.reject(internalServerError500Response))
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={Signup} isAuth />
+      )
+      const inputs = await waitForElement(() => [
+        getByLabelText('User Name'),
+        getByLabelText('Email'),
+        getByLabelText('Password'),
+        getByLabelText('Password Confirm'),
+      ])
+
+      seedInputTestValues(inputs, [
+        'test-user',
+        'test@test.com',
+        'test-password',
+        'test-password'
+      ])
+
+      fireEvent.click(getByText('Signup'))
+      // wait for expectation meet otherwise async timeout
+      await wait(() => {
+        expect(getByText('requesting user signup failed')).toBeInTheDocument()
       })
     })
   })

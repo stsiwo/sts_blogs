@@ -29,21 +29,21 @@ export const request = async (request: RequestContentType): Promise<ResponseResu
   }).then((response: AxiosResponse) => {
     /** success response **/
     console.log('api request succeeded.')
-    return {
+    return Promise.resolve({
       data: response.data,
       status: ResponseResultStatusEnum.SUCCESS,
-    } as ResponseResultType
+    } as ResponseResultType)
 
   }).catch((error: AxiosError<ErrorResponseDataType>) => {
-    console.log('api request failed.')
+    console.log('api request failed. at request func')
 
     /** handle when cancel request **/
     if (api.isCancel(error)) {
       console.log('request is cancaled')
-      throw {
+      return Promise.reject({
         status: ResponseResultStatusEnum.CANCEL,
         errorMsg: error.message
-      }
+      })
     }
     /**
      * https://github.com/axios/axios/issues/960
@@ -61,16 +61,16 @@ export const request = async (request: RequestContentType): Promise<ResponseResu
         })
       }
 
-      throw {
+      return Promise.reject({
         status: ResponseResultStatusEnum.FAILURE,
         errorMsg: error.response.data.message
-      }
+      })
     }
     /** connection (network) error handling **/
     console.log('api request failed because of network error')
-    throw {
+    return Promise.reject({
       status: ResponseResultStatusEnum.FAILURE,
       errorMsg: error.message
-    }
+    })
   })
 }
