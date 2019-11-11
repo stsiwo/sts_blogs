@@ -33,4 +33,28 @@ describe('utils testing', () => {
     const array = []
     expect(array.length != 0).toBeFalsy()
   })
+
+  const testPromise = (is: boolean): Promise<any> => {
+    return new Promise((res, rej) => {
+      if (is) res(1)
+      else rej(0)
+    })
+      .then((data) => {
+        console.log(data)
+      })
+      .catch((error) => {
+        console.log(error)
+        return Promise.resolve(error)
+      })
+      .then((data) => {
+        console.log('then ater catch')
+        return Promise.resolve('yes')
+      })
+  }
+
+  test('test promise', async () => {
+
+    console.log(await testPromise(false))
+
+  })
 })

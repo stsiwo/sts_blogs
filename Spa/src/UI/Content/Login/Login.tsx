@@ -2,65 +2,23 @@ import * as React from 'react';
 import './Login.scss';
 import { UserLoginType, initialUserLoginStatus, UserType } from '../../../domain/user/UserType';
 import { UserLoginValidationType, UserLoginInputTouchedType, initialUserLoginInputTouchedState, initialUserLoginValidationState } from '../../../domain/user/UserValidationType';
-import { ResponseResultType, ResponseResultStatusEnum, RequestMethodEnum } from '../../../requests/types';
+import { ResponseResultType, ResponseResultStatusEnum, RequestMethodEnum, UserResponseDataType } from '../../../requests/types';
 import * as yup from 'yup'
 import { request } from '../../../requests/request';
 import { useDispatch } from 'react-redux';
 import { toggleLoginStatusActionCreator } from '../../../actions/creators';
 import { useAuthContext } from '../../Base/Context/AuthContext/AuthContext';
+import { useRequest } from '../../Base/Hooks/Request/useRequest';
+import { useUserLoginValidation } from '../../Base/Hooks/Validation/UserLogin/useUserLoginValidation';
+import { Link } from 'react-router-dom';
 
 const Login: React.FunctionComponent<{}> = (props: {}) => {
 
   const [currentUserLoginStatus, setUserLoginStatus] = React.useState<UserLoginType>(initialUserLoginStatus)
-  const [currentValidationError, setValidationError] = React.useState<UserLoginValidationType>(initialUserLoginValidationState)
-  const [currentInputTouched, setInputTouched] = React.useState<UserLoginInputTouchedType>(initialUserLoginInputTouchedState)
+  const { currentRequestStatus, setRequestStatus, sendRequest } = useRequest({})
+  const { currentValidationError, touch, validate } = useUserLoginValidation({ domain: currentUserLoginStatus })
 
-  const [currentLoginRequestStatus, setLoginRequestStatus] = React.useState<ResponseResultType>({
-    status: ResponseResultStatusEnum.INITIAL
-  })
   const { dispatch } = useAuthContext()
-
-  let schema = yup.object().shape<UserLoginType>({
-    email: yup.string().email().required(),
-    password: yup.string().required(),
-    confirm: yup.string().required().oneOf([yup.ref('password'), null], 'passwords must match')
-  });
-
-  React.useEffect(() => {
-    function validateFormInput() {
-      schema
-        .validate(currentUserLoginStatus, {
-          abortEarly: false
-        })
-        .then(() => {
-          console.log('validation passed')
-          setValidationError({
-            ...initialUserLoginValidationState
-          })
-        })
-        .catch((error: yup.ValidationError) => {
-          console.log('validation error detected')
-          console.log(error)
-          // clear all of error message first
-          for (let key in currentValidationError) delete currentValidationError[key as keyof UserLoginType]
-          // assign new error message 
-          error.inner.forEach((eachError: yup.ValidationError) => {
-            if (currentInputTouched[eachError.path as keyof UserLoginType])
-              currentValidationError[eachError.path as keyof UserLoginType] = eachError.message
-          })
-          setValidationError({
-            ...currentValidationError
-          })
-        })
-    }
-    console.log('validating input.... should be called only mount and when input is updated')
-    validateFormInput()
-    return () => {
-    };
-  }, [
-      ...Object.keys(currentUserLoginStatus).map(key => currentUserLoginStatus[key as keyof UserLoginType]),
-      ...Object.keys(currentInputTouched).map(key => currentInputTouched[key as keyof UserLoginInputTouchedType]) // for update when input focus
-    ]);
 
   const handleInputChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
     currentUserLoginStatus[e.currentTarget.name as keyof UserLoginType] = e.currentTarget.value
@@ -70,76 +28,33 @@ const Login: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const handleInitialFocusEvent: React.EventHandler<React.FocusEvent<HTMLInputElement>> = (e) => {
-    console.log(e.currentTarget.name)
-    console.log(e.currentTarget.value)
-    currentInputTouched[e.currentTarget.name as keyof UserLoginValidationType] = true
-    setInputTouched({
-      ...currentInputTouched
-    })
+    touch(e.currentTarget.name)
   }
 
   const handleSubmitClickEvent: React.EventHandler<React.MouseEvent<HTMLInputElement>> = async (e) => {
     console.log('clicked update butuon')
     // final check validation ...
-    schema.validate(currentUserLoginStatus, {
-      abortEarly: false
-    })
-      .then(async () => {
+    validate()
+      .then(() => {
         console.log('validation passed')
-
-        // set headers (multipart/form-data)
-        const headers: {} = { 'content-type': 'application/json' }
-
-        setLoginRequestStatus({
-          status: ResponseResultStatusEnum.FETCHING
-        })
-        // send request
-        await request({
-          url: '/login',
+        sendRequest({
+          path: '/login',
           method: RequestMethodEnum.POST,
-          headers: headers,
+          headers: { 'content-type': 'application/json' },
           data: JSON.stringify(currentUserLoginStatus)
         })
-          .then((responseResult: ResponseResultType) => {
-            setLoginRequestStatus({
-              status: responseResult.status
-            })
-            // save user info in response data to localStorage
-            // this is to identify user is login or not (redux is not useful when reload)
-            // assuming data.user exists in response
-            if (responseResult.data) {
-              dispatch({
-                type: 'login',
-                user: responseResult.data.user as UserType
-              })
-            }
+          .then((data: UserResponseDataType) => {
+            if (data) dispatch({ type: 'login', user: data.user as UserType })
           })
-          .catch((responseResult: ResponseResultType) => {
-            setLoginRequestStatus({
-              status: responseResult.status,
-              errorMsg: responseResult.errorMsg
-            })
-          })
-      })
-      .catch((error: yup.ValidationError) => {
-        console.log('validation failed')
-        console.log(error)
-        error.inner.forEach((eachError: yup.ValidationError) => {
-          currentValidationError[eachError.path as keyof UserLoginType] = eachError.message
-        })
-        setValidationError({
-          ...currentValidationError
-        })
-        return false
       })
   }
 
   return (
     <div className="login-form-cover">
       <h2 className="login-form-title">Login Form</h2>
-      {(currentLoginRequestStatus.status === ResponseResultStatusEnum.FETCHING && <p>requesting user login ...</p>)}
-      {(currentLoginRequestStatus.status === ResponseResultStatusEnum.SUCCESS && <p>requesting user login success</p>)}
-      {(currentLoginRequestStatus.status === ResponseResultStatusEnum.FAILURE && <p>requesting user login failed</p>)}
+      {(currentRequestStatus.status === ResponseResultStatusEnum.FETCHING && <p>requesting user login ...</p>)}
+      {(currentRequestStatus.status === ResponseResultStatusEnum.SUCCESS && <p>requesting user login success</p>)}
+      {(currentRequestStatus.status === ResponseResultStatusEnum.FAILURE && <p>requesting user login failed</p>)}
       <form className="login-form-content">
         <div className="login-form-content-item login-form-content-email">
           <label htmlFor="email" className="login-form-content-item-label">Email</label>
@@ -156,8 +71,11 @@ const Login: React.FunctionComponent<{}> = (props: {}) => {
           <input type="password" name="confirm" id="confirm" className="login-form-content-item-input" placeholder="enter your password again..." value={currentUserLoginStatus.confirm} onFocus={handleInitialFocusEvent} onChange={handleInputChangeEvent} />
           {(currentValidationError.confirm && <div className="input-error">{currentValidationError.confirm}</div>)}
         </div>
+        <div className="">
+          <span>if you don&rsquo;t have account  </span><Link to='/login' >Signup Page</Link>
+        </div>
         <div className="login-form-content-btn-wrapper">
-          <input className="regular-btn signup-form-content-btn" type="button" onClick={handleSubmitClickEvent} value="Login" />
+          <input className="regular-btn login-form-content-btn" type="button" onClick={handleSubmitClickEvent} value="Login" />
         </div>
       </form>
     </div>
