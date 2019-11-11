@@ -33,10 +33,9 @@ describe('bm-c1: Signup Component testing', () => {
    * a9. (validation) should display error msg when password and confirm does not match
    * a10. (validation) should not allow to signup when password and confirm does not match
    * a11. (Route) should display element to lead users to login page (login button)
-   * a12. (Route) should display element to lead users to login page (login button)
-   * a14. (EH) should start signup request when 'signup' is clicked 
-   * a15. (DOM) should show 'signup success' message when signup completed 
-   * a16. a16. (DOM) should show "signup failure" message when signup failed because of network issue or 4xx or 5xx error
+   * a12. (EH) should start signup request when 'signup' is clicked 
+   * a13. (DOM) should show 'signup success' message when signup completed 
+   * a14. a16. (DOM) should show "signup failure" message when signup failed because of network issue or 4xx or 5xx error
    *
    **/
 
@@ -171,6 +170,7 @@ describe('bm-c1: Signup Component testing', () => {
   })
 
   test('a9. (validation) should display error msg when password and confirm does not match', async () => {
+    api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
     await act(async () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Signup} isAuth />
@@ -197,6 +197,16 @@ describe('bm-c1: Signup Component testing', () => {
       await wait(() => {
         expect(api.request).toHaveBeenCalledTimes(1)
       })
+    })
+  })
+
+  test('a11. (Route) should display element to lead users to login page (login button)', async () => {
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={Signup} />
+      )
+      const loginNode = await waitForElement(() => getByText('Login Page'))
+      expect(loginNode.getAttribute('href')).toBe('/login')
     })
   })
   afterEach(() => {

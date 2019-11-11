@@ -10,6 +10,7 @@ import { toggleLoginStatusActionCreator } from '../../../actions/creators';
 import { useAuthContext } from '../../Base/Context/AuthContext/AuthContext';
 import { useUserSignupValidation } from '../../Base/Hooks/Validation/UserSignup/useUserSignupValidation';
 import { useRequest } from '../../Base/Hooks/Request/useRequest';
+import { Link } from 'react-router-dom';
 
 
 const Signup: React.FunctionComponent<{}> = (props: {}) => {
@@ -74,6 +75,9 @@ const Signup: React.FunctionComponent<{}> = (props: {}) => {
           <label htmlFor="confirm" className="signup-form-content-item-label">Password Confirm</label>
           <input type="password" name="confirm" id="confirm" className="signup-form-content-item-input" placeholder="enter your password again..." value={currentUserSignupStatus.confirm} onFocus={handleInitialFocusEvent} onChange={handleInputChangeEvent} />
           {(currentValidationError.confirm && <div className="input-error">{currentValidationError.confirm}</div>)}
+        </div>
+        <div className="">
+          <span>if you alreay have account </span><Link to='/login' >Login Page</Link>
         </div>
         <div className="signup-form-content-btn-wrapper">
           <input className="signup-form-content-btn" type="button" onClick={handleSubmitClickEvent} value="Signup" />
