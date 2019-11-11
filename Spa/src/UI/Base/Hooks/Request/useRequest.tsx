@@ -47,7 +47,6 @@ export const useRequest = (input: UseRequestStatusInputType): UseRequestStatusOu
           status: ResponseResultStatusEnum.FAILURE,
           errorMsg: error.message
         })
-        return Promise.reject()
       })
   }
 
