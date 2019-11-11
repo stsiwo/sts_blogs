@@ -7,7 +7,7 @@ import { api } from '../../../../src/requests/api';
 import { userGET200Response } from '../../../requests/fixtures';
 import { ContextWrapperComponent } from '../../fixtures';
 import Signup from '../../../../src/UI/Content/Signup/Signup';
-jest.mock('../../../../../src/requests/api')
+jest.mock('../../../../src/requests/api')
 
 
 describe('bm-c1: Signup Component testing', () => {
@@ -23,15 +23,15 @@ describe('bm-c1: Signup Component testing', () => {
    * ** all **
    *
    * a1. (validation) should display error msg when user name is null/empty 
-   * a2. (validation) should not allow to update when user name is null/empty 
+   * a2. (validation) should not allow to signup when user name is null/empty 
    * a3. (validation) should display error msg when user email is null/empty 
-   * a4. (validation) should not allow to update when user email is null/empty 
+   * a4. (validation) should not allow to signup when user email is null/empty 
    * a5. (validation) should display error msg when user password is null/empty 
-   * a6. (validation) should not allow to update when user password is null/empty 
+   * a6. (validation) should not allow to signup when user password is null/empty 
    * a7. (validation) should display error msg when user confirm is null/empty 
-   * a8. (validation) should not allow to update when user confirm is null/empty 
+   * a8. (validation) should not allow to signup when user confirm is null/empty 
    * a9. (validation) should display error msg when password and confirm does not match
-   * a10. (validation) should not allow to update when password and confirm does not match
+   * a10. (validation) should not allow to signup when password and confirm does not match
    * a11. (Route) should display element to lead users to login page (login button)
    * a12. (Route) should display element to lead users to login page (login button)
    * a14. (EH) should start signup request when 'signup' is clicked 
@@ -55,7 +55,7 @@ describe('bm-c1: Signup Component testing', () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Signup} isAuth />
       )
-      const nameInput = await waitForElement(() => getByLabelText('Name:'))
+      const nameInput = await waitForElement(() => getByLabelText('User Name'))
       fireEvent.focus(nameInput) // need to focus to enable to display validation error on dom
       fireEvent.change(nameInput, { target: { value: '' } })
       const nameErrorNode = await waitForElement(() => getByText('name is a required field'))
@@ -63,23 +63,142 @@ describe('bm-c1: Signup Component testing', () => {
     })
   })
 
-  test('a2. (validation) should not allow to update when user name is null/empty', async () => {
+  test('a2. (validation) should not allow to signup when user name is null/empty', async () => {
     api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
     await act(async () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Signup} isAuth />
       )
-      const nameInput = await waitForElement(() => getByLabelText('Name:'))
+      const nameInput = await waitForElement(() => getByLabelText('User Name'))
       fireEvent.focus(nameInput) // need to focus to enable to display validation error on dom
       fireEvent.change(nameInput, { target: { value: '' } })
       const nameErrorNode = await waitForElement(() => getByText('name is a required field'))
-      fireEvent.click(getByText('Update'))
+      fireEvent.click(getByText('Signup'))
       await wait(() => {
         expect(api.request).toHaveBeenCalledTimes(1)
       })
     })
   })
 
+  test('a3. (validation) should display error msg when user email is null/empty', async () => {
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={Signup} isAuth />
+      )
+      const emailInput = await waitForElement(() => getByLabelText('Email'))
+      fireEvent.focus(emailInput) // need to focus to enable to display validation error on dom
+      fireEvent.change(emailInput, { target: { value: '' } })
+      const emailErrorNode = await waitForElement(() => getByText('email is a required field'))
+      expect(emailErrorNode).toBeInTheDocument()
+    })
+  })
+
+  test('a4. (validation) should not allow to signup when user email is null/empty', async () => {
+    api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={Signup} isAuth />
+      )
+      const emailInput = await waitForElement(() => getByLabelText('Email'))
+      fireEvent.focus(emailInput) // need to focus to enable to display validation error on dom
+      fireEvent.change(emailInput, { target: { value: '' } })
+      const emailErrorNode = await waitForElement(() => getByText('email is a required field'))
+      fireEvent.click(getByText('Signup'))
+      await wait(() => {
+        expect(api.request).toHaveBeenCalledTimes(1)
+      })
+    })
+  })
+
+  test('a5. (validation) should display error msg when user password is null/empty', async () => {
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={Signup} isAuth />
+      )
+      const passwordInput = await waitForElement(() => getByLabelText('Password'))
+      fireEvent.focus(passwordInput) // need to focus to enable to display validation error on dom
+      fireEvent.change(passwordInput, { target: { value: '' } })
+      const passwordErrorNode = await waitForElement(() => getByText('password is a required field'))
+      expect(passwordErrorNode).toBeInTheDocument()
+    })
+  })
+
+  test('a6. (validation) should not allow to signup when user password is null/empty', async () => {
+    api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={Signup} isAuth />
+      )
+      const passwordInput = await waitForElement(() => getByLabelText('Password'))
+      fireEvent.focus(passwordInput) // need to focus to enable to display validation error on dom
+      fireEvent.change(passwordInput, { target: { value: '' } })
+      const passwordErrorNode = await waitForElement(() => getByText('password is a required field'))
+      fireEvent.click(getByText('Signup'))
+      await wait(() => {
+        expect(api.request).toHaveBeenCalledTimes(1)
+      })
+    })
+  })
+
+  test('a7. (validation) should display error msg when user confirm is null/empty', async () => {
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={Signup} isAuth />
+      )
+      const confirmInput = await waitForElement(() => getByLabelText('Password Confirm'))
+      fireEvent.focus(confirmInput) // need to focus to enable to display validation error on dom
+      fireEvent.change(confirmInput, { target: { value: '' } })
+      const confirmErrorNode = await waitForElement(() => getByText('confirm is a required field'))
+      expect(confirmErrorNode).toBeInTheDocument()
+    })
+  })
+
+  test('a8. (validation) should not allow to signup when user confirm is null/empty', async () => {
+    api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={Signup} isAuth />
+      )
+      const confirmInput = await waitForElement(() => getByLabelText('Password Confirm'))
+      fireEvent.focus(confirmInput) // need to focus to enable to display validation error on dom
+      fireEvent.change(confirmInput, { target: { value: '' } })
+      const confirmErrorNode = await waitForElement(() => getByText('confirm is a required field'))
+      fireEvent.click(getByText('Signup'))
+      await wait(() => {
+        expect(api.request).toHaveBeenCalledTimes(1)
+      })
+    })
+  })
+
+  test('a9. (validation) should display error msg when password and confirm does not match', async () => {
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={Signup} isAuth />
+      )
+      const confirmInput = await waitForElement(() => getByLabelText('Password Confirm'))
+      fireEvent.focus(confirmInput) // need to focus to enable to display validation error on dom
+      fireEvent.change(confirmInput, { target: { value: 'match' } })
+      const confirmErrorNode = await waitForElement(() => getByText('passwords must match'))
+      expect(confirmErrorNode).toBeInTheDocument()
+    })
+  })
+
+  test('a10. (validation) should not allow to signup when password and confirm does not match', async () => {
+    api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={Signup} isAuth />
+      )
+      const confirmInput = await waitForElement(() => getByLabelText('Password Confirm'))
+      fireEvent.focus(confirmInput) // need to focus to enable to display validation error on dom
+      fireEvent.change(confirmInput, { target: { value: 'match' } })
+      const confirmErrorNode = await waitForElement(() => getByText('passwords must match'))
+      fireEvent.click(getByText('Signup'))
+      await wait(() => {
+        expect(api.request).toHaveBeenCalledTimes(1)
+      })
+    })
+  })
   afterEach(() => {
     console.log('bm-c1: afterEach ')
   })

@@ -50,7 +50,6 @@ export const useValidation = <D extends object>(input: UseValidationStatusInputT
         setValidationError({
           ...currentValidationError
         })
-        return Promise.reject(error)
       })
   }
 
