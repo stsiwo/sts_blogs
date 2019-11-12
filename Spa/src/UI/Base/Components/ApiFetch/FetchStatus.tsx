@@ -2,14 +2,17 @@ import * as React from 'react';
 import './FetchStatus.scss';
 import { FetchStatusPropType } from './types';
 import { ResponseResultStatusEnum } from '../../../../requests/types';
+var debug = require('debug')('ui:FetchStatus')
 
 const FetchStatus: React.FunctionComponent<FetchStatusPropType> = (props: FetchStatusPropType) => {
+  debug('Component start')
 
   /** 
    * re-implement this
    * close btn should be close this <FetchStatus> component. not for modify any currentFetchStatus
    **/
   const handleFetchStatusCloseClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
+    debug('start handle fetch status close click event')
     props.setFetchStatus({
       status: ResponseResultStatusEnum.INITIAL
     })

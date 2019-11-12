@@ -1,9 +1,11 @@
 import { QueryStringType } from "./requests/types";
 import isEmpty = require('lodash/isEmpty');
+var debug = require('debug')('utils')
+
 
 export const prettyConsole = (target: any): void => {
   var cache: any[] = []
-  console.log(JSON.stringify(target, function(key, value) {
+  debug(JSON.stringify(target, function(key, value) {
     if (typeof value === 'object' && value !== null) {
         if (cache.indexOf(value) !== -1) {
             // Duplicate reference found, discard key

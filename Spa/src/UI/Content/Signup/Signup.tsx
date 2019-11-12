@@ -11,7 +11,7 @@ import { useAuthContext } from '../../Base/Context/AuthContext/AuthContext';
 import { useUserSignupValidation } from '../../Base/Hooks/Validation/UserSignup/useUserSignupValidation';
 import { useRequest } from '../../Base/Hooks/Request/useRequest';
 import { Link } from 'react-router-dom';
-
+var debug = require('debug')('ui:Signup')
 
 const Signup: React.FunctionComponent<{}> = (props: {}) => {
 
@@ -31,11 +31,11 @@ const Signup: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const handleSubmitClickEvent: React.EventHandler<React.MouseEvent<HTMLInputElement>> = async (e) => {
-    console.log('clicked update butuon')
+    debug('clicked update butuon')
     // final check validation ...
     validate()
       .then(() => {
-        console.log('validation passed')
+        debug('validation passed')
         sendRequest({
           path: '/signup',
           method: RequestMethodEnum.POST,

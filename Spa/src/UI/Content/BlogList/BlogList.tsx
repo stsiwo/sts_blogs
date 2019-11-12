@@ -19,6 +19,7 @@ import PageLimitSelect from '../../Base/Components/Pagination/PageLimitSelect';
 import RefreshBtn from '../../Base/Components/RefreshBtn/RefreshBtn';
 import { useRefreshBtn } from '../../Base/Components/RefreshBtn/useRefreshBtn';
 import { getBlogTestData } from '../../../../tests/data/BlogFaker';
+var debug = require('debug')('ui:BlogList')
 
 declare type FetchResultType = {
   status: ResponseResultStatusEnum
@@ -45,10 +46,10 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
 
   const callbackAfterApiFetch = (data: any): void => {
     // assign fetched blogs data to this state
-    console.log('now callback of useApiFetch is called...')
+    debug('now callback of useApiFetch is called...')
     //setBlogs(getBlogTestData())
     if (data) {
-      console.log('response data is available')
+      debug('response data is available')
       setBlogs(data.blogs)
 
       // assign new total count of pagination

@@ -10,6 +10,7 @@ import { TagType } from '../../../../../domain/tag/TagType';
 import { useBlogValidation } from '../../../../Base/Hooks/Validation/Blog/useBlogValidation';
 import { useRequest } from '../../../../Base/Hooks/Request/useRequest';
 import { useAuthContext } from '../../../../Base/Context/AuthContext/AuthContext';
+var debug = require('debug')('ui:NewBlog')
 
 const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
 
@@ -39,10 +40,10 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const handleSaveBlogClickEvent: React.EventHandler<React.MouseEvent<HTMLInputElement>> = async (e) => {
-    console.log('start handling save button click')
+    debug('start handling save button click')
     validate()
       .then(() => {
-        console.log('validation passed at save button event handler') 
+        debug('validation passed at save button event handler') 
         saveRequest({
           path: path, 
           method: method, 
@@ -50,7 +51,7 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
           data: mapStateToFormData(currentBlog),
         })
       }, () => {
-        console.log('validation failed at save button event handler') 
+        debug('validation failed at save button event handler') 
       })
   }
 

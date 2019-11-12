@@ -2,6 +2,7 @@ import * as React from 'react';
 import './Pagination.scss';
 import { PaginationPropType, BuildPaginationResultType, PageType } from './types';
 import { buildPagination } from './buildPagination';
+var debug = require('debug')('ui:Pagination')
 
 const Pagination: React.FunctionComponent<PaginationPropType> = (props: PaginationPropType) => {
 
@@ -9,7 +10,7 @@ const Pagination: React.FunctionComponent<PaginationPropType> = (props: Paginati
   /** REFACTOR **/
   // setter should be done here (not inside api fetch component)
   const handlePageClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
-    console.log('start new page click event')
+    debug('start new page click event')
     props.currentPaginationStatus.offset = parseInt(e.currentTarget.value)
     props.setPaginationStatus({
       ...props.currentPaginationStatus

@@ -10,6 +10,7 @@ import { TagType } from '../../../../../domain/tag/TagType';
 import { useRequest } from '../../../../Base/Hooks/Request/useRequest';
 import { useBlogValidation } from '../../../../Base/Hooks/Validation/Blog/useBlogValidation'
 import { useAuthContext } from '../../../../Base/Context/AuthContext/AuthContext';
+var debug = require('debug')('ui:UpdateBlog')
 
 const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
 
@@ -24,7 +25,7 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
 
   /** lifecycle **/
   React.useEffect(() => {
-    console.log('initial fetch at useEffect')
+    debug('initial fetch at useEffect')
     fetchBlog({
       path: '/blogs/' + blogId,
       method: RequestMethodEnum.GET
@@ -32,7 +33,7 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
       // call from previous 'catch' and 'then' of 'fetchBlog'
       // since resolve promise in the 'catch'
       .then((data: BlogResponseDataType) => {
-        console.log('then func of fetchBlog func')
+        debug('then func of fetchBlog func')
         if (data) setBlog(data.blog)
       })
   }, []);
@@ -52,10 +53,10 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const handleSaveBlogClickEvent: React.EventHandler<React.MouseEvent<HTMLInputElement>> = async (e) => {
-    console.log('start handling save button click')
+    debug('start handling save button click')
     validate()
       .then(() => {
-        console.log('validation passed at save button event handler') 
+        debug('validation passed at save button event handler') 
         updateRequest({
           path: '/blogs/' + blogId,
           method: RequestMethodEnum.PUT,
@@ -63,7 +64,7 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
           data: mapStateToFormData(currentBlog),
         })
       }, () => {
-        console.log('validation failed at save button event handler') 
+        debug('validation failed at save button event handler') 
       })
   }
 

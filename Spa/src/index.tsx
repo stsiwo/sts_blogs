@@ -12,7 +12,7 @@ import Header from './UI/Header/Header';
 import { getUserTestData } from '../tests/data/UserFaker';
 
 // enable debug
-console.log(process.env.DEBUG)
+process.env.DEBUG
 
 var debug = require('debug')('ui:App')
 

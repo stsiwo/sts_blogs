@@ -13,6 +13,7 @@ import { useCssGlobalContext } from '../../Context/CssGlobalContext/CssGlobalCon
 import Icon from '../Icon/Icon';
 import { StateType } from '../../../../states/types';
 import { useAuthContext } from '../../Context/AuthContext/AuthContext';
+var debug = require('debug')('ui:BlogFilterSort')
 
 const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: BlogFilterSortPropType) => {
 
@@ -31,13 +32,13 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
 
   /** EH **/
   const handleTagInputEnterOrTabKeyClickEvent: React.EventHandler<React.KeyboardEvent<HTMLInputElement>> = (e) => {
-    console.log('start handling new tag input')
-    console.log(e.currentTarget.value)
+    debug('start handling new tag input')
+    debug(e.currentTarget.value)
 
     if (e.currentTarget.value === "") return false
 
     if (e.key == 'Enter' || e.key == 'Tab') {
-      console.log("updating tag filters")
+      debug("updating tag filters")
       props.currentFilters.tags.push({ name: e.currentTarget.value })
       props.setFilters({
         ...props.currentFilters,
@@ -61,16 +62,16 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
   }
 
   const handleSortChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
-    console.log('handling sort change ...')
-    console.log(e.currentTarget.value)
+    debug('handling sort change ...')
+    debug(e.currentTarget.value)
     props.setSort(parseInt(e.currentTarget.value))
   }
 
   const handleKeywordChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
-    console.log('handling keyword change ...')
+    debug('handling keyword change ...')
     if (e.currentTarget.value === "") return false
 
-    console.log(e.currentTarget.value)
+    debug(e.currentTarget.value)
 
     props.currentFilters.keyword = e.currentTarget.value
     props.setFilters({
@@ -92,7 +93,7 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
     /** must enable componentdidupdate also, otherwise not close when click outside **/
     const handleFilterSortNavCloseWhenOutsideClickEvent = (e: Event) => {
 
-      console.log('add event listener during this component is mounted')
+      debug('add event listener during this component is mounted')
       if (filterSortBarWrapperRef.current.contains(e.target)) {
 
         return false;
@@ -104,7 +105,7 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
     }
 
     return () => {
-      console.log('remove event listener after this component is unmounted')
+      debug('remove event listener after this component is unmounted')
       window.removeEventListener('mousedown', handleFilterSortNavCloseWhenOutsideClickEvent);
     }
   })

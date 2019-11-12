@@ -4,6 +4,7 @@ import { AxiosError } from 'axios';
 import { ResponseResultStatusEnum, ResponseResultType } from '../../../../requests/types';
 import { request } from '../../../../requests/request';
 import { buildQueryString } from '../../../../utils';
+var debug = require('debug')('ui:FetchStatus')
 
 
 export const useRequest = (input: UseRequestStatusInputType): UseRequestStatusOutputType => {
@@ -13,8 +14,8 @@ export const useRequest = (input: UseRequestStatusInputType): UseRequestStatusOu
   })
 
   async function sendRequest(args: FetchDataArgType) {
-    console.log('start handling fetch data function')
-    console.log(args)
+    debug('start handling fetch data function')
+    debug(args)
     setRequestStatus({
       status: ResponseResultStatusEnum.FETCHING,
     })
@@ -25,8 +26,8 @@ export const useRequest = (input: UseRequestStatusInputType): UseRequestStatusOu
       ...(args.data && { data: args.data })
     })
       .then((responseResult: ResponseResultType) => {
-        console.log('fetch data function receive response successfully')
-        console.log(responseResult)
+        debug('fetch data function receive response successfully')
+        debug(responseResult)
         /** this include 'catch' clause of 'requests' method **/
         setRequestStatus({
           status: responseResult.status,
@@ -40,7 +41,7 @@ export const useRequest = (input: UseRequestStatusInputType): UseRequestStatusOu
         return Promise.resolve(responseResult.data)
       })
       .catch((error: AxiosError) => {
-        console.log('fetch data then clause failedat sendRequest')
+        debug('fetch data then clause failedat sendRequest')
         /** this is called when above 'then' caluse failed **/
         /** esp, 'args.callback' internal error **/
         setRequestStatus({

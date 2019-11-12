@@ -8,6 +8,7 @@ import './Profile.scss';
 import { useAuthContext } from '../../../Base/Context/AuthContext/AuthContext';
 import { useApiFetch } from '../../../Base/Components/ApiFetch/useApiFetch';
 import { useRequest } from '../../../Base/Hooks/Request/useRequest';
+var debug = require('debug')('ui:Profile')
 
 
 const Profile: React.FunctionComponent<{}> = (props: {}) => {
@@ -39,14 +40,14 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
           abortEarly: false
         })
         .then(() => {
-          console.log('validation passed')
+          debug('validation passed')
           setValidationError({
             ...initialUserValidationState
           })
         })
         .catch((error: yup.ValidationError) => {
-          console.log('validation error detected')
-          console.log(error)
+          debug('validation error detected')
+          debug(error)
           // clear all of error message first
           for (let key in currentValidationError) delete currentValidationError[key as keyof UserValidationType]
           // assign new error message 
@@ -59,7 +60,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
           })
         })
     }
-    console.log('validating input.... should be called only mount and when input is updated')
+    debug('validating input.... should be called only mount and when input is updated')
     validateFormInput()
     return () => {
     };
@@ -86,10 +87,10 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
     path: path,
     method: RequestMethodEnum.GET,
     callback: (data: UserResponseDataType) => {
-      console.log('api fetch callback start')
+      debug('api fetch callback start')
       if (data) {
-        console.log('data is available')
-        console.log(data)
+        debug('data is available')
+        debug(data)
         setUser({
           ...data.user
         })
@@ -119,8 +120,8 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const handleNameChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
-    console.log('handling name change event')
-    console.log(e.currentTarget.value)
+    debug('handling name change event')
+    debug(e.currentTarget.value)
     setUser({
       ...currentUser,
       name: e.currentTarget.value
@@ -149,13 +150,13 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const handleSaveUserClickEvent: React.EventHandler<React.MouseEvent<HTMLInputElement>> = async (e) => {
-    console.log('clicked update butuon')
+    debug('clicked update butuon')
     // final check validation ...
     schema.validate(currentUser, {
       abortEarly: false
     })
       .then(async () => {
-        console.log('validation passed')
+        debug('validation passed')
 
         sendRequest({
           path: path,
@@ -165,8 +166,8 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
         })
       })
       .catch((error: yup.ValidationError) => {
-        console.log('validation failed')
-        console.log(error)
+        debug('validation failed')
+        debug(error)
         error.inner.forEach((eachError: yup.ValidationError) => {
           currentValidationError[eachError.path as keyof UserValidationType] = eachError.message
         })
@@ -177,7 +178,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
       })
   }
 
-  console.log(currentValidationError)
+  debug(currentValidationError)
 
   if (currentFetchStatus.status === ResponseResultStatusEnum.FETCHING) return (<p>fetching your data</p>)
 

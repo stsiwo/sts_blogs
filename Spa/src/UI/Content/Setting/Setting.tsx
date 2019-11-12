@@ -10,6 +10,7 @@ import BlogManagement from './BlogManagement/BlogManagement';
 import NewBlog from './BlogManagement/NewBlog/NewBlog';
 import UpdateBlog from './BlogManagement/UpdateBlog/UpdateBlog';
 import { AuthRoute } from '../../Base/Components/AuthRoute';
+var debug = require('debug')('ui:Setting')
 
 declare type SettingNavItemType = {
   name: string
@@ -44,7 +45,7 @@ const Setting: React.FunctionComponent<{}> = (props: {}) => {
 
   let { path, url } = useRouteMatch();
 
-  console.log(path)
+  debug(path)
 
   return (
     <div className="setting-wrapper">

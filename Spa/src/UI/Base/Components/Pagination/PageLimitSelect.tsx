@@ -1,12 +1,14 @@
 import * as React from 'react';
 import './PageLimitSelect.scss';
 import { PageLimitSelectPropType } from './types';
+var debug = require('debug')('ui:PageLimitSelect')
+
 
 const PageLimitSelect: React.FunctionComponent<PageLimitSelectPropType> = (props: PageLimitSelectPropType) => {
 
   const handlePageLimitChangeEvent: React.EventHandler<React.ChangeEvent<HTMLSelectElement>> = (e) => {
-    console.log('select option change event handler')
-    console.log(e.currentTarget.value)
+    debug('select option change event handler')
+    debug(e.currentTarget.value)
     props.currentPaginationStatus.limit = parseInt(e.currentTarget.value)
     props.setPaginationStatus({
       ...props.currentPaginationStatus

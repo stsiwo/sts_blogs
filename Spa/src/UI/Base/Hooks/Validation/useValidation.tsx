@@ -2,6 +2,7 @@ import * as React from 'react'
 import { UseValidationStatusInputType, UseValidationStatusOutputType, DomainValidationType, DomainInputTouchedType, ValidationType, InputTouchedType, SubmitInputTouchedType } from './types';
 import * as yup from 'yup'
 import { UserSignupType } from '../../../../domain/user/UserType';
+var debug = require('debug')('ui:hook:useValidation')
 
 const createInitialValidationError = <D extends object = {}>(domain: D): ValidationType<D> => {
   const initialValidationError = Object.keys(domain).reduce((pre: DomainValidationType<D>, cur: string) => {
@@ -54,12 +55,12 @@ export const useValidation = <D extends object>(input: UseValidationStatusInputT
       abortEarly: false
     })
       .then(async () => {
-        console.log('validation success')
+        debug('validation success')
         return Promise.resolve()
       })
       .catch((error: yup.ValidationError) => {
-        console.log('validation failed')
-        console.log(error)
+        debug('validation failed')
+        debug(error)
         error.inner.forEach((eachError: yup.ValidationError) => {
           currentValidationError[eachError.path as keyof ValidationType<D>] = eachError.message as ValidationType<D>[keyof D]
         })
@@ -79,14 +80,14 @@ export const useValidation = <D extends object>(input: UseValidationStatusInputT
           abortEarly: false
         })
         .then(() => {
-          console.log('validation passed')
+          debug('validation passed')
           setValidationError({
             ...initialValidationError
           })
         })
         .catch((error: yup.ValidationError) => {
-          console.log('validation error detected')
-          console.log(error)
+          debug('validation error detected')
+          debug(error)
           // clear all of error message first
           for (let key in currentValidationError)
             delete currentValidationError[key as keyof DomainValidationType<D>]
@@ -101,8 +102,8 @@ export const useValidation = <D extends object>(input: UseValidationStatusInputT
           })
         })
     }
-    console.log('validating input.... should be called only mount and when input is updated')
-    console.log(input.domain)
+    debug('validating input.... should be called only mount and when input is updated')
+    debug(input.domain)
     validateFormInput()
     return () => {
     };
