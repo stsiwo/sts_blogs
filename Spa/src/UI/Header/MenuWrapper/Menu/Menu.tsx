@@ -1,10 +1,10 @@
 import * as React from 'react';
-import './Menu.scss';
-import { Link } from 'react-router-dom';
-import MenuCloseIcon from './MenuCloseIcon/MenuCloseIcon';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { StateType } from '../../../../states/types';
-import { isUserLoggedIn } from '../../../../storages/user';
+import './Menu.scss';
+import MenuCloseIcon from './MenuCloseIcon/MenuCloseIcon';
+import { useAuthContext } from 'uiBaseContext/AuthContext/AuthContext';
 
 
 const Menu: React.FunctionComponent<{}> = (props: {}) => {
@@ -14,7 +14,7 @@ const Menu: React.FunctionComponent<{}> = (props: {}) => {
     e.stopPropagation()
   }
 
-  const isLogin = isUserLoggedIn() 
+  const { auth } = useAuthContext()
 
   return isNavBarOpen && (
     <ul className="header-menu-ul" onClick={handleStopPropagationClickEvent}>
@@ -31,11 +31,11 @@ const Menu: React.FunctionComponent<{}> = (props: {}) => {
       <li className="header-menu-li">
         <Link className="header-menu-li-link" to="./" >item4</Link>
       </li>
-      {isLogin &&
+      {auth.authed &&
         <li className="header-menu-li">
           <Link className="header-menu-li-link" to="/logout" >Logout</Link>
         </li>}
-      {!isLogin &&
+      {!auth.authed &&
         <React.Fragment>
           <li className="header-menu-li">
             <Link className="header-menu-li-link" to="/signup" >Signup</Link>

@@ -1,8 +1,7 @@
 import * as React from 'react';
-import './MenuToggleIcon.scss';
-import { useResponsiveComponent } from '../../Base/Hooks/ResponsiveComponentHook';
 import { useDispatch } from 'react-redux';
 import { toggleNavBarActionCreator } from '../../../actions/creators';
+import './MenuToggleIcon.scss';
 
 
 const MenuToggleIcon: React.FunctionComponent<{}> = (props: {}) => {

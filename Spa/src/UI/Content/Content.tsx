@@ -1,16 +1,13 @@
 import * as React from 'react';
-import './Content.scss';
-import { useResponsiveComponent } from '../Base/Hooks/ResponsiveComponentHook';
-import { useCssGlobalContext } from '../Base/Context/CssGlobalContext/CssGlobalContext';
 import { Route } from 'react-router-dom';
-import Home from './Home/Home';
-import Setting from './Setting/Setting';
-import Login from './Login/Login';
-import Signup from './Signup/Signup';
-import BlogList from './BlogList/BlogList';
 import Blog from './Blog/Blog';
+import BlogList from './BlogList/BlogList';
+import './Content.scss';
+import Home from './Home/Home';
+import Login from './Login/Login';
 import Logout from './Logout/Logout';
-import { useAuthContext } from '../Base/Context/AuthContext/AuthContext';
+import Setting from './Setting/Setting';
+import Signup from './Signup/Signup';
 
 
 const Content: React.FunctionComponent<{}> = (props: {}) => {

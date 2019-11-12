@@ -1,18 +1,16 @@
+import { BlogType, initialBlogState } from 'domain/blog/BlogType';
+import { TagType } from 'domain/tag/TagType';
 import * as React from 'react';
-import './Blog.scss';
 import { useParams } from 'react-router';
-import { BlogType, initialBlogState } from '../../../domain/blog/BlogType';
-import { getBlogTestData } from '../../../../tests/data/BlogFaker';
-import { TagType } from '../../../domain/tag/TagType';
-import { getTagTestData } from '../../../../tests/data/TagFaker';
-import { useRequest } from '../../Base/Hooks/Request/useRequest';
-import { RequestMethodEnum, BlogResponseDataType, ResponseResultStatusEnum } from '../../../requests/types';
-import Tag from '../../Base/Components/Tag/Tag';
+import { BlogResponseDataType, RequestMethodEnum, ResponseResultStatusEnum } from 'requests/types';
+import Tag from 'uiBaseComponent/Tag/Tag';
+import { useRequest } from 'uiBaseHook/Request/useRequest';
+import './Blog.scss';
 
 const Blog: React.FunctionComponent<{}> = (props: {}) => {
 
   let { blogId } = useParams()
-  
+
   const [currentBlog, setBlog] = React.useState<BlogType>(initialBlogState)
   const { currentRequestStatus: currentBlogFetchStatus, setRequestStatus: setBlogFetchStatus, sendRequest: fetchBlog } = useRequest({})
 
@@ -48,19 +46,19 @@ const Blog: React.FunctionComponent<{}> = (props: {}) => {
         {renderCurrentTags()}
       </div>
       <div className="blog-author-wrapper">
-        <img src="" alt="author avatar" className="blog-author-avatar"/>
+        <img src="" alt="author avatar" className="blog-author-avatar" />
         <h3 className="blog-author-name">author name</h3>
       </div>
       <div className="blog-content-wrapper" role='blog-content'>
         {currentBlog.content}
       </div>
     </div>
-    );
-  }
-  
-  export default Blog;
-  
-  
-  
-  
-  
+  );
+}
+
+export default Blog;
+
+
+
+
+

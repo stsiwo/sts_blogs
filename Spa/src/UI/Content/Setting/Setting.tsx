@@ -1,15 +1,13 @@
 import * as React from 'react';
-import './Setting.scss';
-import { useResponsiveComponent } from '../../Base/Hooks/ResponsiveComponentHook';
-import { useCssGlobalContext } from '../../Base/Context/CssGlobalContext/CssGlobalContext';
-import { Link, Route, Switch } from 'react-router-dom';
-import Profile from './Profile/Profile';
 import { useRouteMatch } from 'react-router';
-import SettingHome from './SettingHome/SettingHome';
+import { Link } from 'react-router-dom';
+import { AuthRoute } from 'uiBaseComponent/AuthRoute';
 import BlogManagement from './BlogManagement/BlogManagement';
 import NewBlog from './BlogManagement/NewBlog/NewBlog';
 import UpdateBlog from './BlogManagement/UpdateBlog/UpdateBlog';
-import { AuthRoute } from '../../Base/Components/AuthRoute';
+import Profile from './Profile/Profile';
+import './Setting.scss';
+import SettingHome from './SettingHome/SettingHome';
 var debug = require('debug')('ui:Setting')
 
 declare type SettingNavItemType = {

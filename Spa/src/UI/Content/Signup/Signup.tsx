@@ -1,16 +1,11 @@
+import { initialUserSignupStatus, UserSignupType, UserType } from 'domain/user/UserType';
 import * as React from 'react';
-import './Signup.scss';
-import { UserSignupType, initialUserSignupStatus, UserType } from '../../../domain/user/UserType';
-import { UserSignupValidationType, initialUserSignupValidationState, UserSignupInputTouchedType, initialUserSignupInputTouchedState } from '../../../domain/user/UserValidationType';
-import { ResponseResultType, ResponseResultStatusEnum, RequestMethodEnum, UserResponseDataType } from '../../../requests/types';
-import * as yup from 'yup'
-import { request } from '../../../requests/request';
-import { useDispatch } from 'react-redux';
-import { toggleLoginStatusActionCreator } from '../../../actions/creators';
-import { useAuthContext } from '../../Base/Context/AuthContext/AuthContext';
-import { useUserSignupValidation } from '../../Base/Hooks/Validation/UserSignup/useUserSignupValidation';
-import { useRequest } from '../../Base/Hooks/Request/useRequest';
 import { Link } from 'react-router-dom';
+import { RequestMethodEnum, ResponseResultStatusEnum, UserResponseDataType } from 'requests/types';
+import { useAuthContext } from 'uiBaseContext/AuthContext/AuthContext';
+import { useRequest } from 'uiBaseHook/Request/useRequest';
+import { useUserSignupValidation } from 'uiBaseHook/Validation/UserSignup/useUserSignupValidation';
+import './Signup.scss';
 var debug = require('debug')('ui:Signup')
 
 const Signup: React.FunctionComponent<{}> = (props: {}) => {

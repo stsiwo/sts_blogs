@@ -17,6 +17,8 @@
           "uiBaseContext/*": ["src/UI/Base/Context/*"]
           "uiBaseComponent/*": ["src/UI/Base/Components/*"]
           "ui/*": ["src/UI/*"]
+          "requests/*": ["src/requests/*"]
+          "domain/*": ["src/domain/*"]
         }
     }
 }

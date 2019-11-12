@@ -4,7 +4,7 @@ import { api } from "./api";
 import { AxiosResponse, AxiosError } from "axios";
 import { useDispatch } from "react-redux";
 import { toggleLoginStatusActionCreator } from "../actions/creators";
-import { useAuthContext } from "../UI/Base/Context/AuthContext/AuthContext";
+import { useAuthContext } from "uiBaseContext/AuthContext/AuthContext";
 var debug = require('debug')('request')
 
 

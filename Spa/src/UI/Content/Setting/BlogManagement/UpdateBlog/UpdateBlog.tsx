@@ -1,15 +1,12 @@
+import { BlogType, initialBlogState } from 'domain/blog/BlogType';
+import { TagType } from 'domain/tag/TagType';
 import * as React from 'react';
-import './UpdateBlog.scss';
 import { useParams } from 'react-router';
-import * as yup from 'yup'
-import { BlogType, initialBlogState } from '../../../../../domain/blog/BlogType';
-import { BlogValidationType, initialBlogValidationState } from '../../../../../domain/blog/BlogValidationType';
-import { ResponseResultType, ResponseResultStatusEnum, RequestMethodEnum, BlogResponseDataType, UserResponseDataType } from '../../../../../requests/types';
-import { request } from '../../../../../requests/request';
-import { TagType } from '../../../../../domain/tag/TagType';
-import { useRequest } from '../../../../Base/Hooks/Request/useRequest';
-import { useBlogValidation } from '../../../../Base/Hooks/Validation/Blog/useBlogValidation'
-import { useAuthContext } from '../../../../Base/Context/AuthContext/AuthContext';
+import { BlogResponseDataType, RequestMethodEnum, ResponseResultStatusEnum } from 'requests/types';
+import { useAuthContext } from 'uiBaseContext/AuthContext/AuthContext';
+import { useRequest } from 'uiBaseHook/Request/useRequest';
+import { useBlogValidation } from 'uiBaseHook/Validation/Blog/useBlogValidation';
+import './UpdateBlog.scss';
 var debug = require('debug')('ui:UpdateBlog')
 
 const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {

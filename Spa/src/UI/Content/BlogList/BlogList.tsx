@@ -1,24 +1,23 @@
+import { BlogType } from 'domain/blog/BlogType';
+import { TagType } from 'domain/tag/TagType';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { RequestMethodEnum, ResponseResultStatusEnum } from 'requests/types';
+import FetchStatus from 'uiBaseComponent/ApiFetch/FetchStatus';
+import { useApiFetch } from 'uiBaseComponent/ApiFetch/useApiFetch';
+import BlogFilterSort from 'uiBaseComponent/BlogFilterSort/BlogFilterSort';
+import { useBlogFilterSort } from 'uiBaseComponent/BlogFilterSort/useBlogFilterSort';
+import PageLimitSelect from 'uiBaseComponent/Pagination/PageLimitSelect';
+import Pagination from 'uiBaseComponent/Pagination/Pagination';
+import { usePagination } from 'uiBaseComponent/Pagination/usePagination';
+import RefreshBtn from 'uiBaseComponent/RefreshBtn/RefreshBtn';
+import { useRefreshBtn } from 'uiBaseComponent/RefreshBtn/useRefreshBtn';
+import { useCssGlobalContext } from 'uiBaseContext/CssGlobalContext/CssGlobalContext';
+import { useResponsiveComponent } from 'uiBaseHook/ResponsiveComponentHook';
 import { toggleFilterSortBarActionCreator } from '../../../actions/creators';
-import { BlogType } from '../../../domain/blog/BlogType';
-import { TagType } from '../../../domain/tag/TagType';
-import { RequestMethodEnum, ResponseResultStatusEnum } from '../../../requests/types';
 import { StateType } from '../../../states/types';
-import FetchStatus from '../../Base/Components/ApiFetch/FetchStatus';
-import { useApiFetch } from '../../Base/Components/ApiFetch/useApiFetch';
-import BlogFilterSort from '../../Base/Components/BlogFilterSort/BlogFilterSort';
-import { useBlogFilterSort } from '../../Base/Components/BlogFilterSort/useBlogFilterSort';
-import Pagination from '../../Base/Components/Pagination/Pagination';
-import { usePagination } from '../../Base/Components/Pagination/usePagination';
-import { useCssGlobalContext } from '../../Base/Context/CssGlobalContext/CssGlobalContext';
-import { useResponsiveComponent } from '../../Base/Hooks/ResponsiveComponentHook';
 import './BlogList.scss';
-import PageLimitSelect from '../../Base/Components/Pagination/PageLimitSelect';
-import RefreshBtn from '../../Base/Components/RefreshBtn/RefreshBtn';
-import { useRefreshBtn } from '../../Base/Components/RefreshBtn/useRefreshBtn';
-import { getBlogTestData } from '../../../../tests/data/BlogFaker';
 var debug = require('debug')('ui:BlogList')
 
 declare type FetchResultType = {

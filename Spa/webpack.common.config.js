@@ -27,6 +27,8 @@ module.exports = {
       uiBaseContext: path.resolve(__dirname, 'src/UI/Base/Context/'),
       uiBaseComponent: path.resolve(__dirname, 'src/UI/Base/Components/'),
       ui: path.resolve(__dirname, 'src/UI/'),
+      requests: path.resolve(__dirname, 'src/requests/'),
+      domain: path.resolve(__dirname, 'src/domain/'),
     }
   },
   // webpack does not tell whether you installed listed loader until it is used. so be careful

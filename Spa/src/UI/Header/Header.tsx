@@ -1,12 +1,10 @@
 import * as React from 'react';
-import { useCssGlobalContext } from '../Base/Context/CssGlobalContext/CssGlobalContext';
-import { useResponsiveComponent } from '../Base/Hooks/ResponsiveComponentHook';
+import { useCssGlobalContext } from 'uiBaseContext/CssGlobalContext/CssGlobalContext';
+import { useResponsiveComponent } from 'uiBaseHook/ResponsiveComponentHook';
 import './Header.scss';
 import MenuToggleIcon from './MenuToggleIcon/MenuToggleIcon';
 import Menu from './MenuWrapper/Menu/Menu';
 import MenuWrapper from './MenuWrapper/MenuWrapper';
-import SignupForm from './Modal/SignupForm/SignupForm';
-import LoginForm from './Modal/LoginForm/LoginForm';
 
 
 const Header: React.FunctionComponent<{}> = (props: {}) => {
