@@ -40,23 +40,13 @@ describe('utils testing', () => {
       else rej(0)
     })
       .then((data) => {
-        console.log('1st then')
-        console.log(data)
-        return Promise.resolve(data)
-      })
-      .catch((error) => {
-        console.log('at 1st catch')
-        console.log(error)
-      })
-      .then((data) => {
-        console.log('then ater catch')
-        return Promise.resolve('yes')
+        setTimeout(() => Promise.resolve(data), 1000)
       })
   }
 
   test('test promise', async () => {
 
-    console.log(await testPromise(false))
+    console.log(await testPromise(true))
 
   })
 })

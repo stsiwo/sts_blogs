@@ -26,21 +26,19 @@ describe('ub-c1: UpdateBlog Component testing', () => {
    *
    * a1. (api fetch) should start api request when this component is mounted
    * a2. (DOM) should display blog data in each input field after initial api request 
-   * a3. (api fetch) should not start api request when this component is updated
-   * a4. (validation) should display error msg when blog name is null/empty 
-   * a5. (validation) should not allow to update when blog name is null/empty 
-   * a6. (validation) should display error msg when email is null/empty 
-   * a7. (validation) should not allow to update when email is null/empty 
-   * a8. (validation) should display error msg when password is null/empty 
-   * a9. (validation) should not allow to update when password is null/empty 
-   * a10. (validation) should display error msg when confirm is null/empty 
-   * a11. (validation) should not allow to update when confirm is null/empty 
-   * a12. (validation) should display error msg when password and confirm does not match
-   * a13. (validation) should not allow to update when password and confirm does not match
-   * a14. (EH) should start update request when 'update' is clicked 
-   * a15. (DOM) should show 'update success' message when update completed 
-   * a16. (DOM) should show "update failure" message when update failed because of network issue 
-   * a17. (DOM) should show "update failure" message when update failed because of 4xx or 5xx error
+   * a3. (api fetch) should display "no blog available" when initial fetch failed because of network error 
+   * a4. (api fetch) should display "no blog available" when initial fetch failed because of 4xx or 5xx 
+   * a5. (api fetch) should not start api request when this component is updated
+   * a6. (validation) should display error msg when blog title is null/empty 
+   * a7. (validation) should not allow to update when blog title is null/empty 
+   * a8. (validation) should display error msg when subtitle is null/empty  
+   * a9.  (validation) should not allow to update when subtitle is null/empty 
+   * a10. (validation) should display error msg when content is null/empty  
+   * a11. (validation) should not allow to update when content is null/empty 
+   * a12. (EH) should start save request when "save" is clicked 
+   * a13. (DOM) should show "save success" message when save completed 
+   * a14. (DOM) should show "save failure" message when save failed because of network issue 
+   * a15. (DOM) should show "save failure" message when save failed because of 4xx or 5xx error
    *
    **/
 
@@ -74,13 +72,40 @@ describe('ub-c1: UpdateBlog Component testing', () => {
 
       await wait(() => {
         expect(getByLabelText('Title').getAttribute('value')).toBeTruthy()
-        expect(getByLabelText('Sub Title').getAttribute('value')).toBeTruthy()
+        expect(getByLabelText('Subtitle').getAttribute('value')).toBeTruthy()
         expect(getByLabelText('Content').getAttribute('value')).toBeTruthy()
       })
     })
   })
+  test('a3. (api fetch) should display "no blog available" when initial fetch failed because of network error', async () => {
 
-  test('a3. (api fetch) should not start api request when this component is updated', async () => {
+    // use mockRejectedValue rather than mockReturnedValue(Promise....)
+    api.request = jest.fn().mockRejectedValue(networkError)
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={UpdateBlog} isAuth />
+      )
+      await wait(() => {
+        expect(getByText('sorry.. your data is not available now')).toBeInTheDocument()
+      })
+    })
+  })
+
+  test('a4. (api fetch) should display "no blog available" when initial fetch failed because of 4xx or 5xx', async () => {
+
+    // use mockRejectedValue rather than mockReturnedValue(Promise....)
+    api.request = jest.fn().mockRejectedValue(internalServerError500Response)
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={UpdateBlog} isAuth />
+      )
+      await wait(() => {
+        expect(getByText('sorry.. your data is not available now')).toBeInTheDocument()
+      })
+    })
+  })
+
+  test('a5. (api fetch) should not start api request when this component is updated', async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
     await act(async () => {
@@ -100,7 +125,7 @@ describe('ub-c1: UpdateBlog Component testing', () => {
     })
   })
 
-  test('a4. (validation) should display error msg when blog title is null/empty', async () => {
+  test('a6. (validation) should display error msg when blog title is null/empty', async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
     await act(async () => {
@@ -115,7 +140,7 @@ describe('ub-c1: UpdateBlog Component testing', () => {
     })
   })
 
-  test('a5. (validation) should not allow to update when blog title is null/empty', async () => {
+  test('a7. (validation) should not allow to update when blog title is null/empty', async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
     await act(async () => {
@@ -133,7 +158,7 @@ describe('ub-c1: UpdateBlog Component testing', () => {
     })
   })
 
-  test('a6. (validation) should display error msg when subtitle is null/empty ', async () => {
+  test('a8. (validation) should display error msg when subtitle is null/empty ', async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
     await act(async () => {
@@ -148,7 +173,7 @@ describe('ub-c1: UpdateBlog Component testing', () => {
     })
   })
 
-  test('a7.  (validation) should not allow to update when subtitle is null/empty', async () => {
+  test('a9.  (validation) should not allow to update when subtitle is null/empty', async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
     await act(async () => {
@@ -165,7 +190,7 @@ describe('ub-c1: UpdateBlog Component testing', () => {
     })
   })
 
-  test('a8. (validation) should display error msg when content is null/empty ', async () => {
+  test('a10. (validation) should display error msg when content is null/empty ', async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
     await act(async () => {
@@ -180,7 +205,7 @@ describe('ub-c1: UpdateBlog Component testing', () => {
     })
   })
 
-  test('a9. (validation) should not allow to update when content is null/empty', async () => {
+  test('a11. (validation) should not allow to update when content is null/empty', async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
     await act(async () => {
@@ -197,7 +222,7 @@ describe('ub-c1: UpdateBlog Component testing', () => {
     })
   })
 
-  test('a14. (EH) should start save request when "save" is clicked', async () => {
+  test('a12. (EH) should start save request when "save" is clicked', async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
     await act(async () => {
@@ -215,7 +240,7 @@ describe('ub-c1: UpdateBlog Component testing', () => {
     })
   })
 
-  test('a15. (DOM) should show "save success" message when save completed', async () => {
+  test('a13. (DOM) should show "save success" message when save completed', async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
     await act(async () => {
@@ -233,7 +258,7 @@ describe('ub-c1: UpdateBlog Component testing', () => {
     })
   })
 
-  test('a16. (DOM) should show "save failure" message when save failed because of network issue', async () => {
+  test('a14. (DOM) should show "save failure" message when save failed because of network issue', async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
     await act(async () => {
@@ -251,7 +276,7 @@ describe('ub-c1: UpdateBlog Component testing', () => {
     })
   })
 
-  test('a17. (DOM) should show "save failure" message when save failed because of 4xx or 5xx error', async () => {
+  test('a15. (DOM) should show "save failure" message when save failed because of 4xx or 5xx error', async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
     await act(async () => {
@@ -268,6 +293,7 @@ describe('ub-c1: UpdateBlog Component testing', () => {
       })
     })
   })
+
   afterEach(() => {
     console.log('ub-c1: afterEach ')
   })

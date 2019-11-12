@@ -13,6 +13,7 @@ import { useAuthContext } from '../../../../Base/Context/AuthContext/AuthContext
 
 const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
 
+  console.log('updateblog is start mount')
   const tagInputRef = React.useRef(null)
 
   const [currentBlog, setBlog] = React.useState<BlogType>(initialBlogState)
@@ -24,6 +25,7 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
 
   /** lifecycle **/
   React.useEffect(() => {
+    console.log('initial fetch at useEffect')
     fetchBlog({
       path: '/blogs/' + blogId,
       method: RequestMethodEnum.GET
