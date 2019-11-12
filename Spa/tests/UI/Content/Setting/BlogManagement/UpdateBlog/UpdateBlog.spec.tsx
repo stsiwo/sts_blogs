@@ -165,36 +165,35 @@ describe('ub-c1: UpdateBlog Component testing', () => {
     })
   })
 
-  test('a8. (validation) should display error msg when password is null/empty ', async () => {
+  test('a8. (validation) should display error msg when content is null/empty ', async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
     await act(async () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={UpdateBlog} isAuth />
       )
-      const passwordInput = await waitForElement(() => getByLabelText('Password:'))
-      fireEvent.focus(passwordInput) // need to focus to enable to display validation error on dom
-      fireEvent.change(passwordInput, { target: { value: '' } })
-      const passwordErrorNode = await waitForElement(() => getByText('password is a required field'))
-      expect(passwordErrorNode).toBeInTheDocument()
+      const contentInput = await waitForElement(() => getByLabelText('Content'))
+      fireEvent.focus(contentInput) // need to focus to enable to display validation error on dom
+      fireEvent.change(contentInput, { target: { value: '' } })
+      const contentErrorNode = await waitForElement(() => getByText('content is a required field'))
+      expect(contentErrorNode).toBeInTheDocument()
     })
   })
 
-  test('a9. (validation) should not allow to update when password is null/empty', async () => {
+  test('a9. (validation) should not allow to update when content is null/empty', async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
     await act(async () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={UpdateBlog} isAuth />
       )
-      const passwordInput = await waitForElement(() => getByLabelText('Password:'))
-      fireEvent.focus(passwordInput) // need to focus to enable to display validation error on dom
-      fireEvent.change(passwordInput, { target: { value: '' } })
-      const passwordErrorNode = await waitForElement(() => getByText('password is a required field'))
+      const contentInput = await waitForElement(() => getByLabelText('Content'))
+      fireEvent.focus(contentInput) // need to focus to enable to display validation error on dom
+      fireEvent.change(contentInput, { target: { value: '' } })
+      const contentErrorNode = await waitForElement(() => getByText('content is a required field'))
       fireEvent.click(getByText('Save'))
-      await wait(() => {
-        expect(api.request).toHaveBeenCalledTimes(1)
-      })
+      await waitForElement(() => getByText('please fix validation errors before submit'))
+      expect(api.request).toHaveBeenCalledTimes(1)
     })
   })
 
@@ -206,9 +205,9 @@ describe('ub-c1: UpdateBlog Component testing', () => {
         <ContextWrapperComponent component={UpdateBlog} isAuth />
       )
       const confirmInput = await waitForElement(() => getByLabelText('Confirm:'))
-      const passwordInput = await waitForElement(() => getByLabelText('Password:'))
+      const contentInput = await waitForElement(() => getByLabelText('Content:'))
       fireEvent.change(confirmInput, { target: { value: '' } })
-      fireEvent.change(passwordInput, { target: { value: '' } })
+      fireEvent.change(contentInput, { target: { value: '' } })
       fireEvent.focus(confirmInput) // need to focus to enable to display validation error on dom
       const confirmErrorNode = await waitForElement(() => getByText('confirm is a required field'))
       expect(confirmErrorNode).toBeInTheDocument()
@@ -233,7 +232,7 @@ describe('ub-c1: UpdateBlog Component testing', () => {
     })
   })
 
-  test('a12. (validation) should display error msg when password and confirm does not match', async () => {
+  test('a12. (validation) should display error msg when content and confirm does not match', async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
     await act(async () => {
@@ -243,12 +242,12 @@ describe('ub-c1: UpdateBlog Component testing', () => {
       const confirmInput = await waitForElement(() => getByLabelText('Confirm:'))
       fireEvent.focus(confirmInput) // need to focus to enable to display validation error on dom
       fireEvent.change(confirmInput, { target: { value: 'sample' } })
-      const confirmErrorNode = await waitForElement(() => getByText('passwords must match'))
+      const confirmErrorNode = await waitForElement(() => getByText('contents must match'))
       expect(confirmErrorNode).toBeInTheDocument()
     })
   })
 
-  test('a13. (validation) should not allow to update when password and confirm does not match', async () => {
+  test('a13. (validation) should not allow to update when content and confirm does not match', async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
     await act(async () => {
@@ -258,7 +257,7 @@ describe('ub-c1: UpdateBlog Component testing', () => {
       const confirmInput = await waitForElement(() => getByLabelText('Confirm:'))
       fireEvent.focus(confirmInput) // need to focus to enable to display validation error on dom
       fireEvent.change(confirmInput, { target: { value: 'sample' } })
-      const confirmErrorNode = await waitForElement(() => getByText('passwords must match'))
+      const confirmErrorNode = await waitForElement(() => getByText('contents must match'))
       fireEvent.click(getByText('Save'))
       await wait(() => {
         expect(api.request).toHaveBeenCalledTimes(1)
