@@ -15,11 +15,11 @@ export declare type BlogType = {
 
 export const initialBlogState: BlogType = {
   id: '',
-  title: 'test-title',
-  subTitle: 'test-subTitle',
+  title: '',
+  subTitle: '',
   mainImage: null,
-  mainImageUrl: 'main-image-url',
-  content: 'test-content',
-  tags: [{ name: 'testtag' }, { name: 'testtag1' }],
+  mainImageUrl: '',
+  content: '',
+  tags: [],
   createdDate: new Date()
 }
