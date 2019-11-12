@@ -23,6 +23,9 @@ module.exports = {
     modules: ['node_modules'],
     extensions: [".ts", ".tsx", ".js", ".json"],
     alias: {
+      uiBaseHook: path.resolve(__dirname, 'src/UI/Base/Hooks/'),
+      uiBaseContext: path.resolve(__dirname, 'src/UI/Base/Context/'),
+      uiBaseComponent: path.resolve(__dirname, 'src/UI/Base/Components/'),
       ui: path.resolve(__dirname, 'src/UI/'),
     }
   },

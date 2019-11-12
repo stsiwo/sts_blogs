@@ -11,6 +11,7 @@ import Content from 'ui/Content/Content';
 import Header from './UI/Header/Header';
 import { getUserTestData } from '../tests/data/UserFaker';
 
+
 // enable debug
 process.env.DEBUG
 
@@ -26,6 +27,8 @@ const App = (props: any) => {
 
   debug('get initial auth and dispatch from context')
   const [auth, dispatch] = useUpdateAuthContextReducer()
+
+
 
   return (
     <div>

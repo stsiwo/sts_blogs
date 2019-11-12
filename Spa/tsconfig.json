@@ -13,6 +13,9 @@
         "jsx": "react",
         "baseUrl": "./",
         "paths": {
+          "uiBaseHook/*": ["src/UI/Base/Hooks/*"]
+          "uiBaseContext/*": ["src/UI/Base/Context/*"]
+          "uiBaseComponent/*": ["src/UI/Base/Components/*"]
           "ui/*": ["src/UI/*"]
         }
     }
