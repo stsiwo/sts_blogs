@@ -48,6 +48,7 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const handleSaveBlogClickEvent: React.EventHandler<React.MouseEvent<HTMLInputElement>> = async (e) => {
+    console.log('start handling save button click')
     validate()
       .then(() => {
         console.log('validation passed')
@@ -57,7 +58,7 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
           headers: { 'content-type': 'multipart/form-data' },
           data: mapStateToFormData(currentBlog),
         })
-      })
+      }, () => {})
   }
 
   const handleTitleChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
@@ -138,7 +139,6 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
           <label htmlFor="tags" className="blog-detail-form-tags-label">Tags</label>
           {(
             currentBlog.tags.length !== 0 && currentBlog.tags.map((tag: TagType) => {
-              console.log('rendering tags')
               return <input type="text" name="tags[]" id="tags" className="blog-detail-form-tags-input" value={tag.name} readOnly key={tag.name} />
             })
           )}
@@ -157,7 +157,8 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
         </div>
         <input type="hidden" name='creationDate' value={currentBlog.createdDate.toJSON()} />
         <div className="blog-detail-btns-wrapper">
-          <input type="button" className="blog-detail-btns-save" value="Save" onClick={handleSaveBlogClickEvent} />
+          <input type="button" className="blog-detail-btns-save" value="Save" name='submit' onClick={handleSaveBlogClickEvent} onFocus={handleInitialFocusEvent}/>
+          {(currentValidationError.submit && <div className="input-error">{currentValidationError.submit}</div>)}
         </div>
       </form>
       )}

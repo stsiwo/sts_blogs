@@ -115,22 +115,20 @@ describe('ub-c1: UpdateBlog Component testing', () => {
     })
   })
 
-
-  test('a5. (validation) should not allow to update when blog name is null/empty', async () => {
+  test('a5. (validation) should not allow to update when blog title is null/empty', async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
     await act(async () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={UpdateBlog} isAuth />
       )
-      const nameInput = await waitForElement(() => getByLabelText('Name:'))
-      fireEvent.focus(nameInput) // need to focus to enable to display validation error on dom
-      fireEvent.change(nameInput, { target: { value: '' } })
-      const nameErrorNode = await waitForElement(() => getByText('name is a required field'))
-      fireEvent.click(getByText('Update'))
-      await wait(() => {
-        expect(api.request).toHaveBeenCalledTimes(1)
-      })
+      const titleInput = await waitForElement(() => getByLabelText('Title'))
+      fireEvent.focus(titleInput) // need to focus to enable to display validation error on dom
+      fireEvent.change(titleInput, { target: { value: '' } })
+      const titleErrorNode = await waitForElement(() => getByText('title is a required field'))
+      fireEvent.click(getByText('Save'))
+      await waitForElement(() => getByText('please fix validation errors before submit'))
+      expect(api.request).toHaveBeenCalledTimes(1)
 
     })
   })
@@ -161,7 +159,7 @@ describe('ub-c1: UpdateBlog Component testing', () => {
       fireEvent.focus(emailInput) // need to focus to enable to display validation error on dom
       fireEvent.change(emailInput, { target: { value: '' } })
       const emailErrorNode = await waitForElement(() => getByText('email is a required field'))
-      fireEvent.click(getByText('Update'))
+      fireEvent.click(getByText('Save'))
       await wait(() => {
         expect(api.request).toHaveBeenCalledTimes(1)
       })
@@ -195,7 +193,7 @@ describe('ub-c1: UpdateBlog Component testing', () => {
       fireEvent.focus(passwordInput) // need to focus to enable to display validation error on dom
       fireEvent.change(passwordInput, { target: { value: '' } })
       const passwordErrorNode = await waitForElement(() => getByText('password is a required field'))
-      fireEvent.click(getByText('Update'))
+      fireEvent.click(getByText('Save'))
       await wait(() => {
         expect(api.request).toHaveBeenCalledTimes(1)
       })
@@ -230,7 +228,7 @@ describe('ub-c1: UpdateBlog Component testing', () => {
       fireEvent.focus(confirmInput) // need to focus to enable to display validation error on dom
       fireEvent.change(confirmInput, { target: { value: '' } })
       const confirmErrorNode = await waitForElement(() => getByText('confirm is a required field'))
-      fireEvent.click(getByText('Update'))
+      fireEvent.click(getByText('Save'))
       await wait(() => {
         expect(api.request).toHaveBeenCalledTimes(1)
       })
@@ -263,7 +261,7 @@ describe('ub-c1: UpdateBlog Component testing', () => {
       fireEvent.focus(confirmInput) // need to focus to enable to display validation error on dom
       fireEvent.change(confirmInput, { target: { value: 'sample' } })
       const confirmErrorNode = await waitForElement(() => getByText('passwords must match'))
-      fireEvent.click(getByText('Update'))
+      fireEvent.click(getByText('Save'))
       await wait(() => {
         expect(api.request).toHaveBeenCalledTimes(1)
       })
@@ -278,7 +276,7 @@ describe('ub-c1: UpdateBlog Component testing', () => {
         <ContextWrapperComponent component={UpdateBlog} isAuth />
       )
       // must wait until fetch is completed
-      const updateBtn = await waitForElement(() => getByText('Update'))
+      const updateBtn = await waitForElement(() => getByText('Save'))
       fireEvent.click(updateBtn)
       // wait until below expectation is met otherwise, timeout
       await wait(() => {
@@ -295,7 +293,7 @@ describe('ub-c1: UpdateBlog Component testing', () => {
         <ContextWrapperComponent component={UpdateBlog} isAuth />
       )
       // must wait until fetch is completed
-      const updateBtn = await waitForElement(() => getByText('Update'))
+      const updateBtn = await waitForElement(() => getByText('Save'))
       // mock response of update request
       api.request = jest.fn().mockReturnValue(Promise.resolve(noDateGET200Response))
       fireEvent.click(updateBtn)
@@ -313,7 +311,7 @@ describe('ub-c1: UpdateBlog Component testing', () => {
         <ContextWrapperComponent component={UpdateBlog} isAuth />
       )
       // must wait until fetch is completed
-      const updateBtn = await waitForElement(() => getByText('Update'))
+      const updateBtn = await waitForElement(() => getByText('Save'))
       // mock response of update request
       api.request = jest.fn().mockReturnValue(Promise.reject(internalServerError500Response))
       fireEvent.click(updateBtn)
@@ -331,7 +329,7 @@ describe('ub-c1: UpdateBlog Component testing', () => {
         <ContextWrapperComponent component={UpdateBlog} isAuth />
       )
       // must wait until fetch is completed
-      const updateBtn = await waitForElement(() => getByText('Update'))
+      const updateBtn = await waitForElement(() => getByText('Save'))
       // mock response of update request
       api.request = jest.fn().mockReturnValue(Promise.reject(internalServerError500Response))
       fireEvent.click(updateBtn)

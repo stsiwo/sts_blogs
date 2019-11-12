@@ -40,11 +40,13 @@ describe('utils testing', () => {
       else rej(0)
     })
       .then((data) => {
+        console.log('1st then')
         console.log(data)
+        return Promise.resolve(data)
       })
       .catch((error) => {
+        console.log('at 1st catch')
         console.log(error)
-        return Promise.resolve(error)
       })
       .then((data) => {
         console.log('then ater catch')
