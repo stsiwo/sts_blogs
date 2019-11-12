@@ -140,7 +140,7 @@ describe('ub-c1: UpdateBlog Component testing', () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={UpdateBlog} isAuth />
       )
-      const subtitleInput = await waitForElement(() => getByLabelText('SubTitle'))
+      const subtitleInput = await waitForElement(() => getByLabelText('Subtitle'))
       fireEvent.focus(subtitleInput) // need to focus to enable to display validation error on dom
       fireEvent.change(subtitleInput, { target: { value: '' } })
       const subtitleErrorNode = await waitForElement(() => getByText('subtitle is a required field'))
@@ -155,7 +155,7 @@ describe('ub-c1: UpdateBlog Component testing', () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={UpdateBlog} isAuth />
       )
-      const subtitleInput = await waitForElement(() => getByLabelText('Sub Title'))
+      const subtitleInput = await waitForElement(() => getByLabelText('Subtitle'))
       fireEvent.focus(subtitleInput) // need to focus to enable to display validation error on dom
       fireEvent.change(subtitleInput, { target: { value: '' } })
       const subtitleErrorNode = await waitForElement(() => getByText('subtitle is a required field'))
