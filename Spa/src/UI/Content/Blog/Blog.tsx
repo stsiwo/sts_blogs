@@ -21,7 +21,7 @@ const Blog: React.FunctionComponent<{}> = (props: {}) => {
   return (
     <div className="blog-wrapper">
       <h1 className="blog-title">{testBlog.title}</h1>
-      <h2 className="blog-subtitle">{testBlog.subTitle}</h2>
+      <h2 className="blog-subtitle">{testBlog.subtitle}</h2>
       <div className="blog-tags-wrapper">
         {renderTags(testTags)}
       </div>

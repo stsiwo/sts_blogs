@@ -38,7 +38,7 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
     const formData = new FormData()
     formData.append('id', state.id)
     formData.set('title', state.title)
-    formData.set('subTitle', state.subTitle)
+    formData.set('subtitle', state.subtitle)
     formData.set('mainImage', state.mainImage)
     formData.set('mainImageUrl', state.mainImageUrl)
     formData.set('content', state.content)
@@ -71,7 +71,7 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
   const handleSubTitleChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
     setBlog({
       ...currentBlog,
-      subTitle: e.currentTarget.value
+      subtitle: e.currentTarget.value
     })
   }
 
@@ -112,7 +112,6 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
   const handleInitialFocusEvent: React.EventHandler<React.FocusEvent<HTMLInputElement>> = (e) => {
     touch(e.currentTarget.name)
   }
-  
 
   if (currentBlogFetchStatus.status === ResponseResultStatusEnum.FETCHING) return (<p>fetching your data</p>)
 
@@ -131,9 +130,9 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
           {(currentValidationError.title && <div className="input-error">{currentValidationError.title}</div>)}
         </div>
         <div className="blog-detail-form-subtitle-wrapper" >
-          <label htmlFor="subTitle" className="blog-detail-form-subtitle-label">Sub Title</label>
-          <input type="text" name="subTitle" id="subTitle" className="blog-detail-form-subtitle-input" placeholder="enter blog subtitle..." value={currentBlog.subTitle} onChange={handleSubTitleChangeEvent} onFocus={handleInitialFocusEvent}/>
-          {(currentValidationError.subTitle && <div className="input-error">{currentValidationError.subTitle}</div>)}
+          <label htmlFor="subtitle" className="blog-detail-form-subtitle-label">Subtitle</label>
+          <input type="text" name="subtitle" id="subtitle" className="blog-detail-form-subtitle-input" placeholder="enter blog subtitle..." value={currentBlog.subtitle} onChange={handleSubTitleChangeEvent} onFocus={handleInitialFocusEvent}/>
+          {(currentValidationError.subtitle && <div className="input-error">{currentValidationError.subtitle}</div>)}
         </div>
         <div className="blog-detail-form-tags-wrapper" >
           <label htmlFor="tags" className="blog-detail-form-tags-label">Tags</label>

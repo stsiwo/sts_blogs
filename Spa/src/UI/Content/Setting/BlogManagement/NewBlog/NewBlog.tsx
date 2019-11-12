@@ -26,7 +26,7 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
   let schema = yup.object().shape<BlogType>({
     id: yup.string(),
     title: yup.string().required(),
-    subTitle: yup.string().required(),
+    subtitle: yup.string().required(),
     content: yup.string().required(),
     createdDate: yup.date().required(),
   });
@@ -61,7 +61,7 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
     const formData = new FormData()
     if (state.id) formData.append('id', state.id)
     formData.set('title', state.title)
-    formData.set('subTitle', state.subTitle)
+    formData.set('subtitle', state.subtitle)
     formData.set('mainImage', state.mainImage)
     formData.set('mainImageUrl', state.mainImageUrl)
     formData.set('content', state.content)
@@ -106,7 +106,7 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
   const handleSubTitleChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
     setBlog({
       ...currentBlog,
-      subTitle: e.currentTarget.value
+      subtitle: e.currentTarget.value
     })
   }
 
@@ -155,9 +155,9 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
           {(currentValidationError.title && <div className="input-error">{currentValidationError.title}</div>)}
         </div>
         <div className="blog-detail-form-subtitle-wrapper" >
-          <label htmlFor="subTitle" className="blog-detail-form-subtitle-label">Sub Title</label>
-          <input type="text" name="subTitle" id="subTitle" className="blog-detail-form-subtitle-input" placeholder="enter blog subtitle..." value={currentBlog.subTitle} onChange={handleSubTitleChangeEvent} />
-          {(currentValidationError.subTitle && <div className="input-error">{currentValidationError.subTitle}</div>)}
+          <label htmlFor="subtitle" className="blog-detail-form-subtitle-label">Sub Title</label>
+          <input type="text" name="subtitle" id="subtitle" className="blog-detail-form-subtitle-input" placeholder="enter blog subtitle..." value={currentBlog.subtitle} onChange={handleSubTitleChangeEvent} />
+          {(currentValidationError.subtitle && <div className="input-error">{currentValidationError.subtitle}</div>)}
         </div>
         <div className="blog-detail-form-tags-wrapper" >
           <label htmlFor="tags" className="blog-detail-form-tags-label">Tags</label>

@@ -4,7 +4,7 @@ import { TagType } from "../tag/TagType";
 export declare type BlogType = {
   id: string,
   title: string,
-  subTitle: string,
+  subtitle: string,
   mainImage?: Blob,
   mainImageUrl?: string,
   content: string,
@@ -16,7 +16,7 @@ export declare type BlogType = {
 export const initialBlogState: BlogType = {
   id: '',
   title: '',
-  subTitle: '',
+  subtitle: '',
   mainImage: null,
   mainImageUrl: '',
   content: '',

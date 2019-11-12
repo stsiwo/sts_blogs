@@ -10,7 +10,7 @@ export const useBlogValidation = (input: UseBlogValidationStatusInputType): UseB
   let schema = yup.object().shape<BlogType>({
     id: yup.string(),
     title: yup.string().required(),
-    subTitle: yup.string().required(),
+    subtitle: yup.string().required(),
     content: yup.string().required(),
     createdDate: yup.date().required(),
   });

@@ -7,7 +7,7 @@ export declare type BlogValidationType = {
 export const initialBlogValidationState: BlogValidationType = {
   id: '',
   title: '',
-  subTitle: '',
+  subtitle: '',
   mainImage: '',
   mainImageUrl: '',
   content: '',

@@ -133,32 +133,32 @@ describe('ub-c1: UpdateBlog Component testing', () => {
     })
   })
 
-  test('a6. (validation) should display error msg when email is null/empty ', async () => {
+  test('a6. (validation) should display error msg when subtitle is null/empty ', async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
     await act(async () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={UpdateBlog} isAuth />
       )
-      const emailInput = await waitForElement(() => getByLabelText('Email:'))
-      fireEvent.focus(emailInput) // need to focus to enable to display validation error on dom
-      fireEvent.change(emailInput, { target: { value: '' } })
-      const emailErrorNode = await waitForElement(() => getByText('email is a required field'))
-      expect(emailErrorNode).toBeInTheDocument()
+      const subtitleInput = await waitForElement(() => getByLabelText('SubTitle'))
+      fireEvent.focus(subtitleInput) // need to focus to enable to display validation error on dom
+      fireEvent.change(subtitleInput, { target: { value: '' } })
+      const subtitleErrorNode = await waitForElement(() => getByText('subtitle is a required field'))
+      expect(subtitleErrorNode).toBeInTheDocument()
     })
   })
 
-  test('a7.  (validation) should not allow to update when email is null/empty', async () => {
+  test('a7.  (validation) should not allow to update when subtitle is null/empty', async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
     await act(async () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={UpdateBlog} isAuth />
       )
-      const emailInput = await waitForElement(() => getByLabelText('Email:'))
-      fireEvent.focus(emailInput) // need to focus to enable to display validation error on dom
-      fireEvent.change(emailInput, { target: { value: '' } })
-      const emailErrorNode = await waitForElement(() => getByText('email is a required field'))
+      const subtitleInput = await waitForElement(() => getByLabelText('Sub Title'))
+      fireEvent.focus(subtitleInput) // need to focus to enable to display validation error on dom
+      fireEvent.change(subtitleInput, { target: { value: '' } })
+      const subtitleErrorNode = await waitForElement(() => getByText('subtitle is a required field'))
       fireEvent.click(getByText('Save'))
       await wait(() => {
         expect(api.request).toHaveBeenCalledTimes(1)
