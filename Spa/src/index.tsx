@@ -11,8 +11,6 @@ import Content from './UI/Content/Content';
 import Header from './UI/Header/Header';
 import { getUserTestData } from '../tests/data/UserFaker';
 
-// test user login
-
 const App = (props: any) => {
   //const [auth, dispatch] = useUpdateAuthContextReducer({
   //  authed: true,

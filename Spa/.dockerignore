@@ -4,3 +4,6 @@ node_modules
 // swp files
 *.swp
 *.swo
+
+// env
+.env

@@ -1,6 +1,7 @@
 *.swp
 *.swo
 
+### Api1 ###
 # venv
 env/
 
@@ -9,3 +10,8 @@ __pycache__/
 
 # npm node module
 node_modules/
+
+### SPA ###
+
+# env
+.env

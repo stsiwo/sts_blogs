@@ -5,7 +5,7 @@
         "noImplicitAny": true,
         "target": "es5",
         "lib": ["dom", "es6" ],
-        "types": ["reflect-metadata", "jest"],
+        "types": ["reflect-metadata", "jest", "node"],
         "module": "commonjs",
         "moduleResolution": "node",
         "experimentalDecorators": true,
