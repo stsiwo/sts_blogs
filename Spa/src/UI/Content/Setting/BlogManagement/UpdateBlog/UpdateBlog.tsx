@@ -28,7 +28,10 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
       path: '/blogs/' + blogId,
       method: RequestMethodEnum.GET
     })
+      // call from previous 'catch' and 'then' of 'fetchBlog'
+      // since resolve promise in the 'catch'
       .then((data: BlogResponseDataType) => {
+        console.log('then func of fetchBlog func')
         if (data) setBlog(data.blog)
       })
   }, []);

@@ -235,7 +235,7 @@ describe('ub-c1: UpdateBlog Component testing', () => {
 
   test('a16. (DOM) should show "save failure" message when save failed because of network issue', async () => {
 
-    api.request = jest.fn().mockReturnValue(Promise.reject(networkError))
+    api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
     await act(async () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={UpdateBlog} isAuth />
@@ -243,7 +243,7 @@ describe('ub-c1: UpdateBlog Component testing', () => {
       // must wait until fetch is completed
       const saveBtn = await waitForElement(() => getByText('Save'))
       // mock response of save request
-      api.request = jest.fn().mockReturnValue(Promise.reject(internalServerError500Response))
+      api.request = jest.fn().mockReturnValue(Promise.reject(networkError))
       fireEvent.click(saveBtn)
       await wait(() => {
         expect(getByText('updating blog failed')).toBeInTheDocument()
@@ -253,7 +253,7 @@ describe('ub-c1: UpdateBlog Component testing', () => {
 
   test('a17. (DOM) should show "save failure" message when save failed because of 4xx or 5xx error', async () => {
 
-    api.request = jest.fn().mockReturnValue(Promise.reject(internalServerError500Response))
+    api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
     await act(async () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={UpdateBlog} isAuth />
