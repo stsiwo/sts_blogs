@@ -23,7 +23,7 @@ module.exports = {
     modules: ['node_modules'],
     extensions: [".ts", ".tsx", ".js", ".json"],
     alias: {
-      Images: path.resolve(__dirname, 'src/Images/'),
+      ui: path.resolve(__dirname, 'src/UI/'),
     }
   },
   // webpack does not tell whether you installed listed loader until it is used. so be careful

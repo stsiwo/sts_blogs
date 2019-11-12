@@ -7,7 +7,7 @@ import { AuthContext, useUpdateAuthContextReducer } from './UI/Base/Context/Auth
 import { CssGlobalContext } from './UI/Base/Context/CssGlobalContext/CssGlobalContext';
 import { CssGlobalContextDefaultState } from './UI/Base/Context/CssGlobalContext/CssGlobalContextDefaultState';
 import './UI/Base/Css/Common.scss';
-import Content from './UI/Content/Content';
+import Content from 'ui/Content/Content';
 import Header from './UI/Header/Header';
 import { getUserTestData } from '../tests/data/UserFaker';
 
@@ -23,7 +23,7 @@ const App = (props: any) => {
   //  authed: true,
   //  user: getUserTestData(1)[0]
   //})
- 
+
   debug('get initial auth and dispatch from context')
   const [auth, dispatch] = useUpdateAuthContextReducer()
 
