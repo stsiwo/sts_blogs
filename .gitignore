@@ -15,3 +15,6 @@ node_modules/
 
 # env
 .env.*
+
+# compiled production dir
+dist/
