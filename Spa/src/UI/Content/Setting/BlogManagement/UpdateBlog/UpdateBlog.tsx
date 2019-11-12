@@ -13,7 +13,6 @@ import { useAuthContext } from '../../../../Base/Context/AuthContext/AuthContext
 
 const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
 
-  console.log('updateblog is start mount')
   const tagInputRef = React.useRef(null)
 
   const [currentBlog, setBlog] = React.useState<BlogType>(initialBlogState)

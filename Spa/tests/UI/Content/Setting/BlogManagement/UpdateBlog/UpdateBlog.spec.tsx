@@ -77,6 +77,7 @@ describe('ub-c1: UpdateBlog Component testing', () => {
       })
     })
   })
+
   test('a3. (api fetch) should display "no blog available" when initial fetch failed because of network error', async () => {
 
     // use mockRejectedValue rather than mockReturnedValue(Promise....)
