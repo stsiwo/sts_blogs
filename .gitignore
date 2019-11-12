@@ -14,4 +14,4 @@ node_modules/
 ### SPA ###
 
 # env
-.env
+.env.*

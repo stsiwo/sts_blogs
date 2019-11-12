@@ -11,12 +11,22 @@ import Content from './UI/Content/Content';
 import Header from './UI/Header/Header';
 import { getUserTestData } from '../tests/data/UserFaker';
 
+// enable debug
+console.log(process.env.DEBUG)
+
+var debug = require('debug')('ui:App')
+
+
 const App = (props: any) => {
+  debug('Component start')
   //const [auth, dispatch] = useUpdateAuthContextReducer({
   //  authed: true,
   //  user: getUserTestData(1)[0]
   //})
+ 
+  debug('get initial auth and dispatch from context')
   const [auth, dispatch] = useUpdateAuthContextReducer()
+
   return (
     <div>
       <CssGlobalContext.Provider value={CssGlobalContextDefaultState}>
