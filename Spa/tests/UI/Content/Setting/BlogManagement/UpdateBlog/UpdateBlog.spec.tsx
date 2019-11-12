@@ -160,10 +160,8 @@ describe('ub-c1: UpdateBlog Component testing', () => {
       fireEvent.change(subtitleInput, { target: { value: '' } })
       const subtitleErrorNode = await waitForElement(() => getByText('subtitle is a required field'))
       fireEvent.click(getByText('Save'))
-      await wait(() => {
-        expect(api.request).toHaveBeenCalledTimes(1)
-      })
-
+      await waitForElement(() => getByText('please fix validation errors before submit'))
+      expect(api.request).toHaveBeenCalledTimes(1)
     })
   })
 

@@ -51,14 +51,16 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
     console.log('start handling save button click')
     validate()
       .then(() => {
-        console.log('validation passed')
+        console.log('validation passed at save button event handler') 
         updateRequest({
           path: '/blogs/' + blogId,
           method: RequestMethodEnum.PUT,
           headers: { 'content-type': 'multipart/form-data' },
           data: mapStateToFormData(currentBlog),
         })
-      }, () => {})
+      }, () => {
+        console.log('validation failed at save button event handler') 
+      })
   }
 
   const handleTitleChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
