@@ -40,6 +40,14 @@ describe('bm-c1: Signup Component testing', () => {
    *
    **/
 
+  // the order of values must match node array
+  const seedInputTestValues = (targetNodes: HTMLElement[], values: string[]): void => {
+    targetNodes.forEach((node: HTMLElement, index: number) => {
+      fireEvent.focus(node)
+      fireEvent.change(node, { target: { value: values[index] } })
+    })
+  }
+
   beforeAll(() => {
     console.log('bm-c1: beforeAll ')
   })
@@ -211,14 +219,6 @@ describe('bm-c1: Signup Component testing', () => {
     })
   })
 
-  // the order of values must match node array
-  const seedInputTestValues = (targetNodes: HTMLElement[], values: string[]): void => {
-    targetNodes.forEach((node: HTMLElement, index: number) => {
-      fireEvent.focus(node)
-        fireEvent.change(node, { target: { value: values[index] }}) 
-    })
-  }
-
   test('a12. (EH) should start signup request when "signup" is clicked', async () => {
     api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
     await act(async () => {
@@ -273,7 +273,7 @@ describe('bm-c1: Signup Component testing', () => {
       })
     })
   })
-  
+
   test('a15. (DOM) should show "signup failure" message when signup failed because of 4xx or 5xx error', async () => {
     api.request = jest.fn().mockReturnValue(Promise.reject(internalServerError500Response))
     await act(async () => {
