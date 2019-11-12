@@ -123,8 +123,8 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
     <div className="blog-detail-wrapper">
       <h2 className="blog-detail-title">Update Blog</h2>
       {(currentBlogUpdateStatus.status === ResponseResultStatusEnum.FETCHING && <p>updating ...</p>)}
-      {(currentBlogUpdateStatus.status === ResponseResultStatusEnum.FAILURE && <p>updating failed</p>)}
-      {(currentBlogUpdateStatus.status === ResponseResultStatusEnum.SUCCESS && <p>updating success</p>)}
+      {(currentBlogUpdateStatus.status === ResponseResultStatusEnum.FAILURE && <p>updating blog failed</p>)}
+      {(currentBlogUpdateStatus.status === ResponseResultStatusEnum.SUCCESS && <p>updating blog success</p>)}
       <form className="blog-detail-form">
         <div className="blog-detail-form-title-wrapper" >
           <label htmlFor="title" className="blog-detail-form-title-label">Title</label>
