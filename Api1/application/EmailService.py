@@ -1,14 +1,13 @@
 from Configs.app import app
-from Configs.ygmailConfig import yag
+# from Configs.ygmailConfig import yag
 from exceptions.EmailServiceException import EmailServiceException
 from urllib.parse import urljoin
-from utils.util import printObject
 
 
 class EmailService(object):
 
     def __init__(self):
-        self._client = yag
+        self._client = None
         pass
 
     def sendForgotPasswordEmail(self, to: str, token: str) -> None:

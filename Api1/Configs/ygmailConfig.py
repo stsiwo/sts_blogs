@@ -1,6 +1,6 @@
-import yagmail
-from Configs.app import app
+# import yagmail
+# from Configs.app import app
 
 # yagmail register
-yagmail.register(app.config['MYGMAIL_USERNAME'], app.config['MYGMAIL_PASSWORD'])
-yag = yagmail.SMTP(app.config['MYGMAIL_USERNAME'])
+# yagmail.register(app.config['MYGMAIL_USERNAME'], app.config['MYGMAIL_PASSWORD'])
+# yag = yagmail.SMTP(app.config['MYGMAIL_USERNAME'])
