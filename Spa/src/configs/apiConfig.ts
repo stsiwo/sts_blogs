@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from "axios";
 
 export const apiConfig: AxiosRequestConfig = {
-  baseURL: 'http://base.url.com/api',
+  baseURL: process.env.API1_URL,
   timeout: 5000,
 
 }
