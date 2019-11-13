@@ -1,12 +1,28 @@
-version: '3'
+version: '3.4'
 services:
   spa:
-  api1:
-    image: api1:dev
-  web-server: 
-    image: nginx
+    #image: spa:dev
+    build: 
+      context: './Spa'
+      target: development
     volumes:
-      - "$PWD/WebServer/default.conf:/etc/nginx/conf.d/default.conf:ro"
+      - "/app/node_modules"
+      - "$PWD/Spa/:/app"
     ports: 
-      - "8080:80"
+      - "80:8080"
+  api1:
+    build: 
+      context: './Api1'
+      target: development
+    # image: api1:dev
+    volumes:
+      - "$PWD/Api1/:/app"
+    ports: 
+      - "5000:5000"
+#  web-server: 
+#    image: nginx
+#    volumes:
+#      - "$PWD/WebServer/default.conf:/etc/nginx/conf.d/default.conf:ro"
+#    ports: 
+#      - "8080:80"
   # db: in-memory in dev
