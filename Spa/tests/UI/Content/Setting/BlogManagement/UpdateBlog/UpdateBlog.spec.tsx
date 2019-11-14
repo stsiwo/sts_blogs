@@ -8,7 +8,6 @@ import { blogGET200NonEmptyResponse, blogGET200EmptyResponse, noDateGET200Respon
 import UpdateBlog from 'ui/Content/Setting/BlogManagement/UpdateBlog/UpdateBlog'
 import { ContextWrapperComponent } from '../../../../fixtures';
 import { CssGlobalContextDefaultState } from 'Contexts/CssGlobalContext/CssGlobalContextDefaultState';
-jest.mock('requests/api')
 
 
 describe('ub-c1: UpdateBlog Component testing', () => {

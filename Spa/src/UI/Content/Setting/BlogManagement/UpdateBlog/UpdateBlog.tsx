@@ -7,6 +7,7 @@ import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
 import { useRequest } from 'Hooks/Request/useRequest';
 import { useBlogValidation } from 'Hooks/Validation/Blog/useBlogValidation';
 import './UpdateBlog.scss';
+import FetchStatus from 'Components/ApiFetch/FetchStatus';
 var debug = require('debug')('ui:UpdateBlog')
 
 const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
@@ -124,9 +125,13 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
   return (currentBlogFetchStatus.status === ResponseResultStatusEnum.SUCCESS &&
     <div className="blog-detail-wrapper">
       <h2 className="blog-detail-title">Update Blog</h2>
-      {(currentBlogUpdateStatus.status === ResponseResultStatusEnum.FETCHING && <p>updating ...</p>)}
-      {(currentBlogUpdateStatus.status === ResponseResultStatusEnum.FAILURE && <p>updating blog failed</p>)}
-      {(currentBlogUpdateStatus.status === ResponseResultStatusEnum.SUCCESS && <p>updating blog success</p>)}
+      <FetchStatus 
+        currentFetchStatus={currentBlogUpdateStatus} 
+        setFetchStatus={setBlogUpdateStatus} 
+        fetchingMsg={'updating...'}
+        successMsg={'updating blog success'}
+        failureMsg={'updating blog failed'}
+      />
       <form className="blog-detail-form">
         <div className="blog-detail-form-title-wrapper" >
           <label htmlFor="title" className="blog-detail-form-title-label">Title</label>
