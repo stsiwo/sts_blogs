@@ -1,4 +1,5 @@
 from Configs.app import app
+from flask_cors import CORS
 from Configs.extensions import (
         api, db, jwt, migrate, ma, bcrypt
         )
@@ -39,6 +40,9 @@ def configureApp(config_object="Configs.settings"):
     ma.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
+
+    # cores
+    CORS(app, origins=[app.config['CLIENT_SPA_URL'] + '/*'])
 
     return app
 
