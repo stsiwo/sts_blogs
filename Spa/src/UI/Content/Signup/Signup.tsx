@@ -6,6 +6,7 @@ import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
 import { useRequest } from 'Hooks/Request/useRequest';
 import { useUserSignupValidation } from 'Hooks/Validation/UserSignup/useUserSignupValidation';
 import './Signup.scss';
+import FetchStatus from 'Components/ApiFetch/FetchStatus';
 var debug = require('debug')('ui:Signup')
 
 const Signup: React.FunctionComponent<{}> = (props: {}) => {
@@ -40,15 +41,21 @@ const Signup: React.FunctionComponent<{}> = (props: {}) => {
           .then((data: UserResponseDataType) => {
             if (data) dispatch({ type: 'login', user: data.user as UserType })
           })
+      }, () => {
+        debug('validation failed at save button event handler') 
       })
   }
 
   return (
     <div className="signup-form-cover">
       <h2 className="signup-form-title">Signup Form</h2>
-      {(currentRequestStatus.status === ResponseResultStatusEnum.FETCHING && <p>requesting user signup ...</p>)}
-      {(currentRequestStatus.status === ResponseResultStatusEnum.SUCCESS && <p>requesting user signup success</p>)}
-      {(currentRequestStatus.status === ResponseResultStatusEnum.FAILURE && <p>requesting user signup failed</p>)}
+      <FetchStatus 
+        currentFetchStatus={currentRequestStatus} 
+        setFetchStatus={setRequestStatus} 
+        fetchingMsg={'requesting user signup ...'}
+        successMsg={'requesting user signup success'}
+        failureMsg={'requesting user signup failed'}
+      />
       <form className="signup-form-content">
         <div className="signup-form-content-item signup-form-content-name">
           <label htmlFor="name" className="signup-form-content-item-label">User Name</label>
@@ -74,6 +81,7 @@ const Signup: React.FunctionComponent<{}> = (props: {}) => {
           <span>if you alreay have account </span><Link to='/login' >Login Page</Link>
         </div>
         <div className="signup-form-content-btn-wrapper">
+          {(currentValidationError.submit && <div className="input-error">{currentValidationError.submit}</div>)}
           <input className="signup-form-content-btn" type="button" onClick={handleSubmitClickEvent} value="Signup" />
         </div>
       </form>

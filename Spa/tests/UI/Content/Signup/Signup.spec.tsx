@@ -7,7 +7,6 @@ import { api } from 'requests/api';
 import { userGET200Response, internalServerError500Response, networkError } from '../../../requests/fixtures';
 import { ContextWrapperComponent } from '../../fixtures';
 import Signup from 'ui/Content/Signup/Signup';
-jest.mock('requests/api')
 
 
 describe('bm-c1: Signup Component testing', () => {
@@ -82,9 +81,8 @@ describe('bm-c1: Signup Component testing', () => {
       fireEvent.change(nameInput, { target: { value: '' } })
       const nameErrorNode = await waitForElement(() => getByText('name is a required field'))
       fireEvent.click(getByText('Signup'))
-      await wait(() => {
-        expect(api.request).toHaveBeenCalledTimes(1)
-      })
+      await waitForElement(() => getByText('please fix validation errors before submit'))
+      expect(api.request).toHaveBeenCalledTimes(0)
     })
   })
 
@@ -112,9 +110,8 @@ describe('bm-c1: Signup Component testing', () => {
       fireEvent.change(emailInput, { target: { value: '' } })
       const emailErrorNode = await waitForElement(() => getByText('email is a required field'))
       fireEvent.click(getByText('Signup'))
-      await wait(() => {
-        expect(api.request).toHaveBeenCalledTimes(1)
-      })
+      await waitForElement(() => getByText('please fix validation errors before submit'))
+      expect(api.request).toHaveBeenCalledTimes(0)
     })
   })
 
@@ -142,9 +139,8 @@ describe('bm-c1: Signup Component testing', () => {
       fireEvent.change(passwordInput, { target: { value: '' } })
       const passwordErrorNode = await waitForElement(() => getByText('password is a required field'))
       fireEvent.click(getByText('Signup'))
-      await wait(() => {
-        expect(api.request).toHaveBeenCalledTimes(1)
-      })
+      await waitForElement(() => getByText('please fix validation errors before submit'))
+      expect(api.request).toHaveBeenCalledTimes(0)
     })
   })
 
@@ -172,9 +168,8 @@ describe('bm-c1: Signup Component testing', () => {
       fireEvent.change(confirmInput, { target: { value: '' } })
       const confirmErrorNode = await waitForElement(() => getByText('confirm is a required field'))
       fireEvent.click(getByText('Signup'))
-      await wait(() => {
-        expect(api.request).toHaveBeenCalledTimes(1)
-      })
+      await waitForElement(() => getByText('please fix validation errors before submit'))
+      expect(api.request).toHaveBeenCalledTimes(0)
     })
   })
 
@@ -203,9 +198,8 @@ describe('bm-c1: Signup Component testing', () => {
       fireEvent.change(confirmInput, { target: { value: 'match' } })
       const confirmErrorNode = await waitForElement(() => getByText('passwords must match'))
       fireEvent.click(getByText('Signup'))
-      await wait(() => {
-        expect(api.request).toHaveBeenCalledTimes(1)
-      })
+      await waitForElement(() => getByText('please fix validation errors before submit'))
+      expect(api.request).toHaveBeenCalledTimes(0)
     })
   })
 
