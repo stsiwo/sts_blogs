@@ -3,11 +3,10 @@ import '@testing-library/jest-dom/extend-expect';
 import { fireEvent, queryByRole, queryByText, render, wait, waitForElement } from '@testing-library/react';
 import * as React from 'react';
 import { act } from 'react-dom/test-utils';
-import { api } from '../../../../src/requests/api';
+import { api } from 'requests/api';
 import { userGET200Response, internalServerError500Response, networkError } from '../../../requests/fixtures';
 import { ContextWrapperComponent } from '../../fixtures';
-import Login from '../../../../src/UI/Content/Login/Login';
-jest.mock('../../../../src/requests/api')
+import Login from 'ui/Content/Login/Login';
 
 
 describe('l-c1: Login Component testing', () => {
@@ -72,9 +71,8 @@ describe('l-c1: Login Component testing', () => {
       fireEvent.change(emailInput, { target: { value: '' } })
       const emailErrorNode = await waitForElement(() => getByText('email is a required field'))
       fireEvent.click(getByText('Login'))
-      await wait(() => {
-        expect(api.request).toHaveBeenCalledTimes(1)
-      })
+      await waitForElement(() => getByText('please fix validation errors before submit'))
+      expect(api.request).toHaveBeenCalledTimes(0)
     })
   })
 
@@ -102,9 +100,8 @@ describe('l-c1: Login Component testing', () => {
       fireEvent.change(passwordInput, { target: { value: '' } })
       const passwordErrorNode = await waitForElement(() => getByText('password is a required field'))
       fireEvent.click(getByText('Login'))
-      await wait(() => {
-        expect(api.request).toHaveBeenCalledTimes(1)
-      })
+      await waitForElement(() => getByText('please fix validation errors before submit'))
+      expect(api.request).toHaveBeenCalledTimes(0)
     })
   })
 
@@ -132,9 +129,8 @@ describe('l-c1: Login Component testing', () => {
       fireEvent.change(confirmInput, { target: { value: '' } })
       const confirmErrorNode = await waitForElement(() => getByText('confirm is a required field'))
       fireEvent.click(getByText('Login'))
-      await wait(() => {
-        expect(api.request).toHaveBeenCalledTimes(1)
-      })
+      await waitForElement(() => getByText('please fix validation errors before submit'))
+      expect(api.request).toHaveBeenCalledTimes(0)
     })
   })
 
@@ -163,9 +159,8 @@ describe('l-c1: Login Component testing', () => {
       fireEvent.change(confirmInput, { target: { value: 'match' } })
       const confirmErrorNode = await waitForElement(() => getByText('passwords must match'))
       fireEvent.click(getByText('Login'))
-      await wait(() => {
-        expect(api.request).toHaveBeenCalledTimes(1)
-      })
+      await waitForElement(() => getByText('please fix validation errors before submit'))
+      expect(api.request).toHaveBeenCalledTimes(0)
     })
   })
 

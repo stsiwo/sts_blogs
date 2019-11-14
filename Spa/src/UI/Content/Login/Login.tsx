@@ -6,6 +6,7 @@ import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
 import { useRequest } from 'Hooks/Request/useRequest';
 import { useUserLoginValidation } from 'Hooks/Validation/UserLogin/useUserLoginValidation';
 import './Login.scss';
+import FetchStatus from 'Components/ApiFetch/FetchStatus';
 var debug = require('debug')('ui:Login')
 
 const Login: React.FunctionComponent<{}> = (props: {}) => {
@@ -42,15 +43,21 @@ const Login: React.FunctionComponent<{}> = (props: {}) => {
           .then((data: UserResponseDataType) => {
             if (data) dispatch({ type: 'login', user: data.user as UserType })
           })
+      }, () => {
+        debug('validation failed at save button event handler') 
       })
   }
 
   return (
     <div className="login-form-cover">
       <h2 className="login-form-title">Login Form</h2>
-      {(currentRequestStatus.status === ResponseResultStatusEnum.FETCHING && <p>requesting user login ...</p>)}
-      {(currentRequestStatus.status === ResponseResultStatusEnum.SUCCESS && <p>requesting user login success</p>)}
-      {(currentRequestStatus.status === ResponseResultStatusEnum.FAILURE && <p>requesting user login failed</p>)}
+      <FetchStatus 
+        currentFetchStatus={currentRequestStatus} 
+        setFetchStatus={setRequestStatus} 
+        fetchingMsg={'requesting user login ...'}
+        successMsg={'requesting user login success'}
+        failureMsg={'requesting user login failed'}
+      />
       <form className="login-form-content">
         <div className="login-form-content-item login-form-content-email">
           <label htmlFor="email" className="login-form-content-item-label">Email</label>
@@ -71,6 +78,7 @@ const Login: React.FunctionComponent<{}> = (props: {}) => {
           <span>if you don&rsquo;t have account  </span><Link to='/login' >Signup Page</Link>
         </div>
         <div className="login-form-content-btn-wrapper">
+          {(currentValidationError.submit && <div className="input-error">{currentValidationError.submit}</div>)}
           <input className="regular-btn login-form-content-btn" type="button" onClick={handleSubmitClickEvent} value="Login" />
         </div>
       </form>
