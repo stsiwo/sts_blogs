@@ -49,7 +49,6 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   const dispatch = useDispatch()
   const { currentPaginationStatus, setPaginationStatus } = usePagination({})
   const { currentFilters, currentSort, setFilters, setSort } = useBlogFilterSort({})
-  const { currentRefreshStatus, setRefreshStatus } = useRefreshBtn({})
   const { currentRequestStatus: currentInitialBlogsFetchStatus, setRequestStatus: setInitialBlogsFetchStatus, sendRequest: sendBlogsFetchRequest, currentCancelSource } = useRequest({})
   const [currentRefreshCount, setRefreshCount] = React.useState<number>(null)
 

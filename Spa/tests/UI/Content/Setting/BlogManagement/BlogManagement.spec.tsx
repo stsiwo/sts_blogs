@@ -8,7 +8,6 @@ import { blogGET200NonEmptyResponse, blogGET200EmptyResponse } from '../../../..
 import { ContextWrapperComponent } from '../../../fixtures';
 import BlogManagement from 'ui/Content/Setting/BlogManagement/BlogManagement';
 import { CssGlobalContextDefaultState } from 'Contexts/CssGlobalContext/CssGlobalContextDefaultState';
-jest.mock('requests/api')
 
 
 describe('bm-c1: BlogManagement Component testing', () => {
