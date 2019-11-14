@@ -7,6 +7,7 @@ import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
 import { useRequest } from 'Hooks/Request/useRequest';
 import { useBlogValidation } from 'Hooks/Validation/Blog/useBlogValidation';
 import './NewBlog.scss';
+import FetchStatus from 'Components/ApiFetch/FetchStatus';
 var debug = require('debug')('ui:NewBlog')
 
 const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
@@ -107,9 +108,13 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
   return (
     <div className="blog-detail-wrapper">
       <h2 className="blog-detail-title">New Blog</h2>
-      {(currentNewBlogStatus.status === ResponseResultStatusEnum.FETCHING && <p>saving ...</p>)}
-      {(currentNewBlogStatus.status === ResponseResultStatusEnum.FAILURE && <p>saving blog failed</p>)}
-      {(currentNewBlogStatus.status === ResponseResultStatusEnum.SUCCESS && <p>saving blog success</p>)}
+      <FetchStatus 
+        currentFetchStatus={currentNewBlogStatus} 
+        setFetchStatus={setNewBlogStatus} 
+        fetchingMsg={'saving...'}
+        successMsg={'ok'}
+        failureMsg={'failed'}
+      />
       <form className="blog-detail-form">
         <div className="blog-detail-form-title-wrapper" >
           <label htmlFor="title" className="blog-detail-form-title-label">Title</label>
@@ -147,7 +152,6 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
           {(currentValidationError.submit && <div className="input-error">{currentValidationError.submit}</div>)}
         </div>
       </form>
-      )}
     </div>
   );
 }

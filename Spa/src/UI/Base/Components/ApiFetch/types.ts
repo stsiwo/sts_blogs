@@ -12,6 +12,9 @@ export declare type FetchStatusType = {
 export declare type FetchStatusPropType = {
   currentFetchStatus: FetchStatusType
   setFetchStatus: React.Dispatch<React.SetStateAction<FetchStatusType>>
+  fetchingMsg?: string
+  successMsg?: string
+  failureMsg?: string
 }
 
 

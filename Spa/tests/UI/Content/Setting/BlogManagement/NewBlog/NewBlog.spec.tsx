@@ -8,7 +8,6 @@ import { blogGET200NonEmptyResponse, blogGET200EmptyResponse, noDateGET200Respon
 import NewBlog from 'ui/Content/Setting/BlogManagement/NewBlog/NewBlog'
 import { ContextWrapperComponent } from '../../../../fixtures';
 import { CssGlobalContextDefaultState } from 'Contexts/CssGlobalContext/CssGlobalContextDefaultState';
-jest.mock('requests/api')
 
 
 describe('ub-c1: NewBlog Component testing', () => {
@@ -62,6 +61,7 @@ describe('ub-c1: NewBlog Component testing', () => {
 
   test('a2. (validation) should not allow to update when blog title is null/empty', async () => {
 
+    api.request = jest.fn()
     await act(async () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={NewBlog} isAuth />
@@ -92,6 +92,7 @@ describe('ub-c1: NewBlog Component testing', () => {
 
   test('a4.  (validation) should not allow to update when subtitle is null/empty', async () => {
 
+    api.request = jest.fn()
     await act(async () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={NewBlog} isAuth />
@@ -197,7 +198,7 @@ describe('ub-c1: NewBlog Component testing', () => {
       api.request = jest.fn().mockResolvedValue(noDateGET200Response)
       fireEvent.click(saveBtn)
       await wait(() => {
-        expect(getByText('saving blog success')).toBeInTheDocument()
+        expect(getByText('ok')).toBeInTheDocument()
       })
     })
   })
@@ -225,7 +226,7 @@ describe('ub-c1: NewBlog Component testing', () => {
       api.request = jest.fn().mockRejectedValue(networkError)
       fireEvent.click(saveBtn)
       await wait(() => {
-        expect(getByText('saving blog failed')).toBeInTheDocument()
+        expect(getByText('failed')).toBeInTheDocument()
       })
     })
   })
@@ -253,7 +254,7 @@ describe('ub-c1: NewBlog Component testing', () => {
       api.request = jest.fn().mockRejectedValue(internalServerError500Response)
       fireEvent.click(saveBtn)
       await wait(() => {
-        expect(getByText('saving blog failed')).toBeInTheDocument()
+        expect(getByText('failed')).toBeInTheDocument()
       })
     })
   })
