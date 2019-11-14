@@ -83,7 +83,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
     // should replace mock with real one
-    api.CancelToken.source = jest.fn().mockReturnValue('cancel-token')
+    //api.CancelToken.source = jest.fn().mockReturnValue('cancel-token')
     await act(async () => {
       const { getByText, getByRole, getAllByRole } = render(
         <ContextWrapperComponent component={BlogList} />
@@ -101,16 +101,30 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
 
   })
 
+  const delayedResolvedValue = (data: any): Promise<any> => {
+    return new Promise((res, rej) => {
+      setTimeout(() => {
+        res(data)
+      }, 1000)
+    })
+  }
+
+  // does not work
   test("a5. (EH) should cancel api request when 'cancel' button is clicked after 'refresh' button is clicked", async () => {
 
-    // api.request = jest.fn()
-    //   .mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse)
-    //     .then((data) => new Promise(resolve => setTimeout(() => {
-    //       resolve(data)
-    //     }, 3000))))
-
-    expect(1).toBe(0)
-
+    api.request = jest.fn().mockResolvedValue(blogGET200NonEmptyResponse)
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug } = render(
+        <ContextWrapperComponent component={BlogList} />
+      )
+      const refreshBtn = await waitForElement(() => getByText('refresh'))
+      api.request = jest.fn().mockReturnValue(delayedResolvedValue(blogGET200NonEmptyResponse))
+      fireEvent.click(refreshBtn)
+      const cancelBtn = await waitForElement(() => getByText('cancel'))
+      fireEvent.click(cancelBtn)
+      const msg = await waitForElement(() => getByText('refresh request is canceled'))
+      console.log(msg)
+    })
   })
 
   test("a6. (EH) should start api request with new limit value when page limit selector is changed", async () => {

@@ -40,6 +40,7 @@ export const request = async (request: RequestContentType): Promise<ResponseResu
     /** handle when cancel request **/
     if (api.isCancel(error)) {
       debug('request is cancaled')
+      debug(error)
       return Promise.reject({
         status: ResponseResultStatusEnum.CANCEL,
         errorMsg: error.message

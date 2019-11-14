@@ -46,13 +46,13 @@ export const useRequest = (input: UseRequestStatusInputType): UseRequestStatusOu
          **/
         return Promise.resolve(responseResult.data)
       })
-      .catch((error: AxiosError) => {
-        debug('fetch data then clause failedat sendRequest')
+      .catch((result: ResponseResultType) => {
+        debug('fetch data then clause failed at sendRequest')
         /** this is called when above 'then' caluse failed **/
         /** esp, 'args.callback' internal error **/
         setRequestStatus({
           status: ResponseResultStatusEnum.FAILURE,
-          errorMsg: error.message
+          errorMsg: result.errorMsg
         })
         return Promise.resolve()
       })
