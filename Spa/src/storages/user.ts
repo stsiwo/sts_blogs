@@ -1,4 +1,4 @@
-import { UserType } from "../domain/user/UserType";
+import { UserType } from "domain/user/UserType";
 
 export const storeUserInfo = (user: UserType): void => {
   localStorage.setItem('auth-user', JSON.stringify(user))

@@ -1,7 +1,7 @@
 import { HandlerType } from "./types";
-import { UiStateType } from "../../states/types";
+import { UiStateType } from "states/types";
 import { toggleLoginFormCaseReducer, toggleSignupFormCaseReducer, toggleNavBarCaseReducer, toggleFilterSortBarCaseReducer } from "../caseReducers/uiCaseReducers";
-import { ActionTypeEnum } from "../../actions/types";
+import { ActionTypeEnum } from "actions/types";
 
 export const uiHandler: HandlerType<UiStateType> = {
     [ActionTypeEnum.TOGGLE_LOGIN_FORM]: toggleLoginFormCaseReducer,

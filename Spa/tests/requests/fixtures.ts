@@ -1,6 +1,6 @@
 import { AxiosResponse, AxiosError } from "axios";
 import { getBlogTestData } from "../data/BlogFaker";
-import { ErrorResponseDataType, BlogListResponseDataType, UserResponseDataType, BlogResponseDataType } from "../../src/requests/types";
+import { ErrorResponseDataType, BlogListResponseDataType, UserResponseDataType, BlogResponseDataType } from "requests/types";
 import { getUserTestData } from "../data/UserFaker";
 
 export const noDateGET200Response: AxiosResponse<{}> = {

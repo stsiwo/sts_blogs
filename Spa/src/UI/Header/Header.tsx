@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useCssGlobalContext } from 'uiBaseContext/CssGlobalContext/CssGlobalContext';
-import { useResponsiveComponent } from 'uiBaseHook/ResponsiveComponentHook';
+import { useCssGlobalContext } from 'Contexts/CssGlobalContext/CssGlobalContext';
+import { useResponsiveComponent } from 'Hooks/ResponsiveComponentHook';
 import './Header.scss';
 import MenuToggleIcon from './MenuToggleIcon/MenuToggleIcon';
 import Menu from './MenuWrapper/Menu/Menu';

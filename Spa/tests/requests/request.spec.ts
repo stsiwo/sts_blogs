@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { api } from '../../src/requests/api';
+import { api } from 'requests/api';
 
 describe('r-1: request module testing', () => {
 

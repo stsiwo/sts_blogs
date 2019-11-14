@@ -1,10 +1,10 @@
 import { createStore } from "redux";
-import { rootReducer } from "../../src/reducers/rootReducer";
-import { initialState } from "../../src/states/state";
-import { ToggleLoginFormActionType, ToggleSignupFormActionType, ToggleNavBarActionType, ActionTypeEnum, ToggleLoginStatusActionType, ToggleFilterSortBarActionType, AssignTagsActionType, AssignUserActionType, AssignBlogsActionType, ToggleBlogsFetchingFlagActionType, ToggleTagsFetchingFlagActionType } from "../../src/actions/types";
+import { rootReducer } from "reducers/rootReducer";
+import { initialState } from "states/state";
+import { ToggleLoginFormActionType, ToggleSignupFormActionType, ToggleNavBarActionType, ActionTypeEnum, ToggleLoginStatusActionType, ToggleFilterSortBarActionType, AssignTagsActionType, AssignUserActionType, AssignBlogsActionType, ToggleBlogsFetchingFlagActionType, ToggleTagsFetchingFlagActionType } from "actions/types";
 import { prettyConsole } from "../../src/utils";
-import { toggleLoginStatusActionCreator, toggleFilterSortBarActionCreator, assignTagsActionCreator, assignUserActionCreator, assignBlogsActionCreator, toggleBlogsFetchingFlagActionCreator, toggleTagsFetchingFlagActionCreator } from '../../src/actions/creators'
-import { StateType } from "../../src/states/types";
+import { toggleLoginStatusActionCreator, toggleFilterSortBarActionCreator, assignTagsActionCreator, assignUserActionCreator, assignBlogsActionCreator, toggleBlogsFetchingFlagActionCreator, toggleTagsFetchingFlagActionCreator } from 'actions/creators'
+import { StateType } from "states/types";
 import { getTagTestData } from "../data/TagFaker";
 import { getUserTestData } from "../data/UserFaker";
 import { getBlogTestData } from "../data/BlogFaker";

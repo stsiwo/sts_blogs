@@ -1,4 +1,4 @@
-import { QueryStringType } from "./requests/types";
+import { QueryStringType } from "requests/types";
 import isEmpty = require('lodash/isEmpty');
 var debug = require('debug')('utils')
 

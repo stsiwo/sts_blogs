@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { ResponseResultStatusEnum, RequestMethodEnum, QueryStringType } from '../../../../requests/types';
+import { ResponseResultStatusEnum, RequestMethodEnum, QueryStringType } from 'requests/types';
 import { PaginationStatusType } from '../Pagination/types';
 import { CancelTokenSource } from 'axios';
 

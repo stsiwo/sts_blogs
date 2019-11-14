@@ -1,4 +1,4 @@
-import { UserType } from "../../src/domain/user/UserType";
+import { UserType } from "domain/user/UserType";
 import * as faker from 'faker';
 
 export const getUserTestData = (num: number = 20, credential: boolean = false): UserType[] => {

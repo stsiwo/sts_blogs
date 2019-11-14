@@ -3,9 +3,9 @@ import { TagType } from 'domain/tag/TagType';
 import * as React from 'react';
 import { useParams } from 'react-router';
 import { BlogResponseDataType, RequestMethodEnum, ResponseResultStatusEnum } from 'requests/types';
-import { useAuthContext } from 'uiBaseContext/AuthContext/AuthContext';
-import { useRequest } from 'uiBaseHook/Request/useRequest';
-import { useBlogValidation } from 'uiBaseHook/Validation/Blog/useBlogValidation';
+import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
+import { useRequest } from 'Hooks/Request/useRequest';
+import { useBlogValidation } from 'Hooks/Validation/Blog/useBlogValidation';
 import './UpdateBlog.scss';
 var debug = require('debug')('ui:UpdateBlog')
 

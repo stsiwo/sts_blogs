@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { UseRequestStatusInputType, UseRequestStatusOutputType, RequestStatusType, FetchDataArgType } from "./types";
-import { AxiosError } from 'axios';
-import { ResponseResultStatusEnum, ResponseResultType } from '../../../../requests/types';
-import { request } from '../../../../requests/request';
+import { AxiosError, CancelTokenSource } from 'axios';
+import { ResponseResultStatusEnum, ResponseResultType } from 'requests/types';
+import { request, getCancelTokenSource } from 'requests/request';
 import { buildQueryString } from '../../../../utils';
 var debug = require('debug')('ui:FetchStatus')
 
@@ -13,17 +13,23 @@ export const useRequest = (input: UseRequestStatusInputType): UseRequestStatusOu
     status: ResponseResultStatusEnum.INITIAL
   })
 
+  const [currentCancelSource, setCancelSource] = React.useState<CancelTokenSource>(null)
+
   async function sendRequest(args: FetchDataArgType) {
     debug('start handling fetch data function')
     debug(args)
     setRequestStatus({
       status: ResponseResultStatusEnum.FETCHING,
     })
+    const cancelTokenSource = getCancelTokenSource()
+    setCancelSource(cancelTokenSource)
+
     return await request({
       url: args.path + buildQueryString(args.queryString),
       ...(args.method && { method: args.method }),
       ...(args.headers && { headers: args.headers }),
-      ...(args.data && { data: args.data })
+      ...(args.data && { data: args.data }),
+      cancelToken: cancelTokenSource.token
     })
       .then((responseResult: ResponseResultType) => {
         debug('fetch data function receive response successfully')
@@ -55,7 +61,8 @@ export const useRequest = (input: UseRequestStatusInputType): UseRequestStatusOu
   return {
     currentRequestStatus: currentRequestStatus,
     setRequestStatus: setRequestStatus,
-    sendRequest: sendRequest
+    sendRequest: sendRequest,
+    currentCancelSource: currentCancelSource
   }
 }
 

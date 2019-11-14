@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
-import { AuthRoute } from 'uiBaseComponent/AuthRoute';
+import { AuthRoute } from 'Components/AuthRoute';
 import BlogManagement from './BlogManagement/BlogManagement';
 import NewBlog from './BlogManagement/NewBlog/NewBlog';
 import UpdateBlog from './BlogManagement/UpdateBlog/UpdateBlog';

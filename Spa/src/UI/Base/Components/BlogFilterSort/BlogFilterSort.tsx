@@ -2,17 +2,17 @@ import * as React from 'react';
 import './BlogFilterSort.scss';
 import { BlogFilterSortPropType, FilterType, TagType, SortType } from './types';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleFilterSortBarActionCreator } from '../../../../actions/creators';
+import { toggleFilterSortBarActionCreator } from 'actions/creators';
 import { Link } from 'react-router-dom';
 import { useRouteMatch } from 'react-router';
-import Tag from '../../../Base/Components/Tag/Tag';
+import Tag from 'Components/Tag/Tag';
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
-import { useResponsiveComponent } from '../../Hooks/ResponsiveComponentHook';
-import { useCssGlobalContext } from '../../Context/CssGlobalContext/CssGlobalContext';
+import { useResponsiveComponent } from 'Hooks/ResponsiveComponentHook';
+import { useCssGlobalContext } from 'Contexts/CssGlobalContext/CssGlobalContext';
 import Icon from '../Icon/Icon';
-import { StateType } from '../../../../states/types';
-import { useAuthContext } from '../../Context/AuthContext/AuthContext';
+import { StateType } from 'states/types';
+import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
 var debug = require('debug')('ui:BlogFilterSort')
 
 const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: BlogFilterSortPropType) => {

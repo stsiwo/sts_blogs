@@ -1,6 +1,6 @@
 import { useValidation } from '../useValidation';
 import { UseUserLoginValidationStatusInputType, UseUserLoginValidationStatusOutputType } from './types';
-import { UserLoginType } from '../../../../../domain/user/UserType';
+import { UserLoginType } from 'domain/user/UserType';
 import * as yup from 'yup'
 
 export const useUserLoginValidation = (input: UseUserLoginValidationStatusInputType): UseUserLoginValidationStatusOutputType => {

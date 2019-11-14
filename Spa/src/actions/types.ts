@@ -1,7 +1,7 @@
 import { Action, AnyAction } from "redux";
-import { TagType } from "../domain/tag/TagType";
-import { UserType } from "../domain/user/UserType";
-import { BlogType } from "../domain/blog/BlogType";
+import { TagType } from "domain/tag/TagType";
+import { UserType } from "domain/user/UserType";
+import { BlogType } from "domain/blog/BlogType";
 
 /** action type type **/
 export enum ActionTypeEnum {

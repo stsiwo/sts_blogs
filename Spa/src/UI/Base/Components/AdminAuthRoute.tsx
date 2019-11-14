@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Route, Redirect, RouteProps } from 'react-router-dom';
-import { useAuthContext } from '../Context/AuthContext/AuthContext';
-import { RoleEnum } from '../../../domain/user/UserType';
+import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
+import { RoleEnum } from 'domain/user/UserType';
 
 export declare type AdminAuthRoutePropType = {
   component: React.ComponentType,

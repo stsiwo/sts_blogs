@@ -2,9 +2,9 @@ import { initialUserLoginStatus, UserLoginType, UserType } from 'domain/user/Use
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { RequestMethodEnum, ResponseResultStatusEnum, UserResponseDataType } from 'requests/types';
-import { useAuthContext } from 'uiBaseContext/AuthContext/AuthContext';
-import { useRequest } from 'uiBaseHook/Request/useRequest';
-import { useUserLoginValidation } from 'uiBaseHook/Validation/UserLogin/useUserLoginValidation';
+import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
+import { useRequest } from 'Hooks/Request/useRequest';
+import { useUserLoginValidation } from 'Hooks/Validation/UserLogin/useUserLoginValidation';
 import './Login.scss';
 var debug = require('debug')('ui:Login')
 

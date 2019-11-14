@@ -3,12 +3,12 @@ import '@testing-library/jest-dom/extend-expect';
 import { fireEvent, queryByRole, queryByText, render, wait, waitForElement } from '@testing-library/react';
 import * as React from 'react';
 import { act } from 'react-dom/test-utils';
-import { api } from '../../../../../src/requests/api';
+import { api } from 'requests/api';
 import { blogGET200NonEmptyResponse, blogGET200EmptyResponse } from '../../../../requests/fixtures';
 import { ContextWrapperComponent } from '../../../fixtures';
-import BlogManagement from '../../../../../src/UI/Content/Setting/BlogManagement/BlogManagement';
-import { CssGlobalContextDefaultState } from '../../../../../src/UI/Base/Context/CssGlobalContext/CssGlobalContextDefaultState';
-jest.mock('../../../../../src/requests/api')
+import BlogManagement from 'ui/Content/Setting/BlogManagement/BlogManagement';
+import { CssGlobalContextDefaultState } from 'Contexts/CssGlobalContext/CssGlobalContextDefaultState';
+jest.mock('requests/api')
 
 
 describe('bm-c1: BlogManagement Component testing', () => {

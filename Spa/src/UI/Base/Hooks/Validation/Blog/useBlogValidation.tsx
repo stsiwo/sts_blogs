@@ -1,6 +1,6 @@
 import { useValidation } from '../useValidation';
 import { UseBlogValidationStatusInputType, UseBlogValidationStatusOutputType } from './types';
-import { BlogType } from '../../../../../domain/blog/BlogType'
+import { BlogType } from 'domain/blog/BlogType'
 import * as yup from 'yup'
 
 export const useBlogValidation = (input: UseBlogValidationStatusInputType): UseBlogValidationStatusOutputType => {

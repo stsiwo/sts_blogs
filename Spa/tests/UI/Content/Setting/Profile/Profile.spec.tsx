@@ -3,12 +3,12 @@ import '@testing-library/jest-dom/extend-expect';
 import { fireEvent, queryByRole, queryByText, render, wait, waitForElement } from '@testing-library/react';
 import * as React from 'react';
 import { act } from 'react-dom/test-utils';
-import { api } from '../../../../../src/requests/api';
+import { api } from 'requests/api';
 import { blogGET200NonEmptyResponse, blogGET200EmptyResponse, userGET200Response, noDateGET200Response, internalServerError500Response } from '../../../../requests/fixtures';
 import { ContextWrapperComponent } from '../../../fixtures';
-import Profile from '../../../../../src/UI/Content/Setting/Profile/Profile';
-import { CssGlobalContextDefaultState } from '../../../../../src/UI/Base/Context/CssGlobalContext/CssGlobalContextDefaultState';
-jest.mock('../../../../../src/requests/api')
+import Profile from 'ui/Content/Setting/Profile/Profile';
+import { CssGlobalContextDefaultState } from 'Contexts/CssGlobalContext/CssGlobalContextDefaultState';
+jest.mock('requests/api')
 
 
 describe('bm-c1: Profile Component testing', () => {

@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, compose } from 'redux';
-import { rootReducer } from '../reducers/rootReducer';
-import { initialState } from '../states/state';
-import { StateType } from '../states/types';
+import { rootReducer } from 'reducers/rootReducer';
+import { initialState } from 'states/state';
+import { StateType } from 'states/types';
 
 const middleware: any[] = []
 

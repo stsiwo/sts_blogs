@@ -3,8 +3,8 @@ import { TagType } from 'domain/tag/TagType';
 import * as React from 'react';
 import { useParams } from 'react-router';
 import { BlogResponseDataType, RequestMethodEnum, ResponseResultStatusEnum } from 'requests/types';
-import Tag from 'uiBaseComponent/Tag/Tag';
-import { useRequest } from 'uiBaseHook/Request/useRequest';
+import Tag from 'Components/Tag/Tag';
+import { useRequest } from 'Hooks/Request/useRequest';
 import './Blog.scss';
 
 const Blog: React.FunctionComponent<{}> = (props: {}) => {

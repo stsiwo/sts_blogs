@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, CancelTokenStatic } from 'axios'
-import { apiConfig } from '../configs/apiConfig';
+import { apiConfig } from 'configs/apiConfig';
 
 declare type AxiosInstanceWithCancelToken = AxiosInstance & {
   CancelToken?: CancelTokenStatic

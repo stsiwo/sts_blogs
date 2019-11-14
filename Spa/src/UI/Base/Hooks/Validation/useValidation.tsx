@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { UseValidationStatusInputType, UseValidationStatusOutputType, DomainValidationType, DomainInputTouchedType, ValidationType, InputTouchedType, SubmitInputTouchedType } from './types';
 import * as yup from 'yup'
-import { UserSignupType } from '../../../../domain/user/UserType';
+import { UserSignupType } from 'domain/user/UserType';
 var debug = require('debug')('ui:hook:useValidation')
 
 const createInitialValidationError = <D extends object = {}>(domain: D): ValidationType<D> => {

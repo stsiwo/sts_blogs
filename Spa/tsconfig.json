@@ -13,12 +13,16 @@
         "jsx": "react",
         "baseUrl": "./",
         "paths": {
-          "uiBaseHook/*": ["src/UI/Base/Hooks/*"]
-          "uiBaseContext/*": ["src/UI/Base/Context/*"]
-          "uiBaseComponent/*": ["src/UI/Base/Components/*"]
-          "ui/*": ["src/UI/*"]
-          "requests/*": ["src/requests/*"]
-          "domain/*": ["src/domain/*"]
+          "Hooks/*": ["src/UI/Base/Hooks/*"],
+          "Contexts/*": ["src/UI/Base/Context/*"],
+          "Components/*": ["src/UI/Base/Components/*"],
+          "ui/*": ["src/UI/*"],
+          "requests/*": ["src/requests/*"],
+          "domain/*": ["src/domain/*"],
+          "configs/*": ["src/configs/*"],
+          "actions/*": ["src/actions/*"],
+          "states/*": ["src/states/*"],
+          "reducers/*": ["src/reducers/*"]
         }
     }
 }

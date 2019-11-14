@@ -3,11 +3,11 @@ import '@testing-library/jest-dom/extend-expect';
 import { fireEvent, queryByRole, queryByText, render, wait, waitForElement } from '@testing-library/react';
 import * as React from 'react';
 import { act } from 'react-dom/test-utils';
-import { api } from '../../../../src/requests/api';
+import { api } from 'requests/api';
 import { userGET200Response, internalServerError500Response, networkError } from '../../../requests/fixtures';
 import { ContextWrapperComponent } from '../../fixtures';
-import Signup from '../../../../src/UI/Content/Signup/Signup';
-jest.mock('../../../../src/requests/api')
+import Signup from 'ui/Content/Signup/Signup';
+jest.mock('requests/api')
 
 
 describe('bm-c1: Signup Component testing', () => {

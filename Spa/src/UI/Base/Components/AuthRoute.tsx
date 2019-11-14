@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Route, Redirect, RouteProps } from 'react-router-dom';
-import { useAuthContext } from '../Context/AuthContext/AuthContext';
+import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
 var debug = require('debug')('ui:AuthRoute')
 
 export declare type AuthRoutePropType = {

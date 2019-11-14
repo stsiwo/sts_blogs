@@ -1,6 +1,6 @@
-import { BlogType } from "../domain/blog/BlogType";
+import { BlogType } from "domain/blog/BlogType";
 import { CancelToken } from "axios";
-import { UserType } from "../domain/user/UserType";
+import { UserType } from "domain/user/UserType";
 
 export enum ResponseResultStatusEnum {
   INITIAL,

@@ -1,5 +1,5 @@
 import { StateType } from "./types";
-import { RoleEnum } from "../domain/user/UserType";
+import { RoleEnum } from "domain/user/UserType";
 
 export const initialState: StateType = {
   ui: {

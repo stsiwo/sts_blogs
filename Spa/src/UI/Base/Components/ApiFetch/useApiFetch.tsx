@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { request } from '../../../../requests/request';
-import { ResponseResultStatusEnum, ResponseResultType, QueryStringType } from "../../../../requests/types";
+import { request } from 'requests/request';
+import { ResponseResultStatusEnum, ResponseResultType, QueryStringType } from "requests/types";
 import { FetchStatusType, UseFetchStatusInputType, UseFetchStatusOutputType } from "./types";
 import { buildQueryString } from '../../../../utils'
 import { AxiosError, CancelTokenSource } from 'axios';
-import { api } from '../../../../requests/api';
+import { api } from 'requests/api';
 
 
 export const useApiFetch = (input: UseFetchStatusInputType): UseFetchStatusOutputType => {

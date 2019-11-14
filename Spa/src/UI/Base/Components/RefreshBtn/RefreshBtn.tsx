@@ -1,11 +1,11 @@
 import { AxiosError, CancelTokenStatic, CancelTokenSource } from 'axios';
 import * as React from 'react';
-import { ResponseResultStatusEnum, ResponseResultType } from '../../../../requests/types';
+import { ResponseResultStatusEnum, ResponseResultType } from 'requests/types';
 import { buildQueryString } from '../../../../utils';
 import './RefreshBtn.scss';
 import { RefreshBtnPropType } from './types';
-import { request, getCancelTokenSource } from '../../../../requests/request';
-import { api } from '../../../../requests/api';
+import { request, getCancelTokenSource } from 'requests/request';
+import { api } from 'requests/api';
 var debug = require('debug')('ui:RefreshBtn')
 
 const RefreshBtn: React.FunctionComponent<RefreshBtnPropType> = (props: RefreshBtnPropType) => {

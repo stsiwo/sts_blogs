@@ -2,8 +2,8 @@ import { initialUserState, UserType } from 'domain/user/UserType';
 import { initialUserInputTouchedState, initialUserValidationState, UserInputTouchedType, UserValidationType } from 'domain/user/UserValidationType';
 import * as React from 'react';
 import { RequestMethodEnum, ResponseResultStatusEnum, UserResponseDataType } from 'requests/types';
-import { useApiFetch } from 'uiBaseComponent/ApiFetch/useApiFetch';
-import { useRequest } from 'uiBaseHook/Request/useRequest';
+import { useApiFetch } from 'Components/ApiFetch/useApiFetch';
+import { useRequest } from 'Hooks/Request/useRequest';
 import * as yup from 'yup';
 import './Profile.scss';
 var debug = require('debug')('ui:Profile')

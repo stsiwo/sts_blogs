@@ -1,6 +1,6 @@
 import { CaseReducerType } from "./CaseReducerType";
-import { UiStateType } from "../../states/types";
-import { ToggleLoginFormActionType, ToggleSignupFormActionType, ToggleNavBarActionType, ToggleFilterSortBarActionType } from "../../actions/types";
+import { UiStateType } from "states/types";
+import { ToggleLoginFormActionType, ToggleSignupFormActionType, ToggleNavBarActionType, ToggleFilterSortBarActionType } from "actions/types";
 
 
 export const toggleLoginFormCaseReducer: CaseReducerType<UiStateType, ToggleLoginFormActionType> = (ui, action) => {

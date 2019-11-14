@@ -1,9 +1,9 @@
 import * as React from 'react';
 import './MenuCloseIcon.scss';
-import { useCssGlobalContext } from '../../../../Base/Context/CssGlobalContext/CssGlobalContext';
-import { useResponsiveComponent } from '../../../../Base/Hooks/ResponsiveComponentHook';
+import { useCssGlobalContext } from 'Contexts/CssGlobalContext/CssGlobalContext';
+import { useResponsiveComponent } from 'Hooks/ResponsiveComponentHook';
 import { useDispatch } from 'react-redux';
-import { toggleNavBarActionCreator } from '../../../../../actions/creators';
+import { toggleNavBarActionCreator } from 'actions/creators';
 
 
 const MenuCloseIcon: React.FunctionComponent<{}> = (props: {}) => {

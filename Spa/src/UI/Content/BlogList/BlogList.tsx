@@ -3,21 +3,25 @@ import { TagType } from 'domain/tag/TagType';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { RequestMethodEnum, ResponseResultStatusEnum } from 'requests/types';
-import FetchStatus from 'uiBaseComponent/ApiFetch/FetchStatus';
-import { useApiFetch } from 'uiBaseComponent/ApiFetch/useApiFetch';
-import BlogFilterSort from 'uiBaseComponent/BlogFilterSort/BlogFilterSort';
-import { useBlogFilterSort } from 'uiBaseComponent/BlogFilterSort/useBlogFilterSort';
-import PageLimitSelect from 'uiBaseComponent/Pagination/PageLimitSelect';
-import Pagination from 'uiBaseComponent/Pagination/Pagination';
-import { usePagination } from 'uiBaseComponent/Pagination/usePagination';
-import RefreshBtn from 'uiBaseComponent/RefreshBtn/RefreshBtn';
-import { useRefreshBtn } from 'uiBaseComponent/RefreshBtn/useRefreshBtn';
-import { useCssGlobalContext } from 'uiBaseContext/CssGlobalContext/CssGlobalContext';
-import { useResponsiveComponent } from 'uiBaseHook/ResponsiveComponentHook';
-import { toggleFilterSortBarActionCreator } from '../../../actions/creators';
-import { StateType } from '../../../states/types';
+import { RequestMethodEnum, ResponseResultStatusEnum, BlogListResponseDataType } from 'requests/types';
+import FetchStatus from 'Components/ApiFetch/FetchStatus';
+import { useApiFetch } from 'Components/ApiFetch/useApiFetch';
+import BlogFilterSort from 'Components/BlogFilterSort/BlogFilterSort';
+import { useBlogFilterSort } from 'Components/BlogFilterSort/useBlogFilterSort';
+import PageLimitSelect from 'Components/Pagination/PageLimitSelect';
+import Pagination from 'Components/Pagination/Pagination';
+import { usePagination } from 'Components/Pagination/usePagination';
+import RefreshBtn from 'Components/RefreshBtn/RefreshBtn';
+import { useRefreshBtn } from 'Components/RefreshBtn/useRefreshBtn';
+import { useCssGlobalContext } from 'Contexts/CssGlobalContext/CssGlobalContext';
+import { useResponsiveComponent } from 'Hooks/ResponsiveComponentHook';
+import { toggleFilterSortBarActionCreator } from 'actions/creators';
+import { StateType } from 'states/types';
 import './BlogList.scss';
+import { useRequest } from 'Hooks/Request/useRequest';
+import { CancelTokenSource } from 'axios';
+import { getCancelTokenSource } from 'requests/request';
+import RefreshBtnProto from 'Components/RefreshBtn/RefreshBtnProto';
 var debug = require('debug')('ui:BlogList')
 
 declare type FetchResultType = {
@@ -25,6 +29,10 @@ declare type FetchResultType = {
   errorMsg?: string
 }
 
+export declare type CancelTokenSourceProto = {
+  cancelTokenSource: CancelTokenSource
+  id: number
+}
 
 const BlogList: React.FunctionComponent<{}> = (props: {}) => {
 
@@ -42,37 +50,43 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   const { currentPaginationStatus, setPaginationStatus } = usePagination({})
   const { currentFilters, currentSort, setFilters, setSort } = useBlogFilterSort({})
   const { currentRefreshStatus, setRefreshStatus } = useRefreshBtn({})
+  const { currentRequestStatus: currentInitialBlogsFetchStatus, setRequestStatus: setInitialBlogsFetchStatus, sendRequest: sendBlogsFetchRequest, currentCancelSource } = useRequest({})
+  const [currentRefreshCount, setRefreshCount] = React.useState<number>(null)
 
-  const callbackAfterApiFetch = (data: any): void => {
-    // assign fetched blogs data to this state
-    debug('now callback of useApiFetch is called...')
-    //setBlogs(getBlogTestData())
-    if (data) {
-      debug('response data is available')
-      setBlogs(data.blogs)
-
-      // assign new total count of pagination
-      setPaginationStatus({
-        ...currentPaginationStatus,
-        totalCount: data.totalCount
-      })
-    }
-  }
   const queryString = {
     offset: currentPaginationStatus.offset,
     limit: currentPaginationStatus.limit,
-    tags: currentFilters.tags.map((tag: TagType) => tag.name), 
+    tags: currentFilters.tags.map((tag: TagType) => tag.name),
     startDate: currentFilters.creationDate.start ? currentFilters.creationDate.start.toJSON() : null,
     endDate: currentFilters.creationDate.end ? currentFilters.creationDate.end.toJSON() : null,
     keyword: currentFilters.keyword,
     sort: currentSort,
   }
-  const { currentFetchStatus, setFetchStatus } = useApiFetch({
-    path: path,
-    method: RequestMethodEnum.GET,
-    queryString: queryString,
-    callback: callbackAfterApiFetch,
-  })
+
+  React.useEffect(() => {
+    debug("start useEffect")
+    // might can move to inside eh of refresh click
+
+    debug("start send blog fetch request")
+    sendBlogsFetchRequest({
+      path: path,
+      method: RequestMethodEnum.GET,
+      queryString: queryString
+    })
+      .then((data: BlogListResponseDataType) => {
+        if (data) {
+          setBlogs(data.blogs)
+          // assign new total count of pagination
+          setPaginationStatus({
+            ...currentPaginationStatus,
+            totalCount: data.totalCount
+          })
+        }
+      })
+  }, [
+      JSON.stringify(queryString),
+      currentRefreshCount
+    ])
 
   /** EH **/
   const handleFilterSortNavClickEvent: React.EventHandler<React.MouseEvent<HTMLElement>> = (e) => {
@@ -81,6 +95,18 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
 
   const handleFilterSortNavCloseClickEvent: React.EventHandler<React.MouseEvent<HTMLElement>> = (e) => {
     dispatch(toggleFilterSortBarActionCreator(false))
+  }
+
+  const handleRefreshClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = async (e) => {
+    debug("start handling refresh click")
+    const nextRefreshCount = currentRefreshCount + 1
+    setRefreshCount(nextRefreshCount)
+  }
+
+  const handleCancelClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
+    debug('handle cancel click')
+    debug(currentCancelSource)
+    currentCancelSource.cancel("refresh request is canceled")
   }
 
   /** render **/
@@ -103,22 +129,15 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
       <section className="blog-list-section-wrapper">
         <h2 className="blog-list-title">BlogLists</h2>
         <div className="blog-list-controller-wrapper">
-          <FetchStatus currentFetchStatus={currentFetchStatus} setFetchStatus={setFetchStatus} />
-          <RefreshBtn
-            currentRefreshStatus={currentRefreshStatus}
-            setRefreshStatus={setRefreshStatus}
-            path={path}
-            method={RequestMethodEnum.GET}
-            queryString={queryString}
-            callback={callbackAfterApiFetch}
-            enableCancel
-          />
+          <FetchStatus currentFetchStatus={currentInitialBlogsFetchStatus} setFetchStatus={setInitialBlogsFetchStatus} />
+          {(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING && <button className="blog-list-controller-refresh-btn" onClick={handleRefreshClickEvent}>refresh</button>)}
+          {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FETCHING && <button className="blog-list-controller-cancel-btn" onClick={handleCancelClickEvent}>cancel</button>)}
           <PageLimitSelect currentPaginationStatus={currentPaginationStatus} setPaginationStatus={setPaginationStatus} />
         </div>
         <div className="blog-list-items-wrapper">
-          {(currentFetchStatus.status === ResponseResultStatusEnum.FETCHING || currentRefreshStatus.status === ResponseResultStatusEnum.FETCHING && <p role="fetching">fetching ... </p>)}
-          {(currentFetchStatus.status !== ResponseResultStatusEnum.FETCHING && currentRefreshStatus.status !== ResponseResultStatusEnum.FETCHING && currentBlogs.length === 0 && <p>blogs are empty</p>)}
-          {(currentFetchStatus.status !== ResponseResultStatusEnum.FETCHING && currentRefreshStatus.status !== ResponseResultStatusEnum.FETCHING && currentBlogs.length !== 0 && renderBlogLists(currentBlogs))}
+          {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FETCHING && <p role="fetching">fetching ... </p>)}
+          {(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING && currentBlogs.length === 0 && <p>blogs are empty</p>)}
+          {(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING && currentBlogs.length !== 0 && renderBlogLists(currentBlogs))}
         </div>
         <div className="blog-list-pagination-wrapper">
           <Pagination currentPaginationStatus={currentPaginationStatus} setPaginationStatus={setPaginationStatus} />

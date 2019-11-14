@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './FetchStatus.scss';
 import { FetchStatusPropType } from './types';
-import { ResponseResultStatusEnum } from '../../../../requests/types';
+import { ResponseResultStatusEnum } from 'requests/types';
 var debug = require('debug')('ui:FetchStatus')
 
 const FetchStatus: React.FunctionComponent<FetchStatusPropType> = (props: FetchStatusPropType) => {

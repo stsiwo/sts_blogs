@@ -3,12 +3,12 @@ import '@testing-library/jest-dom/extend-expect';
 import { fireEvent, queryByRole, queryByText, render, wait, waitForElement } from '@testing-library/react';
 import * as React from 'react';
 import { act } from 'react-dom/test-utils';
-import { api } from "../../../../src/requests/api";
-import { CssGlobalContextDefaultState } from "../../../../src/UI/Base/Context/CssGlobalContext/CssGlobalContextDefaultState";
-import BlogList from "../../../../src/UI/Content/BlogList/BlogList";
+import { api } from "requests/api";
+import { CssGlobalContextDefaultState } from "Contexts/CssGlobalContext/CssGlobalContextDefaultState";
+import BlogList from "ui/Content/BlogList/BlogList";
 import { blogGET200EmptyResponse, blogGET200NonEmptyResponse } from "../../../requests/fixtures";
 import { ContextWrapperComponent } from "../../fixtures";
-jest.mock('../../../../src/requests/api')
+jest.mock('requests/api')
 
 
 describe('bl-c1: MenuToogleIcon Component testing', () => {

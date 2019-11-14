@@ -3,8 +3,8 @@ import { RequestContentType, ResponseResultType, ResponseResultStatusEnum, Error
 import { api } from "./api";
 import { AxiosResponse, AxiosError } from "axios";
 import { useDispatch } from "react-redux";
-import { toggleLoginStatusActionCreator } from "../actions/creators";
-import { useAuthContext } from "uiBaseContext/AuthContext/AuthContext";
+import { toggleLoginStatusActionCreator } from "actions/creators";
+import { useAuthContext } from "Contexts/AuthContext/AuthContext";
 var debug = require('debug')('request')
 
 

@@ -3,12 +3,12 @@ import '@testing-library/jest-dom/extend-expect';
 import { fireEvent, queryByRole, queryByText, render, wait, waitForElement } from '@testing-library/react';
 import * as React from 'react';
 import { act } from 'react-dom/test-utils';
-import { api } from '../../../../../../src/requests/api';
+import { api } from 'requests/api';
 import { blogGET200NonEmptyResponse, blogGET200EmptyResponse, noDateGET200Response, internalServerError500Response, networkError, singleBlogGET200NonEmptyResponse } from '../../../../../requests/fixtures';
-import UpdateBlog from '../../../../../../src/UI/Content/Setting/BlogManagement/UpdateBlog/UpdateBlog'
+import UpdateBlog from 'ui/Content/Setting/BlogManagement/UpdateBlog/UpdateBlog'
 import { ContextWrapperComponent } from '../../../../fixtures';
-import { CssGlobalContextDefaultState } from '../../../../../../src/UI/Base/Context/CssGlobalContext/CssGlobalContextDefaultState';
-jest.mock('../../../../../../src/requests/api')
+import { CssGlobalContextDefaultState } from 'Contexts/CssGlobalContext/CssGlobalContextDefaultState';
+jest.mock('requests/api')
 
 
 describe('ub-c1: UpdateBlog Component testing', () => {

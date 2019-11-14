@@ -23,12 +23,16 @@ module.exports = {
     modules: ['node_modules'],
     extensions: [".ts", ".tsx", ".js", ".json"],
     alias: {
-      uiBaseHook: path.resolve(__dirname, 'src/UI/Base/Hooks/'),
-      uiBaseContext: path.resolve(__dirname, 'src/UI/Base/Context/'),
-      uiBaseComponent: path.resolve(__dirname, 'src/UI/Base/Components/'),
+      Hooks: path.resolve(__dirname, 'src/UI/Base/Hooks/'),
+      Contexts: path.resolve(__dirname, 'src/UI/Base/Context/'),
+      Components: path.resolve(__dirname, 'src/UI/Base/Components/'),
       ui: path.resolve(__dirname, 'src/UI/'),
       requests: path.resolve(__dirname, 'src/requests/'),
       domain: path.resolve(__dirname, 'src/domain/'),
+      configs: path.resolve(__dirname, 'src/configs/'),
+      actions: path.resolve(__dirname, 'src/actions/'),
+      states: path.resolve(__dirname, 'src/states/'),
+      reducers: path.resolve(__dirname, 'src/reducers/'),
     }
   },
   // webpack does not tell whether you installed listed loader until it is used. so be careful

@@ -1,5 +1,7 @@
 import { CancelTokenSource } from "axios";
-import { RequestMethodEnum, QueryStringType, ResponseResultStatusEnum } from "../../../../requests/types";
+import { RequestMethodEnum, QueryStringType, ResponseResultStatusEnum } from "requests/types";
+import { RequestStatusType } from "Hooks/Request/types";
+import { CancelTokenSourceProto } from "ui/Content/BlogList/BlogList";
 
 export declare type RefreshStatusType = {
   data?: any
@@ -15,6 +17,13 @@ export declare type RefreshBtnPropType = {
   queryString?: QueryStringType
   callback?: (data: any) => void
   enableCancel: boolean
+}
+
+export declare type RefreshBtnProtoPropType = {
+  currentFetchStatus: RequestStatusType 
+  currentRefreshCount: number
+  setRefreshCount: React.Dispatch<React.SetStateAction<number>>
+  currentCancelSource: CancelTokenSource
 }
 
 export declare type UseRefreshStatusInputType<T = any> = {

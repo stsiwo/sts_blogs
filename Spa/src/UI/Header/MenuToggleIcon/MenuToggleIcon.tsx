@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
-import { toggleNavBarActionCreator } from '../../../actions/creators';
+import { toggleNavBarActionCreator } from 'actions/creators';
 import './MenuToggleIcon.scss';
 
 

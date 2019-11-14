@@ -2,13 +2,13 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { store } from './configs/storeConfig';
-import { AuthContext, useUpdateAuthContextReducer } from 'uiBaseContext/AuthContext/AuthContext';
-import { CssGlobalContext } from 'uiBaseContext/CssGlobalContext/CssGlobalContext';
-import { CssGlobalContextDefaultState } from 'uiBaseContext/CssGlobalContext/CssGlobalContextDefaultState';
-import './UI/Base/Css/Common.scss';
+import { store } from 'configs/storeConfig';
+import { AuthContext, useUpdateAuthContextReducer } from 'Contexts/AuthContext/AuthContext';
+import { CssGlobalContext } from 'Contexts/CssGlobalContext/CssGlobalContext';
+import { CssGlobalContextDefaultState } from 'Contexts/CssGlobalContext/CssGlobalContextDefaultState';
+import 'ui/Base/Css/Common.scss';
 import Content from 'ui/Content/Content';
-import Header from './UI/Header/Header';
+import Header from 'ui/Header/Header';
 import { getUserTestData } from '../tests/data/UserFaker';
 
 

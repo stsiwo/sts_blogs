@@ -1,4 +1,4 @@
-import { BlogType } from "../../src/domain/blog/BlogType";
+import { BlogType } from "domain/blog/BlogType";
 import * as faker from 'faker';
 
 export const getBlogTestData = (num: number = 20): BlogType[] => {

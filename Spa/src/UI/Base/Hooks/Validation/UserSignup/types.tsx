@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { UserSignupType } from '../../../../../domain/user/UserType';
+import { UserSignupType } from 'domain/user/UserType';
 import { DomainValidationType } from '../types';
 
 export declare type UseUserSignupValidationStatusInputType = {

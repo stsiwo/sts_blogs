@@ -1,8 +1,8 @@
-import { api } from '../../src/requests/api'
+import { api } from 'requests/api'
 import { printBody } from '../utils';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { blogGET200NonEmptyResponse, blogGET500Response } from './fixtures';
-jest.mock('../../src/requests/api')
+jest.mock('requests/api')
 
 api.get = jest.fn().mockReturnValue(Promise.resolve(blogGET500Response))
 

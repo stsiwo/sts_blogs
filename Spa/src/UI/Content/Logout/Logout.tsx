@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { useAuthContext } from 'uiBaseContext/AuthContext/AuthContext';
+import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
 import './Logout.scss';
 
 const Logout: React.FunctionComponent<{}> = (props: {}) => {

@@ -1,4 +1,4 @@
-import { TagType } from "../../src/domain/tag/TagType";
+import { TagType } from "domain/tag/TagType";
 import * as faker from 'faker';
 
 export const getTagTestData = (num: number = 10): TagType[] => {

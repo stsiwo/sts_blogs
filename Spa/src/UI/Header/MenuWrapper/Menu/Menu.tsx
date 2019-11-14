@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { StateType } from '../../../../states/types';
+import { StateType } from 'states/types';
 import './Menu.scss';
 import MenuCloseIcon from './MenuCloseIcon/MenuCloseIcon';
-import { useAuthContext } from 'uiBaseContext/AuthContext/AuthContext';
+import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
 
 
 const Menu: React.FunctionComponent<{}> = (props: {}) => {
