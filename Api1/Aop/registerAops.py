@@ -1,7 +1,1 @@
-from Aop.createDbSchemeBeforeFirstRequest import (
-        createDbSchemeBeforeFirstRequest
-        )
-
-
-def registerAops():
-    createDbSchemeBeforeFirstRequest()
+import Aop.addCorsResponseHeaders 

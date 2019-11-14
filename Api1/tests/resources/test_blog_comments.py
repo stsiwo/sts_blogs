@@ -1,6 +1,4 @@
 from utils.util import decodeResponseByteJsonToDictionary
-from Infrastructure.DataModels.UserModel import User
-from Infrastructure.DataModels.RoleModel import Role
 from Infrastructure.DataModels.BlogModel import Blog
 import pytest
 

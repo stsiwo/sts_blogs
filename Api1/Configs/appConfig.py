@@ -25,7 +25,8 @@ def configureApp(config_object="Configs.settings"):
     import exceptions.registerErrorHandlers
     # jwt claim loader
     import Resources.claimLoader
-
+    # aop
+    import Aop.registerAops
     # extensions
     # ============================================================
     # IMPORTANT: adding resources must be done before init_app!!!!

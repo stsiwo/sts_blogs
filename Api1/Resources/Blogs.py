@@ -30,9 +30,6 @@ class Blogs(Resource):
 
         response = jsonify(blogs)
         response.status_code = 200
-        response.headers = {
-                'Access-Control-Allow-Origin': app.config['CLIENT_SPA_URL']
-                }
         return response
 
     # create new blog
