@@ -6,6 +6,8 @@ from urllib.parse import urljoin
 
 class EmailService(object):
 
+    _client: None
+
     def __init__(self):
         self._client = None
         pass
