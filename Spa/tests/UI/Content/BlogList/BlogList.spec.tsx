@@ -8,7 +8,6 @@ import { CssGlobalContextDefaultState } from "Contexts/CssGlobalContext/CssGloba
 import BlogList from "ui/Content/BlogList/BlogList";
 import { blogGET200EmptyResponse, blogGET200NonEmptyResponse } from "../../../requests/fixtures";
 import { ContextWrapperComponent } from "../../fixtures";
-jest.mock('requests/api')
 
 
 describe('bl-c1: MenuToogleIcon Component testing', () => {
