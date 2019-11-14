@@ -20,8 +20,8 @@ const Content: React.FunctionComponent<{}> = (props: {}) => {
       <Route path="/login" exact component={Login} /> 
       <Route path="/logout" exact component={Logout} /> 
       <Route path="/signup" exact component={Signup} /> 
-      <Route path="/blog" exact component={BlogList} /> 
-      <Route path="/blog/:id" exact component={Blog} /> 
+      <Route path="/blogs" exact component={BlogList} /> 
+      <Route path="/blogs/:id" exact component={Blog} /> 
     </section>
   );
 }
