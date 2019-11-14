@@ -4,11 +4,10 @@ import { fireEvent, queryByRole, queryByText, render, wait, waitForElement } fro
 import * as React from 'react';
 import { act } from 'react-dom/test-utils';
 import { api } from 'requests/api';
-import { blogGET200NonEmptyResponse, blogGET200EmptyResponse, userGET200Response, noDateGET200Response, internalServerError500Response } from '../../../../requests/fixtures';
+import { blogGET200NonEmptyResponse, blogGET200EmptyResponse, userGET200Response, noDateGET200Response, internalServerError500Response, networkError } from '../../../../requests/fixtures';
 import { ContextWrapperComponent } from '../../../fixtures';
 import Profile from 'ui/Content/Setting/Profile/Profile';
 import { CssGlobalContextDefaultState } from 'Contexts/CssGlobalContext/CssGlobalContextDefaultState';
-jest.mock('requests/api')
 
 
 describe('bm-c1: Profile Component testing', () => {
@@ -224,8 +223,11 @@ describe('bm-c1: Profile Component testing', () => {
         <ContextWrapperComponent component={Profile} isAuth />
       )
       const confirmInput = await waitForElement(() => getByLabelText('Confirm:'))
+      const passwordInput = await waitForElement(() => getByLabelText('Password:'))
       fireEvent.focus(confirmInput) // need to focus to enable to display validation error on dom
+      fireEvent.focus(passwordInput) // need to focus to enable to display validation error on dom
       fireEvent.change(confirmInput,{ target: { value: '' }})
+      fireEvent.change(passwordInput,{ target: { value: '' }})
       const confirmErrorNode = await waitForElement(() => getByText('confirm is a required field'))
       fireEvent.click(getByText('Update'))
       await wait(() => {
@@ -302,7 +304,25 @@ describe('bm-c1: Profile Component testing', () => {
     })
   })
 
-  test('a16. (DOM) should show "update failure" message when update failed because of network issue or 4xx or 5xx error', async () => {
+  test('a16. (DOM) should show "update failure" message when update failed because of network issue', async () => {
+
+    api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={Profile} isAuth />
+      )
+      // must wait until fetch is completed
+      const updateBtn = await waitForElement(() => getByText('Update'))
+      // mock response of update request
+      api.request = jest.fn().mockReturnValue(Promise.reject(networkError))
+      fireEvent.click(updateBtn)
+      await wait(() => {
+        expect(getByText('updating user profile failed')).toBeInTheDocument()
+      })
+    })
+  })
+  
+  test('a17. (DOM) should show "update failure" message when update failed because of 4xx/5xx error', async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
     await act(async () => {

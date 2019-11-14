@@ -6,6 +6,8 @@ import { useApiFetch } from 'Components/ApiFetch/useApiFetch';
 import { useRequest } from 'Hooks/Request/useRequest';
 import * as yup from 'yup';
 import './Profile.scss';
+import { useProfileValidation } from 'Hooks/Validation/Profile/useProfileValidation';
+import FetchStatus from 'Components/ApiFetch/FetchStatus';
 var debug = require('debug')('ui:Profile')
 
 
@@ -14,61 +16,15 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
 
   /** state **/
   const [currentUser, setUser] = React.useState<UserType>(initialUserState)
-  const [currentValidationError, setValidationError] = React.useState<UserValidationType>(initialUserValidationState)
-  const [currentInputTouched, setInputTouched] = React.useState<UserInputTouchedType>(initialUserInputTouchedState)
+  const { currentValidationError, touch, validate } = useProfileValidation({ domain: currentUser })
 
   const path: string = '/users/' + currentUser.id
   const method: RequestMethodEnum = RequestMethodEnum.PUT
 
-  const { currentRequestStatus, setRequestStatus, sendRequest } = useRequest({})
-
-  let schema = yup.object().shape<UserType>({
-    id: yup.string(),
-    name: yup.string().required(),
-    email: yup.string().email().required(),
-    password: yup.string().required(),
-    confirm: yup.string().required().oneOf([yup.ref('password'), null], 'passwords must match')
-  });
+  const { currentRequestStatus: currentUpdateRequestStatus, setRequestStatus: setUpdateRequestStatus, sendRequest: sendUpdateRequest } = useRequest({})
+  const { currentRequestStatus: currentBlogFetchStatus, setRequestStatus: setBlogFetchStatus, sendRequest: fetchBlog } = useRequest({})
 
   /** lifecycle **/
-  React.useEffect(() => {
-    function validateFormInput() {
-      schema
-        .validate(currentUser, {
-          abortEarly: false
-        })
-        .then(() => {
-          debug('validation passed')
-          setValidationError({
-            ...initialUserValidationState
-          })
-        })
-        .catch((error: yup.ValidationError) => {
-          debug('validation error detected')
-          debug(error)
-          // clear all of error message first
-          for (let key in currentValidationError) delete currentValidationError[key as keyof UserValidationType]
-          // assign new error message 
-          error.inner.forEach((eachError: yup.ValidationError) => {
-            if (currentInputTouched[eachError.path as keyof UserInputTouchedType])
-              currentValidationError[eachError.path as keyof UserValidationType] = eachError.message
-          })
-          setValidationError({
-            ...currentValidationError
-          })
-        })
-    }
-    debug('validating input.... should be called only mount and when input is updated')
-    validateFormInput()
-    return () => {
-    };
-  }, [
-      currentUser.name,
-      currentUser.email,
-      currentUser.password,
-      currentUser.confirm,
-      ...Object.keys(currentInputTouched).map(key => currentInputTouched[key as keyof UserInputTouchedType]) // for update when input focus
-    ]);
 
   const mapStateToFormData = (state: UserType): FormData => {
     const formData = new FormData()
@@ -81,20 +37,20 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
     return formData
   }
 
-  const { currentFetchStatus, setFetchStatus } = useApiFetch({
-    path: path,
-    method: RequestMethodEnum.GET,
-    callback: (data: UserResponseDataType) => {
-      debug('api fetch callback start')
-      if (data) {
-        debug('data is available')
-        debug(data)
-        setUser({
-          ...data.user
-        })
-      }
-    }
-  })
+  React.useEffect(() => {
+    debug('initial fetch at useEffect')
+    fetchBlog({
+      path: path,
+      method: RequestMethodEnum.GET,
+    })
+      // call from previous 'catch' and 'then' of 'fetchBlog'
+      // since resolve promise in the 'catch'
+      .then((data: UserResponseDataType) => {
+        debug('then func of fetchBlog func')
+        if (data) setUser(data.user)
+      })
+  }, []);
+
 
   const handleImageUploadChange: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
     const imgFile: File = e.currentTarget.files[0]
@@ -103,13 +59,6 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
       ...currentUser,
       avatarImage: imgFile,
       avatarUrl: imgSrc,
-    })
-  }
-
-  const handleInitialFocusEvent: React.EventHandler<React.FocusEvent<HTMLInputElement>> = (e) => {
-    currentInputTouched[e.currentTarget.name as keyof UserValidationType] = true
-    setInputTouched({
-      ...currentInputTouched
     })
   }
 
@@ -150,48 +99,42 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
   const handleSaveUserClickEvent: React.EventHandler<React.MouseEvent<HTMLInputElement>> = async (e) => {
     debug('clicked update butuon')
     // final check validation ...
-    schema.validate(currentUser, {
-      abortEarly: false
-    })
-      .then(async () => {
-        debug('validation passed')
-
-        sendRequest({
+    validate()
+      .then(() => {
+        debug('validation passed at save button event handler') 
+        sendUpdateRequest({
           path: path,
           method: method,
           headers: { 'content-type': 'multipart/form-data' },
           data: mapStateToFormData(currentUser)
         })
-      })
-      .catch((error: yup.ValidationError) => {
-        debug('validation failed')
-        debug(error)
-        error.inner.forEach((eachError: yup.ValidationError) => {
-          currentValidationError[eachError.path as keyof UserValidationType] = eachError.message
-        })
-        setValidationError({
-          ...currentValidationError
-        })
-        return false
+      }, () => {
+        debug('validation failed at save button event handler') 
       })
   }
 
-  debug(currentValidationError)
+  const handleInitialFocusEvent: React.EventHandler<React.FocusEvent<HTMLInputElement>> = (e) => {
+    touch(e.currentTarget.name)
+  }
 
-  if (currentFetchStatus.status === ResponseResultStatusEnum.FETCHING) return (<p>fetching your data</p>)
+  if (currentBlogFetchStatus.status === ResponseResultStatusEnum.FETCHING) return (<p>fetching your data</p>)
 
-  if (currentFetchStatus.status === ResponseResultStatusEnum.FAILURE) return (<p>sorry.. your data is not available now</p>)
+  if (currentBlogFetchStatus.status === ResponseResultStatusEnum.FAILURE) return (<p>sorry.. your data is not available now</p>)
 
   /**
    * IMPORTANT NOTE: input name and user state key must be matched otherwise, validation won't work
    *  - esp cause error of 'useEffect' 2nd argument inconsistency array element 
    **/
-  return (currentFetchStatus.status === ResponseResultStatusEnum.SUCCESS &&
+  return (currentBlogFetchStatus.status === ResponseResultStatusEnum.SUCCESS &&
     <div className="profile-wrapper">
       <h2 className="profile-title">Profile Management</h2>
-      {(currentRequestStatus.status === ResponseResultStatusEnum.FETCHING && <p>updating user profile ...</p>)}
-      {(currentRequestStatus.status === ResponseResultStatusEnum.SUCCESS && <p>updating user profile success</p>)}
-      {(currentRequestStatus.status === ResponseResultStatusEnum.FAILURE && <p>updating user profile failed</p>)}
+      <FetchStatus 
+        currentFetchStatus={currentUpdateRequestStatus} 
+        setFetchStatus={setUpdateRequestStatus} 
+        fetchingMsg={'updating user profile ...'}
+        successMsg={'updating user profile success'}
+        failureMsg={'updating user profile failed'}
+      />
       <div className="profile-picture-wrapper">
         <img src={currentUser.avatarUrl} className="profile-picture-img" onLoad={handleRevokeObjectURLOnLoad} width={150} height={150} />
         <div className="profile-picture-input-wrapper">
