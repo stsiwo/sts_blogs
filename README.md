@@ -7,3 +7,6 @@
   - docker build --tag=api1:dev --target=development .
   - docker run --name=api1-dev -v ${PWD}:/app -p 80:5000 -e ${PWD}/.env api1:dev
   
+### SPA
+  - change query string format for array 
+    -> from: tags=1,2,3,4,5 to: tags=1&tags=2&tags=3&...
