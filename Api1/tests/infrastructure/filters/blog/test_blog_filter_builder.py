@@ -3,7 +3,7 @@ from typing import Dict
 from Infrastructure.DataModels.BlogModel import Blog
 from Infrastructure.DataModels.TagModel import Tag
 from utils.util import printObject
-from utils.util import parseStrToDate
+from utils.util import parseStrToDate, _printObject
 
 
 # def test_proto_type():
@@ -121,3 +121,31 @@ def test_sort(exSession, blogsSeededFixture):
 
     assert len(filteredBlogs) == 6
     assert all(filteredBlogs[i].createdDate > filteredBlogs[i+1].createdDate for i in range(len(filteredBlogs) - 1))
+
+
+def test_paginate(exSession, blogsSeededFixture):
+
+    test: BlogFilterBuilder = BlogFilterBuilder()
+
+    allBlogs = exSession.query(Blog).all()
+
+    # need group_by to remove duplication by 'join' tag
+    dummyQuery = exSession.query(Blog).join(Blog.tags, aliased=True).group_by(Blog.id)
+    dummyQS: Dict = {
+            'page': {
+                'value': ['2'],
+                'orOp': False
+                },
+            'limit': {
+                'value': ['3'],
+                'orOp': False
+                },
+            }
+
+    dummyQuery = test.build(dummyQuery, dummyQS)
+    print(dummyQuery)
+    filteredBlogs = dummyQuery.paginate(page=int(dummyQS['page']['value'][0]), max_per_page=int(dummyQS['limit']['value'][0]))
+    _printObject(filteredBlogs)
+
+    assert len(filteredBlogs.items) == 3
+    assert filteredBlogs.total == 6
