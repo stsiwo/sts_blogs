@@ -7,6 +7,7 @@ from tests.data.fakers.faker import fake
 def generateBlogModel(
         id=1,
         title=fake.sentence(),
+        subtitle=fake.sentence(),
         content=fake.sentence(),
         userId=None,
         user=None,
@@ -16,6 +17,7 @@ def generateBlogModel(
     blog = Blog(
             id=id,
             title=title,
+            subtitle=subtitle,
             content=content,
             userId=userId,
             tags=tags

@@ -183,10 +183,10 @@ def blogsSeededFixture(exSession, usersSeededFixture, tagsSeededFixture):
     reactTag = exSession.query(Tag).filter(Tag.name == 'react').first()
 
     blogs = [
-            generateBlogModel(id=1, userId=memberUser.id, user=memberUser, tags=[jsTag], content="test-content"),
-            generateBlogModel(id=2, userId=memberUser.id, user=memberUser, tags=[jsTag, webpackTag]),
+            generateBlogModel(id=1, userId=memberUser.id, user=memberUser, tags=[jsTag], content="sample"),
+            generateBlogModel(id=2, userId=memberUser.id, user=memberUser, tags=[jsTag, webpackTag], subtitle="sample"),
             generateBlogModel(id=3, userId=memberUser.id, user=memberUser, tags=[jsTag, reactTag]),
-            generateBlogModel(id=4, userId=memberUser.id, user=memberUser, tags=[jsTag], title="test-title"),
+            generateBlogModel(id=4, userId=memberUser.id, user=memberUser, tags=[jsTag], title="sample"),
             generateBlogModel(id=5, userId=memberUser.id, user=memberUser, tags=[jsTag, webpackTag]),
             generateBlogModel(id=6, userId=memberUser.id, user=memberUser, tags=[jsTag, reactTag])
             ]
