@@ -3,6 +3,7 @@ from typing import Dict
 from Infrastructure.DataModels.BlogModel import Blog
 from Infrastructure.DataModels.TagModel import Tag
 from utils.util import printObject
+from utils.util import parseStrToDate
 
 
 # def test_proto_type():
@@ -55,3 +56,26 @@ def test_keyword(exSession, blogsSeededFixture):
     assert len(filteredBlogs) != 0
     for blog in filteredBlogs:
         assert 'sample' in blog.title or 'sample' in blog.subtitle or 'sample' in blog.content
+
+
+def test_start_date(exSession, blogsSeededFixture):
+
+    test: BlogFilterBuilder = BlogFilterBuilder()
+
+    dummyQuery = exSession.query(Blog).join(Blog.tags, aliased=True)
+    dummyQS: Dict = {
+            'startDate': {
+                'value': ['2003-01-01T00:00:00.000Z'],
+                'orOp': False
+                },
+            }
+
+    dummyQuery = test.build(dummyQuery, dummyQS)
+    print(dummyQuery)
+    filteredBlogs = dummyQuery.all()
+    printObject(filteredBlogs)
+
+    assert 0
+    assert len(filteredBlogs) != 0
+    for blog in filteredBlogs:
+        assert blog.createdDate > parseStrToDate('2000-01-01T00:00:00.000Z')

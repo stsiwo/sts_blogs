@@ -1,6 +1,7 @@
 import pprint
 from collections.abc import Iterable
 import json
+from datetime import datetime
 
 
 def prettyPrint(target):
@@ -38,3 +39,7 @@ def decodeResponseByteJsonToDictionary(target: bytes):
 
 def _isPrimitive(obj):
     return not hasattr(obj, '__dict__')
+
+
+def parseStrToDate(value: str):
+    return datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%fZ')

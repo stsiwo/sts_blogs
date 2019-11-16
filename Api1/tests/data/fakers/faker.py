@@ -1,4 +1,4 @@
 from faker import Faker
 
-fake = Faker()
+fake: Faker = Faker()
 fake.seed(4321)

@@ -5,6 +5,7 @@ from sqlalchemy.orm.query import Query
 # need to import all of subclass of this, to use '__subclasses__()'
 from Infrastructure.filters.Blog.KeywordBlogFilter import KeywordBlogFilter
 from Infrastructure.filters.Blog.TagsBlogFilter import TagsBlogFilter
+from Infrastructure.filters.Blog.StartDateBlogFilter import StartDateBlogFilter
 
 
 class BlogFilterBuilder(object):

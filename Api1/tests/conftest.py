@@ -20,7 +20,7 @@ from utils.forgotPasswordToken import generateForgotPasswordToken
 from Configs.settings import FORGOT_PASSWORD_TOKEN_EXPIRY
 from exceptions.EmailServiceException import EmailServiceException
 from application.EmailService import EmailService
-import random
+from utils.util import parseStrToDate
 
 app = main
 
@@ -183,12 +183,12 @@ def blogsSeededFixture(exSession, usersSeededFixture, tagsSeededFixture):
     reactTag = exSession.query(Tag).filter(Tag.name == 'react').first()
 
     blogs = [
-            generateBlogModel(id=1, userId=memberUser.id, user=memberUser, tags=[jsTag], content="sample"),
-            generateBlogModel(id=2, userId=memberUser.id, user=memberUser, tags=[jsTag, webpackTag], subtitle="sample"),
-            generateBlogModel(id=3, userId=memberUser.id, user=memberUser, tags=[jsTag, reactTag]),
-            generateBlogModel(id=4, userId=memberUser.id, user=memberUser, tags=[jsTag], title="sample"),
-            generateBlogModel(id=5, userId=memberUser.id, user=memberUser, tags=[jsTag, webpackTag]),
-            generateBlogModel(id=6, userId=memberUser.id, user=memberUser, tags=[jsTag, reactTag])
+            generateBlogModel(id=1, userId=memberUser.id, user=memberUser, tags=[jsTag], content="sample", createdDate=parseStrToDate('1999-01-01T00:00:00.000Z')),
+            generateBlogModel(id=2, userId=memberUser.id, user=memberUser, tags=[jsTag, webpackTag], subtitle="sample", createdDate=parseStrToDate('2000-01-01T00:00:00.000Z')),
+            generateBlogModel(id=3, userId=memberUser.id, user=memberUser, tags=[jsTag, reactTag], createdDate=parseStrToDate('2001-01-01T00:00:00.000Z')),
+            generateBlogModel(id=4, userId=memberUser.id, user=memberUser, tags=[jsTag], title="sample", createdDate=parseStrToDate('2002-01-01T00:00:00.000Z')),
+            generateBlogModel(id=5, userId=memberUser.id, user=memberUser, tags=[jsTag, webpackTag], createdDate=parseStrToDate('2003-01-01T00:00:00.000Z')),
+            generateBlogModel(id=6, userId=memberUser.id, user=memberUser, tags=[jsTag, reactTag], createdDate=parseStrToDate('2004-01-01T00:00:00.000Z'))
             ]
 
     for blog in blogs:
