@@ -14,7 +14,15 @@ class KeywordBlogFilter(BlogFilter):
     def getFilter(self, query: Query, values: Dict) -> Query:
         for value in values['value']:
             if values['orOp']:
-                query = query.filter(or_(self._entity.content.contains(value)))
+                query = query.filter(or_(
+                    self._entity.title.contains(value),
+                    self._entity.subtitle.contains(value),
+                    self._entity.content.contains(value),
+                    ))
             else:
-                query = query.filter(self._entity.content.contains(value))
+                query = query.filter(or_(
+                    self._entity.title.contains(value),
+                    self._entity.subtitle.contains(value),
+                    self._entity.content.contains(value),
+                    ))
         return query

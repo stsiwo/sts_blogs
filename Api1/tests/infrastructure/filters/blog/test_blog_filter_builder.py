@@ -42,7 +42,7 @@ def test_keyword(exSession, blogsSeededFixture):
     dummyQuery = exSession.query(Blog).join(Blog.tags, aliased=True)
     dummyQS: Dict = {
             'keyword': {
-                'value': ['test-content'],
+                'value': ['sample'],
                 'orOp': False
                 },
             }
@@ -52,5 +52,6 @@ def test_keyword(exSession, blogsSeededFixture):
     filteredBlogs = dummyQuery.all()
     printObject(filteredBlogs)
 
+    assert len(filteredBlogs) != 0
     for blog in filteredBlogs:
-        assert 'test-content' in blog.content
+        assert 'sample' in blog.title or 'sample' in blog.subtitle or 'sample' in blog.content
