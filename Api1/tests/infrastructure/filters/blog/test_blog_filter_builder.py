@@ -100,3 +100,24 @@ def test_end_date(exSession, blogsSeededFixture):
     assert len(filteredBlogs) != 0
     for blog in filteredBlogs:
         assert blog.createdDate <= parseStrToDate('2001-01-01T00:00:00.000Z')
+
+
+def test_sort(exSession, blogsSeededFixture):
+
+    test: BlogFilterBuilder = BlogFilterBuilder()
+
+    dummyQuery = exSession.query(Blog).join(Blog.tags, aliased=True)
+    dummyQS: Dict = {
+            'sort': {
+                'value': ['1'],
+                'orOp': False
+                },
+            }
+
+    dummyQuery = test.build(dummyQuery, dummyQS)
+    print(dummyQuery)
+    filteredBlogs = dummyQuery.all()
+    printObject(filteredBlogs)
+
+    assert len(filteredBlogs) == 6
+    assert all(filteredBlogs[i].createdDate > filteredBlogs[i+1].createdDate for i in range(len(filteredBlogs) - 1))

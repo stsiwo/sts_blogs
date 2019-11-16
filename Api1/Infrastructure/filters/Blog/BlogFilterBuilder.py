@@ -7,6 +7,7 @@ from Infrastructure.filters.Blog.KeywordBlogFilter import KeywordBlogFilter
 from Infrastructure.filters.Blog.TagsBlogFilter import TagsBlogFilter
 from Infrastructure.filters.Blog.StartDateBlogFilter import StartDateBlogFilter
 from Infrastructure.filters.Blog.EndDateBlogFilter import EndDateBlogFilter
+from Infrastructure.filters.Blog.SortOrderBlogFilter import SortOrderBlogFilter
 
 
 class BlogFilterBuilder(object):
