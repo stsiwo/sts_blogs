@@ -9,6 +9,7 @@ from Infrastructure.DataModels.BlogModel import Blog
 from Resources.viewModels.BlogSchema import BlogSchema
 from Resources.roleAccessDecorator import requires_jwt_role_claim
 from flask_jwt_extended import jwt_required
+from utils.util import printObject
 
 
 class Blogs(Resource):
@@ -25,6 +26,10 @@ class Blogs(Resource):
     def get(self):
         app.logger.info("start processing get request at /blogs")
         print("start processing get request at /blogs")
+
+        print(request.args.lists())
+        for key, value in request.args.lists():
+            print('{} and {}'.format(key, value))
 
         blogs: List[Dict] = self._blogService.getAllBlogService()
 

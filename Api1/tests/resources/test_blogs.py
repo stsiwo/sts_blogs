@@ -41,6 +41,14 @@ def test_b04_blogs_get_endpoint_should_return_202_and_blogs_json_with_user_depen
         assert blog['user']['id'] is not None
 
 
+def test_b041_query_string(client, blogsSeededFixture):
+
+    response = client.get('/blogs?limit=30&offset=0&keyword=sample&tags=tag1,tag2,tag3')
+    assert 200 == response.status_code
+
+    assert 0
+
+
 def test_b05_blogs_put_endpoint_should_return_401_code_since_unauthorized_access(client, database, application, httpHeaders):
 
     response = client.put('/blogs/1')
