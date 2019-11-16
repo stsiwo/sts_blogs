@@ -5,9 +5,9 @@ from sqlalchemy import or_
 from utils.util import parseStrToDate
 
 
-class StartDateBlogFilter(BlogFilter):
+class EndDateBlogFilter(BlogFilter):
 
-    _key: str = 'startDate'
+    _key: str = 'endDate'
 
     def __init__(self):
         pass
@@ -15,7 +15,7 @@ class StartDateBlogFilter(BlogFilter):
     def getFilter(self, query: Query, values: Dict) -> Query:
         for value in values['value']:
             if values['orOp']:
-                query = query.filter(or_(self._entity.createdDate >= parseStrToDate(value)))
+                query = query.filter(or_(self._entity.createdDate <= parseStrToDate(value)))
             else:
-                query = query.filter(self._entity.createdDate >= parseStrToDate(value))
+                query = query.filter(self._entity.createdDate <= parseStrToDate(value))
         return query

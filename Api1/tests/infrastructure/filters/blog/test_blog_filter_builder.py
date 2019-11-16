@@ -75,7 +75,28 @@ def test_start_date(exSession, blogsSeededFixture):
     filteredBlogs = dummyQuery.all()
     printObject(filteredBlogs)
 
-    assert 0
     assert len(filteredBlogs) != 0
     for blog in filteredBlogs:
-        assert blog.createdDate > parseStrToDate('2000-01-01T00:00:00.000Z')
+        assert blog.createdDate >= parseStrToDate('2003-01-01T00:00:00.000Z')
+
+
+def test_end_date(exSession, blogsSeededFixture):
+
+    test: BlogFilterBuilder = BlogFilterBuilder()
+
+    dummyQuery = exSession.query(Blog).join(Blog.tags, aliased=True)
+    dummyQS: Dict = {
+            'endDate': {
+                'value': ['2001-01-01T00:00:00.000Z'],
+                'orOp': False
+                },
+            }
+
+    dummyQuery = test.build(dummyQuery, dummyQS)
+    print(dummyQuery)
+    filteredBlogs = dummyQuery.all()
+    printObject(filteredBlogs)
+
+    assert len(filteredBlogs) != 0
+    for blog in filteredBlogs:
+        assert blog.createdDate <= parseStrToDate('2001-01-01T00:00:00.000Z')
