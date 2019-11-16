@@ -17,10 +17,9 @@ def test_build(exSession, blogsSeededFixture):
 
     test: BlogFilterBuilder = BlogFilterBuilder()
 
-    blogs = exSession.query(Blog).all()
+    tags = exSession.query(Tag).all()
 
-    for blog in blogs:
-        printObject(blog)
+    printObject(tags)
 
     dummyQuery = exSession.query(Blog).join(Blog.tags, aliased=True)
     dummyQS: Dict = {

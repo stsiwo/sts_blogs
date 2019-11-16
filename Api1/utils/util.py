@@ -12,12 +12,12 @@ def printObject(target):
 
     print(type(target))
 
-    if _isPrimitive(target):
-        print('target is primitive')
-        print(target)
+#     if _isPrimitive(target):
+#         print('target is primitive')
+#         print(target)
 
     # if target is iterable
-    elif isinstance(target, Iterable):
+    if isinstance(target, Iterable):
         print('target is iterable')
         for obj in target:
             _printObject(obj)

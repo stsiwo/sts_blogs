@@ -10,9 +10,9 @@ tags = db.Table(
             primary_key=True
         ),
         db.Column(
-            'tag_id',
-            db.Integer,
-            db.ForeignKey('tags.id'),
+            'tag_name',
+            db.VARCHAR,
+            db.ForeignKey('tags.name'),
             primary_key=True
             ),
 )

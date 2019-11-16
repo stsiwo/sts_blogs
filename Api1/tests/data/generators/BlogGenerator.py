@@ -17,11 +17,6 @@ def generateBlogModel(
             title=title,
             content=content,
             userId=userId,
-            tags=[
-                Tag(name='test-tags1'),
-                Tag(name='test-tags2'),
-                Tag(name='test-tags3'),
-                ]
             )
 
     blog.user = user

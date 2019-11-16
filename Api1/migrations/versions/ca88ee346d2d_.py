@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: fe8e1f58f3f7
+Revision ID: ca88ee346d2d
 Revises: 
-Create Date: 2019-10-21 23:03:05.023446
+Create Date: 2019-11-16 03:34:43.098940
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'fe8e1f58f3f7'
+revision = 'ca88ee346d2d'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -24,9 +24,8 @@ def upgrade():
     sa.PrimaryKeyConstraint('id')
     )
     tags_table = op.create_table('tags',
-    sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.VARCHAR(), nullable=False),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('name')
     )
     op.create_table('users',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -54,10 +53,10 @@ def upgrade():
     )
     op.create_table('blogs_tags',
     sa.Column('blog_id', sa.Integer(), nullable=False),
-    sa.Column('tag_id', sa.Integer(), nullable=False),
+    sa.Column('tag_name', sa.VARCHAR(), nullable=False),
     sa.ForeignKeyConstraint(['blog_id'], ['blogs.id'], ),
-    sa.ForeignKeyConstraint(['tag_id'], ['tags.id'], ),
-    sa.PrimaryKeyConstraint('blog_id', 'tag_id')
+    sa.ForeignKeyConstraint(['tag_name'], ['tags.name'], ),
+    sa.PrimaryKeyConstraint('blog_id', 'tag_name')
     )
     op.create_table('comments',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -69,6 +68,7 @@ def upgrade():
     sa.ForeignKeyConstraint(['blogId'], ['blogs.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+
     op.bulk_insert(
             roles_table,
             [
@@ -104,8 +104,9 @@ def upgrade():
                 {'name': 'pytest'},
                 {'name': 'webpack'},
                 {'name': 'js'}
-            ]
-    )
+                ]
+            )
+
     # ### end Alembic commands ###
 
 
