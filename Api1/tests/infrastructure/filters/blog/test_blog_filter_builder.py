@@ -13,27 +13,44 @@ from utils.util import printObject
 #     assert 0
 
 
-def test_build(exSession, blogsSeededFixture):
+def test_tags_filter(exSession, blogsSeededFixture):
 
     test: BlogFilterBuilder = BlogFilterBuilder()
 
-    tags = exSession.query(Tag).all()
-
-    printObject(tags)
+    printObject(blogsSeededFixture)
 
     dummyQuery = exSession.query(Blog).join(Blog.tags, aliased=True)
     dummyQS: Dict = {
-            'keyword': {
-                'value': ['test-keyword'],
-                'orOp': False
-                },
             'tags': {
-                'value': ['test-tag1', 'test-tag2', 'test-tag3'],
+                'value': ['js', 'webpack'],
                 'orOp': False
                 },
             }
 
     dummyQuery = test.build(dummyQuery, dummyQS)
+    filteredBlogs = dummyQuery.all()
 
+    for blog in filteredBlogs:
+        assert blog.tags[0].name == 'js'
+        assert blog.tags[1].name == 'webpack'
+
+
+def test_keyword(exSession, blogsSeededFixture):
+
+    test: BlogFilterBuilder = BlogFilterBuilder()
+
+    dummyQuery = exSession.query(Blog).join(Blog.tags, aliased=True)
+    dummyQS: Dict = {
+            'keyword': {
+                'value': ['test-content'],
+                'orOp': False
+                },
+            }
+
+    dummyQuery = test.build(dummyQuery, dummyQS)
     print(dummyQuery)
-    assert 0
+    filteredBlogs = dummyQuery.all()
+    printObject(filteredBlogs)
+
+    for blog in filteredBlogs:
+        assert 'test-content' in blog.content

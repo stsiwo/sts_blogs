@@ -20,7 +20,7 @@ class BlogFilterBuilder(object):
     def build(self, query: Query, queryString: Dict) -> Query:
         for blogFilter in self._filters:
             print('before if statement')
-            if queryString[blogFilter._key]:
+            if queryString.get(blogFilter._key, ''):
                 print('before getFilter')
                 query = blogFilter().getFilter(query, queryString[blogFilter._key])
         return query

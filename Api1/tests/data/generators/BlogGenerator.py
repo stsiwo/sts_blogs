@@ -9,7 +9,8 @@ def generateBlogModel(
         title=fake.sentence(),
         content=fake.sentence(),
         userId=None,
-        user=None
+        user=None,
+        tags=None
         ):
 
     blog = Blog(
@@ -17,6 +18,7 @@ def generateBlogModel(
             title=title,
             content=content,
             userId=userId,
+            tags=tags
             )
 
     blog.user = user

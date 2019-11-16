@@ -20,6 +20,7 @@ from utils.forgotPasswordToken import generateForgotPasswordToken
 from Configs.settings import FORGOT_PASSWORD_TOKEN_EXPIRY
 from exceptions.EmailServiceException import EmailServiceException
 from application.EmailService import EmailService
+import random
 
 app = main
 
@@ -119,9 +120,6 @@ def tagsSeededFixture(database, application):
 
     database.session.commit()
 
-    tags = database.session.query(Role).all()
-    printObject(tags)
-
     yield None
     print("teardown tagsSeededFixture fixture")
 
@@ -175,15 +173,22 @@ def usersSeededFixture(exSession):
 
 
 @pytest.fixture
-def blogsSeededFixture(exSession, usersSeededFixture):
+def blogsSeededFixture(exSession, usersSeededFixture, tagsSeededFixture):
     print("setup blogsSeededFixture fixture")
 
     memberUser = usersSeededFixture
 
+    jsTag = exSession.query(Tag).filter(Tag.name == 'js').first()
+    webpackTag = exSession.query(Tag).filter(Tag.name == 'webpack').first()
+    reactTag = exSession.query(Tag).filter(Tag.name == 'react').first()
+
     blogs = [
-            generateBlogModel(id=1, userId=memberUser.id, user=memberUser),
-            generateBlogModel(id=2, userId=memberUser.id, user=memberUser),
-            generateBlogModel(id=3, userId=memberUser.id, user=memberUser)
+            generateBlogModel(id=1, userId=memberUser.id, user=memberUser, tags=[jsTag], content="test-content"),
+            generateBlogModel(id=2, userId=memberUser.id, user=memberUser, tags=[jsTag, webpackTag]),
+            generateBlogModel(id=3, userId=memberUser.id, user=memberUser, tags=[jsTag, reactTag]),
+            generateBlogModel(id=4, userId=memberUser.id, user=memberUser, tags=[jsTag], title="test-title"),
+            generateBlogModel(id=5, userId=memberUser.id, user=memberUser, tags=[jsTag, webpackTag]),
+            generateBlogModel(id=6, userId=memberUser.id, user=memberUser, tags=[jsTag, reactTag])
             ]
 
     for blog in blogs:
