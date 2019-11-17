@@ -32,18 +32,19 @@ class BlogService(object):
         return result
 
     @db_transaction()
-    def updateBlogService(self, blog_id: str, title: str, content: str) -> Blog:
+    def updateBlogService(self, blog_id: str, title: str, subtitle: str, content: str) -> Blog:
         app.logger.info("start update blog service")
         print("start update blog service")
 
         # need to implement 'optimistic locking' later
         # to avoid any confict concurrency request
-        targetBlog = self._blogRepository.get(blog_id)
+        targetBlog: Blog = self._blogRepository.get(blog_id)
 
         if targetBlog is None:
             raise BlogNotFoundException
 
         targetBlog.title = title
+        targetBlog.subtitle = subtitle
         targetBlog.content = content
 
         targetBlog = self._blogSchema.dump(targetBlog)

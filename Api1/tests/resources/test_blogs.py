@@ -4,21 +4,24 @@ from Infrastructure.DataModels.BlogModel import Blog
 import pytest
 
 
-@pytest.mark.blogs_get
+@pytest.mark.blogs_src
+@pytest.mark.blogs_src_get
 def test_b01_blogs_get_endpoint_should_return_404_since_no_blogs_data(client):
 
     response = client.get('/blogs')
     assert 404 == response.status_code
 
 
-@pytest.mark.blogs_get
+@pytest.mark.blogs_src
+@pytest.mark.blogs_src_get
 def test_b02_blogs_get_endpoint_should_return_202(client, blogsSeededFixture):
 
     response = client.get('/blogs')
     assert 200 == response.status_code
 
 
-@pytest.mark.blogs_get
+@pytest.mark.blogs_src
+@pytest.mark.blogs_src_get
 def test_b03_blogs_get_endpoint_should_return_202_and_blogs_json(client, blogsSeededFixture):
 
     response = client.get('/blogs')
@@ -32,7 +35,8 @@ def test_b03_blogs_get_endpoint_should_return_202_and_blogs_json(client, blogsSe
         assert blog['id'] is not None
 
 
-@pytest.mark.blogs_get
+@pytest.mark.blogs_src
+@pytest.mark.blogs_src_get
 def test_b04_blogs_get_endpoint_should_return_202_and_blogs_json_with_user_dependencies(client, blogsSeededFixture):
 
     response = client.get('/blogs')
@@ -46,7 +50,8 @@ def test_b04_blogs_get_endpoint_should_return_202_and_blogs_json_with_user_depen
         assert blog['user']['id'] is not None
 
 
-@pytest.mark.blogs_get
+@pytest.mark.blogs_src
+@pytest.mark.blogs_src_get
 def test_b041_blogs_get_endpoint_should_return_queried_blogs(client, blogsSeededFixture):
 
     response = client.get('/blogs?limit=30&page=1&tags=js&tags=webpack')
@@ -60,29 +65,32 @@ def test_b041_blogs_get_endpoint_should_return_queried_blogs(client, blogsSeeded
         assert blog['id'] is not None
 
 
+@pytest.mark.blogs_src
+@pytest.mark.blogs_src_put_
 def test_b05_blogs_put_endpoint_should_return_401_code_since_unauthorized_access(client, database, application, httpHeaders):
 
     response = client.put('/blogs/1')
     assert 401 == response.status_code
 
 
-def test_b06_blogs_put_endpoint_should_allow_authed_user_to_get_404_code_since_target_blog_does_not_exist(authedClient, database, application, httpHeaders):
+@pytest.mark.blogs_src
+@pytest.mark.blogs_src_put_
+def test_b06_blogs_put_endpoint_should_allow_authed_user_to_get_404_code_since_target_blog_does_not_exist(authedClient, database, application, httpHeaders, testBlogData):
 
     csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
     httpHeaders['X-CSRF-TOKEN'] = csrf_token
 
     response = authedClient.put(
             '/blogs/{}'.format(12342),
-            json={
-                'title': 'updated_title',
-                'content': 'updated_content'
-                },
+            json=testBlogData,
             headers=httpHeaders
             )
 
     assert 404 == response.status_code
 
 
+@pytest.mark.blogs_src
+@pytest.mark.blogs_src_put_
 def test_b07_blogs_put_endpoint_should_allow_authed_user_to_get_400_code_since_input_is_invalid(authedClient, database, application, httpHeaders):
 
     csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
@@ -99,7 +107,9 @@ def test_b07_blogs_put_endpoint_should_allow_authed_user_to_get_400_code_since_i
     assert 400 == response.status_code
 
 
-def test_b08_blogs_put_endpoint_should_allow_authed_user_to_get_200_code(authedClientWithBlogSeeded, database, application, httpHeaders):
+@pytest.mark.blogs_src
+@pytest.mark.blogs_src_put_
+def test_b08_blogs_put_endpoint_should_allow_authed_user_to_get_200_code(authedClientWithBlogSeeded, database, application, httpHeaders, testBlogData):
 
     blogId = None
 
@@ -112,16 +122,15 @@ def test_b08_blogs_put_endpoint_should_allow_authed_user_to_get_200_code(authedC
 
     response = authedClientWithBlogSeeded.put(
             '/blogs/{}'.format(blogId),
-            json={
-                'title': 'updated_title',
-                'content': 'updated_content'
-                },
+            json=testBlogData,
             headers=httpHeaders
             )
 
     assert 200 == response.status_code
 
 
+@pytest.mark.blogs_src
+@pytest.mark.blogs_src_put_
 def test_b09_blogs_put_endpoint_should_allow_authed_user_to_return_updated_blog(authedClientWithBlogSeeded, database, application, httpHeaders):
 
     blogId = None
@@ -137,6 +146,7 @@ def test_b09_blogs_put_endpoint_should_allow_authed_user_to_return_updated_blog(
             '/blogs/{}'.format(blogId),
             json={
                 'title': 'updated_title',
+                'subtitle': 'updated_subtitle',
                 'content': 'updated_content'
                 },
             headers=httpHeaders
@@ -148,4 +158,5 @@ def test_b09_blogs_put_endpoint_should_allow_authed_user_to_return_updated_blog(
 
     assert 200 == response.status_code
     assert 'updated_title' == data['title']
+    assert 'updated_subtitle' == data['subtitle']
     assert 'updated_content' == data['content']

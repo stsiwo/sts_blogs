@@ -4,6 +4,7 @@ from exceptions.BadSignatureException import BadSignatureException
 from exceptions.SignatureExpiredException import SignatureExpiredException
 from exceptions.BlogNotFoundException import BlogNotFoundException
 from exceptions.EmailNotFoundException import EmailNotFoundException
+from exceptions.EmailServiceException import EmailServiceException
 from exceptions.CommentNotFoundException import CommentNotFoundException
 from exceptions.PasswordInvalidException import PasswordInvalidException
 from exceptions.UploadedFileException import UploadedFileException
@@ -28,6 +29,11 @@ def signatureExpired(error):
 
 @app.errorhandler(EmailNotFoundException)
 def emailNotFound(error):
+    return constructResponse(error)
+
+
+@app.errorhandler(EmailServiceException)
+def emailService(error):
     return constructResponse(error)
 
 

@@ -19,7 +19,7 @@ import shutil
 from utils.forgotPasswordToken import generateForgotPasswordToken
 from Configs.settings import FORGOT_PASSWORD_TOKEN_EXPIRY
 from exceptions.EmailServiceException import EmailServiceException
-from application.EmailService import EmailService
+from application.EmailService import EmailClient
 from utils.util import parseStrToDate
 
 app = main
@@ -407,13 +407,13 @@ def setupTempUploadDirWithTestImageFile(setupTempUploadDir):
 
 @pytest.fixture
 def patchedYgmailSendFunc(mocker):
-    mocked_yag_send = mocker.patch.object(EmailService._client, 'send')
+    mocked_yag_send = mocker.patch.object(EmailClient, 'send')
     yield mocked_yag_send
 
 
 @pytest.fixture
 def patchedYgmailSendFuncWithThrowException(mocker):
-    mocked_yag_send = mocker.patch.object(EmailService._client, 'send', side_effect=EmailServiceException())
+    mocked_yag_send = mocker.patch.object(EmailClient, 'send', side_effect=EmailServiceException())
     yield mocked_yag_send
 
 
@@ -429,3 +429,12 @@ def expiredTokenGenerator():
     yield generateToken
 
     app.config['FORGOT_PASSWORD_TOKEN_EXPIRY'] = FORGOT_PASSWORD_TOKEN_EXPIRY
+
+
+@pytest.fixture
+def testBlogData():
+    yield {
+            'title': "test-title",
+            'subtitle': "test-subtitle",
+            'content': "test-content"
+            }

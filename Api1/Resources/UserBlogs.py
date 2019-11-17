@@ -51,6 +51,7 @@ class UserBlogs(Resource):
         newBlog: Blog = self._userBlogService.createNewBlogService(
                 user_id,
                 request.json.get('title'),
+                request.json.get('subtitle'),
                 request.json.get('content')
                 )
 

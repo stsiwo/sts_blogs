@@ -11,7 +11,7 @@ def generateBlogModel(
         content=fake.sentence(),
         userId=None,
         user=None,
-        tags=None,
+        tags=[],
         createdDate=fake.date_time_between(start_date="-30y", end_date="now", tzinfo=None)
         ):
 

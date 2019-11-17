@@ -31,12 +31,13 @@ class UserBlogService(object):
         return serializedBlogs
 
     @db_transaction()
-    def createNewBlogService(self, user_id: str, title: str, content: str) -> Blog:
+    def createNewBlogService(self, user_id: str, title: str, subtitle: str, content: str) -> Blog:
         app.logger.info("start userblog user service")
         print("start userblog user service")
 
         newBlog: Blog = Blog(
                             title=title,
+                            subtitle=subtitle,
                             content=content,
                             userId=user_id
                             )

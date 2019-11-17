@@ -58,6 +58,7 @@ class Blogs(Resource):
         updatedBlog: Blog = self._blogService.updateBlogService(
                 blog_id,
                 request.json.get('title'),
+                request.json.get('subtitle'),
                 request.json.get('content')
                 )
 

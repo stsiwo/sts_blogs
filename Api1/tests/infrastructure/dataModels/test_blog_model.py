@@ -3,14 +3,17 @@ from Infrastructure.DataModels.BlogModel import Blog
 from Infrastructure.DataModels.UserModel import User
 from Infrastructure.DataModels.TagModel import Tag
 from Infrastructure.DataModels.CommentModel import Comment
+import pytest
 
 
+@pytest.mark.blog_model
 def test_user_can_create_blog(exSession, usersSeededFixture):
 
     user = exSession.query(User).first()
 
     blog = Blog(
             title='test title',
+            subtitle='test subtitle',
             content='test content'
             )
 
@@ -24,14 +27,16 @@ def test_user_can_create_blog(exSession, usersSeededFixture):
     assert user.id == queryBlog.userId
 
 
+@pytest.mark.blog_model
 def test_user_can_create_blog_with_tags(exSession, usersSeededFixture):
 
     user = exSession.query(User).first()
 
-    tags = exSession.query(Tag).all()
+    tags = exSession.query(Tag).limit(3).all()
 
     blog = Blog(
             title='test title',
+            subtitle='test subtitle',
             content='test content',
             userId=user.id,
             tags=tags
@@ -43,9 +48,13 @@ def test_user_can_create_blog_with_tags(exSession, usersSeededFixture):
 
     queryBlog = exSession.query(Blog).filter_by(title='test title').first()
 
-    assert tags == queryBlog.tags
+    printObject(tags)
+    printObject(queryBlog.tags)
+
+    assert len(tags) == len(queryBlog.tags)
 
 
+@pytest.mark.blog_model
 def test_user_can_add_comment_on_blog_of_another_user(exSession, blogsSeededFixture):
 
     blog = exSession.query(Blog).first()

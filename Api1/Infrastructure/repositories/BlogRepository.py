@@ -14,7 +14,7 @@ class BlogRepository(BaseRepository[Blog]):
         super().__init__()
         self._blogFilterBuilder = BlogFilterBuilder()
 
-    def getAll(self, queryString: Dict) -> Dict:
+    def getAll(self, queryString: Dict = {}) -> Dict:
         query: Query = self._session.query(Blog).group_by(Blog.id)
         query = self._blogFilterBuilder.build(query, queryString)
         pagination: Pagination = query.paginate(page=int(queryString.get('page', 1)), per_page=int(queryString.get('limit', 20)))

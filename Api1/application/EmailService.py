@@ -4,12 +4,22 @@ from exceptions.EmailServiceException import EmailServiceException
 from urllib.parse import urljoin
 
 
-class EmailService(object):
-
-    _client: None
+class EmailClient(object):
+    """ please replace with real impl """
 
     def __init__(self):
-        self._client = None
+        pass
+
+    def send(self, to, subject, contents):
+        pass
+
+
+class EmailService(object):
+
+    _client: EmailClient
+
+    def __init__(self):
+        self._client = EmailClient()
         pass
 
     def sendForgotPasswordEmail(self, to: str, token: str) -> None:
@@ -25,4 +35,5 @@ class EmailService(object):
         try:
             self._client.send(to=to, subject=subject, contents=html)
         except Exception as e:
+            print(e)
             raise EmailServiceException()

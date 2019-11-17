@@ -10,6 +10,8 @@ from Infrastructure.DataModels.UserModel import User
 # fp_post04: 202 code for successfully sending email with password-reset link
 
 
+@pytest.mark.forgot_password_src
+@pytest.mark.forgot_password_src_post
 def test_fp_post01_forgot_password_post_endpoint_should_return_400_code_for_invalid_input(client):
 
     response = client.post(
@@ -18,6 +20,8 @@ def test_fp_post01_forgot_password_post_endpoint_should_return_400_code_for_inva
     assert response.status_code == 400
 
 
+@pytest.mark.forgot_password_src
+@pytest.mark.forgot_password_src_post
 def test_fp_post02_forgot_password_post_endpoint_should_return_404_code_since_no_such_an_email_address_in_db(client, httpHeaders):
 
     response = client.post(
@@ -29,6 +33,8 @@ def test_fp_post02_forgot_password_post_endpoint_should_return_404_code_since_no
     assert response.status_code == 404
 
 
+@pytest.mark.forgot_password_src
+@pytest.mark.forgot_password_src_post
 def test_fp_post03_forgot_password_post_endpoint_should_return_500_code_since_internal_email_service_exception_is_thrown(client, httpHeaders, patchedYgmailSendFuncWithThrowException, usersSeededFixture, exSession):
 
     userEmail = exSession.query(User).get(2).email
@@ -44,6 +50,8 @@ def test_fp_post03_forgot_password_post_endpoint_should_return_500_code_since_in
     patchedYgmailSendFuncWithThrowException.assert_called
 
 
+@pytest.mark.forgot_password_src
+@pytest.mark.forgot_password_src_post
 def test_fp_post04_forgot_password_post_endpoint_should_return_202_code_for_successfully_email_was_sent(client, httpHeaders, patchedYgmailSendFunc, usersSeededFixture, exSession):
 
     userEmail = exSession.query(User).get(2).email
@@ -55,5 +63,6 @@ def test_fp_post04_forgot_password_post_endpoint_should_return_202_code_for_succ
                 },
             headers=httpHeaders)
 
+    printObject(response.data)
     assert response.status_code == 202
     assert patchedYgmailSendFunc.assert_called

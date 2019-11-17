@@ -1,17 +1,20 @@
 from Infrastructure.repositories.BlogRepository import BlogRepository
 from Infrastructure.DataModels.BlogModel import Blog
 from utils.util import printObject
+import pytest
 
 
+@pytest.mark.blog_repo
 def test_br1_get_all(blogsSeededFixture):
 
     blogRepo = BlogRepository()
 
-    blogs = blogRepo.getAll()
+    result = blogRepo.getAll()
 
-    assert len(blogs) != 0
+    assert len(result['data']) != 0
 
 
+@pytest.mark.blog_repo
 def test_br2_get(blogsSeededFixture):
 
     blogRepo = BlogRepository()
@@ -21,6 +24,7 @@ def test_br2_get(blogsSeededFixture):
     assert blog.id == 2
 
 
+@pytest.mark.blog_repo
 def test_ur3_find(blogsSeededFixture):
 
     blogRepo = BlogRepository()
@@ -32,6 +36,7 @@ def test_ur3_find(blogsSeededFixture):
     assert len(blogs) != 0
 
 
+@pytest.mark.blog_repo
 def test_ur4_find_should_return_none_when_one_of_arg_is_wrong(blogsSeededFixture):
 
     blogRepo = BlogRepository()
@@ -43,6 +48,7 @@ def test_ur4_find_should_return_none_when_one_of_arg_is_wrong(blogsSeededFixture
     assert len(blogs) == 0
 
 
+@pytest.mark.blog_repo
 def test_br8_delete(exSession, blogsSeededFixture):
 
     blog = blogsSeededFixture[0]
@@ -58,6 +64,7 @@ def test_br8_delete(exSession, blogsSeededFixture):
     assert deletedBlog is None
 
 
+@pytest.mark.blog_repo
 def test_br8_deleteByUserId(exSession, blogsSeededFixture):
 
     blogRepo = BlogRepository()
