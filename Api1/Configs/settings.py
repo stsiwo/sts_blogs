@@ -36,6 +36,7 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # image files
 UPLOAD_FOLDER = 'uploads'
+PUBLIC_FILE_FOLDER = 'images'
 
 # custome error handling
 # PROPAGATE_EXCEPTIONS = True

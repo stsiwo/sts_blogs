@@ -3,6 +3,7 @@ from Infrastructure.DataModels.UserModel import User
 from Infrastructure.DataModels.RoleModel import Role
 from Infrastructure.DataModels.BlogModel import Blog
 import pytest
+from utils.util import printObject
 
 
 @pytest.mark.user_blog_src
@@ -93,7 +94,7 @@ def test_ub06_blogs_get_endpoint_should_return_202_and_blogs_json_with_user_depe
 
 @pytest.mark.user_blog_src
 @pytest.mark.user_blog_src_post
-def test_ub07_blogs_post_endpoint_should_return_400_for_bad_request_for_invalid_input(authedClient, database, application, httpHeaders):
+def test_ub07_blogs_post_endpoint_should_return_400_for_bad_request_for_invalid_input(authedClient, database, application, multipartHttpHeaders):
 
     userId = None
 
@@ -102,15 +103,15 @@ def test_ub07_blogs_post_endpoint_should_return_400_for_bad_request_for_invalid_
         userId = user.id
 
     csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
-    httpHeaders['X-CSRF-TOKEN'] = csrf_token
+    multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
 
-    response = authedClient.post('/users/' + str(userId) + '/blogs', headers=httpHeaders)
+    response = authedClient.post('/users/' + str(userId) + '/blogs', headers=multipartHttpHeaders)
     assert 400 == response.status_code
 
 
 @pytest.mark.user_blog_src
 @pytest.mark.user_blog_src_post
-def test_ub08_blogs_post_endpoint_should_allow_authed_user_to_get_201_code(authedClient, database, application, httpHeaders, testBlogData):
+def test_ub08_blogs_post_endpoint_should_allow_authed_user_to_get_201_code(authedClient, database, application, multipartHttpHeaders, testBlogData):
 
     userId = None
 
@@ -119,12 +120,12 @@ def test_ub08_blogs_post_endpoint_should_allow_authed_user_to_get_201_code(authe
         userId = user.id
 
     csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
-    httpHeaders['X-CSRF-TOKEN'] = csrf_token
+    multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
 
     response = authedClient.post(
             '/users/' + str(userId) + '/blogs',
-            json=testBlogData,
-            headers=httpHeaders
+            data=testBlogData,
+            headers=multipartHttpHeaders
             )
 
     assert 201 == response.status_code
@@ -132,7 +133,7 @@ def test_ub08_blogs_post_endpoint_should_allow_authed_user_to_get_201_code(authe
 
 @pytest.mark.user_blog_src
 @pytest.mark.user_blog_src_post
-def test_ub09_blogs_post_endpoint_should_allow_authed_user_to_create_its_new_blog(authedClient, database, application, httpHeaders, testBlogData):
+def test_ub09_blogs_post_endpoint_should_allow_authed_user_to_create_its_new_blog(authedClient, database, application, multipartHttpHeaders, testBlogData):
 
     userId = None
 
@@ -141,12 +142,38 @@ def test_ub09_blogs_post_endpoint_should_allow_authed_user_to_create_its_new_blo
         userId = user.id
 
     csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
-    httpHeaders['X-CSRF-TOKEN'] = csrf_token
+    multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
 
     response = authedClient.post(
             '/users/' + str(userId) + '/blogs',
-            json=testBlogData,
-            headers=httpHeaders
+            data=testBlogData,
+            headers=multipartHttpHeaders
+            )
+
+    data = decodeResponseByteJsonToDictionary(response.data)
+
+    printObject(data)
+
+    assert data['id'] is not None
+
+
+@pytest.mark.user_blog_src
+@pytest.mark.user_blog_src_post
+def test_ub09_1_blogs_post_endpoint_should_allow_authed_user_to_create_its_new_blog_with_image(authedClient, database, application, multipartHttpHeaders, testBlogDataWithMainImage, setupTempUploadDir):
+
+    userId = None
+
+    with application.app_context():
+        user = database.session.query(User).filter_by(email='test@test.com').first()
+        userId = user.id
+
+    csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
+    multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
+
+    response = authedClient.post(
+            '/users/' + str(userId) + '/blogs',
+            data=testBlogDataWithMainImage,
+            headers=multipartHttpHeaders
             )
 
     data = decodeResponseByteJsonToDictionary(response.data)
@@ -156,7 +183,7 @@ def test_ub09_blogs_post_endpoint_should_allow_authed_user_to_create_its_new_blo
 
 @pytest.mark.user_blog_src
 @pytest.mark.user_blog_src_post
-def test_ub10_blogs_post_endpoint_should_return_location_header_to_new_blog(authedClient, database, application, httpHeaders, testBlogData):
+def test_ub10_blogs_post_endpoint_should_return_location_header_to_new_blog(authedClient, database, application, multipartHttpHeaders, testBlogData):
 
     userId = None
 
@@ -165,12 +192,12 @@ def test_ub10_blogs_post_endpoint_should_return_location_header_to_new_blog(auth
         userId = user.id
 
     csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
-    httpHeaders['X-CSRF-TOKEN'] = csrf_token
+    multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
 
     response = authedClient.post(
             '/users/' + str(userId) + '/blogs',
-            json=testBlogData,
-            headers=httpHeaders
+            data=testBlogData,
+            headers=multipartHttpHeaders
             )
 
     data = decodeResponseByteJsonToDictionary(response.data)
@@ -180,7 +207,7 @@ def test_ub10_blogs_post_endpoint_should_return_location_header_to_new_blog(auth
 
 @pytest.mark.user_blog_src
 @pytest.mark.user_blog_src_post
-def test_ub11_blogs_post_endpoint_should_allow_admin_user_to_get_201_code(authedAdminClient, database, application, httpHeaders, usersSeededFixture, testBlogData):
+def test_ub11_blogs_post_endpoint_should_allow_admin_user_to_get_201_code(authedAdminClient, database, application, multipartHttpHeaders, usersSeededFixture, testBlogData):
 
     userId = None
 
@@ -189,12 +216,12 @@ def test_ub11_blogs_post_endpoint_should_allow_admin_user_to_get_201_code(authed
         userId = user.id
 
     csrf_token = [cookie.value for cookie in authedAdminClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
-    httpHeaders['X-CSRF-TOKEN'] = csrf_token
+    multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
 
     response = authedAdminClient.post(
             '/users/' + str(userId) + '/blogs',
-            json=testBlogData,
-            headers=httpHeaders
+            data=testBlogData,
+            headers=multipartHttpHeaders
             )
 
     assert 201 == response.status_code
@@ -202,7 +229,7 @@ def test_ub11_blogs_post_endpoint_should_allow_admin_user_to_get_201_code(authed
 
 @pytest.mark.user_blog_src
 @pytest.mark.user_blog_src_post
-def test_ub12_blogs_post_endpoint_should_allow_authed_user_to_create_its_new_blog(authedAdminClient, database, application, httpHeaders, usersSeededFixture, testBlogData):
+def test_ub12_blogs_post_endpoint_should_allow_authed_user_to_create_its_new_blog(authedAdminClient, database, application, multipartHttpHeaders, usersSeededFixture, testBlogData):
 
     userId = None
 
@@ -211,12 +238,12 @@ def test_ub12_blogs_post_endpoint_should_allow_authed_user_to_create_its_new_blo
         userId = user.id
 
     csrf_token = [cookie.value for cookie in authedAdminClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
-    httpHeaders['X-CSRF-TOKEN'] = csrf_token
+    multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
 
     response = authedAdminClient.post(
             '/users/' + str(userId) + '/blogs',
-            json=testBlogData,
-            headers=httpHeaders
+            data=testBlogData,
+            headers=multipartHttpHeaders
             )
 
     data = decodeResponseByteJsonToDictionary(response.data)
@@ -226,7 +253,7 @@ def test_ub12_blogs_post_endpoint_should_allow_authed_user_to_create_its_new_blo
 
 @pytest.mark.user_blog_src
 @pytest.mark.user_blog_src_post
-def test_ub13_blogs_post_endpoint_should_return_location_header_to_new_blog(authedAdminClient, database, application, httpHeaders, usersSeededFixture, testBlogData):
+def test_ub13_blogs_post_endpoint_should_return_location_header_to_new_blog(authedAdminClient, database, application, multipartHttpHeaders, usersSeededFixture, testBlogData):
 
     userId = None
 
@@ -235,12 +262,12 @@ def test_ub13_blogs_post_endpoint_should_return_location_header_to_new_blog(auth
         userId = user.id
 
     csrf_token = [cookie.value for cookie in authedAdminClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
-    httpHeaders['X-CSRF-TOKEN'] = csrf_token
+    multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
 
     response = authedAdminClient.post(
             '/users/' + str(userId) + '/blogs',
-            json=testBlogData,
-            headers=httpHeaders
+            data=testBlogData,
+            headers=multipartHttpHeaders
             )
 
     data = decodeResponseByteJsonToDictionary(response.data)

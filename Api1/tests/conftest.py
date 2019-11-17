@@ -438,3 +438,13 @@ def testBlogData():
             'subtitle': "test-subtitle",
             'content': "test-content"
             }
+
+
+@pytest.fixture
+def testBlogDataWithMainImage(testImageFile):
+    yield {
+            'title': "test-title",
+            'subtitle': "test-subtitle",
+            'content': "test-content",
+            'mainImageFile': testImageFile
+            }

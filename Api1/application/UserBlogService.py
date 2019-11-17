@@ -1,10 +1,12 @@
 from Configs.app import app
 from Infrastructure.DataModels.BlogModel import Blog
-from typing import Dict, List
+from typing import Dict, List, BinaryIO
 from Resources.viewModels.BlogSchema import BlogSchema
 from Infrastructure.transactionDecorator import db_transaction
 from Infrastructure.repositories.BlogRepository import BlogRepository
 from exceptions.BlogNotFoundException import BlogNotFoundException
+from application.FileServiceProto import FileServiceProto
+from utils.util import printObject
 
 
 class UserBlogService(object):
@@ -13,9 +15,12 @@ class UserBlogService(object):
 
     _blogRepository: BlogRepository
 
+    _fileService: FileServiceProto
+
     def __init__(self):
         self._blogSchema = BlogSchema()
         self._blogRepository = BlogRepository()
+        self._fileService = FileServiceProto()
 
     def getAllUserBlogService(self, user_id: str) -> List[Dict]:
         app.logger.info("start userblog user service")
@@ -31,15 +36,18 @@ class UserBlogService(object):
         return serializedBlogs
 
     @db_transaction()
-    def createNewBlogService(self, user_id: str, title: str, subtitle: str, content: str) -> Blog:
+    def createNewBlogService(self, user_id: str, title: str, subtitle: str, content: str, mainImageFile: BinaryIO = None) -> Blog:
         app.logger.info("start userblog user service")
         print("start userblog user service")
+
+        mainImageUrl = self._fileService.saveImageFileToDir(mainImageFile, user_id) if mainImageFile is not None else None
 
         newBlog: Blog = Blog(
                             title=title,
                             subtitle=subtitle,
                             content=content,
-                            userId=user_id
+                            userId=user_id,
+                            mainImageUrl=mainImageUrl
                             )
 
         self._blogRepository.add(newBlog)

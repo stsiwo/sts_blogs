@@ -1,7 +1,5 @@
 from flask_restful import Resource
-from flask import request, abort, jsonify
-from Infrastructure.DataModels.UserModel import User
-from Configs.extensions import db
+from flask import request, jsonify
 from Configs.app import app
 from application.UserBlogService import UserBlogService
 from typing import Dict, List
@@ -11,6 +9,7 @@ from Resources.validators.validatorDecorator import validate_request_with
 from Resources.validators.userBlogValidator import userBlogValidator
 from Infrastructure.DataModels.BlogModel import Blog
 from Resources.viewModels.BlogSchema import BlogSchema
+from utils.util import printObject
 
 
 class UserBlogs(Resource):
@@ -50,9 +49,10 @@ class UserBlogs(Resource):
 
         newBlog: Blog = self._userBlogService.createNewBlogService(
                 user_id,
-                request.json.get('title'),
-                request.json.get('subtitle'),
-                request.json.get('content')
+                request.form.get('title'),
+                request.form.get('subtitle'),
+                request.form.get('content'),
+                request.files.get('mainImageFile', None)
                 )
 
         blogSchema = self._blogSchema.dump(newBlog)

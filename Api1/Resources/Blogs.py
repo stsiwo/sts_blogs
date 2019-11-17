@@ -39,13 +39,6 @@ class Blogs(Resource):
         response.status_code = 200
         return response
 
-    # create new blog
-    # use /users/{id}/blogs for creating blogs for specific user
-    # def post(self):
-    #     response = jsonify({})
-    #     response.status_code = 202
-    #     return response
-
     # replace existing whole blogs or create whole blogs if does not exist
     # payload must be whole blogs (all properties of blog)
     @jwt_required
@@ -57,9 +50,10 @@ class Blogs(Resource):
 
         updatedBlog: Blog = self._blogService.updateBlogService(
                 blog_id,
-                request.json.get('title'),
-                request.json.get('subtitle'),
-                request.json.get('content')
+                request.form.get('title'),
+                request.form.get('subtitle'),
+                request.form.get('content'),
+                request.form.get('file')
                 )
 
         # successfully updated and return its serialized and updated blog
