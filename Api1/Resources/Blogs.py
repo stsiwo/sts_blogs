@@ -10,6 +10,7 @@ from Resources.viewModels.BlogSchema import BlogSchema
 from Resources.roleAccessDecorator import requires_jwt_role_claim
 from flask_jwt_extended import jwt_required
 from utils.util import printObject
+from Resources.parsers.QueryStringParser import QueryStringParser
 
 
 class Blogs(Resource):
@@ -18,22 +19,23 @@ class Blogs(Resource):
 
     _blogSchema: BlogSchema
 
+    _parser: QueryStringParser
+
     def __init__(self):
         self._blogService = BlogService()
         self._blogSchema = BlogSchema()
+        self._parser = QueryStringParser()
 
     # get all blogs
     def get(self):
         app.logger.info("start processing get request at /blogs")
         print("start processing get request at /blogs")
 
-        print(request.args.lists())
-        for key, value in request.args.lists():
-            print('{} and {}'.format(key, value))
+        queryString: Dict = self._parser.parse(request.args)
+        # { items: List[blogSchema], totalCount: number }
+        result: Dict = self._blogService.getAllBlogService(queryString)
 
-        blogs: List[Dict] = self._blogService.getAllBlogService()
-
-        response = jsonify(blogs)
+        response = jsonify(result)
         response.status_code = 200
         return response
 

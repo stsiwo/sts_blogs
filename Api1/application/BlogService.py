@@ -1,11 +1,9 @@
 from Configs.app import app
 from Infrastructure.DataModels.BlogModel import Blog
-from flask import abort
 from typing import Dict, List
 from Resources.viewModels.BlogSchema import BlogSchema
 from Infrastructure.transactionDecorator import db_transaction
 from Infrastructure.repositories.BlogRepository import BlogRepository
-from utils.util import printObject
 from exceptions.BlogNotFoundException import BlogNotFoundException
 
 
@@ -19,20 +17,19 @@ class BlogService(object):
         self._blogSchema = BlogSchema()
         self._blogRepository = BlogRepository()
 
-    def getAllBlogService(self) -> List[Dict]:
+    def getAllBlogService(self, queryString: Dict) -> Dict:
         app.logger.info("start blog user service")
         print("start blog user service")
 
-        blogs: List[Blog] = self._blogRepository.getAll()
+        result: Dict = self._blogRepository.getAll(queryString)
 
-        # need to refactor not to throw exception when blog is empty
-        # this should not be exception and should return 200 and empty data
-        if len(blogs) == 0:
+        if len(result['data']) == 0:
             raise BlogNotFoundException
 
-        serializedBlogs: List[Dict] = [self._blogSchema.dump(blog) for blog in blogs]
+        # transform data model to view model of blog
+        result['data']: List[Dict] = [self._blogSchema.dump(blog) for blog in result['data']]
 
-        return serializedBlogs
+        return result
 
     @db_transaction()
     def updateBlogService(self, blog_id: str, title: str, content: str) -> Blog:

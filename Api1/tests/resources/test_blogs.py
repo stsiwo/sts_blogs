@@ -1,20 +1,24 @@
 from utils.util import printObject, decodeResponseByteJsonToDictionary
 from Infrastructure.DataModels.UserModel import User
 from Infrastructure.DataModels.BlogModel import Blog
+import pytest
 
 
+@pytest.mark.blogs_get
 def test_b01_blogs_get_endpoint_should_return_404_since_no_blogs_data(client):
 
     response = client.get('/blogs')
     assert 404 == response.status_code
 
 
+@pytest.mark.blogs_get
 def test_b02_blogs_get_endpoint_should_return_202(client, blogsSeededFixture):
 
     response = client.get('/blogs')
     assert 200 == response.status_code
 
 
+@pytest.mark.blogs_get
 def test_b03_blogs_get_endpoint_should_return_202_and_blogs_json(client, blogsSeededFixture):
 
     response = client.get('/blogs')
@@ -24,10 +28,11 @@ def test_b03_blogs_get_endpoint_should_return_202_and_blogs_json(client, blogsSe
 
     assert data is not None
 
-    for blog in data:
+    for blog in data['data']:
         assert blog['id'] is not None
 
 
+@pytest.mark.blogs_get
 def test_b04_blogs_get_endpoint_should_return_202_and_blogs_json_with_user_dependencies(client, blogsSeededFixture):
 
     response = client.get('/blogs')
@@ -37,16 +42,22 @@ def test_b04_blogs_get_endpoint_should_return_202_and_blogs_json_with_user_depen
 
     assert data is not None
 
-    for blog in data:
+    for blog in data['data']:
         assert blog['user']['id'] is not None
 
 
-def test_b041_query_string(client, blogsSeededFixture):
+@pytest.mark.blogs_get
+def test_b041_blogs_get_endpoint_should_return_queried_blogs(client, blogsSeededFixture):
 
-    response = client.get('/blogs?limit=30&offset=0&keyword=sample&tags=tag1,tag2,tag3')
+    response = client.get('/blogs?limit=30&page=1&tags=js&tags=webpack')
     assert 200 == response.status_code
 
-    assert 0
+    data = decodeResponseByteJsonToDictionary(response.data)
+
+    assert data is not None
+
+    for blog in data['data']:
+        assert blog['id'] is not None
 
 
 def test_b05_blogs_put_endpoint_should_return_401_code_since_unauthorized_access(client, database, application, httpHeaders):

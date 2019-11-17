@@ -127,8 +127,6 @@ def test_paginate(exSession, blogsSeededFixture):
 
     test: BlogFilterBuilder = BlogFilterBuilder()
 
-    allBlogs = exSession.query(Blog).all()
-
     # need group_by to remove duplication by 'join' tag
     dummyQuery = exSession.query(Blog).join(Blog.tags, aliased=True).group_by(Blog.id)
     dummyQS: Dict = {
