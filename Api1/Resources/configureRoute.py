@@ -10,7 +10,7 @@ from Resources.Blogs import Blogs
 from Resources.BlogComments import BlogComments
 from Resources.UserBlogs import UserBlogs
 from Resources.Test import Test
-from Resources.UploadImage import UploadImage
+# from Resources.UploadImage import UploadImage
 from Resources.UploadedImage import UploadedImage
 from Resources.ForgotPassword import ForgotPassword
 from Resources.PasswordReset import PasswordReset
@@ -24,8 +24,9 @@ api.add_resource(Signup, '/signup')
 api.add_resource(Login, '/login')
 api.add_resource(Blogs, '/blogs', '/blogs/<string:blog_id>')
 api.add_resource(BlogComments, '/blogs/<string:blog_id>/comments')
-api.add_resource(UploadImage, '/uploads', '/uploads/<string:file_name>')
-api.add_resource(UploadedImage, '/images/<string:file_name>')
+# depreciate
+# api.add_resource(UploadImage, '/uploads', '/uploads/<string:file_name>')
+api.add_resource(UploadedImage, '/images/<string:user_id>/<string:file_name>')
 api.add_resource(ForgotPassword, '/forgot-password')
 api.add_resource(PasswordReset, '/password-reset')
 api.add_resource(Test, '/test')

@@ -11,6 +11,7 @@ from flask_jwt_extended import get_jwt_identity
 
 
 class UploadImage(Resource):
+    """ depreciate: switch multipart/form with resource (user, blog) """
 
     _uploadImageService: UploadImageService
 
