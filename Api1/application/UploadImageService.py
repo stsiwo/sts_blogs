@@ -2,16 +2,16 @@ from Configs.app import app
 from Configs.extensions import db
 from typing import Dict, BinaryIO
 from Infrastructure.transactionDecorator import db_transaction
-from application.FileService import FileService
+from application.FileServiceDep import FileServiceDep
 from Infrastructure.DataModels.UserModel import User
 
 
 class UploadImageService(object):
 
-    _fileService: FileService
+    _fileService: FileServiceDep
 
     def __init__(self):
-        self._fileService = FileService()
+        self._fileService = FileServiceDep()
 
     @db_transaction()
     def saveUploadImageService(self, files: Dict[str, BinaryIO], fileKeyName: str, userId: str) -> str:

@@ -3,6 +3,9 @@ from typing import Dict, BinaryIO
 from werkzeug.utils import secure_filename
 import os
 from exceptions.UploadedFileException import UploadedFileException
+from werkzeug import FileStorage
+import pathlib
+import ntpath
 
 
 class FileService(object):
@@ -12,35 +15,39 @@ class FileService(object):
     def __init__(self):
         pass
 
-    def saveImageFileToDir(self, files: Dict[str, BinaryIO], fileKeyName: str) -> str:
+    def saveImageFileToDir(self, file: FileStorage, userId: str) -> str:
+        return self._saveOrUpdateImageToDir(file, userId)
 
-        imgFile: BinaryIO = self._checkAndExtractImageFile(files, fileKeyName)
-
-        if imgFile and self._allowed_file(imgFile.filename):
-            filename: str = secure_filename(imgFile.filename)
-            imgDir = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            imgFile.save(imgDir)
-            destImagePath = os.path.join('/images', filename)
-            return destImagePath
-        else:
-            raise UploadedFileException
-
-    def updateImageFileToDir(self, files: Dict[str, BinaryIO], fileKeyName: str, originalFileName: str) -> str:
-
-        imgFile: BinaryIO = self._checkAndExtractImageFile(files, fileKeyName)
-
-        if imgFile and self._allowed_file(imgFile.filename):
-            filename: str = secure_filename(imgFile.filename)
-            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], originalFileName))
-            imgDir = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            imgFile.save(imgDir)
-            destImagePath = os.path.join('/images', filename)
-            return destImagePath
-        else:
-            raise UploadedFileException
+    def updateImageFileToDir(self, file: FileStorage, userId: str, originalFileName: str) -> str:
+        return self._saveOrUpdateImageToDir(file, userId, originalFileName, True)
 
     def _allowed_file(self, filename: str) -> bool:
         return '.' in filename and filename.rsplit('.', 1)[1].lower() in self._allowedExtension
 
-    def _checkAndExtractImageFile(self, files: Dict[str, BinaryIO], name: str) -> bytes:
-        return files[name] if name in files and files[name].filename != '' else None
+    def _extractFileName(self, originalFilePath: str) -> str:
+        return ntpath.basename(originalFilePath)
+
+    def _saveOrUpdateImageToDir(self, file: FileStorage, userId: str, originalFilePath: str = None, isUpdate: bool = False):
+
+        if file.stream is not None and self._allowed_file(file.filename):
+            # check file extension is safe
+            filename: str = secure_filename(file.filename)
+            if isUpdate:
+                # extract file name from path
+                originalFileName = self._extractFileName(originalFilePath)
+                # remove existing image if isUpdate is True
+                os.remove(os.path.join(app.config['UPLOAD_FOLDER'], str(userId), originalFileName))
+            # set upload directory for the file
+            imgDir = os.path.join(app.config['UPLOAD_FOLDER'], str(userId))
+            # create the directory if not exists
+            pathlib.Path(imgDir).mkdir(parents=True, exist_ok=True)
+            # set file
+            imgPath = os.path.join(imgDir, filename)
+            # save the file in the directory
+            file.save(imgPath)
+            # get a path for accessing from public
+            destImagePath = os.path.join(app.config['PUBLIC_FILE_FOLDER'], str(userId), filename)
+
+            return destImagePath
+        else:
+            raise UploadedFileException

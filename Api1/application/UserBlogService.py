@@ -5,7 +5,7 @@ from Resources.viewModels.BlogSchema import BlogSchema
 from Infrastructure.transactionDecorator import db_transaction
 from Infrastructure.repositories.BlogRepository import BlogRepository
 from exceptions.BlogNotFoundException import BlogNotFoundException
-from application.FileServiceProto import FileServiceProto
+from application.FileService import FileService
 from utils.util import printObject
 from werkzeug import FileStorage
 
@@ -16,12 +16,12 @@ class UserBlogService(object):
 
     _blogRepository: BlogRepository
 
-    _fileService: FileServiceProto
+    _fileService: FileService
 
     def __init__(self):
         self._blogSchema = BlogSchema()
         self._blogRepository = BlogRepository()
-        self._fileService = FileServiceProto()
+        self._fileService = FileService()
 
     def getAllUserBlogService(self, user_id: str) -> List[Dict]:
         app.logger.info("start userblog user service")
