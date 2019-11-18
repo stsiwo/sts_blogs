@@ -5,8 +5,8 @@ from Resources.viewModels.BlogSchema import BlogSchema
 from Infrastructure.transactionDecorator import db_transaction
 from Infrastructure.repositories.BlogRepository import BlogRepository
 from exceptions.BlogNotFoundException import BlogNotFoundException
-from typing import BinaryIO
-from application.FileService import FileService
+from application.FileServiceProto import FileServiceProto
+from werkzeug import FileStorage
 
 
 class BlogService(object):
@@ -15,12 +15,12 @@ class BlogService(object):
 
     _blogRepository: BlogRepository
 
-    _fileService: FileService
+    _fileService: FileServiceProto
 
     def __init__(self):
         self._blogSchema = BlogSchema()
         self._blogRepository = BlogRepository()
-        self._fileService = FileService()
+        self._fileService = FileServiceProto()
 
     def getAllBlogService(self, queryString: Dict) -> Dict:
         app.logger.info("start blog user service")
@@ -37,7 +37,7 @@ class BlogService(object):
         return result
 
     @db_transaction()
-    def updateBlogService(self, blog_id: str, title: str, subtitle: str, content: str, file: BinaryIO = None) -> Blog:
+    def updateBlogService(self, blog_id: str, title: str, subtitle: str, content: str, mainImageFile: FileStorage = None) -> Dict:
         app.logger.info("start update blog service")
         print("start update blog service")
 
@@ -51,9 +51,7 @@ class BlogService(object):
         targetBlog.title = title
         targetBlog.subtitle = subtitle
         targetBlog.content = content
-
-        # if file is not None:
-        #    self._fileService.updateImageFileToDir()
+        targetBlog.mainImageUrl = self._fileService.updateImageFileToDir(mainImageFile, targetBlog.userId, targetBlog.mainImageUrl) if mainImageFile is not None else targetBlog.mainImageUrl
 
         targetBlog = self._blogSchema.dump(targetBlog)
 

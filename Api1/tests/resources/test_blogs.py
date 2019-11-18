@@ -2,6 +2,7 @@ from utils.util import printObject, decodeResponseByteJsonToDictionary
 from Infrastructure.DataModels.UserModel import User
 from Infrastructure.DataModels.BlogModel import Blog
 import pytest
+import os
 
 
 @pytest.mark.blogs_src
@@ -67,7 +68,7 @@ def test_b041_blogs_get_endpoint_should_return_queried_blogs(client, blogsSeeded
 
 @pytest.mark.blogs_src
 @pytest.mark.blogs_src_put
-def test_b05_blogs_put_endpoint_should_return_401_code_since_unauthorized_access(client, database, application, httpHeaders):
+def test_b05_blogs_put_endpoint_should_return_401_code_since_unauthorized_access(client, database, application, multipartHttpHeaders):
 
     response = client.put('/blogs/1')
     assert 401 == response.status_code
@@ -82,7 +83,7 @@ def test_b06_blogs_put_endpoint_should_allow_authed_user_to_get_404_code_since_t
 
     response = authedClient.put(
             '/blogs/{}'.format(12342),
-            json=testBlogDataWithMainImage,
+            data=testBlogDataWithMainImage,
             headers=multipartHttpHeaders
             )
 
@@ -91,17 +92,17 @@ def test_b06_blogs_put_endpoint_should_allow_authed_user_to_get_404_code_since_t
 
 @pytest.mark.blogs_src
 @pytest.mark.blogs_src_put
-def test_b07_blogs_put_endpoint_should_allow_authed_user_to_get_400_code_since_input_is_invalid(authedClient, database, application, httpHeaders):
+def test_b07_blogs_put_endpoint_should_allow_authed_user_to_get_400_code_since_input_is_invalid(authedClient, database, application, multipartHttpHeaders):
 
     csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
-    httpHeaders['X-CSRF-TOKEN'] = csrf_token
+    multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
 
     response = authedClient.put(
             '/blogs/{}'.format(12342),
-            json={
+            data={
                 'content': 'updated_title'
                 },
-            headers=httpHeaders
+            headers=multipartHttpHeaders
             )
 
     assert 400 == response.status_code
@@ -109,7 +110,7 @@ def test_b07_blogs_put_endpoint_should_allow_authed_user_to_get_400_code_since_i
 
 @pytest.mark.blogs_src
 @pytest.mark.blogs_src_put
-def test_b08_blogs_put_endpoint_should_allow_authed_user_to_get_200_code(authedClientWithBlogSeeded, database, application, httpHeaders, testBlogData):
+def test_b08_blogs_put_endpoint_should_allow_authed_user_to_get_200_code(authedClientWithBlogSeeded, database, application, multipartHttpHeaders, testBlogData):
 
     blogId = None
 
@@ -118,12 +119,12 @@ def test_b08_blogs_put_endpoint_should_allow_authed_user_to_get_200_code(authedC
         blogId = blog.id
 
     csrf_token = [cookie.value for cookie in authedClientWithBlogSeeded.cookie_jar if cookie.name == 'csrf_access_token'][0]
-    httpHeaders['X-CSRF-TOKEN'] = csrf_token
+    multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
 
     response = authedClientWithBlogSeeded.put(
             '/blogs/{}'.format(blogId),
-            json=testBlogData,
-            headers=httpHeaders
+            data=testBlogData,
+            headers=multipartHttpHeaders
             )
 
     assert 200 == response.status_code
@@ -131,7 +132,7 @@ def test_b08_blogs_put_endpoint_should_allow_authed_user_to_get_200_code(authedC
 
 @pytest.mark.blogs_src
 @pytest.mark.blogs_src_put
-def test_b09_blogs_put_endpoint_should_allow_authed_user_to_return_updated_blog(authedClientWithBlogSeeded, database, application, httpHeaders):
+def test_b09_blogs_put_endpoint_should_allow_authed_user_to_return_updated_blog(authedClientWithBlogSeeded, database, application, multipartHttpHeaders):
 
     blogId = None
 
@@ -140,16 +141,16 @@ def test_b09_blogs_put_endpoint_should_allow_authed_user_to_return_updated_blog(
         blogId = blog.id
 
     csrf_token = [cookie.value for cookie in authedClientWithBlogSeeded.cookie_jar if cookie.name == 'csrf_access_token'][0]
-    httpHeaders['X-CSRF-TOKEN'] = csrf_token
+    multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
 
     response = authedClientWithBlogSeeded.put(
             '/blogs/{}'.format(blogId),
-            json={
+            data={
                 'title': 'updated_title',
                 'subtitle': 'updated_subtitle',
                 'content': 'updated_content'
                 },
-            headers=httpHeaders
+            headers=multipartHttpHeaders
             )
 
     printObject(response)
@@ -160,3 +161,40 @@ def test_b09_blogs_put_endpoint_should_allow_authed_user_to_return_updated_blog(
     assert 'updated_title' == data['title']
     assert 'updated_subtitle' == data['subtitle']
     assert 'updated_content' == data['content']
+
+
+@pytest.mark.blogs_src
+@pytest.mark.blogs_src_put
+def test_b10_blogs_put_endpoint_should_allow_authed_user_to_return_updated_blog_with_image(authedClientWithBlogSeeded, database, application, multipartHttpHeaders, setupTempUploadDirWithTestBlogImageFile, testFileStorage):
+
+    blogId = None
+    authUser = None
+
+    with application.app_context():
+        authUser = database.session.query(User).filter(User.email == 'test@test.com').first()
+        blog = database.session.query(Blog).join(Blog.user).filter(User.email == 'test@test.com').first()
+        blogId = blog.id
+
+    csrf_token = [cookie.value for cookie in authedClientWithBlogSeeded.cookie_jar if cookie.name == 'csrf_access_token'][0]
+    multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
+
+    response = authedClientWithBlogSeeded.put(
+            '/blogs/{}'.format(blogId),
+            data={
+                'title': 'updated_title',
+                'subtitle': 'updated_subtitle',
+                'content': 'updated_content',
+                'mainImageFile': testFileStorage.stream
+                },
+            headers=multipartHttpHeaders
+            )
+
+    printObject(response)
+
+    data = decodeResponseByteJsonToDictionary(response.data)
+
+    assert 200 == response.status_code
+    assert 'updated_title' == data['title']
+    assert 'updated_subtitle' == data['subtitle']
+    assert 'updated_content' == data['content']
+    assert os.path.join(application.config['PUBLIC_FILE_FOLDER'], str(authUser.id), testFileStorage.filename) == data['mainImageUrl']

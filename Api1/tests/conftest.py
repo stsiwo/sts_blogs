@@ -21,6 +21,8 @@ from Configs.settings import FORGOT_PASSWORD_TOKEN_EXPIRY
 from exceptions.EmailServiceException import EmailServiceException
 from application.EmailService import EmailClient
 from utils.util import parseStrToDate
+import pathlib
+from werkzeug.datastructures import FileStorage
 
 app = main
 
@@ -322,11 +324,56 @@ def authedAdminClient(client, adminUserSeededFixture):
 
 
 @pytest.fixture
-def authedClientWithBlogSeeded(exSession, authedClient):
+def testImageFile():
+    file = BytesIO()
+    image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
+    image.save(file, 'png')
+    file.name = 'test.png'
+    file.seek(0)
+    yield file
+
+
+@pytest.fixture
+def testNoImageFile():
+    file = BytesIO()
+    file.write('this is not image file'.encode('utf-8'))
+    file.name = 'non-image-file.js'
+    file.seek(0)
+    yield file
+
+
+@pytest.fixture
+def testExistingFileStorage():
+    print('start setup test exisitng file storage')
+    file = BytesIO()
+    image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
+    image.save(file, 'png')
+    file.name = 'test-existing.png'
+    file.seek(0)
+    fileStorage: FileStorage = FileStorage(stream=file)
+    print(fileStorage)
+    yield fileStorage
+
+
+@pytest.fixture
+def testFileStorage():
+    print('start setup test exisitng file storage')
+    file = BytesIO()
+    image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
+    image.save(file, 'png')
+    file.name = 'test-sample.png'
+    file.seek(0)
+    fileStorage: FileStorage = FileStorage(stream=file)
+    print(fileStorage)
+    yield fileStorage
+
+
+@pytest.fixture
+def authedClientWithBlogSeeded(exSession, authedClient, testExistingFileStorage):
     print("setup seedBlogsOfAuthedClient fixture")
 
     authedUser = exSession.query(User).filter_by(email='test@test.com').first()
-    exSession.add(generateBlogModel(id=1, user=authedUser, userId=authedUser.id))
+    exSession.add(generateBlogModel(id=1, user=authedUser, userId=authedUser.id, mainImageUrl='/images/1/' + testExistingFileStorage.filename))
     exSession.add(generateBlogModel(id=2, user=authedUser, userId=authedUser.id))
     exSession.add(generateBlogModel(id=3, user=authedUser, userId=authedUser.id))
     exSession.commit()
@@ -355,35 +402,17 @@ def multipartHttpHeaders():
     yield headers
 
 
-@pytest.fixture
-def testImageFile():
-    file = BytesIO()
-    image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
-    image.save(file, 'png')
-    file.name = 'test.png'
-    file.seek(0)
-    yield file
-
-
-@pytest.fixture
-def testNoImageFile():
-    file = BytesIO()
-    file.write('this is not image file'.encode('utf-8'))
-    file.name = 'non-image-file.js'
-    file.seek(0)
-    yield file
-
-
 uploadedFilePath = 'temp/uploads'
+publicFilePath = 'temp/images'
 
 
 @pytest.fixture
 def setupTempUploadDir(application, request):
+    print('start creating temp directory for test files')
 
     # for upload image directory
     application.config['UPLOAD_FOLDER'] = uploadedFilePath
-    os.mkdir('temp')
-    os.mkdir('temp/uploads')
+    pathlib.Path(os.path.join(application.config['UPLOAD_FOLDER'])).mkdir(parents=True, exist_ok=True)
 
     printObject(os.listdir('.'))
 
@@ -392,6 +421,19 @@ def setupTempUploadDir(application, request):
 
     request.addfinalizer(fin)
     return None
+
+
+@pytest.fixture
+def setupTempUploadDirWithTestBlogImageFile(setupTempUploadDir, authedClientWithBlogSeeded, exSession, testExistingFileStorage):
+
+    authedUser = exSession.query(User).filter_by(email='test@test.com').first()
+    imgDir = os.path.join(uploadedFilePath, str(authedUser.id))
+    pathlib.Path(imgDir).mkdir(parents=True, exist_ok=True)
+    testExistingFileStorage.save(os.path.join(imgDir, testExistingFileStorage.filename))
+
+    printObject(os.listdir(uploadedFilePath))
+
+    yield None
 
 
 @pytest.fixture

@@ -53,7 +53,7 @@ class Blogs(Resource):
                 request.form.get('title'),
                 request.form.get('subtitle'),
                 request.form.get('content'),
-                request.form.get('file')
+                request.files.get('mainImageFile', None)
                 )
 
         # successfully updated and return its serialized and updated blog

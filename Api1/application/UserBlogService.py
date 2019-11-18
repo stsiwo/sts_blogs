@@ -7,6 +7,7 @@ from Infrastructure.repositories.BlogRepository import BlogRepository
 from exceptions.BlogNotFoundException import BlogNotFoundException
 from application.FileServiceProto import FileServiceProto
 from utils.util import printObject
+from werkzeug import FileStorage
 
 
 class UserBlogService(object):
@@ -36,7 +37,7 @@ class UserBlogService(object):
         return serializedBlogs
 
     @db_transaction()
-    def createNewBlogService(self, user_id: str, title: str, subtitle: str, content: str, mainImageFile: BinaryIO = None) -> Blog:
+    def createNewBlogService(self, user_id: str, title: str, subtitle: str, content: str, mainImageFile: FileStorage = None) -> Blog:
         app.logger.info("start userblog user service")
         print("start userblog user service")
 
