@@ -27,6 +27,51 @@ from werkzeug.datastructures import FileStorage
 app = main
 
 
+@pytest.fixture
+def testImageFile():
+    file = BytesIO()
+    image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
+    image.save(file, 'png')
+    file.name = 'test.png'
+    file.seek(0)
+    yield file
+
+
+@pytest.fixture
+def testNoImageFile():
+    file = BytesIO()
+    file.write('this is not image file'.encode('utf-8'))
+    file.name = 'non-image-file.js'
+    file.seek(0)
+    yield file
+
+
+@pytest.fixture
+def testExistingFileStorage():
+    print('start setup test exisitng file storage')
+    file = BytesIO()
+    image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
+    image.save(file, 'png')
+    file.name = 'test-existing.png'
+    file.seek(0)
+    fileStorage: FileStorage = FileStorage(stream=file)
+    print(fileStorage)
+    yield fileStorage
+
+
+@pytest.fixture
+def testFileStorage():
+    print('start setup test exisitng file storage')
+    file = BytesIO()
+    image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
+    image.save(file, 'png')
+    file.name = 'test-sample.png'
+    file.seek(0)
+    fileStorage: FileStorage = FileStorage(stream=file)
+    print(fileStorage)
+    yield fileStorage
+
+
 @pytest.fixture(scope="session")
 def application():
     print('setup application fixture ...')
@@ -36,6 +81,7 @@ def application():
     # need to set secret key
     app.config['SECRET_KEY'] = 'sekrit!'
     app.config['SQLALCHEMY_ECHO'] = True
+    app.config['UPLOAD_FOLDER'] = 'temp/uploads'
 
     yield app
 
@@ -69,6 +115,46 @@ def clear_data(db):
             print('Clear table %s' % table)
             db.session.execute(table.delete())
     db.session.commit()
+
+
+@pytest.fixture
+def setupTempUploadDir(application, request):
+    print('start creating temp directory for test files')
+
+    # for upload image directory
+    pathlib.Path(os.path.join(application.config['UPLOAD_FOLDER'])).mkdir(parents=True, exist_ok=True)
+
+    printObject(os.listdir('.'))
+
+    def fin():
+        shutil.rmtree('temp')
+
+    request.addfinalizer(fin)
+    return None
+
+
+@pytest.fixture
+def setupTempUploadDirWithImageFile(application, setupTempUploadDir, authedClientWithBlogSeeded, exSession, testExistingFileStorage):
+
+    authedUser = exSession.query(User).filter_by(email='test@test.com').first()
+    imgDir = os.path.join(application.config['UPLOAD_FOLDER'], str(authedUser.id))
+    pathlib.Path(imgDir).mkdir(parents=True, exist_ok=True)
+    testExistingFileStorage.save(os.path.join(imgDir, testExistingFileStorage.filename))
+
+    printObject(os.listdir(application.config['UPLOAD_FOLDER']))
+
+    yield None
+
+
+@pytest.fixture
+def setupTempUploadDirWithTestImageFile(application, setupTempUploadDir):
+
+    image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
+    image.save(os.path.join(application.config['UPLOAD_FOLDER'], 'existing_test.png'))
+
+    printObject(os.listdir(application.config['UPLOAD_FOLDER']))
+
+    yield None
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -154,7 +240,7 @@ def exSession(database, request):
 
 
 @pytest.fixture
-def usersSeededFixture(exSession):
+def usersSeededFixture(application, exSession, testExistingFileStorage):
     print("setup usersSeededFixture fixture")
 
     memberRole = exSession.query(Role).filter_by(name='member').first()
@@ -163,6 +249,7 @@ def usersSeededFixture(exSession):
             name='test',
             email='test@test.com',
             password='test',
+            avatarUrl=os.path.join(application.config['PUBLIC_FILE_FOLDER'], str(2), testExistingFileStorage.filename),
             roles=[memberRole]
             )
 
@@ -324,51 +411,6 @@ def authedAdminClient(client, adminUserSeededFixture):
 
 
 @pytest.fixture
-def testImageFile():
-    file = BytesIO()
-    image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
-    image.save(file, 'png')
-    file.name = 'test.png'
-    file.seek(0)
-    yield file
-
-
-@pytest.fixture
-def testNoImageFile():
-    file = BytesIO()
-    file.write('this is not image file'.encode('utf-8'))
-    file.name = 'non-image-file.js'
-    file.seek(0)
-    yield file
-
-
-@pytest.fixture
-def testExistingFileStorage():
-    print('start setup test exisitng file storage')
-    file = BytesIO()
-    image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
-    image.save(file, 'png')
-    file.name = 'test-existing.png'
-    file.seek(0)
-    fileStorage: FileStorage = FileStorage(stream=file)
-    print(fileStorage)
-    yield fileStorage
-
-
-@pytest.fixture
-def testFileStorage():
-    print('start setup test exisitng file storage')
-    file = BytesIO()
-    image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
-    image.save(file, 'png')
-    file.name = 'test-sample.png'
-    file.seek(0)
-    fileStorage: FileStorage = FileStorage(stream=file)
-    print(fileStorage)
-    yield fileStorage
-
-
-@pytest.fixture
 def authedClientWithBlogSeeded(exSession, authedClient, testExistingFileStorage):
     print("setup seedBlogsOfAuthedClient fixture")
 
@@ -400,51 +442,6 @@ def multipartHttpHeaders():
         'Accept': mimetype,
     }
     yield headers
-
-
-uploadedFilePath = 'temp/uploads'
-publicFilePath = 'temp/images'
-
-
-@pytest.fixture
-def setupTempUploadDir(application, request):
-    print('start creating temp directory for test files')
-
-    # for upload image directory
-    application.config['UPLOAD_FOLDER'] = uploadedFilePath
-    pathlib.Path(os.path.join(application.config['UPLOAD_FOLDER'])).mkdir(parents=True, exist_ok=True)
-
-    printObject(os.listdir('.'))
-
-    def fin():
-        shutil.rmtree('temp')
-
-    request.addfinalizer(fin)
-    return None
-
-
-@pytest.fixture
-def setupTempUploadDirWithTestBlogImageFile(setupTempUploadDir, authedClientWithBlogSeeded, exSession, testExistingFileStorage):
-
-    authedUser = exSession.query(User).filter_by(email='test@test.com').first()
-    imgDir = os.path.join(uploadedFilePath, str(authedUser.id))
-    pathlib.Path(imgDir).mkdir(parents=True, exist_ok=True)
-    testExistingFileStorage.save(os.path.join(imgDir, testExistingFileStorage.filename))
-
-    printObject(os.listdir(uploadedFilePath))
-
-    yield None
-
-
-@pytest.fixture
-def setupTempUploadDirWithTestImageFile(setupTempUploadDir):
-
-    image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
-    image.save(os.path.join(uploadedFilePath, 'existing_test.png'))
-
-    printObject(os.listdir(uploadedFilePath))
-
-    yield None
 
 
 @pytest.fixture
@@ -489,4 +486,23 @@ def testBlogDataWithMainImage(testImageFile):
             'subtitle': "test-subtitle",
             'content': "test-content",
             'mainImageFile': testImageFile
+            }
+
+
+@pytest.fixture
+def testUserDataForUpdate():
+    yield {
+            'name': 'updated_name',
+            'email': 'updated@test.com',
+            'password': 'updated_password',
+            }
+
+
+@pytest.fixture
+def testUserDataWithImageForUpdate(testFileStorage):
+    yield {
+            'name': 'updated_name',
+            'email': 'updated@test.com',
+            'password': 'updated_password',
+            'avatarFile': testFileStorage.stream
             }

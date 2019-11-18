@@ -165,7 +165,7 @@ def test_b09_blogs_put_endpoint_should_allow_authed_user_to_return_updated_blog(
 
 @pytest.mark.blogs_src
 @pytest.mark.blogs_src_put
-def test_b10_blogs_put_endpoint_should_allow_authed_user_to_return_updated_blog_with_image(authedClientWithBlogSeeded, database, application, multipartHttpHeaders, setupTempUploadDirWithTestBlogImageFile, testFileStorage):
+def test_b10_blogs_put_endpoint_should_allow_authed_user_to_return_updated_blog_with_image(authedClientWithBlogSeeded, database, application, multipartHttpHeaders, setupTempUploadDirWithImageFile, testFileStorage):
 
     blogId = None
     authUser = None

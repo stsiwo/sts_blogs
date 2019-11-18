@@ -28,7 +28,8 @@ class Users(Resource):
 
         updatedUser: Dict[str, str] = self._userService.updateUserService(
                 userId=user_id,
-                input=request.json
+                input=request.form,
+                avatarFile=request.files.get('avatarFile', None)
                 )
 
         # successfully updated and return its serialized and updated user
