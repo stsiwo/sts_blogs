@@ -1,0 +1,43 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:10.16.3    
+    steps:
+      - checkout
+      - run: 
+          name: Install Dependencies 
+          working_directory: ./Spa
+          command: |
+            ls -al 
+            npm install
+      - restore_cache:
+          keys:
+            - dep1-{{ checksum "./Spa/package-lock.json" }}
+      - run:
+          name: Run Test
+          working_directory: ./Spa
+          command: |
+            npx jest tests/
+            #  build:
+            #    docker:
+            #      - image: circleci/python:3.6.8-stretch-browsers
+            #    steps:
+            #      - checkout
+            #      - run: 
+            #          name: Install Dependencies 
+            #          working_directory: ./Api1
+            #          command: |
+            #            ls -al 
+            #            python3 -m venv venv
+            #            . venv/bin/activate
+            #            pip install -r requirements.txt
+            #      - restore_cache:
+            #          keys:
+            #            - dep1-{{ checksum "./Api1/requirements.txt" }}
+            #      - run:
+            #          name: Run Test
+            #          working_directory: ./Api1
+            #          command: |
+            #            . venv/bin/activate
+            #            python -m pytest 
