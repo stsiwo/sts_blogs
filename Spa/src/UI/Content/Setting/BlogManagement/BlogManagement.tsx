@@ -1,6 +1,5 @@
 import { toggleFilterSortBarActionCreator } from 'actions/creators';
 import FetchStatus from 'Components/ApiFetch/FetchStatus';
-import { useApiFetch } from 'Components/ApiFetch/useApiFetch';
 import BlogFilterSort from 'Components/BlogFilterSort/BlogFilterSort';
 import { useBlogFilterSort } from 'Components/BlogFilterSort/useBlogFilterSort';
 import PageLimitSelect from 'Components/Pagination/PageLimitSelect';
