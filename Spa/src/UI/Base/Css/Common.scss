@@ -1,6 +1,10 @@
 @import './Mixins';
 @import './GlobalVariables';
 
+body {
+  font-family: $mainFontFamily;
+}
+
 .input-text {
   @include input-text; 
 }
@@ -20,3 +24,4 @@
 .tag-icon {
   @include tag-icon;
 }
+

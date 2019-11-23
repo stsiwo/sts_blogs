@@ -1,3 +1,5 @@
+@import './Fonts.scss';
+
 /* media */
 $mobileSSize: 320;
 $mobileLSize: 425;
@@ -8,6 +10,9 @@ $desktopSize: 1440;
 /* text */
 $mainColor: black;
 
+/* font */
+$mainFontFamily: 'Sahitya', serif;
+
 /* font-size*/
 $titileFontSize: 2em;
 $subTitleFontSize: 1.4em;
@@ -15,3 +20,6 @@ $regularFontSize: 1em;
 
 /* header */
 $headerHeight: 50px;
+
+/* size */
+$desktopContentWidth: 1000px;
