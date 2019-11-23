@@ -10,6 +10,7 @@ import 'ui/Base/Css/Common.scss';
 import Content from 'ui/Content/Content';
 import Header from 'ui/Header/Header';
 import { getUserTestData } from '../tests/data/UserFaker';
+import Footer from 'ui/Footer/Footer';
 
 
 // enable debug
@@ -38,6 +39,7 @@ const App = (props: any) => {
             <Router>
               <Header />
               <Content />
+              <Footer />
             </Router>
           </Provider>
         </AuthContext.Provider>
