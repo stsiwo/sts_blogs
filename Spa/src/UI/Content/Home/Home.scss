@@ -2,4 +2,30 @@
 
 .home-wrapper {
   background-color: rgba(87, 170, 255, 0.4);
+
+  @media only screen and (max-width: $mobileLSize - 1 + "px") {
+    width: 100%;
+  }
+
+  @media only screen and (min-width: $mobileLSize + "px") and (max-width: $tabletSize - 1 + "px") {
+    width: 100%;
+    max-width: 600px;
+  }
+
+  @media only screen and (min-width: $tabletSize + "px") {
+    width: 100%;
+    max-width: 600px;
+  }
+}
+
+.home-title-wrapper {
+  width: 80%; 
+  margin: 0 auto;
+  padding: 100px 0;
+  box-sizing: border-box;
+
+}
+
+.home-slogan {
+  text-align: center;
 }

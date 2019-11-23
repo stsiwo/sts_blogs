@@ -187,8 +187,8 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
             setPaginationStatus={setPaginationStatus} 
           />
           <FetchStatus 
-            currentFetchStatus={currentInitialBlogsFetchStatus} 
-            setFetchStatus={setInitialBlogsFetchStatus} 
+            currentFetchStatus={currentDeleteRequestStatus} 
+            setFetchStatus={setDeleteRequestStatus} 
             fetchingMsg={'deleting...'}
             successMsg={'ok'}
             failureMsg={'failed'}

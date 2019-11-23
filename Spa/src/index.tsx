@@ -20,13 +20,13 @@ var debug = require('debug')('ui:App')
 
 const App = (props: any) => {
   debug('Component start')
-  //const [auth, dispatch] = useUpdateAuthContextReducer({
-  //  authed: true,
-  //  user: getUserTestData(1)[0]
-  //})
+  const [auth, dispatch] = useUpdateAuthContextReducer({
+    authed: true,
+    user: getUserTestData(1)[0]
+  })
 
-  debug('get initial auth and dispatch from context')
-  const [auth, dispatch] = useUpdateAuthContextReducer()
+  //debug('get initial auth and dispatch from context')
+  //const [auth, dispatch] = useUpdateAuthContextReducer()
 
 
 

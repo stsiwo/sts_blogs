@@ -118,13 +118,13 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
 
   if (currentBlogFetchStatus.status === ResponseResultStatusEnum.FETCHING) return (<p>fetching your data</p>)
 
-  if (currentBlogFetchStatus.status === ResponseResultStatusEnum.FAILURE) return (<p>sorry.. your data is not available now</p>)
+  //if (currentBlogFetchStatus.status === ResponseResultStatusEnum.FAILURE) return (<p>sorry.. your data is not available now</p>)
 
   /**
    * IMPORTANT NOTE: input name and user state key must be matched otherwise, validation won't work
    *  - esp cause error of 'useEffect' 2nd argument inconsistency array element 
    **/
-  return (currentBlogFetchStatus.status === ResponseResultStatusEnum.SUCCESS &&
+  return (//currentBlogFetchStatus.status === ResponseResultStatusEnum.SUCCESS &&
     <div className="profile-wrapper">
       <h2 className="profile-title">Profile Management</h2>
       <FetchStatus 
