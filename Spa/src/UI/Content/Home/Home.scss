@@ -1,7 +1,6 @@
 @import '../../Base/Css/GlobalVariables';
 
 .home-wrapper {
-  background-color: rgba(87, 170, 255, 0.4);
 
   @media only screen and (max-width: $mobileLSize - 1 + "px") {
     width: 100%;
@@ -9,13 +8,16 @@
 
   @media only screen and (min-width: $mobileLSize + "px") and (max-width: $tabletSize - 1 + "px") {
     width: 100%;
-    max-width: 600px;
   }
 
   @media only screen and (min-width: $tabletSize + "px") {
     width: 100%;
-    max-width: 600px;
   }
+}
+
+.home-search-bar-wrapper {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .home-title-wrapper {
