@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { toggleNavBarActionCreator } from 'actions/creators';
 import './MenuToggleIcon.scss';
+import { MdMenu } from 'react-icons/md'
 
 
 const MenuToggleIcon: React.FunctionComponent<{}> = (props: {}) => {
@@ -13,8 +14,8 @@ const MenuToggleIcon: React.FunctionComponent<{}> = (props: {}) => {
     }
 
     return (
-      <i className="header-menu-toggle-icon" onClick={handleMenuToggleIconEvent}>
-        <div className="">MenuToggleIcon</div> 
+      <i className="icon-wrapper header-menu-toggle-icon" onClick={handleMenuToggleIconEvent}>
+        <MdMenu className="icon"/>
       </i>
     );
 } 
