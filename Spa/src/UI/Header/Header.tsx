@@ -3,8 +3,7 @@ import { useCssGlobalContext } from 'Contexts/CssGlobalContext/CssGlobalContext'
 import { useResponsiveComponent } from 'Hooks/ResponsiveComponentHook';
 import './Header.scss';
 import MenuToggleIcon from './MenuToggleIcon/MenuToggleIcon';
-import Menu from './MenuWrapper/Menu/Menu';
-import MenuWrapper from './MenuWrapper/MenuWrapper';
+import Menu from './Menu/Menu';
 
 
 const Header: React.FunctionComponent<{}> = (props: {}) => {
@@ -16,7 +15,7 @@ const Header: React.FunctionComponent<{}> = (props: {}) => {
     return (
       <React.Fragment>
         <MenuToggleIcon />
-        <MenuWrapper />
+        <Menu />
       </React.Fragment>
     );
   }

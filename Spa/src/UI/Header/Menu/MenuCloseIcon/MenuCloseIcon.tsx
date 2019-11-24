@@ -4,13 +4,14 @@ import { useCssGlobalContext } from 'Contexts/CssGlobalContext/CssGlobalContext'
 import { useResponsiveComponent } from 'Hooks/ResponsiveComponentHook';
 import { useDispatch } from 'react-redux';
 import { toggleNavBarActionCreator } from 'actions/creators';
+import { MdClose } from 'react-icons/md'
 
 
 const MenuCloseIcon: React.FunctionComponent<{}> = (props: {}) => {
 
   const dispatch = useDispatch()
 
-  const handleCloseNavBarClickEvent: React.EventHandler<React.MouseEvent<HTMLElement>> = (e) => {
+  const handleCloseNavBarClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = (e) => {
     dispatch(toggleNavBarActionCreator(false))
   }
 
@@ -19,9 +20,9 @@ const MenuCloseIcon: React.FunctionComponent<{}> = (props: {}) => {
 
   return (
     currentScreenWidth < globalCss.laptopSize && (
-      <i className="regular-icon header-menu-close-icon" onClick={handleCloseNavBarClickEvent}>
-        &#10006;
-      </i>
+      <div className="icon-wrapper header-menu-close-icon-wrapper" onClick={handleCloseNavBarClickEvent}>
+        <MdClose className="icon header-menu-close-icon" />
+      </div>
     )
   );
 }

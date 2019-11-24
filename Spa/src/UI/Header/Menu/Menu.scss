@@ -1,4 +1,4 @@
-@import '../../../Base/Css/GlobalVariables';
+@import '../../Base/Css/GlobalVariables';
 
 .header-menu-ul {
 
@@ -13,11 +13,11 @@
   text-align: center;
 
   @media only screen and (max-width: $laptopSize - 1 + "px") {
-    top: $headerHeight;
+    top: 0;
     right: 0;
-    width: 100px;
+    width: 100%;
     height: 100%;
-    background-color: pink;
+    background-color: rgba(0, 0, 0, 0.7);
     transition: 0.5s
   }
 
@@ -29,9 +29,26 @@
 
 .header-menu-li {
 
+  cursor: pointer;
+
   @media only screen and (max-width: $laptopSize - 1 + "px") {
     font-size: $titileFontSize;
     margin: 3px 0;
+    clear: right; // prevent be beside in the menu close icon
+    position: relative;
+    padding: 5px;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      box-sizing: border-box;
+      margin: 0 5%;
+      width: 90%; 
+      height: 1px;
+      background-color: white; 
+    }
   }
 
   @media only screen and (min-width: $laptopSize + "px") {
@@ -45,5 +62,5 @@
 .header-menu-li-link {
 
   text-decoration: none;
-  color: $mainColor;
+  color: white;
 }

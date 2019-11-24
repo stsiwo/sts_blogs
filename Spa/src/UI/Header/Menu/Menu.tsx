@@ -10,14 +10,10 @@ import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
 const Menu: React.FunctionComponent<{}> = (props: {}) => {
 
   const isNavBarOpen = useSelector((state: StateType) => state.ui.isNavBarOpen)
-  const handleStopPropagationClickEvent: React.EventHandler<React.MouseEvent<HTMLUListElement>> = (e) => {
-    e.stopPropagation()
-  }
-
   const { auth } = useAuthContext()
 
   return isNavBarOpen && (
-    <ul className="header-menu-ul" onClick={handleStopPropagationClickEvent}>
+    <ul className="header-menu-ul" >
       <MenuCloseIcon />
       <li className="header-menu-li">
         <Link className="header-menu-li-link" to="./" >item1</Link>
