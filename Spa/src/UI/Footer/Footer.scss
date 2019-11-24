@@ -16,12 +16,14 @@
   }
 
   @media only screen and (min-width: $mobileLSize + "px") and (max-width: $tabletSize - 1 + "px") {
-    width: $desktopContentWidth;
+    max-width: $desktopContentWidth;
+    width: 100%;
     margin: 0 auto;
   }
 
   @media only screen and (min-width: $tabletSize + "px") {
-    width: $desktopContentWidth;
+    max-width: $desktopContentWidth;
+    width: 100%;
     margin: 0 auto;
   }
 }

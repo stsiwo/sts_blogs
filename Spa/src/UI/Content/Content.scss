@@ -4,7 +4,8 @@
   position: relative;
   top: $headerHeight; 
   width: 100%;
-  background-color: rgba(255, 172, 227, 0.5);
+  max-width: $desktopContentWidth; 
+  margin: 0 auto;
 }
 
 

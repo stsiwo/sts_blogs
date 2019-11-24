@@ -3,8 +3,6 @@
 
 body {
   font-family: $mainFontFamily;
-  /* might change to each element #DOUBT */
-  max-width: $desktopContentWidth;
 }
 
 .input {
@@ -34,6 +32,39 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.tab {
+  background-color: transparent;
+  border: none;
+  border-style: solid;
+  border-width: 1px 1px 0 1px;
+  border-radius: 10px 10px 0 0;
+  height: 30px;
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+.btn {
+  background-color: transparent;
+  border: solid 2px black;
+  border-radius: 7px;
+  height: 30px;
+  box-sizing: border-box;
+  padding: 10px;
+  margin: 5px;
+  font-family: $mainFontFamily;
+  font-weight: bold;
+  line-height: 0px; 
+  box-shadow: 1px 2px 2px grey;
+  outline: none; 
+}
+
+.btn:active {
+  background-color: black;
+  color: white;
+  outline: none; 
+  box-shadow: none; 
 }
 
 .input-text {

@@ -31,6 +31,11 @@ const Home: React.FunctionComponent<{}> = (props: {}) => {
       <div className="home-title-wrapper">
         <h1 className="home-slogan">Share Your Knowledge and Expand What You Can Do</h1>
       </div>
+      <div className="home-blog-tabs-wrapper">
+        <button className="btn" >Recent</button>
+        <button className="btn" >Popular</button>
+        <button className="btn" >Recommended</button>
+      </div>
       <div className="home-featured-tag-blog-wrapper">
         <h1 className="">featured tag blos list</h1>
       </div>
