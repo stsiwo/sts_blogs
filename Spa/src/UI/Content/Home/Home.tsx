@@ -1,23 +1,37 @@
 import * as React from 'react';
 import './Home.scss';
 import { GoSearch } from 'react-icons/go'
+import { CssPropertyAnimationType } from './types';
+
 
 const Home: React.FunctionComponent<{}> = (props: {}) => {
 
   // search input ref
   const searchInputRef = React.useRef<HTMLInputElement>()
   // search input display status
-  const [currentSearchInputDisplayStatus, setSearchInputDisplayStatus] = React.useState<boolean>(false)
+  const [currentSearchInputAnimationStatus, setSearchInputAnimationStatus] = React.useState<CssPropertyAnimationType>({
+    isNextDisplay: true,
+    width: {
+      value: {
+        [1]: '300px',
+        [0]: '0'
+      }
+    },
+    padding: {
+      value: {
+        [1]: '5px',
+        [0]: '0'
+      }
+    }
+  })
 
   const handleSearchIconClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = (e) => {
-    if (currentSearchInputDisplayStatus) {
-      searchInputRef.current.style.width = '0px'
-      searchInputRef.current.style.padding = '0px'
-    } else {
-      searchInputRef.current.style.width = '300px'
-      searchInputRef.current.style.padding = '5px'
-    }
-    setSearchInputDisplayStatus(!currentSearchInputDisplayStatus)
+    searchInputRef.current.style.width = currentSearchInputAnimationStatus.width.value[+currentSearchInputAnimationStatus.isNextDisplay] 
+    searchInputRef.current.style.padding = currentSearchInputAnimationStatus.padding.value[+currentSearchInputAnimationStatus.isNextDisplay] 
+    setSearchInputAnimationStatus({
+      ...currentSearchInputAnimationStatus,
+      isNextDisplay: !currentSearchInputAnimationStatus.isNextDisplay 
+    })
   }
 
   return (
