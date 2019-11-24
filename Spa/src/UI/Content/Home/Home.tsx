@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './Home.scss';
 import { GoSearch } from 'react-icons/go'
-import { CssPropertyAnimationType } from './types';
+import { CssPropertyAnimationType, searchInputAnimationStatus } from './types';
 
 
 const Home: React.FunctionComponent<{}> = (props: {}) => {
@@ -9,21 +9,7 @@ const Home: React.FunctionComponent<{}> = (props: {}) => {
   // search input ref
   const searchInputRef = React.useRef<HTMLInputElement>()
   // search input display status
-  const [currentSearchInputAnimationStatus, setSearchInputAnimationStatus] = React.useState<CssPropertyAnimationType>({
-    isNextDisplay: true,
-    width: {
-      value: {
-        [1]: '300px',
-        [0]: '0'
-      }
-    },
-    padding: {
-      value: {
-        [1]: '5px',
-        [0]: '0'
-      }
-    }
-  })
+  const [currentSearchInputAnimationStatus, setSearchInputAnimationStatus] = React.useState<CssPropertyAnimationType>(searchInputAnimationStatus)
 
   const handleSearchIconClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = (e) => {
     searchInputRef.current.style.width = currentSearchInputAnimationStatus.width.value[+currentSearchInputAnimationStatus.isNextDisplay] 
