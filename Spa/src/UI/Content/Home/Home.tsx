@@ -1,13 +1,13 @@
 import * as React from 'react';
 import './Home.scss';
 import { GoSearch } from 'react-icons/go'
-import { CssPropertyAnimationType, searchInputAnimationStatus } from './types';
 import { BlogType } from 'domain/blog/BlogType';
 
 //test image
 const whiteAvatar = require('../../../../tests/data/images/white-1920x1280.jpg');
 const redImage = require('../../../../tests/data/images/red-girl-1920x1279.jpg');
 import range = require('lodash/range');
+import { CssPropertyAnimationType, searchInputAnimationStatus } from 'ui/Base/Animation/types';
 
 
 const Home: React.FunctionComponent<{}> = (props: {}) => {
