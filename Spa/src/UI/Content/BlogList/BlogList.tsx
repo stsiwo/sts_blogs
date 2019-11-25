@@ -122,10 +122,11 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
     return tagList.map((tag: TagType) => <div className="blog-list-filter-tags-tag" key={tag.name}>{tag.name}</div>)
   }
 
+  // maybe can reuse frame (structure of element) of Home.tsx
+  // #REFACTOR
   return (
-    <div className="blog-list-wrapper">
-      <section className="blog-list-section-wrapper">
-        <h2 className="blog-list-title">BlogLists</h2>
+    <div className="context-wrapper">
+      <div className="main-wrapper">
         <div className="blog-list-controller-wrapper">
           <FetchStatus currentFetchStatus={currentInitialBlogsFetchStatus} setFetchStatus={setInitialBlogsFetchStatus} />
           {(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING && <button className="blog-list-controller-refresh-btn" onClick={handleRefreshClickEvent}>refresh</button>)}
@@ -140,8 +141,15 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
         <div className="blog-list-pagination-wrapper">
           <Pagination currentPaginationStatus={currentPaginationStatus} setPaginationStatus={setPaginationStatus} />
         </div>
-      </section>
-      <BlogFilterSort currentFilters={currentFilters} currentSort={currentSort} setFilters={setFilters} setSort={setSort} />
+      </div>
+      <div className="aside-wrapper">
+        <div className="be-part-of-it-wrapper">
+          <h2 className="be-part-of-it-title">Be Part of It</h2>
+          <p className="be-part-of-it-desc">Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
+          <button className="btn">Join</button>
+        </div>
+        <BlogFilterSort currentFilters={currentFilters} currentSort={currentSort} setFilters={setFilters} setSort={setSort} />
+      </div>
     </div>
   );
 }

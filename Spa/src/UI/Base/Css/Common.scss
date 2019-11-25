@@ -153,6 +153,42 @@ body {
   font-weight: bold;
 }
 
+.be-part-of-it-wrapper {
+  box-sizing: border-box;
+  padding: 10px;
+  width: 100%;
+}
+
+.context-wrapper {
+
+  @media only screen and (max-width: $tabletSize - 1 + "px") {
+  }
+
+  @media only screen and (min-width: $tabletSize + "px") {
+    display: flex;
+  }
+}
+
+.main-wrapper {
+
+  @media only screen and (max-width: $tabletSize - 1 + "px") {
+  }
+
+  @media only screen and (min-width: $tabletSize + "px") {
+    flex-basis: 75%;
+  }
+}
+
+.aside-wrapper {
+
+  @media only screen and (max-width: $tabletSize - 1 + "px") {
+  }
+
+  @media only screen and (min-width: $tabletSize + "px") {
+    flex-basis: 25%;
+  }
+}
+
 .input-text {
   @include input-text; 
 }

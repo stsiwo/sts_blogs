@@ -67,8 +67,8 @@ const Home: React.FunctionComponent<{}> = (props: {}) => {
       <div className="home-title-wrapper">
         <h1 className="home-slogan">Share Your Knowledge and Expand What You Can Do</h1>
       </div>
-      <div className="home-content-wrapper">
-        <div className="home-main-wrapper">
+      <div className="context-wrapper">
+        <div className="main-wrapper">
           <div className="home-blog-tabs-wrapper">
             <button className="tab" >Recent</button>
             <button className="tab" >Popular</button>
@@ -78,8 +78,8 @@ const Home: React.FunctionComponent<{}> = (props: {}) => {
             {renderBlogs()}
           </div>
         </div>
-        <div className="home-aside-wrapper">
-          <div className="home-be-part-of-it-wrapper">
+        <div className="aside-wrapper">
+          <div className="be-part-of-it-wrapper">
             <h2 className="be-part-of-it-title">Be Part of It</h2>
             <p className="be-part-of-it-desc">Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
             <button className="btn">Join</button>

@@ -1,7 +1,7 @@
 @import '../../../Base/Css/GlobalVariables';
 @import '../../../Base/Css/Mixins';
 
-.aside-wrapper {
+.sort-filter-aside-wrapper {
   text-align: center;
   @media only screen and (max-width: $mobileSSize + "px") {
     width: 100%;
