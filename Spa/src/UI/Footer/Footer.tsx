@@ -1,13 +1,12 @@
 import * as React from 'react';
-import { useResponsiveComponent } from 'Hooks/ResponsiveComponentHook';
 import { useCssGlobalContext } from 'Contexts/CssGlobalContext/CssGlobalContext';
 import './Footer.scss';
+import { useResponsive } from 'Hooks/Responsive/useResponsive';
 
 
 const Footer: React.FunctionComponent<{}> = (props: {}) => {
 
-  const currentScreenWidth = useResponsiveComponent();
-  const cssGlobal = useCssGlobalContext();
+  const currentScreenSize = useResponsive();
 
   return (
     <footer className="footer-wrapper">

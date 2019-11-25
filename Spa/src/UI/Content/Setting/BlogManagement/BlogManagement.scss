@@ -2,10 +2,10 @@
 @import '../../../Base/Css/Mixins';
 
 .blog-management-wrapper {
-  @media only screen and (max-width: $tabletSize - 1 + "px") {
+  @media only screen and (max-width: $tabletSize + "px") {
   }
 
-  @media only screen and (min-width: $tabletSize + "px") {
+  @media only screen and (min-width: $tabletSize + 1 + "px") {
     display: flex;
     justify-content: center;
   }
@@ -13,10 +13,10 @@
 
 .blog-management-main-wrapper {
 
-  @media only screen and (max-width: $tabletSize - 1 + "px") {
+  @media only screen and (max-width: $tabletSize + "px") {
   }
 
-  @media only screen and (min-width: $tabletSize + "px") {
+  @media only screen and (min-width: $tabletSize + 1 + "px") {
     width: 50vw;
     max-width: 600px;
     min-width: 500px;
@@ -60,10 +60,9 @@
   overflow: hidden;
   text-overflow: ellipsis;
 
-  @media only screen and (max-width: $mobileLSize - 1 + "px") {
+  @media only screen and (max-width: $mobileLSize + "px") {
     font-size: $regularFontSize;
   }
-  /**@media only screen and (min-width: $mobileLSize + "px") and (max-width: $tabletSize - 1 + "px") {**/
 }
 
 .blog-management-item-created-date {

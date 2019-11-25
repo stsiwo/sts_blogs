@@ -7,7 +7,7 @@
     width: 100%;
   }
 
-  @media only screen and (max-width: $tabletSize - 1 + "px") {
+  @media only screen and (max-width: $tabletSize + "px") {
     box-sizing: border-box;
     padding: 5px;
     position: fixed;
@@ -18,7 +18,7 @@
     color: white;
   }
 
-  @media only screen and (min-width: $tabletSize + "px") {
+  @media only screen and (min-width: $tabletSize + 1 + "px") {
     width: 200px;
     margin: 10px;
   }
@@ -44,23 +44,23 @@
   margin-left: 5px;
   margin-right: 5px;
 
-  @media only screen and (max-width: $tabletSize - 1 + "px") {
+  @media only screen and (max-width: $tabletSize + "px") {
     border: 1px solid white;
   }
 
-  @media only screen and (min-width: $tabletSize + "px") {
+  @media only screen and (min-width: $tabletSize + 1 + "px") {
     border: 1px solid black;
   }
 }
 
 .aside-new-blog-label:hover {
 
-  @media only screen and (max-width: $tabletSize - 1 + "px") {
+  @media only screen and (max-width: $tabletSize + "px") {
     color: black;
     background-color: white;
   }
 
-  @media only screen and (min-width: $tabletSize + "px") {
+  @media only screen and (min-width: $tabletSize + 1 + "px") {
     color: white;
     background-color: black;
   }
@@ -89,23 +89,23 @@
   padding: 3px;
   border-radius: 4px;
 
-  @media only screen and (max-width: $tabletSize - 1 + "px") {
+  @media only screen and (max-width: $tabletSize + "px") {
     border: 1px solid white;
   }
 
-  @media only screen and (min-width: $tabletSize + "px") {
+  @media only screen and (min-width: $tabletSize + 1 + "px") {
     border: 1px solid black;
   }
 }
 
 .aside-sort-item-wrapper:hover {
-  @media only screen and (max-width: $tabletSize - 1 + "px") {
+  @media only screen and (max-width: $tabletSize + "px") {
     color: black;
     background-color: white;
     border: 1px solid black;
   }
 
-  @media only screen and (min-width: $tabletSize + "px") {
+  @media only screen and (min-width: $tabletSize + 1 + "px") {
     color: white;
     background-color: black;
     border: 1px solid white;
@@ -120,11 +120,11 @@
   margin: 3px;
   padding: 3px 10px;
 
-  @media only screen and (max-width: $tabletSize - 1 + "px") {
+  @media only screen and (max-width: $tabletSize + "px") {
     border: 1px solid white; 
   }
 
-  @media only screen and (min-width: $tabletSize + "px") {
+  @media only screen and (min-width: $tabletSize + 1 + "px") {
     border: 1px solid black; 
   }
 }

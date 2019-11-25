@@ -1,15 +1,14 @@
 import * as React from 'react';
 import { useCssGlobalContext } from 'Contexts/CssGlobalContext/CssGlobalContext';
-import { useResponsiveComponent } from 'Hooks/ResponsiveComponentHook';
 import './Header.scss';
 import MenuToggleIcon from './MenuToggleIcon/MenuToggleIcon';
 import Menu from './Menu/Menu';
+import { useResponsive } from 'Hooks/Responsive/useResponsive';
 
 
 const Header: React.FunctionComponent<{}> = (props: {}) => {
 
-  const currentScreenWidth = useResponsiveComponent();
-  const cssGlobal = useCssGlobalContext();
+  const currentScreenSize = useResponsive()
 
   const renderMenuSidebar = () => {
     return (
@@ -29,8 +28,8 @@ const Header: React.FunctionComponent<{}> = (props: {}) => {
   return (
     <header className="header-wrapper">
       <h1 className="header-title">title</h1>
-      {(currentScreenWidth < cssGlobal.laptopSize && renderMenuSidebar())}
-      {(currentScreenWidth >= cssGlobal.laptopSize && renderHorizontalMenu())}
+      {(currentScreenSize.isLTELaptop && renderMenuSidebar())}
+      {(!currentScreenSize.isLTELaptop && renderHorizontalMenu())}
     </header>
   );
 }

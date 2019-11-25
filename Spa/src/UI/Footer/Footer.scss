@@ -10,16 +10,13 @@
 
 .footer-content-wrapper {
 
-  @media only screen and (max-width: $mobileLSize - 1 + "px") {
-  }
-
-  @media only screen and (min-width: $mobileLSize + "px") and (max-width: $tabletSize - 1 + "px") {
+  @media only screen and (min-width: $mobileLSize + "px") and (max-width: $tabletSize + "px") {
     max-width: $desktopContentWidth;
     width: 100%;
     margin: 0 auto;
   }
 
-  @media only screen and (min-width: $tabletSize + "px") {
+  @media only screen and (min-width: $tabletSize + 1 + "px") {
     max-width: $desktopContentWidth;
     width: 100%;
     margin: 0 auto;

@@ -3,10 +3,10 @@
 
 .setting-wrapper {
 
-  @media only screen and (max-width: $laptopSize - 1 + "px") {
+  @media only screen and (max-width: $laptopSize + "px") {
   }
 
-  @media only screen and (min-width: $laptopSize + "px") {
+  @media only screen and (min-width: $laptopSize + 1 + "px") {
     display: flex;
     flex-wrap: nowrap;
     box-sizing: border-box;
@@ -17,13 +17,13 @@
 
 .setting-list-wrapper {
 
-  @media only screen and (max-width: $laptopSize - 1 + "px") {
+  @media only screen and (max-width: $laptopSize + "px") {
     white-space: nowrap;
     box-sizing: border-box; 
     padding: 10px;
   }
 
-  @media only screen and (min-width: $laptopSize + "px") {
+  @media only screen and (min-width: $laptopSize + 1 + "px") {
   }
 }
 
@@ -36,12 +36,12 @@
   margin-block-start: 0;
   margin-block-end: 0;
 
-  @media only screen and (max-width: $laptopSize - 1 + "px") {
+  @media only screen and (max-width: $laptopSize + "px") {
     overflow-y: hidden;
     text-align: center;
   }
 
-  @media only screen and (min-width: $laptopSize + "px") {
+  @media only screen and (min-width: $laptopSize + 1 + "px") {
     width: 100px;
     box-sizing: border-box;
     padding: 10px;
@@ -52,12 +52,12 @@
 
   @include link-in-text;
 
-  @media only screen and (max-width: $laptopSize - 1 + "px") {
+  @media only screen and (max-width: $laptopSize + "px") {
     display: inline-block;
     padding: 0 10px;
   }
 
-  @media only screen and (min-width: $laptopSize + "px") {
+  @media only screen and (min-width: $laptopSize + 1 + "px") {
     font-size: 1.2em;
     box-sizing: border-box;
     border-bottom: 1px solid grey;
@@ -68,11 +68,11 @@
 .setting-content {
   background-color: darkkhaki;
 
-  @media only screen and (max-width: $laptopSize - 1 + "px") {
+  @media only screen and (max-width: $laptopSize + "px") {
     padding: 0 20px;
   }
 
-  @media only screen and (min-width: $laptopSize + "px") {
+  @media only screen and (min-width: $laptopSize + 1 + "px") {
     box-sizing: border-box;
     padding: 0 10px 10px 10px;
   }

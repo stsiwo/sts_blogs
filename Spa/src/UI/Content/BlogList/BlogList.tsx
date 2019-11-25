@@ -13,7 +13,6 @@ import { usePagination } from 'Components/Pagination/usePagination';
 import RefreshBtn from 'Components/RefreshBtn/RefreshBtn';
 import { useRefreshBtn } from 'Components/RefreshBtn/useRefreshBtn';
 import { useCssGlobalContext } from 'Contexts/CssGlobalContext/CssGlobalContext';
-import { useResponsiveComponent } from 'Hooks/ResponsiveComponentHook';
 import { toggleFilterSortBarActionCreator } from 'actions/creators';
 import { StateType } from 'states/types';
 import './BlogList.scss';
@@ -21,6 +20,7 @@ import { useRequest } from 'Hooks/Request/useRequest';
 import { CancelTokenSource } from 'axios';
 import { getCancelTokenSource } from 'requests/request';
 import RefreshBtnProto from 'Components/RefreshBtn/RefreshBtnProto';
+import { useResponsive } from 'Hooks/Responsive/useResponsive';
 var debug = require('debug')('ui:BlogList')
 
 declare type FetchResultType = {
@@ -43,7 +43,7 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   const isFilterSortBarOpen = useSelector((state: StateType) => state.ui.isFilterSortBarOpen)
 
   /** hooks **/
-  const currentWidth = useResponsiveComponent()
+  const currentScreenSize = useResponsive()
   const cssGlobal = useCssGlobalContext()
   const dispatch = useDispatch()
   const { currentPaginationStatus, setPaginationStatus } = usePagination({})

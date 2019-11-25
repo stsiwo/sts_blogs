@@ -12,7 +12,6 @@ import { useCssGlobalContext } from 'Contexts/CssGlobalContext/CssGlobalContext'
 import { BlogType } from 'domain/blog/BlogType';
 import { TagType } from 'domain/tag/TagType';
 import { useRequest } from 'Hooks/Request/useRequest';
-import { useResponsiveComponent } from 'Hooks/ResponsiveComponentHook';
 import * as React from 'react';
 import "react-datepicker/dist/react-datepicker.css";
 import { useDispatch, useSelector } from 'react-redux';
@@ -40,8 +39,6 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   const { auth } = useAuthContext()
   const userId = auth.user.id
   const dispatch = useDispatch()
-  const currentWidth = useResponsiveComponent()
-  const cssGlobal = useCssGlobalContext()
   const { path, url } = useRouteMatch();
   const { currentPaginationStatus, setPaginationStatus } = usePagination({})
   const { currentFilters, currentSort, setFilters, setSort } = useBlogFilterSort({})

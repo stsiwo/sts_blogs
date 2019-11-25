@@ -8,8 +8,8 @@ const whiteAvatar = require('../../../../tests/data/images/white-1920x1280.jpg')
 const redImage = require('../../../../tests/data/images/red-girl-1920x1279.jpg');
 import range = require('lodash/range');
 import { CssPropertyAnimationType, searchInputAnimationStatus } from 'ui/Base/Animation/types';
-import { useResponsiveComponent } from 'Hooks/ResponsiveComponentHook';
 import { useCssGlobalContext } from 'Contexts/CssGlobalContext/CssGlobalContext';
+import { useResponsive } from 'Hooks/Responsive/useResponsive';
 
 
 const Home: React.FunctionComponent<{}> = (props: {}) => {
@@ -21,8 +21,7 @@ const Home: React.FunctionComponent<{}> = (props: {}) => {
   const [currentRecentBlogs, setRecentBlogs] = React.useState<BlogType>()
   const [currentPopularBlogs, setPopularBlogs] = React.useState<BlogType>()
   const [currentRecommendedBlogs, setRecommendedBlogs] = React.useState<BlogType>()
-  const currentScreenWidth = useResponsiveComponent()
-  const cssGlobal = useCssGlobalContext()
+  const currentScreenSize = useResponsive()
 
   const handleSearchIconClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = (e) => {
     searchInputRef.current.style.width = currentSearchInputAnimationStatus.width.value[+currentSearchInputAnimationStatus.isNextDisplay]
@@ -40,7 +39,7 @@ const Home: React.FunctionComponent<{}> = (props: {}) => {
           <img className="blog-list-item-img" src={redImage} alt="blog item" width="150px" height="100px" />
           <div className="blog-list-item-desc">
             <h2 className="blog-list-item-desc-title">sample title might be a little bit longer</h2>
-        {(currentScreenWidth > cssGlobal.mobileLSize && 
+        {(!currentScreenSize.isMobileL && 
           <h3 className="blog-list-item-desc-subtitle">sample subtitle might be longer than blog title so might need to concatinate it</h3>)}
             <div className="blog-list-item-desc-detail">
               <p className="blog-list-item-desc-detail-main-tag">main tag</p>

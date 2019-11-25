@@ -12,7 +12,7 @@
   position: fixed;
   text-align: center;
 
-  @media only screen and (max-width: $laptopSize - 1 + "px") {
+  @media only screen and (max-width: $laptopSize  + "px") {
     top: 0;
     right: 0;
     width: 0;
@@ -21,7 +21,7 @@
     transition: 0.5s
   }
 
-  @media only screen and (min-width: $laptopSize + "px") {
+  @media only screen and (min-width: $laptopSize + 1 + "px") {
     right: 0;
     margin-right: 5px;
   }
@@ -40,7 +40,7 @@
   cursor: pointer;
   padding: 5px;
 
-  @media only screen and (max-width: $laptopSize - 1 + "px") {
+  @media only screen and (max-width: $laptopSize + "px") {
     font-size: $titileFontSize;
     margin: 3px 0;
     clear: right; // prevent be beside in the menu close icon
@@ -59,7 +59,7 @@
     }
   }
 
-  @media only screen and (min-width: $laptopSize + "px") {
+  @media only screen and (min-width: $laptopSize + 1 + "px") {
     display: inline-block;
     font-size: $subTitleFontSize;
     margin: 0 3px;
@@ -71,11 +71,11 @@
   text-decoration: none;
   font-weight: bold;
 
-  @media only screen and (max-width: $laptopSize - 1 + "px") {
+  @media only screen and (max-width: $laptopSize + "px") {
     color: white;
   }
 
-  @media only screen and (min-width: $laptopSize + "px") {
+  @media only screen and (min-width: $laptopSize + 1 + "px") {
     color: black;
   }
 }

@@ -27,24 +27,24 @@
   border-radius: 3px;
   position: relative;
 
-  @media only screen and (max-width: $mobileLSize - 1 + "px") {
+  @media only screen and (max-width: $mobileLSize + "px") {
     width: 100px;
     height: 100px;
   }
 
-  @media only screen and (min-width: $mobileLSize + "px") and (max-width: $tabletSize - 1 + "px") {
+  @media only screen and (min-width: $mobileLSize + 1 + "px") and (max-width: $tabletSize + "px") {
     float: right;
     width: 150px;
     height: 150px;
   }
 
-  @media only screen and (min-width: $tabletSize + "px") and (max-width: $laptopSize - 1 + "px") {
+  @media only screen and (min-width: $tabletSize + 1 + "px") and (max-width: $laptopSize + "px") {
     float: right;
     width: 200px;
     height: 200px;
   }
 
-  @media only screen and (min-width: $laptopSize + "px") {
+  @media only screen and (min-width: $laptopSize + 1 + "px") {
     float: right;
     width: 250px;
     height: 250px;
@@ -53,22 +53,22 @@
 
 .profile-picture-img {
 
-  @media only screen and (max-width: $mobileLSize - 1 + "px") {
+  @media only screen and (max-width: $mobileLSize + "px") {
   }
 
-  @media only screen and (min-width: $mobileLSize + "px") and (max-width: $tabletSize - 1 + "px") {
+  @media only screen and (min-width: $mobileLSize + 1 + "px") and (max-width: $tabletSize + "px") {
   }
 
-  @media only screen and (min-width: $tabletSize + "px") and (max-width: $laptopSize - 1 + "px") {
+  @media only screen and (min-width: $tabletSize + 1 + "px") and (max-width: $laptopSize + "px") {
   }
 
-  @media only screen and (min-width: $laptopSize + "px") {
+  @media only screen and (min-width: $laptopSize + 1 + "px") {
   }
 }
 
 .profile-picture-input-wrapper {
 
-  @media only screen and (max-width: $mobileLSize - 1 + "px") {
+  @media only screen and (max-width: $mobileLSize + "px") {
 
   }
 
@@ -82,7 +82,7 @@
 
 .profile-picture-input-label {
 
-  @media only screen and (max-width: $mobileLSize - 1 + "px") {
+  @media only screen and (max-width: $mobileLSize + "px") {
     font-size: 1.0em;
   }
 

@@ -161,30 +161,30 @@ body {
 
 .context-wrapper {
 
-  @media only screen and (max-width: $tabletSize - 1 + "px") {
+  @media only screen and (max-width: $tabletSize + "px") {
   }
 
-  @media only screen and (min-width: $tabletSize + "px") {
+  @media only screen and (min-width: $tabletSize  + 1 +  "px") {
     display: flex;
   }
 }
 
 .main-wrapper {
 
-  @media only screen and (max-width: $tabletSize - 1 + "px") {
+  @media only screen and (max-width: $tabletSize + "px") {
   }
 
-  @media only screen and (min-width: $tabletSize + "px") {
+  @media only screen and (min-width: $tabletSize  + 1 +  "px") {
     flex-basis: 75%;
   }
 }
 
 .aside-wrapper {
 
-  @media only screen and (max-width: $tabletSize - 1 + "px") {
+  @media only screen and (max-width: $tabletSize + "px") {
   }
 
-  @media only screen and (min-width: $tabletSize + "px") {
+  @media only screen and (min-width: $tabletSize  + 1 +  "px") {
     flex-basis: 25%;
   }
 }

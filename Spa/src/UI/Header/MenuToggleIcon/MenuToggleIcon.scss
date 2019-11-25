@@ -1,12 +1,9 @@
 @import '../../Base/Css/GlobalVariables';
 
 .header-menu-toggle-icon {
-  @media only screen and (max-width: $laptopSize - 1 + "px") {
+  @media only screen and (max-width: $laptopSize  + "px") {
      position: fixed;
      top: 0;
      right: 0;
-  }
-
-  @media only screen and (min-width: $laptopSize + "px") {
   }
 }

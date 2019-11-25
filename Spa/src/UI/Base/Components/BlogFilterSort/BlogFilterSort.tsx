@@ -8,11 +8,11 @@ import { useRouteMatch } from 'react-router';
 import Tag from 'Components/Tag/Tag';
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
-import { useResponsiveComponent } from 'Hooks/ResponsiveComponentHook';
 import { useCssGlobalContext } from 'Contexts/CssGlobalContext/CssGlobalContext';
 import Icon from '../Icon/Icon';
 import { StateType } from 'states/types';
 import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
+import { useResponsive } from 'Hooks/Responsive/useResponsive';
 var debug = require('debug')('ui:BlogFilterSort')
 
 const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: BlogFilterSortPropType) => {
@@ -26,9 +26,8 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
   /** hooks **/
   const dispatch = useDispatch()
   let { path, url } = useRouteMatch();
-  const currentWidth = useResponsiveComponent()
-  const cssGlobal = useCssGlobalContext()
   const isFilterSortBarOpen = useSelector((state: StateType) => state.ui.isFilterSortBarOpen)
+  const currentScreenSize = useResponsive()
 
   /** EH **/
   const handleTagInputEnterOrTabKeyClickEvent: React.EventHandler<React.KeyboardEvent<HTMLInputElement>> = (e) => {
@@ -164,10 +163,6 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
   const { auth } = useAuthContext()
   const newLink = auth.authed ? url + 'new' : '/login'
 
-  if (currentWidth <= cssGlobal.tabletSize && !isFilterSortBarOpen) {
-    return <Icon role='filter-sort-icon' label="??" css="blog-management-sort-filter-icon" onClick={handleFilterSortNavClickEvent} />
-  }
-
   return (
     <aside role="filter-sort-aside" className="aside-wrapper" ref={filterSortBarWrapperRef}>
       <ul className="aside-ul">
@@ -218,7 +213,7 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
           </div>
         </li>
       </ul>
-      {(currentWidth <= cssGlobal.tabletSize && <div className="aside-filter-sort-close-icon" onClick={handleFilterSortNavCloseClickEvent}>&#10005;</div>)}
+      {(currentScreenSize.isLTETablet && <div className="aside-filter-sort-close-icon" onClick={handleFilterSortNavCloseClickEvent}>&#10005;</div>)}
     </aside>
   );
 }
