@@ -6,15 +6,15 @@ export const useResponsive = (): UseResponsiveStatusOutputType => {
 
   const cssGlobal = useCssGlobalContext()
   const [currentScreenSize, setScreenSize] = React.useState<ScreenSizeStatusType>({
-    currentScreenWidth: 0,
-    currentScreenHeight: 0,
-    isMobileL: false,
-    isTablet: false,
-    isLaptop: false,
-    isDesktop: false,
-    isLTETablet: false,
-    isLTELaptop: false,
-    isLTEDesktop: false,
+    currentScreenWidth: window.innerWidth,
+    currentScreenHeight: window.innerHeight,
+    isMobileL: window.innerWidth <= cssGlobal.mobileLSize,
+    isTablet: cssGlobal.mobileLSize < window.innerWidth && window.innerWidth <= cssGlobal.tabletSize,
+    isLaptop: cssGlobal.tabletSize < window.innerWidth && window.innerWidth <= cssGlobal.laptopSize,
+    isDesktop: cssGlobal.laptopSize < window.innerWidth,
+    isLTETablet: window.innerWidth <= cssGlobal.tabletSize,
+    isLTELaptop: window.innerWidth <= cssGlobal.laptopSize,
+    isLTEDesktop: window.innerWidth <= cssGlobal.desktopSize,
   });
 
   React.useEffect(() => {
@@ -37,10 +37,12 @@ export const useResponsive = (): UseResponsiveStatusOutputType => {
     return () => {
       window.removeEventListener("resize", handleScreenWidth);
     };
-  }, [currentScreenSize]);
+  }, [
+      JSON.stringify(currentScreenSize)
+    ]);
 
 
-  return currentScreenSize 
+  return currentScreenSize
 }
 
 
