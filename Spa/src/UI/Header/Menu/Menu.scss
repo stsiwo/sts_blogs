@@ -15,7 +15,7 @@
   @media only screen and (max-width: $laptopSize - 1 + "px") {
     top: 0;
     right: 0;
-    width: 100%;
+    width: 0;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.7);
     transition: 0.5s
@@ -27,16 +27,24 @@
   }
 }
 
+.header-menu-close-icon-row {
+  text-align: end;
+}
+
+.header-menu-close-icon {
+  color: white;
+}
+
 .header-menu-li {
 
   cursor: pointer;
+  padding: 5px;
 
   @media only screen and (max-width: $laptopSize - 1 + "px") {
     font-size: $titileFontSize;
     margin: 3px 0;
     clear: right; // prevent be beside in the menu close icon
     position: relative;
-    padding: 5px;
 
     &::after {
       content: "";
@@ -60,7 +68,14 @@
 }
 
 .header-menu-li-link {
-
   text-decoration: none;
-  color: white;
+  font-weight: bold;
+
+  @media only screen and (max-width: $laptopSize - 1 + "px") {
+    color: white;
+  }
+
+  @media only screen and (min-width: $laptopSize + "px") {
+    color: black;
+  }
 }
