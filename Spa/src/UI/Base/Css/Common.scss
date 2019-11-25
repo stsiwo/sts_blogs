@@ -83,10 +83,9 @@ body {
 }
 
 .blog-list-item-wrapper {
-  display: flex;
+  position: relative;
   width: 100%;
   height: 100px;
-  flex-wrap: nowrap;
   border-radius: 10px;
   box-shadow: 1px 2px 2px grey;
   margin-bottom: 5px;
@@ -98,11 +97,30 @@ body {
 }
 
 .blog-list-item-desc {
-  margin-left: 5px; 
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  box-sizing: border-box;
+  padding-left: 155px; // must match with width of 'blog-list-item-img' + 5px for extra padding
 }
 
+// need to truncate when screen size is small and title is longer enough to collapse design
+// #REFACTOR
 .blog-list-item-desc-title {
   margin: 0;
+}
+
+.blog-list-item-desc-subtitle {
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.blog-list-item-desc-detail {
+  display: flex;
+  justify-content: space-between;
 }
 
 .blog-list-item-desc-detail-main-tag {
@@ -115,10 +133,24 @@ body {
   margin-right: 5px;
 }
 
-.blog-list-item-desc-author-name {
-  margin-top: 3px;
-  font-weight: bold;
+.blog-list-item-desc-author {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+}
 
+.blog-list-item-desc-author-img {
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  margin: 5px;
+}
+
+.blog-list-item-desc-author-name {
+  margin: 0px 10px 0 10px;
+  font-weight: bold;
 }
 
 .input-text {
