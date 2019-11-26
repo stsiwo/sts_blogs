@@ -136,7 +136,7 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
               )}
             </div>
           </div>
-          {(currentScreenSize.isLTELaptop &&
+          {(currentScreenSize.isLTETablet &&
             <div className="icon-wrapper-row">
               <div className="icon-wrapper" onClick={handleFilterSortNavClickEvent}>
                 <MdSettings className="icon" />
