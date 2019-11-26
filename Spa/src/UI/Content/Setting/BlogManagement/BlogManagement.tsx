@@ -21,6 +21,7 @@ import { BlogListResponseDataType, RequestMethodEnum, ResponseResultStatusEnum }
 import { StateType } from 'states/types';
 import { dateFormatOption } from '../../../../utils';
 import './BlogManagement.scss';
+import BlogListController from 'Components/BlogListController/BlogListController';
 var debug = require('debug')('ui:BlogManagement')
 
 const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
@@ -121,13 +122,13 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
       })
   }
 
-  const handleRefreshClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = async (e) => {
+  const handleRefreshClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = async (e) => {
     debug("start handling refresh click")
     const nextRefreshCount = currentRefreshCount + 1
     setRefreshCount(nextRefreshCount)
   }
 
-  const handleFetchCancelClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
+  const handleFetchCancelClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = (e) => {
     debug('handle cancel click')
     debug(currentFetchCancelSource)
     currentFetchCancelSource.cancel("refresh request is canceled")
@@ -167,49 +168,47 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   return (
-    <div className="blog-management-wrapper">
-      <div className="blog-management-main-wrapper">
-        <h2 className="blog-management-title">Blog Management</h2>
-        <div className="blog-management-controller-wrapper">
-          <FetchStatus 
-            currentFetchStatus={currentInitialBlogsFetchStatus} 
-            setFetchStatus={setInitialBlogsFetchStatus} 
-          />
-          {(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING &&
-            <button className="blog-list-controller-refresh-btn" onClick={handleRefreshClickEvent}>refresh</button>)}
-          {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FETCHING 
-            && <button className="blog-list-controller-cancel-btn" onClick={handleFetchCancelClickEvent}>cancel</button>)}
-          <PageLimitSelect 
-            currentPaginationStatus={currentPaginationStatus} 
-            setPaginationStatus={setPaginationStatus} 
-          />
-          <FetchStatus 
-            currentFetchStatus={currentDeleteRequestStatus} 
-            setFetchStatus={setDeleteRequestStatus} 
-            fetchingMsg={'deleting...'}
-            successMsg={'ok'}
-            failureMsg={'failed'}
-          />
-        </div>
+    <div className="context-wrapper">
+      <div className="main-wrapper">
+        <BlogListController
+          currentFetchStatus={currentInitialBlogsFetchStatus}
+          setFetchStatus={setInitialBlogsFetchStatus}
+          handleRefreshClickEvent={handleRefreshClickEvent}
+          handleCancelClickEvent={handleFetchCancelClickEvent}
+          handleFilterSortNavClickEvent={handleFilterSortNavClickEvent}
+          currentPaginationStatus={currentPaginationStatus}
+          setPaginationStatus={setPaginationStatus}
+        />
+
+        {/** how to deal with another request rather than initial fetch **/}
+        <FetchStatus
+          currentFetchStatus={currentDeleteRequestStatus}
+          setFetchStatus={setDeleteRequestStatus}
+          fetchingMsg={'deleting...'}
+          successMsg={'ok'}
+          failureMsg={'failed'}
+        />
         <div className="blog-management-items-wrapper">
-          {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FETCHING && 
+          {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FETCHING &&
             <p role="fetching">fetching ... </p>)}
-          {(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING && 
+          {(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING &&
             currentBlogs.length === 0 && <p>blogs are empty</p>)}
-          {(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING && 
+          {(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING &&
             currentBlogs.length !== 0 && renderBlogs(currentBlogs))}
         </div>
-        <Pagination 
-          currentPaginationStatus={currentPaginationStatus} 
-          setPaginationStatus={setPaginationStatus} 
+        <Pagination
+          currentPaginationStatus={currentPaginationStatus}
+          setPaginationStatus={setPaginationStatus}
         />
       </div>
-      <BlogFilterSort 
-        currentFilters={currentFilters} 
-        currentSort={currentSort} 
-        setFilters={setFilters} 
-        setSort={setSort} 
-      />
+      <div className="aside-wrapper">
+        <BlogFilterSort
+          currentFilters={currentFilters}
+          currentSort={currentSort}
+          setFilters={setFilters}
+          setSort={setSort}
+        />
+      </div>
     </div>
   );
 }

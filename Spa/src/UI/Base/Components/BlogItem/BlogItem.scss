@@ -1,3 +1,90 @@
 @import '../../../Base/Css/GlobalVariables';
 @import '../../../Base/Css/Mixins';
 
+.blog-list-item-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100px;
+  border-radius: 10px;
+  box-shadow: 1px 2px 2px grey;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+
+.blog-list-item-img {
+  border-radius: 9px 0 0 9px;
+}
+
+.blog-list-item-desc {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  box-sizing: border-box;
+  padding-left: 155px; // must match with width of 'blog-list-item-img' + 5px for extra padding
+}
+
+// need to truncate when screen size is small and title is longer enough to collapse design
+// #REFACTOR
+.blog-list-item-desc-title {
+  margin: 0;
+}
+
+.blog-list-item-desc-subtitle {
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.blog-list-item-desc-detail {
+  display: flex;
+  justify-content: space-between;
+}
+
+.blog-list-item-desc-detail-main-tag {
+  margin: 0;
+  border-radius: 9px 0 0 9px;
+}
+
+.blog-list-item-desc-detail-date {
+  margin: 0;
+  margin-right: 5px;
+}
+
+.blog-list-item-desc-author {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+}
+
+.blog-list-item-desc-author-img {
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  margin: 5px;
+}
+
+.blog-list-item-desc-author-name {
+  margin: 0px 10px 0 10px;
+  font-weight: bold;
+}
+
+.blog-item-controller-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 7px;
+  width: 100%;
+  height: 100%;
+}
+
+.blog-item-controller-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

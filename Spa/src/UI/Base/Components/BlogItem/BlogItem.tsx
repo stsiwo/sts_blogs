@@ -2,6 +2,9 @@ import * as React from 'react';
 import './BlogItem.scss';
 import { BlogItemPropType } from './types';
 import { useResponsive } from 'Hooks/Responsive/useResponsive';
+import { FaEdit } from 'react-icons/fa'
+import { MdDeleteForever } from 'react-icons/md';
+import { Link } from 'react-router-dom';
 const whiteAvatar = require('../../../../../tests/data/images/white-1920x1280.jpg');
 const redImage = require('../../../../../tests/data/images/red-girl-1920x1279.jpg');
 
@@ -23,6 +26,18 @@ const BlogItem: React.FunctionComponent<BlogItemPropType> = (props: BlogItemProp
         <div className="blog-list-item-desc-author">
           <img src={whiteAvatar} alt="avatar image" className="blog-list-item-desc-author-img" />
           <p className="blog-list-item-desc-author-name">author name</p>
+        </div>
+        <div className="blog-item-controller-overlay" >
+          <div className="blog-item-controller-content" >
+            <Link to={`./update/${1}`} className="link" role='blog-edit-link'>
+              <div className="white-icon-wrapper">
+                <FaEdit className="icon" />
+              </div>
+            </Link>
+            <div className="white-icon-wrapper">
+              <MdDeleteForever className="icon" />
+            </div>
+          </div>
         </div>
       </div>
     </div>

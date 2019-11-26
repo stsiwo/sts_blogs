@@ -19,6 +19,8 @@ import { BlogListResponseDataType, RequestMethodEnum, ResponseResultStatusEnum }
 import { StateType } from 'states/types';
 import { getBlogTestData } from '../../../../tests/data/BlogFaker';
 import './BlogList.scss';
+import BlogListController from 'Components/BlogListController/BlogListController';
+import BePartOfIt from 'Components/BePartOfIt/BePartOfIt';
 var debug = require('debug')('ui:BlogList')
 
 declare type FetchResultType = {
@@ -98,7 +100,7 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
     setRefreshCount(nextRefreshCount)
   }
 
-  const handleCancelClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
+  const handleCancelClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = (e) => {
     debug('handle cancel click')
     debug(currentCancelSource)
     currentCancelSource.cancel("refresh request is canceled")
@@ -124,27 +126,15 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   return (
     <div className="context-wrapper">
       <div className="main-wrapper">
-        <div className="blog-list-controller-wrapper">
-          <FetchStatus currentFetchStatus={currentInitialBlogsFetchStatus} setFetchStatus={setInitialBlogsFetchStatus} />
-          <div className="icon-wrapper-row blog-list-controller-refresh">
-            <div className="icon-wrapper" onClick={handleRefreshClickEvent}>
-              {(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING &&
-                <MdRefresh className="icon" />
-              )}
-              {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FETCHING &&
-                <MdCancel className="icon" />
-              )}
-            </div>
-          </div>
-          {(currentScreenSize.isLTETablet &&
-            <div className="icon-wrapper-row">
-              <div className="icon-wrapper" onClick={handleFilterSortNavClickEvent}>
-                <MdSettings className="icon" />
-              </div>
-            </div>
-          )}
-          <PageLimitSelect currentPaginationStatus={currentPaginationStatus} setPaginationStatus={setPaginationStatus} />
-        </div>
+        <BlogListController 
+          currentFetchStatus={currentInitialBlogsFetchStatus} 
+          setFetchStatus={setInitialBlogsFetchStatus}
+          handleRefreshClickEvent={handleRefreshClickEvent} 
+          handleCancelClickEvent={handleCancelClickEvent}
+          handleFilterSortNavClickEvent={handleFilterSortNavClickEvent} 
+          currentPaginationStatus={currentPaginationStatus}
+          setPaginationStatus={setPaginationStatus}
+        />
         <div className="blog-list-items-wrapper">
           {renderBlogs(getBlogTestData())}
         </div>
@@ -153,12 +143,13 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
         </div>
       </div>
       <div className="aside-wrapper">
-        <div className="be-part-of-it-wrapper">
-          <h2 className="be-part-of-it-title">Be Part of It</h2>
-          <p className="be-part-of-it-desc">Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
-          <button className="btn">Join</button>
-        </div>
-        <BlogFilterSort currentFilters={currentFilters} currentSort={currentSort} setFilters={setFilters} setSort={setSort} />
+        <BePartOfIt />
+        <BlogFilterSort 
+          currentFilters={currentFilters} 
+          currentSort={currentSort} 
+          setFilters={setFilters} 
+          setSort={setSort} 
+        />
       </div>
     </div>
   );

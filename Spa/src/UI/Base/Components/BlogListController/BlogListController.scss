@@ -1,0 +1,11 @@
+@import '../../../Base/Css/GlobalVariables';
+@import '../../../Base/Css/Mixins';
+
+.blog-list-controller-wrapper {
+  display: flex;
+}
+
+.blog-list-controller-refresh {
+  margin-left: auto;
+}
+
