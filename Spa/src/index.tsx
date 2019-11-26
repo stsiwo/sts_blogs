@@ -29,8 +29,6 @@ const App = (props: any) => {
   //debug('get initial auth and dispatch from context')
   //const [auth, dispatch] = useUpdateAuthContextReducer()
 
-
-
   return (
     <div>
       <CssGlobalContext.Provider value={CssGlobalContextDefaultState}>

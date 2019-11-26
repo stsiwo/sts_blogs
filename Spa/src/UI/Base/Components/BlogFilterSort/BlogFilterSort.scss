@@ -10,6 +10,7 @@
     //padding: 5px;
     position: fixed;
     bottom: 0;
+    left: 0;
     background-color: rgba(0, 0, 0, 0.8);
     overflow: hidden;
     height: 100%;
@@ -19,8 +20,7 @@
   }
 
   @media only screen and (min-width: $tabletSize + 1 + "px") {
-    width: 200px;
-    margin: 10px;
+    height: 100%;
   }
 }
 
@@ -31,6 +31,10 @@
   padding-inline-start: 0;
   box-sizing: border-box;
   padding: 0 10px;
+
+  @media only screen and (min-width: $tabletSize + 1 + "px") {
+    padding: 0; 
+  }
 }
 
 .filter-sort-aside-content-close-icon {
@@ -39,7 +43,12 @@
 
 .filter-sort-aside-title {
   text-align: left; 
-  font-size: $titileFontSize;
+  @media only screen and (max-width: $tabletSize + "px") {
+    font-size: $titileFontSize;
+  }
+  @media only screen and (min-width: $tabletSize + 1 + "px") {
+    font-size: 1.5em; // must match with 'be part of it' title font size
+  }
 }
 
 .filter-sort-aside-sort-grid {
@@ -65,7 +74,7 @@
   }
 }
 
-.aside-sort-item-wrapper:hover {
+.aside-sort-item-wrapper:hover, .aside-sort-item-selected-wrapper {
   @media only screen and (max-width: $tabletSize + "px") {
     color: black;
     background-color: white;
@@ -79,12 +88,44 @@
   }
 }
 
+.aside-filter-input-wrapper {
+  white-space: nowrap;
+
+  @media only screen and (max-width: $tabletSize + "px") {
+    text-align: center;
+  }
+
+  @media only screen and (min-width: $tabletSize + 1 + "px") {
+    text-align: left;
+  }
+}
+
 .aside-sort-item-input {
   display: none;
 }
 
 .aside-filter-label {
   font-size: $subTitleFontSize;
+}
+
+.aside-filter-input {
+  @media only screen and (max-width: $tabletSize + "px") {
+    color: white;
+    text-align: center;
+  }
+
+  @media only screen and (min-width: $tabletSize + 1 + "px") {
+    color: black;
+    text-align: center;
+  }
+}
+
+.aside-filter-tag-wrapper {
+  border: solid 1px black;
+}
+
+.aside-filter-tag-name {
+  color: black;
 }
 
 .aside-filter-tags-list-selected {

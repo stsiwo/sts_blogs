@@ -10,6 +10,7 @@ import range = require('lodash/range');
 import { CssPropertyAnimationType, searchInputAnimationStatus } from 'ui/Base/Animation/types';
 import { useCssGlobalContext } from 'Contexts/CssGlobalContext/CssGlobalContext';
 import { useResponsive } from 'Hooks/Responsive/useResponsive';
+import BlogItem from 'Components/BlogItem/BlogItem';
 
 
 const Home: React.FunctionComponent<{}> = (props: {}) => {
@@ -33,26 +34,7 @@ const Home: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const renderBlogs: () => React.ReactNode = () => {
-    return range(5).map((num) => {
-      return (
-        <div className="blog-list-item-wrapper">
-          <img className="blog-list-item-img" src={redImage} alt="blog item" width="150px" height="100px" />
-          <div className="blog-list-item-desc">
-            <h2 className="blog-list-item-desc-title">sample title might be a little bit longer</h2>
-        {(!currentScreenSize.isMobileL && 
-          <h3 className="blog-list-item-desc-subtitle">sample subtitle might be longer than blog title so might need to concatinate it</h3>)}
-            <div className="blog-list-item-desc-detail">
-              <p className="blog-list-item-desc-detail-main-tag">main tag</p>
-              <p className="blog-list-item-desc-detail-date">blog date</p>
-            </div>
-            <div className="blog-list-item-desc-author">
-              <img src={whiteAvatar} alt="avatar image" className="blog-list-item-desc-author-img" />
-              <p className="blog-list-item-desc-author-name">author name</p>
-            </div>
-          </div>
-        </div>
-      );
-    })
+    return range(5).map((num) => <BlogItem />)
   }
 
   return (

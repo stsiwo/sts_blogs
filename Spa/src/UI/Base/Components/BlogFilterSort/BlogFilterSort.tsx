@@ -141,22 +141,37 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
     },
   ]
 
+  /** reach max tags limit: 10 tags **/
+  const isTagsLimit: boolean = props.currentFilters.tags.length >= 10
+
 
   /** render **/
   const renderCurrentTags = () => {
+    const wrapperStyle = currentScreenSize.isLTETablet ? "" : "aside-filter-tag-wrapper"
+    const nameStyle = currentScreenSize.isLTETablet ? "" : "aside-filter-tag-name"
+    debug("before render selected tags")
+    debug(currentScreenSize.isLTELaptop) 
+    debug(wrapperStyle) 
     return props.currentFilters.tags.map((tag: TagType) => {
       return (
-        <Tag name={tag.name} withCancelBtn key={tag.name} />
+        <Tag
+          name={tag.name}
+          withCancelBtn
+          key={tag.name}
+          wrapperStyle={wrapperStyle}
+          nameStyle={nameStyle}
+        />
       )
     })
   }
 
   const renderSortList = () => {
     return sortList.map((sort: SortType) => {
+      const isSelected: boolean = sort.value === props.currentSort
       return (
-        <div className="aside-sort-item-wrapper" key={sort.value}>
+        <div className={`aside-sort-item-wrapper ${isSelected ? 'aside-sort-item-selected-wrapper' : ''}`} key={sort.value}>
           <label htmlFor={`sort-${sort.value}`} className="">
-            <input type='radio' id={`sort-${sort.value}`} name='sort' className="aside-sort-item-input" value={sort.value} key={sort.value} checked={sort.value === props.currentSort} onChange={handleSortChangeEvent} />
+            <input type='radio' id={`sort-${sort.value}`} name='sort' className="aside-sort-item-input" value={sort.value} key={sort.value} checked={isSelected} onChange={handleSortChangeEvent} />
             {sort.title}
           </label>
         </div>
@@ -182,11 +197,11 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
           {renderSortList()}
         </div>
         <h1 className="filter-sort-aside-title">Filter by</h1>
-        <div className="aside-filter-keyword-wrapper" >
+        <div className="aside-filter-input-wrapper" >
           <label htmlFor="keyword" className="aside-filter-label">Keyword</label>&nbsp;
-          <input type="text" name="keyword" id="keyword" className="white-input" onChange={handleKeywordChangeEvent} value={props.currentFilters.keyword} placeholder="enter keyword here ..." />
+          <input type="text" name="keyword" id="keyword" className="white-input aside-filter-input" onChange={handleKeywordChangeEvent} value={props.currentFilters.keyword} placeholder="enter keyword here ..." />
         </div>
-        <div className="aside-filter-start-date-wrapper" >
+        <div className="aside-filter-input-wrapper" >
           <label htmlFor="start-date-input" className="aside-filter-label">Start Date</label>&nbsp;
           <DatePicker
             selected={props.currentFilters.creationDate.start}
@@ -195,11 +210,11 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
             startDate={props.currentFilters.creationDate.start}
             maxDate={props.currentFilters.creationDate.end}
             id='start-date-input'
-            className="white-input"
+            className="white-input aside-filter-input"
             placeholderText="click to pick start date here ..."
           />
         </div>
-        <div className="aside-filter-end-date-wrapper" >
+        <div className="aside-filter-input-wrapper" >
           <label htmlFor="end-date-input" className="aside-filter-label">End Date</label>
           <DatePicker
             selected={props.currentFilters.creationDate.end}
@@ -208,16 +223,21 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
             endDate={props.currentFilters.creationDate.end}
             minDate={props.currentFilters.creationDate.start}
             id="end-date-input"
-            className="white-input"
+            className="white-input aside-filter-input"
             placeholderText="click to pick end date here ..."
           />
         </div>
-        <div className="aside-filter-tags-wrapper" >
+        <div className="aside-filter-input-wrapper" >
           <label htmlFor="tag" className="aside-filter-label">Tags</label>
-          <input type="text" id='tag' name='tag' className="white-input" onKeyDown={handleTagInputEnterOrTabKeyClickEvent} ref={tagInputRef} placeholder="enter #tags here ..."/>
-          <div className="aside-filter-tags-list-selected">
-            {renderCurrentTags()}
-          </div>
+          {(!isTagsLimit &&
+            <input type="text" id='tag' name='tag' className="white-input aside-filter-input" onKeyDown={handleTagInputEnterOrTabKeyClickEvent} ref={tagInputRef} placeholder="enter #tags here ..." />
+          )}
+          {(isTagsLimit &&
+            <input type="text" id='tag' name='tag' className="white-input aside-filter-input" onKeyDown={handleTagInputEnterOrTabKeyClickEvent} ref={tagInputRef} placeholder="opps you reached max tags limit ..." readOnly/>
+          )}
+        </div>
+        <div className="aside-filter-tags-list-selected">
+          {renderCurrentTags()}
         </div>
       </div>
     </aside>

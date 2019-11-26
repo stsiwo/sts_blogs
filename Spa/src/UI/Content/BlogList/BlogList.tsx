@@ -1,27 +1,24 @@
-import { BlogType } from 'domain/blog/BlogType';
-import { TagType } from 'domain/tag/TagType';
-import * as React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { RequestMethodEnum, ResponseResultStatusEnum, BlogListResponseDataType } from 'requests/types';
+import { toggleFilterSortBarActionCreator } from 'actions/creators';
+import { CancelTokenSource } from 'axios';
 import FetchStatus from 'Components/ApiFetch/FetchStatus';
 import BlogFilterSort from 'Components/BlogFilterSort/BlogFilterSort';
 import { useBlogFilterSort } from 'Components/BlogFilterSort/useBlogFilterSort';
+import BlogItem from 'Components/BlogItem/BlogItem';
 import PageLimitSelect from 'Components/Pagination/PageLimitSelect';
 import Pagination from 'Components/Pagination/Pagination';
 import { usePagination } from 'Components/Pagination/usePagination';
-import RefreshBtn from 'Components/RefreshBtn/RefreshBtn';
-import { useRefreshBtn } from 'Components/RefreshBtn/useRefreshBtn';
-import { useCssGlobalContext } from 'Contexts/CssGlobalContext/CssGlobalContext';
-import { toggleFilterSortBarActionCreator } from 'actions/creators';
-import { StateType } from 'states/types';
-import './BlogList.scss';
+import { BlogType } from 'domain/blog/BlogType';
+import { TagType } from 'domain/tag/TagType';
 import { useRequest } from 'Hooks/Request/useRequest';
-import { CancelTokenSource } from 'axios';
-import { getCancelTokenSource } from 'requests/request';
-import RefreshBtnProto from 'Components/RefreshBtn/RefreshBtnProto';
 import { useResponsive } from 'Hooks/Responsive/useResponsive';
+import * as React from 'react';
 import { MdCancel, MdRefresh, MdSettings } from 'react-icons/md';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { BlogListResponseDataType, RequestMethodEnum, ResponseResultStatusEnum } from 'requests/types';
+import { StateType } from 'states/types';
+import { getBlogTestData } from '../../../../tests/data/BlogFaker';
+import './BlogList.scss';
 var debug = require('debug')('ui:BlogList')
 
 declare type FetchResultType = {
@@ -45,7 +42,6 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
 
   /** hooks **/
   const currentScreenSize = useResponsive()
-  const cssGlobal = useCssGlobalContext()
   const dispatch = useDispatch()
   const { currentPaginationStatus, setPaginationStatus } = usePagination({})
   const { currentFilters, currentSort, setFilters, setSort } = useBlogFilterSort({})
@@ -109,11 +105,11 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   /** render **/
-  const renderBlogLists = (blogList: BlogType[]): React.ReactNode => {
+  const renderBlogs = (blogList: BlogType[]): React.ReactNode => {
     return blogList.map((blog: BlogType) => {
       return (
         <Link to={`/blog/${blog.id}`} className="blog-list-items-item-wrapper" key={blog.id} role="blog-item">
-          <h3 className="blog-list-items-item-title">{blog.title}</h3>
+          <BlogItem />
         </Link>
       )
     })
@@ -129,24 +125,28 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
     <div className="context-wrapper">
       <div className="main-wrapper">
         <div className="blog-list-controller-wrapper">
-          <div className="icon-wrapper" onClick={handleRefreshClickEvent}>
-
-            {(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING &&
-              <MdRefresh className="icon" />
-            )}
-            {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FETCHING &&
-              <MdCancel className="icon" />
-            )}
+          <FetchStatus currentFetchStatus={currentInitialBlogsFetchStatus} setFetchStatus={setInitialBlogsFetchStatus} />
+          <div className="icon-wrapper-row blog-list-controller-refresh">
+            <div className="icon-wrapper" onClick={handleRefreshClickEvent}>
+              {(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING &&
+                <MdRefresh className="icon" />
+              )}
+              {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FETCHING &&
+                <MdCancel className="icon" />
+              )}
+            </div>
           </div>
-          <div className="icon-wrapper" onClick={handleFilterSortNavClickEvent}>
-            <MdSettings className="icon" />
-          </div>
+          {(currentScreenSize.isLTELaptop &&
+            <div className="icon-wrapper-row">
+              <div className="icon-wrapper" onClick={handleFilterSortNavClickEvent}>
+                <MdSettings className="icon" />
+              </div>
+            </div>
+          )}
+          <PageLimitSelect currentPaginationStatus={currentPaginationStatus} setPaginationStatus={setPaginationStatus} />
         </div>
-        <PageLimitSelect currentPaginationStatus={currentPaginationStatus} setPaginationStatus={setPaginationStatus} />
         <div className="blog-list-items-wrapper">
-          {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FETCHING && <p role="fetching">fetching ... </p>)}
-          {(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING && currentBlogs.length === 0 && <p>blogs are empty</p>)}
-          {(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING && currentBlogs.length !== 0 && renderBlogLists(currentBlogs))}
+          {renderBlogs(getBlogTestData())}
         </div>
         <div className="blog-list-pagination-wrapper">
           <Pagination currentPaginationStatus={currentPaginationStatus} setPaginationStatus={setPaginationStatus} />
