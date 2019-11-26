@@ -57,3 +57,27 @@
   border-radius: 0px 5px 0px 5px;
 
 }
+
+@mixin base-input {
+  background-color: transparent; 
+  border: none;
+  box-sizing: border-box;
+  border-bottom: solid 1px grey;
+  margin: 9px;
+  padding: 5px;
+  font-family: $mainFontFamily;
+}
+
+@mixin base-icon-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+@mixin base-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

@@ -1,21 +1,21 @@
 @import '../../../Base/Css/GlobalVariables';
 @import '../../../Base/Css/Mixins';
 
-.sort-filter-aside-wrapper {
+.filter-sort-aside-wrapper {
+  z-index: 8000;
   text-align: center;
-  @media only screen and (max-width: $mobileSSize + "px") {
-    width: 100%;
-  }
 
   @media only screen and (max-width: $tabletSize + "px") {
     box-sizing: border-box;
-    padding: 5px;
+    //padding: 5px;
     position: fixed;
-    top: $headerHeight;
-    right: 0;
+    bottom: 0;
     background-color: rgba(0, 0, 0, 0.8);
+    overflow: hidden;
     height: 100%;
+    width: 100%;
     color: white;
+    transition: 0.5s height;
   }
 
   @media only screen and (min-width: $tabletSize + 1 + "px") {
@@ -24,61 +24,28 @@
   }
 }
 
-.aside-ul {
+.filter-sort-aside-content {
   list-style-type: none;
   margin-block-start: 0; 
   margin-block-end: 0;
   padding-inline-start: 0;
-}
-
-.aside-new-blog-link {
-  text-decoration: none;
-  color: inherit;
-}
-
-.aside-new-blog-label {
-  border-radius: 3px;
-  font-weight: normal;
   box-sizing: border-box;
-  padding: 5px 0;
-  margin-left: 5px;
-  margin-right: 5px;
-
-  @media only screen and (max-width: $tabletSize + "px") {
-    border: 1px solid white;
-  }
-
-  @media only screen and (min-width: $tabletSize + 1 + "px") {
-    border: 1px solid black;
-  }
+  padding: 0 10px;
 }
 
-.aside-new-blog-label:hover {
-
-  @media only screen and (max-width: $tabletSize + "px") {
-    color: black;
-    background-color: white;
-  }
-
-  @media only screen and (min-width: $tabletSize + 1 + "px") {
-    color: white;
-    background-color: black;
-  }
+.filter-sort-aside-content-close-icon {
+  color: white;
 }
 
-
-.aside-filter-tags-input {
-  box-sizing: border-box;
-  border: none;
-  margin: 2px;
-  padding: 5px;
-  width: 80%;
-  border-radius: 5px;
+.filter-sort-aside-title {
+  text-align: left; 
+  font-size: $titileFontSize;
 }
 
-.aside-sort-items-wrapper {
+.filter-sort-aside-sort-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr; 
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
 }
 
 .aside-sort-item-wrapper {
@@ -112,19 +79,14 @@
   }
 }
 
-.aside-filter-sort-close-icon {
-  font-size: 1.5em;
-  border-radius: 4px;
-  display: inline-block;
-  box-sizing: border-box;
-  margin: 3px;
-  padding: 3px 10px;
-
-  @media only screen and (max-width: $tabletSize + "px") {
-    border: 1px solid white; 
-  }
-
-  @media only screen and (min-width: $tabletSize + 1 + "px") {
-    border: 1px solid black; 
-  }
+.aside-sort-item-input {
+  display: none;
 }
+
+.aside-filter-label {
+  font-size: $subTitleFontSize;
+}
+
+.aside-filter-tags-list-selected {
+}
+

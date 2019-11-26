@@ -21,6 +21,7 @@ import { CancelTokenSource } from 'axios';
 import { getCancelTokenSource } from 'requests/request';
 import RefreshBtnProto from 'Components/RefreshBtn/RefreshBtnProto';
 import { useResponsive } from 'Hooks/Responsive/useResponsive';
+import { MdCancel, MdRefresh, MdSettings } from 'react-icons/md';
 var debug = require('debug')('ui:BlogList')
 
 declare type FetchResultType = {
@@ -95,7 +96,7 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
     dispatch(toggleFilterSortBarActionCreator(false))
   }
 
-  const handleRefreshClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = async (e) => {
+  const handleRefreshClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = async (e) => {
     debug("start handling refresh click")
     const nextRefreshCount = currentRefreshCount + 1
     setRefreshCount(nextRefreshCount)
@@ -128,11 +129,20 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
     <div className="context-wrapper">
       <div className="main-wrapper">
         <div className="blog-list-controller-wrapper">
-          <FetchStatus currentFetchStatus={currentInitialBlogsFetchStatus} setFetchStatus={setInitialBlogsFetchStatus} />
-          {(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING && <button className="blog-list-controller-refresh-btn" onClick={handleRefreshClickEvent}>refresh</button>)}
-          {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FETCHING && <button className="blog-list-controller-cancel-btn" onClick={handleCancelClickEvent}>cancel</button>)}
-          <PageLimitSelect currentPaginationStatus={currentPaginationStatus} setPaginationStatus={setPaginationStatus} />
+          <div className="icon-wrapper" onClick={handleRefreshClickEvent}>
+
+            {(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING &&
+              <MdRefresh className="icon" />
+            )}
+            {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FETCHING &&
+              <MdCancel className="icon" />
+            )}
+          </div>
+          <div className="icon-wrapper" onClick={handleFilterSortNavClickEvent}>
+            <MdSettings className="icon" />
+          </div>
         </div>
+        <PageLimitSelect currentPaginationStatus={currentPaginationStatus} setPaginationStatus={setPaginationStatus} />
         <div className="blog-list-items-wrapper">
           {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FETCHING && <p role="fetching">fetching ... </p>)}
           {(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING && currentBlogs.length === 0 && <p>blogs are empty</p>)}

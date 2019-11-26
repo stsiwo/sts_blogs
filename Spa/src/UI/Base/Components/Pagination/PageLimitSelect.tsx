@@ -1,6 +1,7 @@
 import * as React from 'react';
 import './PageLimitSelect.scss';
 import { PageLimitSelectPropType } from './types';
+import { MdViewModule } from 'react-icons/md';
 var debug = require('debug')('ui:PageLimitSelect')
 
 
@@ -16,12 +17,17 @@ const PageLimitSelect: React.FunctionComponent<PageLimitSelectPropType> = (props
   }
 
   return (
-    <select className="page-limit-select" name='page-limit-select' role="page-limit-select" value={props.currentPaginationStatus.limit} onChange={handlePageLimitChangeEvent}>
-      <option className="page-limit-option" value="20">20</option>
-      <option className="page-limit-option" value="30">30</option>
-      <option className="page-limit-option" value="40">40</option>
-      <option className="page-limit-option" value="50">50</option>
-    </select>
+    <div className="page-limit-select-wrapper" >
+      <div className="icon-wrapper">
+        <MdViewModule className="icon" />
+      </div>
+      <select className="page-limit-select" name='page-limit-select' role="page-limit-select" value={props.currentPaginationStatus.limit} onChange={handlePageLimitChangeEvent}>
+        <option className="page-limit-option" value="20">20</option>
+        <option className="page-limit-option" value="30">30</option>
+        <option className="page-limit-option" value="40">40</option>
+        <option className="page-limit-option" value="50">50</option>
+      </select>
+    </div>
   );
 }
 

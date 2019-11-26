@@ -1,18 +1,19 @@
-import * as React from 'react';
-import './BlogFilterSort.scss';
-import { BlogFilterSortPropType, FilterType, TagType, SortType } from './types';
-import { useDispatch, useSelector } from 'react-redux';
 import { toggleFilterSortBarActionCreator } from 'actions/creators';
-import { Link } from 'react-router-dom';
-import { useRouteMatch } from 'react-router';
 import Tag from 'Components/Tag/Tag';
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import { useCssGlobalContext } from 'Contexts/CssGlobalContext/CssGlobalContext';
-import Icon from '../Icon/Icon';
+import * as React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useRouteMatch } from 'react-router';
+import { Link } from 'react-router-dom';
 import { StateType } from 'states/types';
 import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
 import { useResponsive } from 'Hooks/Responsive/useResponsive';
+import { SortType, BlogFilterSortPropType } from './types';
+import { TagType } from 'domain/tag/TagType';
+import './BlogFilterSort.scss'
+import { MdClose } from 'react-icons/md';
 var debug = require('debug')('ui:BlogFilterSort')
 
 const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: BlogFilterSortPropType) => {
@@ -20,7 +21,6 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
   /** refs **/
   const tagInputRef = React.useRef(null)
   const filterSortBarWrapperRef = React.useRef(null)
-
   /** state **/
 
   /** hooks **/
@@ -86,7 +86,6 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
     dispatch(toggleFilterSortBarActionCreator(false))
   }
 
-
   /** lifecycle **/
   React.useEffect(() => {
     /** must enable componentdidupdate also, otherwise not close when click outside **/
@@ -94,7 +93,6 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
 
       debug('add event listener during this component is mounted')
       if (filterSortBarWrapperRef.current.contains(e.target)) {
-
         return false;
       }
       dispatch(toggleFilterSortBarActionCreator(false))
@@ -109,6 +107,12 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
     }
   })
 
+  React.useEffect(() => {
+    if (currentScreenSize.isLTELaptop && filterSortBarWrapperRef.current) {
+      filterSortBarWrapperRef.current.style.height = isFilterSortBarOpen ? currentScreenSize.currentScreenHeight + 'px' : '0px'
+    }
+  })
+
   /** anything else **/
   const sortList: SortType[] = [
     {
@@ -116,23 +120,23 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
       value: 0
     },
     {
-      title: 'Date Desc',
-      value: 1
-    },
-    {
       title: 'Title Asc',
       value: 2
+    },
+    {
+      title: 'Clap Asc',
+      value: 4
+    },
+    {
+      title: 'Date Desc',
+      value: 1
     },
     {
       title: 'Title Desc',
       value: 3
     },
     {
-      title: 'Review Asc',
-      value: 4
-    },
-    {
-      title: 'Review Desc',
+      title: 'Clap Desc',
       value: 5
     },
   ]
@@ -151,8 +155,8 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
     return sortList.map((sort: SortType) => {
       return (
         <div className="aside-sort-item-wrapper" key={sort.value}>
-          <label htmlFor={`sort-${sort.value}`} className="aside-filter-tags-label">
-            <input type='radio' id={`sort-${sort.value}`} name='sort' className="" value={sort.value} key={sort.value} checked={sort.value === props.currentSort} onChange={handleSortChangeEvent} />
+          <label htmlFor={`sort-${sort.value}`} className="">
+            <input type='radio' id={`sort-${sort.value}`} name='sort' className="aside-sort-item-input" value={sort.value} key={sort.value} checked={sort.value === props.currentSort} onChange={handleSortChangeEvent} />
             {sort.title}
           </label>
         </div>
@@ -164,56 +168,58 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
   const newLink = auth.authed ? url + 'new' : '/login'
 
   return (
-    <aside role="filter-sort-aside" className="aside-wrapper" ref={filterSortBarWrapperRef}>
-      <ul className="aside-ul">
-        <li className="aside-li">
-          <Link to={newLink} className="aside-new-blog-link" role='new-blog-link'>
-            <h3 className="aside-new-blog-label">Create New Blog</h3>
-          </Link>
-          {(!auth.authed && <p>Member Only</p>)}
-        </li>
-        <li className="aside-li">
-          <h3 className="aside-filter-title">Filter Blogs</h3>
-          <div className="aside-filter-tags-wrapper" >
-            <label htmlFor="tag" className="aside-filter-tags-label">Tags</label>
-            <input type="text" id='tag' name='tag' className="aside-filter-tags-input" onKeyDown={handleTagInputEnterOrTabKeyClickEvent} ref={tagInputRef} />
+    <aside role="filter-sort-aside" className="filter-sort-aside-wrapper" ref={filterSortBarWrapperRef}>
+      {(currentScreenSize.isLTETablet &&
+        <div className="close-icon-row" onClick={handleFilterSortNavCloseClickEvent}>
+          <div className="icon-wrapper" >
+            <MdClose className="icon filter-sort-aside-content-close-icon" />
+          </div>
+        </div>
+      )}
+      <div className="filter-sort-aside-content">
+        <h1 className="filter-sort-aside-title">Sort by</h1>
+        <div className="filter-sort-aside-sort-grid">
+          {renderSortList()}
+        </div>
+        <h1 className="filter-sort-aside-title">Filter by</h1>
+        <div className="aside-filter-keyword-wrapper" >
+          <label htmlFor="keyword" className="aside-filter-label">Keyword</label>&nbsp;
+          <input type="text" name="keyword" id="keyword" className="white-input" onChange={handleKeywordChangeEvent} value={props.currentFilters.keyword} placeholder="enter keyword here ..." />
+        </div>
+        <div className="aside-filter-start-date-wrapper" >
+          <label htmlFor="start-date-input" className="aside-filter-label">Start Date</label>&nbsp;
+          <DatePicker
+            selected={props.currentFilters.creationDate.start}
+            onChange={handleFilterCreationDateStartChangeEvent}
+            selectsStart
+            startDate={props.currentFilters.creationDate.start}
+            maxDate={props.currentFilters.creationDate.end}
+            id='start-date-input'
+            className="white-input"
+            placeholderText="click to pick start date here ..."
+          />
+        </div>
+        <div className="aside-filter-end-date-wrapper" >
+          <label htmlFor="end-date-input" className="aside-filter-label">End Date</label>
+          <DatePicker
+            selected={props.currentFilters.creationDate.end}
+            onChange={handleFilterCreationDateEndChangeEvent}
+            selectsEnd
+            endDate={props.currentFilters.creationDate.end}
+            minDate={props.currentFilters.creationDate.start}
+            id="end-date-input"
+            className="white-input"
+            placeholderText="click to pick end date here ..."
+          />
+        </div>
+        <div className="aside-filter-tags-wrapper" >
+          <label htmlFor="tag" className="aside-filter-label">Tags</label>
+          <input type="text" id='tag' name='tag' className="white-input" onKeyDown={handleTagInputEnterOrTabKeyClickEvent} ref={tagInputRef} placeholder="enter #tags here ..."/>
+          <div className="aside-filter-tags-list-selected">
             {renderCurrentTags()}
           </div>
-          <div className="aside-filter-keyword-wrapper" >
-            <label htmlFor="keyword" className="aside-filter-keyword-label">Keyword</label>
-            <input type="text" name="keyword" id="keyword" className="aside-filter-keyword-input" onChange={handleKeywordChangeEvent} value={props.currentFilters.keyword} />
-          </div>
-          <div className="aside-filter-date-wrapper" >
-            <h4 className="aside-filter-date-title">Date</h4>
-            <label htmlFor="start-date-input" className="aside-filter-start-date-label">Start Date</label>
-            <DatePicker
-              selected={props.currentFilters.creationDate.start}
-              onChange={handleFilterCreationDateStartChangeEvent}
-              selectsStart
-              startDate={props.currentFilters.creationDate.start}
-              maxDate={props.currentFilters.creationDate.end}
-              id='start-date-input'
-
-            />
-            <label htmlFor="end-date-input" className="aside-filter-end-date-label">End Date</label>
-            <DatePicker
-              selected={props.currentFilters.creationDate.end}
-              onChange={handleFilterCreationDateEndChangeEvent}
-              selectsEnd
-              endDate={props.currentFilters.creationDate.end}
-              minDate={props.currentFilters.creationDate.start}
-              id="end-date-input"
-            />
-          </div>
-        </li>
-        <li className="aside-li">
-          <h3 className="aside-sort-title">Sort Blogs</h3>
-          <div className="aside-sort-items-wrapper" >
-            {renderSortList()}
-          </div>
-        </li>
-      </ul>
-      {(currentScreenSize.isLTETablet && <div className="aside-filter-sort-close-icon" onClick={handleFilterSortNavCloseClickEvent}>&#10005;</div>)}
+        </div>
+      </div>
     </aside>
   );
 }
