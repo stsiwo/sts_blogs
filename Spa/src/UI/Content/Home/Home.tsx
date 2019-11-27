@@ -11,6 +11,7 @@ import { CssPropertyAnimationType, searchInputAnimationStatus } from 'ui/Base/An
 import { useCssGlobalContext } from 'Contexts/CssGlobalContext/CssGlobalContext';
 import { useResponsive } from 'Hooks/Responsive/useResponsive';
 import BlogItem from 'Components/BlogItem/BlogItem';
+import { getBlogTestData } from '../../../../tests/data/BlogFaker';
 
 
 const Home: React.FunctionComponent<{}> = (props: {}) => {
@@ -34,7 +35,7 @@ const Home: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const renderBlogs: () => React.ReactNode = () => {
-    return range(5).map((num) => <BlogItem />)
+    return getBlogTestData(5).map((blog: BlogType) => <BlogItem blog={blog}/>)
   }
 
   return (

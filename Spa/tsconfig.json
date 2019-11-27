@@ -22,7 +22,8 @@
           "configs/*": ["src/configs/*"],
           "actions/*": ["src/actions/*"],
           "states/*": ["src/states/*"],
-          "reducers/*": ["src/reducers/*"]
+          "reducers/*": ["src/reducers/*"],
+          "src/*": ["src/*"]
         }
     }
 }

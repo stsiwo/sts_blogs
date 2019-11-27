@@ -25,7 +25,7 @@ const Setting: React.FunctionComponent<{}> = (props: {}) => {
     },
     {
       name: 'blogs',
-      label: 'Blogs'
+      label: 'Blog Management'
     },
   ]
 
@@ -33,7 +33,7 @@ const Setting: React.FunctionComponent<{}> = (props: {}) => {
     return settingNavList.map((settingItem: SettingNavItemType) => {
       return (
         <li className="setting-list-li" key={settingItem.name}>
-          <Link to={`${url}/${settingItem.name}`}>
+          <Link to={`${url}/${settingItem.name}`} className="link">
             {settingItem.label}
           </Link>
         </li>

@@ -9,7 +9,7 @@ export declare type BlogType = {
   mainImageUrl?: string,
   content: string,
   createdDate: Date
-  //author: AuthorType,
+  author?: AuthorType,
   tags?: TagType[],
 }
 
@@ -21,5 +21,6 @@ export const initialBlogState: BlogType = {
   mainImageUrl: '',
   content: '',
   tags: [],
+  author: null,
   createdDate: new Date()
 }

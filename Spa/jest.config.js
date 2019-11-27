@@ -18,6 +18,7 @@ module.exports = {
       "^states(.*)$": "<rootDir>/src/states$1", 
       "^reducers(.*)$": "<rootDir>/src/reducers$1", 
       "^configs(.*)$": "<rootDir>/src/configs$1", 
+      "^src(.*)$": "<rootDir>/src$1", 
     },
   "transform": {
     "^.+\\.tsx?$": "ts-jest"

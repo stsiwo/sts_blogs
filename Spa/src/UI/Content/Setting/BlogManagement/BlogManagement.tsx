@@ -22,6 +22,8 @@ import { StateType } from 'states/types';
 import { dateFormatOption } from '../../../../utils';
 import './BlogManagement.scss';
 import BlogListController from 'Components/BlogListController/BlogListController';
+import BlogItem from 'Components/BlogItem/BlogItem';
+import { getBlogTestData } from '../../../../../tests/data/BlogFaker';
 var debug = require('debug')('ui:BlogManagement')
 
 const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
@@ -96,14 +98,6 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
     ])
 
   /** EH **/
-  const handleBlogControllerOpenClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
-    controllerRefs.get(e.currentTarget.id).current.style.display = 'flex';
-  }
-
-  const handleBlogControllerCloseClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
-    controllerRefs.get(e.currentTarget.id).current.style.display = 'none';
-  }
-
   const handleFilterSortNavClickEvent: React.EventHandler<React.MouseEvent<HTMLElement>> = (e) => {
     dispatch(toggleFilterSortBarActionCreator(true))
   }
@@ -112,7 +106,7 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
     dispatch(toggleFilterSortBarActionCreator(false))
   }
 
-  const handleDeleteBlogClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
+  const handleDeleteBlogClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = (e) => {
     sendDeleteRequest({
       path: '/users/' + userId + '/blogs',
       method: RequestMethodEnum.DELETE,
@@ -143,26 +137,8 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   const renderBlogs = (blogs: BlogType[]): React.ReactNode => {
 
     return blogs.map((blog: BlogType) => {
-      const divRef: React.MutableRefObject<HTMLDivElement> = {
-        current: null
-      }
-      controllerRefs.set(blog.id, divRef)
       return (
-        <div className="blog-management-item-wrapper" key={blog.id} role='blog-item' >
-          <img src="" alt="blog item" className="blog-management-item-img" />
-          <h3 className="blog-management-item-title">{blog.title}</h3>
-          <div className="blog-management-item-created-date">{blog.createdDate.toLocaleDateString("en-US", dateFormatOption)}</div>
-          <div className="blog-management-btn-wrapper">
-            <button className="blog-management-item-controller" onClick={handleBlogControllerOpenClickEvent} id={blog.id}>&hellip;</button>
-          </div>
-          <div className="blog-management-item-controller-wrapper" ref={divRef} id={blog.id}>
-            <Link to={`./update/${blog.id}`} className="blog-management-blog-edit-link" role='blog-edit-link'>
-              <button className="blog-management-item-edit-btn">Edit</button>
-            </Link>
-            <button role='blog-delete-btn' className="blog-management-item-delete-btn" onClick={handleDeleteBlogClickEvent}>Delete</button>
-            <button className="blog-management-item-close-btn" onClick={handleBlogControllerCloseClickEvent} id={blog.id} >&#10005;</button>
-          </div>
-        </div>
+        <BlogItem blog={blog} handleDeleteBlogClickEvent={handleDeleteBlogClickEvent}  />
       )
     })
   }
@@ -189,12 +165,13 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
           failureMsg={'failed'}
         />
         <div className="blog-management-items-wrapper">
-          {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FETCHING &&
-            <p role="fetching">fetching ... </p>)}
-          {(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING &&
-            currentBlogs.length === 0 && <p>blogs are empty</p>)}
-          {(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING &&
-            currentBlogs.length !== 0 && renderBlogs(currentBlogs))}
+          {/**(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FETCHING &&
+            <p role="fetching">fetching ... </p>)**/}
+          {/**(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING &&
+            currentBlogs.length === 0 && <p>blogs are empty</p>)**/}
+          {/**(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING &&
+            currentBlogs.length !== 0 && renderBlogs(currentBlogs))**/}
+          {renderBlogs(getBlogTestData())}
         </div>
         <Pagination
           currentPaginationStatus={currentPaginationStatus}

@@ -33,6 +33,7 @@ module.exports = {
       actions: path.resolve(__dirname, 'src/actions/'),
       states: path.resolve(__dirname, 'src/states/'),
       reducers: path.resolve(__dirname, 'src/reducers/'),
+      src: path.resolve(__dirname, 'src/'),
     }
   },
   // webpack does not tell whether you installed listed loader until it is used. so be careful

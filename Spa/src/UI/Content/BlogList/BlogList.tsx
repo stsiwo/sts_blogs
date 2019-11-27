@@ -111,7 +111,7 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
     return blogList.map((blog: BlogType) => {
       return (
         <Link to={`/blog/${blog.id}`} className="blog-list-items-item-wrapper" key={blog.id} role="blog-item">
-          <BlogItem />
+          <BlogItem blog={blog}/>
         </Link>
       )
     })

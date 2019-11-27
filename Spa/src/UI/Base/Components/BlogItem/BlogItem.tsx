@@ -1,26 +1,17 @@
 import * as React from 'react';
 import './BlogItem.scss';
-import { BlogItemPropType } from './types';
+import { BlogItemPropType, BlogItemOverlayPropsType, AnimationStatusType } from './types';
 import { useResponsive } from 'Hooks/Responsive/useResponsive';
 import { FaEdit } from 'react-icons/fa'
 import { MdDeleteForever } from 'react-icons/md';
 import { Link } from 'react-router-dom';
+import { TagType } from 'domain/tag/TagType';
+import { dateFormatOption } from 'src/utils';
 const whiteAvatar = require('../../../../../tests/data/images/white-1920x1280.jpg');
 const redImage = require('../../../../../tests/data/images/red-girl-1920x1279.jpg');
 
 
-declare type AnimationStatusType = {
-  didMounted: boolean
-  componentShow: boolean
-  isMouseEnter: boolean
-}
-
-declare type TestPorpsType = {
-  setOverlayState: React.Dispatch<React.SetStateAction<AnimationStatusType>>
-  currentOverlayState: AnimationStatusType
-}
-
-const BlogItemOverlay: React.FunctionComponent<TestPorpsType> = (props: TestPorpsType) => {
+const BlogItemOverlay: React.FunctionComponent<BlogItemOverlayPropsType> = (props: BlogItemOverlayPropsType) => {
 
   const onTransaction: React.EventHandler<React.TransitionEvent<HTMLDivElement>> = (e) => {
     // when mouse leaves
@@ -56,7 +47,7 @@ const BlogItemOverlay: React.FunctionComponent<TestPorpsType> = (props: TestPorp
       }}
     >
       <div className="blog-item-controller-content" >
-        <Link to={`./update/${1}`} className="link" role='blog-edit-link'>
+        <Link to={`./update/${props.blogId}`} className="link" role='blog-edit-link'>
           <div className="white-icon-wrapper">
             <FaEdit className="icon" />
           </div>
@@ -104,25 +95,31 @@ const BlogItem: React.FunctionComponent<BlogItemPropType> = (props: BlogItemProp
     })
   }
 
+  const renderTags = (tagList: TagType[]): React.ReactNode => {
+    return tagList.map((tag: TagType) => <div className="blog-list-filter-tags-tag" key={tag.name}>{tag.name}</div>)
+  }
+
   return (
-    <div className="blog-list-item-wrapper" onMouseEnter={handleBlogItemMouseEnterEvent} onMouseLeave={handleBlogItemMouseLeaveEvent}>
-      <img className="blog-list-item-img" src={redImage} alt="blog item" width="150px" height="100px" />
+    <div className="blog-list-item-wrapper" onMouseEnter={handleBlogItemMouseEnterEvent} onMouseLeave={handleBlogItemMouseLeaveEvent} role="blog-item">
+      <img className="blog-list-item-img" src={props.blog.mainImageUrl} alt="blog item" width="150px" height="100px" />
       <div className="blog-list-item-desc">
-        <h2 className="blog-list-item-desc-title">sample title might be a little bit longer</h2>
+        <h2 className="blog-list-item-desc-title">{props.blog.title}</h2>
         {(!currentScreenSize.isMobileL &&
-          <h3 className="blog-list-item-desc-subtitle">sample subtitle might be longer than blog title so might need to concatinate it</h3>)}
+          <h3 className="blog-list-item-desc-subtitle">{props.blog.subtitle}</h3>)}
         <div className="blog-list-item-desc-detail">
-          <p className="blog-list-item-desc-detail-main-tag">main tag</p>
-          <p className="blog-list-item-desc-detail-date">blog date</p>
+          {renderTags(props.blog.tags)}
+          <p className="blog-list-item-desc-detail-date">{props.blog.createdDate.toLocaleDateString("en-US", dateFormatOption)}</p>
         </div>
         <div className="blog-list-item-desc-author">
-          <img src={whiteAvatar} alt="avatar image" className="blog-list-item-desc-author-img" />
-          <p className="blog-list-item-desc-author-name">author name</p>
+          <img src={props.blog.author.avatarUrl} alt="avatar image" className="blog-list-item-desc-author-img" />
+          <p className="blog-list-item-desc-author-name">{props.blog.author.name}</p>
         </div>
         {(currentOverlayState.componentShow &&
           <BlogItemOverlay
             currentOverlayState={currentOverlayState}
             setOverlayState={setOverlayState}
+            handleDeleteBlogClickEvent={props.handleDeleteBlogClickEvent}
+            blogId={props.blog.id}
           />
         )}
       </div>

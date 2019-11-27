@@ -7,20 +7,15 @@
   }
 
   @media only screen and (min-width: $laptopSize + 1 + "px") {
-    display: flex;
-    flex-wrap: nowrap;
-    box-sizing: border-box;
-    padding: 0 10px;
-    justify-content: center;
   }
 }
 
 .setting-list-wrapper {
 
+  white-space: nowrap;
+  box-sizing: border-box; 
+  padding: 10px;
   @media only screen and (max-width: $laptopSize + "px") {
-    white-space: nowrap;
-    box-sizing: border-box; 
-    padding: 10px;
   }
 
   @media only screen and (min-width: $laptopSize + 1 + "px") {
@@ -30,50 +25,39 @@
 .setting-list-ul {
 
   font-size: $subTitleFontSize;
+  font-weight: bold;
   list-style-type: none;
-  background-color: yellow;
   padding-inline-start: 0px;
   margin-block-start: 0;
   margin-block-end: 0;
-
+  padding: 10px;
+  overflow-y: hidden;
+  text-align: center;
   @media only screen and (max-width: $laptopSize + "px") {
-    overflow-y: hidden;
-    text-align: center;
   }
 
   @media only screen and (min-width: $laptopSize + 1 + "px") {
-    width: 100px;
-    box-sizing: border-box;
-    padding: 10px;
   }
 }
 
 .setting-list-li {
 
   @include link-in-text;
+  display: inline-block;
+  padding: 0 10px;
 
   @media only screen and (max-width: $laptopSize + "px") {
-    display: inline-block;
-    padding: 0 10px;
   }
 
   @media only screen and (min-width: $laptopSize + 1 + "px") {
-    font-size: 1.2em;
-    box-sizing: border-box;
-    border-bottom: 1px solid grey;
-    padding: 10px 0;
   }
 }
 
 .setting-content {
-  background-color: darkkhaki;
-
+  padding: 0 20px;
   @media only screen and (max-width: $laptopSize + "px") {
-    padding: 0 20px;
   }
 
   @media only screen and (min-width: $laptopSize + 1 + "px") {
-    box-sizing: border-box;
-    padding: 0 10px 10px 10px;
   }
 }
