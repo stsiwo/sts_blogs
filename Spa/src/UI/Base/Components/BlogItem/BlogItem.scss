@@ -1,6 +1,10 @@
 @import '../../../Base/Css/GlobalVariables';
 @import '../../../Base/Css/Mixins';
 
+.test-inline {
+  transition: 1s opacity;
+}
+
 .blog-list-item-wrapper {
   position: relative;
   width: 100%;
@@ -80,6 +84,9 @@
   border-radius: 7px;
   width: 100%;
   height: 100%;
+  opacity: 0;
+  transition: 0.5s opacity;
+
 }
 
 .blog-item-controller-content {
