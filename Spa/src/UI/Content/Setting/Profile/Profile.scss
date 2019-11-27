@@ -21,124 +21,92 @@
   margin: 0;
 }
 
+.profile-content-wrapper {
+  @media only screen and (max-width: $tabletSize + "px") {
+    text-align: center;
+  }
+  @media only screen and (min-width: $tabletSize + 1 + "px") {
+    display: grid;
+    grid-template-columns: 2fr 1fr; 
+    grid-template-rows: repeat(5, minmax(100px, 100px));
+  }
+}
+
 .profile-picture-wrapper {
 
   background-color: white;
   border-radius: 3px;
   position: relative;
+  padding: 10px;
+  box-sizing: border-box;
+  text-align: center;
 
-  @media only screen and (max-width: $mobileLSize + "px") {
-    width: 100px;
-    height: 100px;
+
+  width: 100%;
+  @media only screen and (max-width: $tabletSize + "px") {
+  }
+  @media only screen and (min-width: $tabletSize + 1 + "px") {
+    grid-column-start: 2;
+    grid-row-start: 1; 
   }
 
-  @media only screen and (min-width: $mobileLSize + 1 + "px") and (max-width: $tabletSize + "px") {
-    float: right;
-    width: 150px;
-    height: 150px;
-  }
-
-  @media only screen and (min-width: $tabletSize + 1 + "px") and (max-width: $laptopSize + "px") {
-    float: right;
-    width: 200px;
-    height: 200px;
-  }
-
-  @media only screen and (min-width: $laptopSize + 1 + "px") {
-    float: right;
-    width: 250px;
-    height: 250px;
-  }
 }
 
 .profile-picture-img {
 
-  @media only screen and (max-width: $mobileLSize + "px") {
+  border-radius: 50%;
+}
+
+.profile-input-wrapper {
+  @media only screen and (max-width: $tabletSize + "px") {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+
+  }
+  @media only screen and (min-width: $tabletSize + 1 + "px") {
+    margin-bottom: 15px;
+    grid-column-start: 1;
+    grid-column-end: 1;
   }
 
-  @media only screen and (min-width: $mobileLSize + 1 + "px") and (max-width: $tabletSize + "px") {
-  }
+}
 
-  @media only screen and (min-width: $tabletSize + 1 + "px") and (max-width: $laptopSize + "px") {
+.profile-input-label {
+  font-weight: bold;
+  font-size: 1.4em;
+  display: block;
+  @media only screen and (max-width: $tabletSize + "px") {
+    text-align: left;
   }
+  @media only screen and (min-width: $tabletSize + 1 + "px") {
+  }
+}
 
-  @media only screen and (min-width: $laptopSize + 1 + "px") {
-  }
+.profile-input {
+  text-align: center;
+  width: 100%;
+  max-width: 500px;
 }
 
 .profile-picture-input-wrapper {
 
+  margin: 10px 0;
+
   @media only screen and (max-width: $mobileLSize + "px") {
 
   }
-
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  box-sizing: border-box;
-  margin: 5px;
-  padding: 5px 0; /* must match with padding in ...label */
 }
 
-.profile-picture-input-label {
-
-  @media only screen and (max-width: $mobileLSize + "px") {
-    font-size: 1.0em;
-  }
-
-  border-radius: 3px;
-  background-color: grey;
-  color: white;
-  font-size: 1.2em;
-  box-sizing: border-box;
-  padding: 5px; /* must match with padding in ...wrapper */
-  position: relative;
+.profile-picture-label {
+  display: inline;
+  padding: 3px 17px;
 }
 
 .profile-picture-input-label::after {
-  content: "";
-  position: absolute;
-  top:1px;
-  left: 1px;
-  right: 1px;
-  bottom: 1px;
-  border: 1px dashed white;
-  border-radius: 3px;
 }
 
 .profile-picture-input {
   display: none;
 }
 
-.profile-user-name-wrapper {
-}
-
-.profile-user-name-title {
-}
-
-.profile-user-name-description {
-}
-
-.profile-user-name-input {
-  @include input-text;
-}
-
-.profile-email-wrapper {
-}
-
-.profile-password-wrapper {
-}
-
-.profile-btn-wrapper {
-  box-sizing: border-box;
-  padding: 10px 0;
-  text-align: end;
-}
-
-.profile-btn-reset {
-  @include regular-btn;
-}
-
-.profile-btn-update {
-  @include regular-btn;
-}

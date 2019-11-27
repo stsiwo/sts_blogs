@@ -100,7 +100,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
     // final check validation ...
     validate()
       .then(() => {
-        debug('validation passed at save button event handler') 
+        debug('validation passed at save button event handler')
         sendUpdateRequest({
           path: path,
           method: method,
@@ -108,7 +108,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
           data: mapStateToFormData(currentUser)
         })
       }, () => {
-        debug('validation failed at save button event handler') 
+        debug('validation failed at save button event handler')
       })
   }
 
@@ -116,7 +116,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
     touch(e.currentTarget.name)
   }
 
-  if (currentBlogFetchStatus.status === ResponseResultStatusEnum.FETCHING) return (<p>fetching your data</p>)
+  //if (currentBlogFetchStatus.status === ResponseResultStatusEnum.FETCHING) return (<p>fetching your data</p>)
 
   //if (currentBlogFetchStatus.status === ResponseResultStatusEnum.FAILURE) return (<p>sorry.. your data is not available now</p>)
 
@@ -125,58 +125,61 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
    *  - esp cause error of 'useEffect' 2nd argument inconsistency array element 
    **/
   return (//currentBlogFetchStatus.status === ResponseResultStatusEnum.SUCCESS &&
-    <div className="profile-wrapper">
-      <h2 className="profile-title">Profile Management</h2>
-      <FetchStatus 
-        currentFetchStatus={currentUpdateRequestStatus} 
-        setFetchStatus={setUpdateRequestStatus} 
-        fetchingMsg={'updating user profile ...'}
-        successMsg={'updating user profile success'}
-        failureMsg={'updating user profile failed'}
-      />
-      <div className="profile-picture-wrapper">
-        <img src={currentUser.avatarUrl} className="profile-picture-img" onLoad={handleRevokeObjectURLOnLoad} width={150} height={150} />
-        <div className="profile-picture-input-wrapper">
-          <label htmlFor="profile-picture-input" className="profile-picture-input-label">Select New Image</label>
-          <input type="file" id="profile-picture-input" name="avatarImage" accept="image/*" onChange={handleImageUploadChange} className="profile-picture-input" />
+    <div className="context-wrapper">
+      <div className="main-wrapper">
+        <h2 className="profile-title">Profile Management</h2>
+        <FetchStatus
+          currentFetchStatus={currentUpdateRequestStatus}
+          setFetchStatus={setUpdateRequestStatus}
+          fetchingMsg={'updating user profile ...'}
+          successMsg={'updating user profile success'}
+          failureMsg={'updating user profile failed'}
+        />
+        <div className="profile-content-wrapper">
+          <div className="profile-picture-wrapper">
+            <img src={currentUser.avatarUrl} className="profile-picture-img" onLoad={handleRevokeObjectURLOnLoad} width={150} height={150} />
+            <div className="profile-picture-input-wrapper">
+              <label htmlFor="profile-picture-input" className="btn profile-picture-label">
+                Select New Image
+              </label>
+              <input type="file" id="profile-picture-input" name="avatarImage" accept="image/*" onChange={handleImageUploadChange} className="profile-picture-input" />
+            </div>
+          </div>
+          <div className="profile-input-wrapper">
+            <label htmlFor="name" className="profile-input-label">
+              New User Name
+          </label>
+            <input type="text" id="name" name="name" placeholder="enter new user name..." className="black-input profile-input" value={currentUser.name} onChange={handleNameChangeEvent} onFocus={handleInitialFocusEvent} />
+
+            {(currentValidationError.name && <div className="input-error">{currentValidationError.name}</div>)}
+          </div>
+          <div className="profile-input-wrapper">
+            <label htmlFor="email" className="profile-input-label">
+              New Email
+          </label>
+            <input type="text" id="email" name="email" placeholder="enter new email..." className="black-input profile-input" value={currentUser.email} onChange={handleEmailChangeEvent} onFocus={handleInitialFocusEvent} />
+            {(currentValidationError.email && <div className="input-error">{currentValidationError.email}</div>)}
+          </div>
+          <div className="profile-input-wrapper">
+            <label htmlFor="password" className="profile-input-label">
+              New Password
+          </label>
+            <input type="password" id="password" name="password" placeholder="enter new password..." className="black-input profile-input" value={currentUser.password} onChange={handlePasswordChangeEvent} onFocus={handleInitialFocusEvent} />
+            {(currentValidationError.password && <div className="input-error">{currentValidationError.password}</div>)}
+          </div>
+          <div className="profile-input-wrapper">
+            <label htmlFor="confirm" className="profile-input-label">
+              Password Confirm
+          </label>
+            <input type="password" id="confirm" name="confirm" placeholder="enter new password again..." className="black-input profile-input" value={currentUser.confirm} onChange={handleConfirmChangeEvent} onFocus={handleInitialFocusEvent} />
+            {(currentValidationError.confirm && <div className="input-error">{currentValidationError.confirm}</div>)}
+          </div>
+          <div className="profile-input-wrapper">
+            <button type="button" className="btn" onClick={handleSaveUserClickEvent}>Update</button>
+          </div>
         </div>
       </div>
-      <div className="profile-user-name-wrapper">
-        <h3 className="profile-user-name-title">Update User Name</h3>
-        <p className="profile-user-name-description">
-          Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.
-        </p>
-        <label htmlFor="name" className="profile-user-name-label ">
-          Name: <input type="text" id="name" name="name" placeholder="enter new user name..." className="input-text profile-user-name-input" value={currentUser.name} onChange={handleNameChangeEvent} onFocus={handleInitialFocusEvent} />
-        </label>
-        {(currentValidationError.name && <div className="input-error">{currentValidationError.name}</div>)}
-      </div>
-      <div className="profile-email-wrapper">
-        <h3 className="profile-email-title">Update Email</h3>
-        <p className="profile-email-description">
-          Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.
-        </p>
-        <label htmlFor="email" className="profile-user-email-label ">
-          Email: <input type="text" id="email" name="email" placeholder="enter new email..." className="input-text profile-email-input" value={currentUser.email} onChange={handleEmailChangeEvent} onFocus={handleInitialFocusEvent} />
-        </label>
-        {(currentValidationError.email && <div className="input-error">{currentValidationError.email}</div>)}
-      </div>
-      <div className="profile-password-wrapper">
-        <h3 className="profile-password-title">Update Password</h3>
-        <p className="profile-password-description">
-          Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.
-        </p>
-        <label htmlFor="password" className="profile-user-password-label ">
-          Password: <input type="password" id="password" name="password" placeholder="enter new password..." className="input-text profile-password-input" value={currentUser.password} onChange={handlePasswordChangeEvent} onFocus={handleInitialFocusEvent} />
-        </label>
-        <label htmlFor="confirm" className="profile-user-confirm-label ">
-          Confirm: <input type="password" id="confirm" name="confirm" placeholder="enter new password again..." className="input-text profile-password-confirm-input" value={currentUser.confirm} onChange={handleConfirmChangeEvent} onFocus={handleInitialFocusEvent} />
-        </label>
-        {(currentValidationError.password && <div className="input-error">{currentValidationError.password}</div>)}
-        {(currentValidationError.confirm && <div className="input-error">{currentValidationError.confirm}</div>)}
-      </div>
-      <div className="profile-btn-wrapper">
-        <button type="button" className="regular-btn profile-btn-update" onClick={handleSaveUserClickEvent}>Update</button>
+      <div className="aside-wrapper">
       </div>
     </div>
   );

@@ -18,6 +18,18 @@ body {
   padding: 5px;
 }
 
+.black-input {
+  @include base-input;
+  color: black;
+  padding: 5px;
+}
+
+.input-error {
+  font-size: 1.3em;
+  color: red;
+  font-weight: bold;
+}
+
 .close-icon-row {
   text-align: end;
 }
