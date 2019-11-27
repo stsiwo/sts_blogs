@@ -54,6 +54,10 @@ body {
   @include base-icon;
 }
 
+.page-icon {
+  vertical-align: middle;
+}
+
 .tab {
   background-color: transparent;
   border: solid 2px black;

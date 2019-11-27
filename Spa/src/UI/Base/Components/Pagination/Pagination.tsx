@@ -2,6 +2,7 @@ import * as React from 'react';
 import './Pagination.scss';
 import { PaginationPropType, BuildPaginationResultType, PageType } from './types';
 import { buildPagination } from './buildPagination';
+import { MdLastPage, MdFirstPage } from 'react-icons/md';
 var debug = require('debug')('ui:Pagination')
 
 const Pagination: React.FunctionComponent<PaginationPropType> = (props: PaginationPropType) => {
@@ -22,13 +23,17 @@ const Pagination: React.FunctionComponent<PaginationPropType> = (props: Paginati
 
   return (pageResult.pageList.length !== 0 &&
     <div className="pagination-wrapper">
-      <button className='pagination-btn' role='first-page-btn' value="0" onClick={handlePageClickEvent}>&laquo;</button>
+      <button className='pagination-btn' role='first-page-btn' value="0" onClick={handlePageClickEvent}>
+        <MdFirstPage className="page-icon"/> 
+      </button>
       {(pageResult.pageList.map((page: PageType) => {
         return (
           <button className={page.css} value={page.offset} key={page.pageNum} onClick={handlePageClickEvent}>{page.pageNum}</button>
         );
       }))}
-      <button className='pagination-btn' role='last-page-btn' value={pageResult.maxPageNumOffset} onClick={handlePageClickEvent}>&raquo;</button>
+      <button className='pagination-btn' role='last-page-btn' value={pageResult.maxPageNumOffset} onClick={handlePageClickEvent}>
+        <MdLastPage className="page-icon"/>
+      </button>
     </div>
   );
 }
