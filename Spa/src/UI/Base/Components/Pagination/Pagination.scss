@@ -1,3 +1,35 @@
 @import '../../../Base/Css/GlobalVariables';
 @import '../../../Base/Css/Mixins';
 
+.pagination-wrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  height: 50px;
+  margin: 10px 0;
+}
+
+.pagination-btn {
+  width: 50px;
+  height: 50px;
+  box-sizing: border-box;
+  margin: 0 5px;
+  border: none;
+  border-radius: 25px;
+  background-color: black;
+  color: white;
+  font-family: $mainFontFamily;
+  font-size: $subTitleFontSize;
+  box-shadow: 1px 2px 2px grey;
+  transition: 0.5s;
+}
+
+.pagination-btn:hover {
+  color: black;
+  background-color: white;
+}
+
+.pagination-btn-selected {
+  color: black;
+  background-color: white;
+}

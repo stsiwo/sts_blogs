@@ -6,7 +6,9 @@ var debug = require('debug')('ui:Pagination')
 
 const Pagination: React.FunctionComponent<PaginationPropType> = (props: PaginationPropType) => {
 
-  const pageResult: BuildPaginationResultType = buildPagination(props.currentPaginationStatus.offset, props.currentPaginationStatus.totalCount, props.currentPaginationStatus.limit) 
+  //const pageResult: BuildPaginationResultType = buildPagination(props.currentPaginationStatus.offset, props.currentPaginationStatus.totalCount, props.currentPaginationStatus.limit)
+  // delete when it is done
+  const pageResult: BuildPaginationResultType = buildPagination(0, 1000, 40)
   /** REFACTOR **/
   // setter should be done here (not inside api fetch component)
   const handlePageClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
@@ -18,21 +20,17 @@ const Pagination: React.FunctionComponent<PaginationPropType> = (props: Paginati
   }
 
 
-  if (pageResult.pageList.length !== 0) {
-    return (
-      <React.Fragment>
-        <button className='pagination-btn' role='first-page-btn' value="0" onClick={handlePageClickEvent}>&laquo;</button>
-        {(pageResult.pageList.map((page: PageType) => {
-          return (
-            <button className={page.css} value={page.offset} key={page.pageNum} onClick={handlePageClickEvent}>{page.pageNum}</button>
-          );
-        }))}
-        <button className='pagination-btn' role='last-page-btn' value={pageResult.maxPageNumOffset} onClick={handlePageClickEvent}>&raquo;</button>
-      </React.Fragment>
-    );
-  } else {
-    return null;
-  }
+  return (pageResult.pageList.length !== 0 &&
+    <div className="pagination-wrapper">
+      <button className='pagination-btn' role='first-page-btn' value="0" onClick={handlePageClickEvent}>&laquo;</button>
+      {(pageResult.pageList.map((page: PageType) => {
+        return (
+          <button className={page.css} value={page.offset} key={page.pageNum} onClick={handlePageClickEvent}>{page.pageNum}</button>
+        );
+      }))}
+      <button className='pagination-btn' role='last-page-btn' value={pageResult.maxPageNumOffset} onClick={handlePageClickEvent}>&raquo;</button>
+    </div>
+  );
 }
 
 export default Pagination;
