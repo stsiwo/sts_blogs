@@ -8,11 +8,14 @@ import { useRequest } from 'Hooks/Request/useRequest';
 import { useBlogValidation } from 'Hooks/Validation/Blog/useBlogValidation';
 import './UpdateBlog.scss';
 import FetchStatus from 'Components/ApiFetch/FetchStatus';
+import Tag from 'Components/Tag/Tag';
 var debug = require('debug')('ui:UpdateBlog')
 
 const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
 
   const tagInputRef = React.useRef(null)
+  const titleInputRef = React.useRef(null)
+  const subtitleInputRef = React.useRef(null)
 
   const [currentBlog, setBlog] = React.useState<BlogType>(initialBlogState)
   const { currentValidationError, touch, validate } = useBlogValidation({ domain: currentBlog })
@@ -54,7 +57,7 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
     debug('start handling save button click')
     validate()
       .then(() => {
-        debug('validation passed at save button event handler') 
+        debug('validation passed at save button event handler')
         updateRequest({
           path: '/blogs/' + blogId,
           method: RequestMethodEnum.PUT,
@@ -62,8 +65,12 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
           data: mapStateToFormData(currentBlog),
         })
       }, () => {
-        debug('validation failed at save button event handler') 
+        debug('validation failed at save button event handler')
       })
+  }
+
+  const changeInputWidthDynamically = (inputRef: React.MutableRefObject<HTMLInputElement>, currentChLength: number): void => {
+    inputRef.current.style.width = currentChLength > 30 ? currentChLength + 'ch' : 30 + 'ch';
   }
 
   const handleTitleChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
@@ -71,6 +78,7 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
       ...currentBlog,
       title: e.currentTarget.value
     })
+    changeInputWidthDynamically(titleInputRef, e.currentTarget.value.length)
   }
 
   const handleSubTitleChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
@@ -78,6 +86,7 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
       ...currentBlog,
       subtitle: e.currentTarget.value
     })
+    changeInputWidthDynamically(subtitleInputRef, e.currentTarget.value.length)
   }
 
   const handleImageUploadChange: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
@@ -106,7 +115,7 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
     if (e.currentTarget.value === "") return false
 
     if (e.key == 'Enter' || e.key == 'Tab') {
-      currentBlog.tags.push({ name: e.currentTarget.value })
+      currentBlog.tags.add(e.currentTarget.value)
       setBlog({
         ...currentBlog,
       })
@@ -118,58 +127,96 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
     touch(e.currentTarget.name)
   }
 
-  if (currentBlogFetchStatus.status === ResponseResultStatusEnum.FETCHING) return (<p>fetching your data</p>)
+  const handleTagDeleteClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = (e) => {
+    
+    const targetTag = e.currentTarget.getAttribute('data-tag')
+    currentBlog.tags.delete(targetTag)
+    setBlog({
+      ...currentBlog
+    })
+  }
 
-  if (currentBlogFetchStatus.status === ResponseResultStatusEnum.FAILURE) return (<p>sorry.. your data is not available now</p>)
+  const renderCurrentTags = () => {
+    return Array.from(currentBlog.tags).map((tag: string) => {
+      return (
+        <Tag
+          name={tag}
+          withCancelBtn
+          key={tag}
+          blackStyle
+          handleTagDeleteClickEvent={handleTagDeleteClickEvent}
+        />
+      )
+    })
+  }
 
-  return (currentBlogFetchStatus.status === ResponseResultStatusEnum.SUCCESS &&
-    <div className="blog-detail-wrapper">
-      <h2 className="blog-detail-title">Update Blog</h2>
-      <FetchStatus 
-        currentFetchStatus={currentBlogUpdateStatus} 
-        setFetchStatus={setBlogUpdateStatus} 
-        fetchingMsg={'updating...'}
-        successMsg={'updating blog success'}
-        failureMsg={'updating blog failed'}
-      />
-      <form className="blog-detail-form">
-        <div className="blog-detail-form-title-wrapper" >
-          <label htmlFor="title" className="blog-detail-form-title-label">Title</label>
-          <input type="text" name="title" id="title" className="blog-detail-form-title-input" placeholder="enter blog title..." value={currentBlog.title} onChange={handleTitleChangeEvent}  onFocus={handleInitialFocusEvent}/>
+  const isTagsLimit: boolean = currentBlog.tags.size >= 10
+
+  //if (currentBlogFetchStatus.status === ResponseResultStatusEnum.FETCHING) return (<p>fetching your data</p>)
+
+  //if (currentBlogFetchStatus.status === ResponseResultStatusEnum.FAILURE) return (<p>sorry.. your data is not available now</p>)
+
+  return (//currentBlogFetchStatus.status === ResponseResultStatusEnum.SUCCESS &&
+    <div className="context-wrapper">
+      <div className="main-wrapper">
+        <h2 className="profile-title">Update Blog</h2>
+        <FetchStatus
+          currentFetchStatus={currentBlogUpdateStatus}
+          setFetchStatus={setBlogUpdateStatus}
+          fetchingMsg={'updating...'}
+          successMsg={'updating blog success'}
+          failureMsg={'updating blog failed'}
+        />
+        <div className="blog-detail-picture-wrapper">
+          <img src={currentBlog.mainImageUrl} className="blog-detail-picture-img" onLoad={handleRevokeObjectURLOnLoad} alt="selected image ..." width={'100%'} height={'6.66%'} />
+          <div className="grid-picture-input-wrapper blog-detail-input-wrapper">
+            <label htmlFor="update-blog-picture-input" className="btn grid-picture-label ">
+              Select Main Image
+              </label>
+            <input type="file" name="mainImage" id="update-blog-picture-input" className="grid-picture-input " placeholder="enter blog image..." onChange={handleImageUploadChange} onFocus={handleInitialFocusEvent} />
+          </div>
+        </div>
+        <div className="blog-detail-input-wrapper">
+          <label htmlFor="title" className="grid-input-label blog-detail-input-label">
+            Title
+            </label>
+          <input type="text" name="title" id="title" className="black-input grid-input blog-detail-input" placeholder="enter blog title..." value={currentBlog.title} onChange={handleTitleChangeEvent} onFocus={handleInitialFocusEvent} ref={titleInputRef}/>
           {(currentValidationError.title && <div className="input-error">{currentValidationError.title}</div>)}
         </div>
-        <div className="blog-detail-form-subtitle-wrapper" >
-          <label htmlFor="subtitle" className="blog-detail-form-subtitle-label">Subtitle</label>
-          <input type="text" name="subtitle" id="subtitle" className="blog-detail-form-subtitle-input" placeholder="enter blog subtitle..." value={currentBlog.subtitle} onChange={handleSubTitleChangeEvent} onFocus={handleInitialFocusEvent}/>
+        <div className="blog-detail-input-wrapper">
+          <label htmlFor="subtitle" className="grid-input-label blog-detail-input-label">
+            Subtitle
+            </label>
+          <input type="text" name="subtitle" id="subtitle" className="black-input grid-input blog-detail-input" placeholder="enter blog subtitle..." value={currentBlog.subtitle} onChange={handleSubTitleChangeEvent} onFocus={handleInitialFocusEvent} ref={subtitleInputRef}/>
           {(currentValidationError.subtitle && <div className="input-error">{currentValidationError.subtitle}</div>)}
         </div>
-        <div className="blog-detail-form-tags-wrapper" >
-          <label htmlFor="tags" className="blog-detail-form-tags-label">Tags</label>
-          {(
-            currentBlog.tags.length !== 0 && currentBlog.tags.map((tag: TagType) => {
-              return <input type="text" name="tags[]" id="tags" className="blog-detail-form-tags-input" value={tag.name} readOnly key={tag.name} />
-            })
+        <div className="blog-detail-input-wrapper" >
+          <label htmlFor="tag" className="grid-input-label blog-detail-input-label">Tags</label>
+          {(!isTagsLimit &&
+            <input type="text" id='tag-entry' name='tag-entry' className="black-input grid-input blog-detail-input" onKeyDown={handleTagInputEnterOrTabKeyClickEvent} ref={tagInputRef} placeholder="enter #tags here ..." />
           )}
-          <input type="text" id="tag-entry" className="blog-detail-form-tags-input" placeholder="enter blog tags..." onKeyDown={handleTagInputEnterOrTabKeyClickEvent} ref={tagInputRef} />
-          {(currentValidationError.tags && <div className="input-error">{currentValidationError.tags}</div>)}
+          {(isTagsLimit &&
+            <input type="text" id='tag-entry' name='tag-entry' className="black-input grid-input blog-detail-input" onKeyDown={handleTagInputEnterOrTabKeyClickEvent} ref={tagInputRef} placeholder="opps you reached max tags limit ..." readOnly />
+          )}
+          <div className="aside-filter-tags-list-selected">
+            {renderCurrentTags()}
+          </div>
         </div>
-        <div className="blog-detail-form-image-wrapper" >
-          <label htmlFor="tags" className="blog-detail-form-image-label">Main Image</label>
-          <input type="file" name="tags" id="tags" className="blog-detail-form-image-input" placeholder="enter blog image..." onChange={handleImageUploadChange} onFocus={handleInitialFocusEvent}/>
-          <img src={currentBlog.mainImageUrl} className="" onLoad={handleRevokeObjectURLOnLoad} alt="selected image ..." width={100} height={100} />
-        </div>
-        <div className="blog-detail-form-content-wrapper" >
-          <label htmlFor="content" className="blog-detail-form-content-label">Content</label>
-          <input type="text" name="content" id="content" className="blog-detail-form-content-input" placeholder="enter blog content..." value={currentBlog.content} onChange={handleContentChangeEvent} onFocus={handleInitialFocusEvent}/>
+        <div className="blog-detail-input-wrapper">
+          <label htmlFor="content" className="grid-input-label blog-detail-input-label">
+            Content
+            </label>
+          <input type="text" name="content" id="content" className="black-input grid-input" placeholder="enter blog content..." value={currentBlog.content} onChange={handleTitleChangeEvent} onFocus={handleInitialFocusEvent} />
           {(currentValidationError.content && <div className="input-error">{currentValidationError.content}</div>)}
         </div>
-        <input type="hidden" name='creationDate' value={currentBlog.createdDate.toJSON()} />
-        <div className="blog-detail-btns-wrapper">
-          <input type="button" className="blog-detail-btns-save" value="Save" name='submit' onClick={handleSaveBlogClickEvent} onFocus={handleInitialFocusEvent}/>
+        <div className="blog-detail-input-wrapper">
+          <input type="button" className="btn" value="Save" name='submit' onClick={handleSaveBlogClickEvent} onFocus={handleInitialFocusEvent} />
           {(currentValidationError.submit && <div className="input-error">{currentValidationError.submit}</div>)}
         </div>
-      </form>
-      )}
+        <input type="hidden" name='creationDate' value={currentBlog.createdDate.toJSON()} />
+      </div>
+      <div className="aside-wrapper">
+      </div>
     </div>
   );
 }

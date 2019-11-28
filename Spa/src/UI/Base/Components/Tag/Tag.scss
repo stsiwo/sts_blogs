@@ -2,6 +2,7 @@
 @import '../../../Base/Css/Mixins';
 
 .tags-item-wrapper {
+  margin: 3px;
   display: inline-block;
   box-sizing: border-box;
   border: solid 1px rgba(255, 255, 255, 0.5);
@@ -21,4 +22,12 @@
 
 .tags-item-close-icon-wrapper {
   vertical-align: middle;
+}
+
+.black-tags-item-wrapper {
+  border: solid 1px rgba(0, 0, 0, 0.5);
+}
+
+.black-tags-item-name {
+  color: black;
 }

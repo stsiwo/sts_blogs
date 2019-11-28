@@ -7,11 +7,14 @@ import { MdDeleteForever } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import { TagType } from 'domain/tag/TagType';
 import { dateFormatOption } from 'src/utils';
+import { useRouteMatch } from 'react-router';
 const whiteAvatar = require('../../../../../tests/data/images/white-1920x1280.jpg');
 const redImage = require('../../../../../tests/data/images/red-girl-1920x1279.jpg');
 
 
 const BlogItemOverlay: React.FunctionComponent<BlogItemOverlayPropsType> = (props: BlogItemOverlayPropsType) => {
+
+  let { path, url } = useRouteMatch();
 
   const onTransaction: React.EventHandler<React.TransitionEvent<HTMLDivElement>> = (e) => {
     // when mouse leaves
@@ -47,7 +50,7 @@ const BlogItemOverlay: React.FunctionComponent<BlogItemOverlayPropsType> = (prop
       }}
     >
       <div className="blog-item-controller-content" >
-        <Link to={`./update/${props.blogId}`} className="link" role='blog-edit-link'>
+        <Link to={`${path}/update/${props.blogId}`} className="link" role='blog-edit-link'>
           <div className="white-icon-wrapper">
             <FaEdit className="icon" />
           </div>
@@ -95,8 +98,8 @@ const BlogItem: React.FunctionComponent<BlogItemPropType> = (props: BlogItemProp
     })
   }
 
-  const renderTags = (tagList: TagType[]): React.ReactNode => {
-    return tagList.map((tag: TagType) => <div className="blog-list-filter-tags-tag" key={tag.name}>{tag.name}</div>)
+  const renderTags = (tagSet: Set<string>): React.ReactNode => {
+    return Array.from(tagSet).map((tag: string) => <div className="blog-list-filter-tags-tag" key={tag}>{tag}</div>)
   }
 
   return (

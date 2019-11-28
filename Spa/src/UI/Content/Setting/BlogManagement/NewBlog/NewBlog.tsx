@@ -93,7 +93,7 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
     if (e.currentTarget.value === "") return false
 
     if (e.key == 'Enter' || e.key == 'Tab') {
-      currentBlog.tags.push({ name: e.currentTarget.value })
+      currentBlog.tags.add(e.currentTarget.value)
       setBlog({
         ...currentBlog,
       })
@@ -129,8 +129,8 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
         <div className="blog-detail-form-tags-wrapper" >
           <label htmlFor="tags" className="blog-detail-form-tags-label">Tags</label>
           {(
-            currentBlog.tags.length !== 0 && currentBlog.tags.map((tag: TagType) => {
-              return <input type="text" name="tags[]" id="tags" className="blog-detail-form-tags-input" value={tag.name} readOnly key={tag.name} />
+            currentBlog.tags.size !== 0 && Array.from(currentBlog.tags).map((tag: string) => {
+              return <input type="text" name="tags[]" id="tags" className="blog-detail-form-tags-input" value={tag} readOnly key={tag} />
             })
           )}
           <input type="text" id="tag-entry" className="blog-detail-form-tags-input" placeholder="enter blog tags..." onKeyDown={handleTagInputEnterOrTabKeyClickEvent} ref={tagInputRef} />

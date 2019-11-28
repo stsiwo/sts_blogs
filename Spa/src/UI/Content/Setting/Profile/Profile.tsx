@@ -135,46 +135,46 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
           successMsg={'updating user profile success'}
           failureMsg={'updating user profile failed'}
         />
-        <div className="profile-content-wrapper">
-          <div className="profile-picture-wrapper">
+        <div className="grid-content-wrapper">
+          <div className="grid-picture-wrapper">
             <img src={currentUser.avatarUrl} className="profile-picture-img" onLoad={handleRevokeObjectURLOnLoad} width={150} height={150} />
-            <div className="profile-picture-input-wrapper">
-              <label htmlFor="profile-picture-input" className="btn profile-picture-label">
+            <div className="grid-picture-input-wrapper">
+              <label htmlFor="grid-picture-input" className="btn grid-picture-label">
                 Select New Image
               </label>
-              <input type="file" id="profile-picture-input" name="avatarImage" accept="image/*" onChange={handleImageUploadChange} className="profile-picture-input" />
+              <input type="file" id="profile-picture-input" name="avatarImage" accept="image/*" onChange={handleImageUploadChange} className="grid-picture-input" />
             </div>
           </div>
-          <div className="profile-input-wrapper">
-            <label htmlFor="name" className="profile-input-label">
+          <div className="grid-input-wrapper">
+            <label htmlFor="name" className="grid-input-label">
               New User Name
           </label>
-            <input type="text" id="name" name="name" placeholder="enter new user name..." className="black-input profile-input" value={currentUser.name} onChange={handleNameChangeEvent} onFocus={handleInitialFocusEvent} />
+            <input type="text" id="name" name="name" placeholder="enter new user name..." className="black-input grid-input" value={currentUser.name} onChange={handleNameChangeEvent} onFocus={handleInitialFocusEvent} />
 
             {(currentValidationError.name && <div className="input-error">{currentValidationError.name}</div>)}
           </div>
-          <div className="profile-input-wrapper">
-            <label htmlFor="email" className="profile-input-label">
+          <div className="grid-input-wrapper">
+            <label htmlFor="email" className="grid-input-label">
               New Email
-          </label>
-            <input type="text" id="email" name="email" placeholder="enter new email..." className="black-input profile-input" value={currentUser.email} onChange={handleEmailChangeEvent} onFocus={handleInitialFocusEvent} />
+            </label>
+            <input type="text" id="email" name="email" placeholder="enter new email..." className="black-input grid-input" value={currentUser.email} onChange={handleEmailChangeEvent} onFocus={handleInitialFocusEvent} />
             {(currentValidationError.email && <div className="input-error">{currentValidationError.email}</div>)}
           </div>
-          <div className="profile-input-wrapper">
-            <label htmlFor="password" className="profile-input-label">
+          <div className="grid-input-wrapper">
+            <label htmlFor="password" className="grid-input-label">
               New Password
           </label>
-            <input type="password" id="password" name="password" placeholder="enter new password..." className="black-input profile-input" value={currentUser.password} onChange={handlePasswordChangeEvent} onFocus={handleInitialFocusEvent} />
+            <input type="password" id="password" name="password" placeholder="enter new password..." className="black-input grid-input" value={currentUser.password} onChange={handlePasswordChangeEvent} onFocus={handleInitialFocusEvent} />
             {(currentValidationError.password && <div className="input-error">{currentValidationError.password}</div>)}
           </div>
-          <div className="profile-input-wrapper">
-            <label htmlFor="confirm" className="profile-input-label">
+          <div className="grid-input-wrapper">
+            <label htmlFor="confirm" className="grid-input-label">
               Password Confirm
           </label>
-            <input type="password" id="confirm" name="confirm" placeholder="enter new password again..." className="black-input profile-input" value={currentUser.confirm} onChange={handleConfirmChangeEvent} onFocus={handleInitialFocusEvent} />
+            <input type="password" id="confirm" name="confirm" placeholder="enter new password again..." className="black-input grid-input" value={currentUser.confirm} onChange={handleConfirmChangeEvent} onFocus={handleInitialFocusEvent} />
             {(currentValidationError.confirm && <div className="input-error">{currentValidationError.confirm}</div>)}
           </div>
-          <div className="profile-input-wrapper">
+          <div className="grid-input-wrapper">
             <button type="button" className="btn" onClick={handleSaveUserClickEvent}>Update</button>
           </div>
         </div>

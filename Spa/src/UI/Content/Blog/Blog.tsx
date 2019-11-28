@@ -27,9 +27,9 @@ const Blog: React.FunctionComponent<{}> = (props: {}) => {
   }, []);
 
   const renderCurrentTags = () => {
-    return currentBlog.tags.map((tag: TagType) => {
+    return Array.from(currentBlog.tags).map((tag: string) => {
       return (
-        <Tag name={tag.name} key={tag.name} />
+        <Tag name={tag} key={tag} />
       )
     })
   }

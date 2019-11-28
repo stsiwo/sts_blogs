@@ -2,6 +2,7 @@ import { BlogType } from "domain/blog/BlogType";
 import * as faker from 'faker';
 import { getUserTestData } from "./UserFaker";
 import { AuthorType } from "domain/author/AuthorType";
+import { TagType } from "domain/tag/TagType";
 
 export const getBlogTestData = (num: number = 20): BlogType[] => {
 
@@ -17,7 +18,7 @@ export const getBlogTestData = (num: number = 20): BlogType[] => {
       content: faker.lorem.paragraphs(10),
       createdDate: faker.date.past(),
       author: getUserTestData(1)[0] as AuthorType, 
-      tags: new Array(tagNum).fill(null).map((ele: string) => ({ name: faker.random.word()}))
+      tags: new Set<string>(new Array<string>(tagNum).fill(null).map(() => (faker.random.word())))
     })
   }
 

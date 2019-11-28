@@ -10,7 +10,7 @@ export declare type BlogType = {
   content: string,
   createdDate: Date
   author?: AuthorType,
-  tags?: TagType[],
+  tags?: Set<string>,
 }
 
 export const initialBlogState: BlogType = {
@@ -20,7 +20,7 @@ export const initialBlogState: BlogType = {
   mainImage: null,
   mainImageUrl: '',
   content: '',
-  tags: [],
+  tags: new Set<string>(),
   author: null,
   createdDate: new Date()
 }
