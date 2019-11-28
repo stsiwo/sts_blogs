@@ -8,11 +8,15 @@ import { useRequest } from 'Hooks/Request/useRequest';
 import { useBlogValidation } from 'Hooks/Validation/Blog/useBlogValidation';
 import './NewBlog.scss';
 import FetchStatus from 'Components/ApiFetch/FetchStatus';
+import ImageInput from 'Components/Input/ImageInput';
+import Input from 'Components/Input/Input';
+import TagInput from 'Components/Input/TagInput';
 var debug = require('debug')('ui:NewBlog')
 
 const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
 
-  const tagInputRef = React.useRef(null)
+  const titleInputRef: React.MutableRefObject<HTMLInputElement> = { current: null } 
+  const subtitleInputRef: React.MutableRefObject<HTMLInputElement> = { current: null } 
 
   const [currentBlog, setBlog] = React.useState<BlogType>(initialBlogState)
   const { currentValidationError, touch, validate } = useBlogValidation({ domain: currentBlog })
@@ -20,8 +24,8 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
   const { blogId } = useParams();
   const userId = useAuthContext()
   /** anything else **/
-  const path: string = '/users/' + userId + '/blogs/' 
-  const method: RequestMethodEnum = RequestMethodEnum.POST 
+  const path: string = '/users/' + userId + '/blogs/'
+  const method: RequestMethodEnum = RequestMethodEnum.POST
 
   /** EH **/
   const mapStateToFormData = (state: BlogType): FormData => {
@@ -41,16 +45,22 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
     debug('start handling save button click')
     validate()
       .then(() => {
-        debug('validation passed at save button event handler') 
+        debug('validation passed at save button event handler')
         saveRequest({
-          path: path, 
-          method: method, 
+          path: path,
+          method: method,
           headers: { 'content-type': 'multipart/form-data' },
           data: mapStateToFormData(currentBlog),
         })
       }, () => {
-        debug('validation failed at save button event handler') 
+        debug('validation failed at save button event handler')
       })
+  }
+
+  const changeInputWidthDynamically = (inputRef: React.MutableRefObject<HTMLInputElement>, currentChLength: number): void => {
+    console.log(inputRef)
+    console.log(currentChLength)
+    inputRef.current.style.width = currentChLength > 30 ? currentChLength + 'ch' : 30 + 'ch';
   }
 
   const handleTitleChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
@@ -58,6 +68,7 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
       ...currentBlog,
       title: e.currentTarget.value
     })
+    changeInputWidthDynamically(titleInputRef, e.currentTarget.value.length)
   }
 
   const handleSubTitleChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
@@ -65,6 +76,7 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
       ...currentBlog,
       subtitle: e.currentTarget.value
     })
+    changeInputWidthDynamically(subtitleInputRef, e.currentTarget.value.length)
   }
 
   const handleImageUploadChange: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
@@ -88,70 +100,92 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
     })
   }
 
-  const handleTagInputEnterOrTabKeyClickEvent: React.EventHandler<React.KeyboardEvent<HTMLInputElement>> = (e) => {
-
-    if (e.currentTarget.value === "") return false
-
-    if (e.key == 'Enter' || e.key == 'Tab') {
-      currentBlog.tags.add(e.currentTarget.value)
-      setBlog({
-        ...currentBlog,
-      })
-      e.currentTarget.value = ""
-    }
-  }
-
   const handleInitialFocusEvent: React.EventHandler<React.FocusEvent<HTMLInputElement>> = (e) => {
     touch(e.currentTarget.name)
   }
   /** render **/
   return (
-    <div className="blog-detail-wrapper">
-      <h2 className="blog-detail-title">New Blog</h2>
-      <FetchStatus 
-        currentFetchStatus={currentNewBlogStatus} 
-        setFetchStatus={setNewBlogStatus} 
-        fetchingMsg={'saving...'}
-        successMsg={'ok'}
-        failureMsg={'failed'}
-      />
-      <form className="blog-detail-form">
-        <div className="blog-detail-form-title-wrapper" >
-          <label htmlFor="title" className="blog-detail-form-title-label">Title</label>
-          <input type="text" name="title" id="title" className="blog-detail-form-title-input" placeholder="enter blog title..." value={currentBlog.title} onChange={handleTitleChangeEvent}  onFocus={handleInitialFocusEvent}/>
-          {(currentValidationError.title && <div className="input-error">{currentValidationError.title}</div>)}
-        </div>
-        <div className="blog-detail-form-subtitle-wrapper" >
-          <label htmlFor="subtitle" className="blog-detail-form-subtitle-label">Subtitle</label>
-          <input type="text" name="subtitle" id="subtitle" className="blog-detail-form-subtitle-input" placeholder="enter blog subtitle..." value={currentBlog.subtitle} onChange={handleSubTitleChangeEvent} onFocus={handleInitialFocusEvent}/>
-          {(currentValidationError.subtitle && <div className="input-error">{currentValidationError.subtitle}</div>)}
-        </div>
-        <div className="blog-detail-form-tags-wrapper" >
-          <label htmlFor="tags" className="blog-detail-form-tags-label">Tags</label>
-          {(
-            currentBlog.tags.size !== 0 && Array.from(currentBlog.tags).map((tag: string) => {
-              return <input type="text" name="tags[]" id="tags" className="blog-detail-form-tags-input" value={tag} readOnly key={tag} />
-            })
-          )}
-          <input type="text" id="tag-entry" className="blog-detail-form-tags-input" placeholder="enter blog tags..." onKeyDown={handleTagInputEnterOrTabKeyClickEvent} ref={tagInputRef} />
-          {(currentValidationError.tags && <div className="input-error">{currentValidationError.tags}</div>)}
-        </div>
-        <div className="blog-detail-form-image-wrapper" >
-          <label htmlFor="tags" className="blog-detail-form-image-label">Main Image</label>
-          <input type="file" name="tags" id="tags" className="blog-detail-form-image-input" placeholder="enter blog image..." onChange={handleImageUploadChange} onFocus={handleInitialFocusEvent}/>
-          <img src={currentBlog.mainImageUrl} className="" onLoad={handleRevokeObjectURLOnLoad} alt="selected image ..." width={100} height={100} />
-        </div>
-        <div className="blog-detail-form-content-wrapper" >
-          <label htmlFor="content" className="blog-detail-form-content-label">Content</label>
-          <input type="text" name="content" id="content" className="blog-detail-form-content-input" placeholder="enter blog content..." value={currentBlog.content} onChange={handleContentChangeEvent} onFocus={handleInitialFocusEvent}/>
+    <div className="context-wrapper">
+      <div className="main-wrapper">
+        <h2 className="profile-title">New Blog</h2>
+        <FetchStatus
+          currentFetchStatus={currentNewBlogStatus}
+          setFetchStatus={setNewBlogStatus}
+          fetchingMsg={'saving...'}
+          successMsg={'ok'}
+          failureMsg={'failed'}
+        />
+        <ImageInput
+          handleImageUploadChange={handleImageUploadChange}
+          handleRevokeObjectURLOnLoad={handleRevokeObjectURLOnLoad}
+          id={"update-blog-picture-input"}
+          imgStyle={"blog-detail-picture-img"}
+          inputStyle={"grid-picture-input"}
+          inputValue={null}
+          label={"Select Main Image"}
+          labelStyle={"btn grid-picture-label"}
+          labelWrapperStyle={"grid-picture-input-wrapper blog-detail-input-wrapper"}
+          name={"mainImage"}
+          onInputFocus={handleInitialFocusEvent}
+          placeholder={"enter blog image..."}
+          src={currentBlog.mainImageUrl}
+          wrapperStyle={"blog-detail-picture-wrapper"}
+        />
+        <Input
+          id={"title"}
+          inputStyle={"black-input grid-input blog-detail-input"}
+          inputValue={currentBlog.title}
+          label={"Title"}
+          labelStyle={"grid-input-label blog-detail-input-label"}
+          name={"title"}
+          onInputChange={handleTitleChangeEvent}
+          onInputFocus={handleInitialFocusEvent}
+          placeholder={"enter blog title..."}
+          wrapperStyle={'blog-detail-input-wrapper'}
+          errorMsg={currentValidationError.title}
+          forwardRef={titleInputRef}
+        />
+        <Input
+          id={"subtitle"}
+          inputStyle={"black-input grid-input blog-detail-input"}
+          inputValue={currentBlog.subtitle}
+          label={"Subtitle"}
+          labelStyle={"grid-input-label blog-detail-input-label"}
+          name={"subtitle"}
+          onInputChange={handleSubTitleChangeEvent}
+          onInputFocus={handleInitialFocusEvent}
+          placeholder={"enter blog subtitle..."}
+          wrapperStyle={'blog-detail-input-wrapper'}
+          errorMsg={currentValidationError.subtitle}
+          forwardRef={subtitleInputRef}
+        />
+        <TagInput
+          id={"tag"}
+          inputStyle={"black-input grid-input blog-detail-input"}
+          inputValue={currentBlog.tags}
+          label={"Tags"}
+          labelStyle={"grid-input-label blog-detail-input-label"}
+          onInputChange={handleSubTitleChangeEvent}
+          onInputFocus={handleInitialFocusEvent}
+          wrapperStyle={'blog-detail-input-wrapper'}
+          currentBlog={currentBlog}
+          setBlog={setBlog}
+        />
+        <div className="blog-detail-input-wrapper">
+          <label htmlFor="content" className="grid-input-label blog-detail-input-label">
+            Content
+            </label>
+          <input type="text" name="content" id="content" className="black-input grid-input" placeholder="enter blog content..." value={currentBlog.content} onChange={handleTitleChangeEvent} onFocus={handleInitialFocusEvent} />
           {(currentValidationError.content && <div className="input-error">{currentValidationError.content}</div>)}
         </div>
         <input type="hidden" name='creationDate' value={currentBlog.createdDate.toJSON()} />
-        <div className="blog-detail-btns-wrapper">
-          <input type="button" className="blog-detail-btns-save" value="Save" name='submit' onClick={handleSaveBlogClickEvent} onFocus={handleInitialFocusEvent}/>
+        <div className="blog-detail-input-wrapper">
+          <input type="button" className="btn" value="Save" name='submit' onClick={handleSaveBlogClickEvent} onFocus={handleInitialFocusEvent} />
           {(currentValidationError.submit && <div className="input-error">{currentValidationError.submit}</div>)}
         </div>
-      </form>
+      </div>
+      <div className="aside-wrapper">
+      </div>
     </div>
   );
 }
