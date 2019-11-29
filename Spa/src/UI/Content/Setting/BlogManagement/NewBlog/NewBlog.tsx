@@ -11,12 +11,16 @@ import FetchStatus from 'Components/ApiFetch/FetchStatus';
 import ImageInput from 'Components/Input/ImageInput';
 import Input from 'Components/Input/Input';
 import TagInput from 'Components/Input/TagInput';
+// Import the Slate editor factory.
+import { createEditor } from 'slate'
+// Import the Slate components and React plugin.
+import { Slate, Editable, withReact } from 'slate-react'
 var debug = require('debug')('ui:NewBlog')
 
 const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
 
-  const titleInputRef: React.MutableRefObject<HTMLInputElement> = { current: null } 
-  const subtitleInputRef: React.MutableRefObject<HTMLInputElement> = { current: null } 
+  const titleInputRef: React.MutableRefObject<HTMLInputElement> = { current: null }
+  const subtitleInputRef: React.MutableRefObject<HTMLInputElement> = { current: null }
 
   const [currentBlog, setBlog] = React.useState<BlogType>(initialBlogState)
   const { currentValidationError, touch, validate } = useBlogValidation({ domain: currentBlog })
@@ -103,6 +107,21 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
   const handleInitialFocusEvent: React.EventHandler<React.FocusEvent<HTMLInputElement>> = (e) => {
     touch(e.currentTarget.name)
   }
+
+  // Create a Slate editor object that won't change across renders.
+  const editor = React.useMemo(() => withReact(createEditor()), [])
+
+  const defaultValue = [
+    {
+      type: 'paragraph',
+      children: [
+        {
+          text: 'A line of text in a paragraph. please work, please. please',
+          marks: [] as any[],
+        },
+      ],
+    },
+  ]
   /** render **/
   return (
     <div className="context-wrapper">
@@ -171,6 +190,12 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
           currentBlog={currentBlog}
           setBlog={setBlog}
         />
+        <Slate
+          editor={editor}
+          defaultValue={defaultValue}
+        >
+          <Editable />
+        </Slate>
         <div className="blog-detail-input-wrapper">
           <label htmlFor="content" className="grid-input-label blog-detail-input-label">
             Content
