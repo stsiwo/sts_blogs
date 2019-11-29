@@ -10,6 +10,7 @@
         "moduleResolution": "node",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
+        "esModuleInterop": true,
         "jsx": "react",
         "baseUrl": "./",
         "paths": {
