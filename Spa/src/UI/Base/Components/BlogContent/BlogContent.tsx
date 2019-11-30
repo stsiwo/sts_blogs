@@ -9,6 +9,7 @@ import { Slate, Editable, withReact } from 'src/slate-react'
 import { Editor } from 'slate'
 import { CustomElementProps, CustomElement } from 'src/slate-react/components/custom';
 import { AiOutlinePicLeft, AiOutlinePicRight, AiOutlinePicCenter, AiOutlineFullscreen } from 'react-icons/ai';
+import { FaBold, FaCode, FaItalic, FaImage } from 'react-icons/fa';
 
 declare type ImageCustomElementProps = CustomElementProps & {
   src: string
@@ -278,42 +279,52 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
     <Slate
       editor={editor}
       defaultValue={defaultValue}
+      onChange={value => {
+        // Save the value to Local Storage.
+        const content = JSON.stringify(value)
+        localStorage.setItem('content', content)
+      }}
     >
       <>
-        <button
-          onMouseDown={(e: React.MouseEvent<HTMLButtonElement>) => {
+        <div
+          className="small-icon-wrapper"
+          onMouseDown={(e: React.MouseEvent<HTMLDivElement>) => {
             event.preventDefault()
             editor.exec({ type: 'toggle_bold_mark' })
           }}
         >
-          Bold
-        </button>
-        <button
-          onMouseDown={(e: React.MouseEvent<HTMLButtonElement>) => {
+          <FaBold className="small-icon" />
+        </div>
+        <div
+          className="small-icon-wrapper"
+          onMouseDown={(e: React.MouseEvent<HTMLDivElement>) => {
             event.preventDefault()
             editor.exec({ type: 'toggle_code_block' })
           }}
         >
-          Code
-        </button>
-        <button
-          onMouseDown={(e: React.MouseEvent<HTMLButtonElement>) => {
+          <FaCode className="small-icon" />
+        </div>
+        <div
+          className="small-icon-wrapper"
+          onMouseDown={(e: React.MouseEvent<HTMLDivElement>) => {
             event.preventDefault()
             editor.exec({ type: 'toggle_italic_mark' })
           }}
         >
-          Italic
-        </button>
-        <button
-          onMouseDown={(e: React.MouseEvent<HTMLButtonElement>) => {
+          <FaItalic className="small-icon" />
+        </div>
+        <div
+          className="small-icon-wrapper"
+          onMouseDown={(e: React.MouseEvent<HTMLDivElement>) => {
             event.preventDefault()
             editor.exec({ type: 'insert_image' })
           }}
         >
-          Image
-        </button>
+          <FaImage className="small-icon" />
+        </div>
         <Editable
           className="blog-content-editable"
+          placeholder="start writing your blog here ..."
           renderElement={renderElement}
           renderMark={renderMark}
           onKeyDown={(event: React.KeyboardEvent) => {
