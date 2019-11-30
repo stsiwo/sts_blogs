@@ -1,0 +1,44 @@
+@import '../../../Base/Css/GlobalVariables';
+@import '../../../Base/Css/Mixins';
+
+.blog-content-editable {
+  width: 100%;
+  height: 80%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.editable-figure {
+  width: 100%;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+}
+
+.editable-image-wrapper {
+  position: relative;
+}
+
+.editable-img {
+  max-width: 100%;
+}
+
+.popup-img-menu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 1.0);
+}
+
+.popup-img-menu-left-btn {
+}
+
+.popup-img-menu-center-btn {
+}
+
+.popup-img-menu-full-btn {
+}
+
+.popup-img-menu-right-btn {
+}
+

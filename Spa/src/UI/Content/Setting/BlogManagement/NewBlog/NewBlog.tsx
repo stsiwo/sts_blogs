@@ -11,12 +11,7 @@ import FetchStatus from 'Components/ApiFetch/FetchStatus';
 import ImageInput from 'Components/Input/ImageInput';
 import Input from 'Components/Input/Input';
 import TagInput from 'Components/Input/TagInput';
-// Import the Slate editor factory.
-import { createEditor } from 'slate'
-// Import the Slate components and React plugin.
-import { Slate, Editable, withReact } from 'src/slate-react'
-import { Editor } from 'slate'
-import { CustomElementProps } from 'src/slate-react/components/custom';
+import BlogContent from 'Components/BlogContent/BlogContent';
 var debug = require('debug')('ui:NewBlog')
 
 const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
@@ -110,41 +105,6 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
     touch(e.currentTarget.name)
   }
 
-  // Create a Slate editor object that won't change across renders.
-  const editor = React.useMemo(() => withReact(createEditor()), [])
-
-  const defaultValue = [
-    {
-      type: 'paragraph',
-      children: [
-        {
-          text: 'A line of text in a paragraph. please work, please. please please',
-          marks: [] as any[],
-        },
-      ],
-    },
-  ]
-
-  const CodeElement: React.FunctionComponent<CustomElementProps> = props => {
-    return (
-      <pre {...props.attributes}>
-        <code>{props.children}</code>
-      </pre>
-    )
-  }
-
-  const DefaultElement: React.FunctionComponent<CustomElementProps> = props => {
-    return <p {...props.attributes}>{props.children}</p>
-  }
-
-  const renderElement = React.useCallback(props => {
-    switch (props.element.type) {
-      case 'code':
-        return <CodeElement {...props} />
-      default:
-        return <DefaultElement {...props} />
-    }
-  }, [])
   /** render **/
   return (
     <div className="context-wrapper">
@@ -213,38 +173,7 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
           currentBlog={currentBlog}
           setBlog={setBlog}
         />
-        <Slate
-          editor={editor}
-          defaultValue={defaultValue}
-        >
-          <>
-            <button
-              onMouseDown={(e: React.MouseEvent<HTMLButtonElement>) => {
-              }}
-            >
-              Bold
-            </button>
-            <Editable
-              renderElement={renderElement}
-              onKeyDown={(event: React.KeyboardEvent) => {
-                if (event.key === '`' && event.ctrlKey) {
-                  // Determine whether any of the currently selected blocks are code blocks.
-                  const { selection } = editor
-                  const isCode = selection
-                    ? Editor.match(editor, selection, { type: 'code' })
-                    : false
-
-                  // Toggle the block type depending on `isCode`.
-                  Editor.setNodes(
-                    editor,
-                    { type: isCode ? 'paragraph' : 'code' },
-                    { match: 'block' }
-                  )
-                }
-              }}
-            />
-          </>
-        </Slate>
+        <BlogContent />
         <div className="blog-detail-input-wrapper">
           <label htmlFor="content" className="grid-input-label blog-detail-input-label">
             Content
