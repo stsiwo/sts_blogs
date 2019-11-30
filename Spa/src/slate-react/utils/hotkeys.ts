@@ -49,9 +49,9 @@ const WINDOWS_HOTKEYS = {
  */
 
 const create = (key: string) => {
-  const generic = HOTKEYS[key]
-  const apple = APPLE_HOTKEYS[key]
-  const windows = WINDOWS_HOTKEYS[key]
+  const generic = HOTKEYS[key as keyof typeof HOTKEYS]
+  const apple = APPLE_HOTKEYS[key as keyof typeof APPLE_HOTKEYS]
+  const windows = WINDOWS_HOTKEYS[key as keyof typeof WINDOWS_HOTKEYS]
   const isGeneric = generic && isKeyHotkey(generic)
   const isApple = apple && isKeyHotkey(apple)
   const isWindows = windows && isKeyHotkey(windows)

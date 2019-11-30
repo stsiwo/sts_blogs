@@ -23,7 +23,7 @@ import {
   normalizeDOMPoint,
 } from './utils/dom'
 
-export interface ReactEditor extends Editor {}
+export interface ReactEditor extends Editor { }
 
 export const ReactEditor = {
   /**
@@ -364,8 +364,9 @@ export const ReactEditor = {
         range.setEnd(nearestNode, nearestOffset)
         const contents = range.cloneContents()
         const removals = [
-          ...contents.querySelectorAll('[data-slate-zero-width]'),
-          ...contents.querySelectorAll('[contenteditable=false]'),
+          /** need to fix 'as any' **/
+          ...contents.querySelectorAll('[data-slate-zero-width]') as any,
+          ...contents.querySelectorAll('[contenteditable=false]') as any,
         ]
 
         removals.forEach(el => {

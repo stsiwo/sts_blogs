@@ -740,7 +740,7 @@ export const Editable = (
  * A default memoized decorate function.
  */
 
-const defaultDecorate = () => []
+const defaultDecorate = () => [] as any[]
 
 /**
  * Check if two DOM range objects are equal.

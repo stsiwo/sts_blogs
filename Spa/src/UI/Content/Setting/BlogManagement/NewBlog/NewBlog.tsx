@@ -14,9 +14,9 @@ import TagInput from 'Components/Input/TagInput';
 // Import the Slate editor factory.
 import { createEditor } from 'slate'
 // Import the Slate components and React plugin.
-import { Slate, Editable, withReact } from 'slate-react'
+import { Slate, Editable, withReact } from 'src/slate-react'
 import { Editor } from 'slate'
-import { CustomElementProps } from 'slate-react/lib/components/custom';
+import { CustomElementProps } from 'src/slate-react/components/custom';
 var debug = require('debug')('ui:NewBlog')
 
 const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
