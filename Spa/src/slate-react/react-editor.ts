@@ -364,7 +364,7 @@ export const ReactEditor = {
         range.setEnd(nearestNode, nearestOffset)
         const contents = range.cloneContents()
         const removals = [
-          /** need to fix 'as any' **/
+          /** this is typescript sdie parse error so make this 'as any' **/
           ...contents.querySelectorAll('[data-slate-zero-width]') as any,
           ...contents.querySelectorAll('[contenteditable=false]') as any,
         ]
