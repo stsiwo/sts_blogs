@@ -5,10 +5,12 @@
   background-color: black;
   color: white;
   position: relative;
-  top: $headerHeight;
+  margin-top: auto;
 }
 
 .footer-content-wrapper {
+
+  padding: 30px 10px;
 
   @media only screen and (min-width: $mobileLSize + "px") and (max-width: $tabletSize + "px") {
     max-width: $desktopContentWidth;

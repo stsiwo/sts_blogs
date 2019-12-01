@@ -30,7 +30,7 @@ const App = (props: any) => {
   //const [auth, dispatch] = useUpdateAuthContextReducer()
 
   return (
-    <div>
+    <div className="app-wrapper">
       <CssGlobalContext.Provider value={CssGlobalContextDefaultState}>
         <AuthContext.Provider value={{ auth, dispatch }}>
           <Provider store={store}>
