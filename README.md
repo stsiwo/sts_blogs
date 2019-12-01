@@ -13,3 +13,5 @@
   - useCallback hook instead of nornal function when assign function to component
     -> this is because every time component updates, those function is re-created if don't use useCallback
     -> so this could be performance issue.
+  - should save blog every time user changes (not clicking 'save' button)
+  - create 'publish' button
