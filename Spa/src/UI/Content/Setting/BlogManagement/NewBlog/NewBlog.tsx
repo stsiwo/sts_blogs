@@ -38,7 +38,10 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
     formData.set('mainImageUrl', state.mainImageUrl)
     formData.set('content', state.content)
     formData.set('createdDate', state.createdDate.toJSON())
-    formData.set('tags', JSON.stringify(state.tags))
+    formData.set('tags', JSON.stringify(Array.from(state.tags)))
+    for (const image in state.blogImages) {
+      formData.append('blogImages[]', image)
+    }
     return formData
   }
 
@@ -101,7 +104,7 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
       return {
         ...prev,
         content: content,
-        imageFiles: imageFiles
+        blogImages: imageFiles
       }
     })
     /**

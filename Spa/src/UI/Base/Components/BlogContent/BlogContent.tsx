@@ -34,7 +34,6 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
     defaultElement
   ]
 
-
   // Define our own custom set of helpers for common queries.
   const CustomEditor = {
     // extract current editor's mark contains 'bold' mark
