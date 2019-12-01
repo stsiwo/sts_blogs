@@ -18,54 +18,10 @@
   padding: 0 20px 20px 20px;
   width: 300px;
   margin: 0 auto;
+  text-align: center;
 }
 
-.signup-form-content-item {
-  margin: 20px 0;
+.signup-login-link-wrapper {
+  margin: 10px 0 30px 0;
 }
-
-.signup-form-content-user-name {
-}
-
-.signup-form-content-email {
-}
-
-.signup-form-content-password {
-}
-
-.signup-form-content-password-confirm {
-}
-
-.signup-form-content-item-label {
-  display: block;
-  text-align: start;
-
-}
-
-.signup-form-content-item-input {
-  width: 100%;
-  @include input-text;
-}
-
-.signup-form-content-item-input:focus {
-    
-}
-
-.signup-form-content-btn-wrapper {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.signup-form-content-btn {
-  @include regular-btn;
-}
-
-.signup-form-content-btn:hover {
-}
-
-.signup-form-content-btn:active {
-  box-shadow: 0 0 10px grey;
-}
-
-
 

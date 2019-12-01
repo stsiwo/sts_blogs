@@ -28,10 +28,17 @@ body {
   @include base-input;
   color: black;
   padding: 5px;
+  text-align: center;
 }
 
 .input-error {
   font-size: 1.3em;
+  color: red;
+  font-weight: bold;
+}
+
+.small-input-error {
+  font-size: 1em;
   color: red;
   font-weight: bold;
 }

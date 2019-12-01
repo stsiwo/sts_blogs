@@ -5,6 +5,8 @@ import BaseInput from './BaseInput';
 
 const Input: React.FunctionComponent<InputPropType> = (props: InputPropType) => {
 
+  const inputType = props.inputType ? props.inputType : 'text'
+
   return (
     <BaseInput 
       id={props.id}
@@ -13,7 +15,7 @@ const Input: React.FunctionComponent<InputPropType> = (props: InputPropType) => 
       wrapperStyle={props.wrapperStyle}
     >
       <input 
-        type="text" 
+        type={inputType} 
         name={props.name} 
         id={props.id} 
         className={props.inputStyle} 
@@ -24,7 +26,7 @@ const Input: React.FunctionComponent<InputPropType> = (props: InputPropType) => 
         ref={props.forwardRef}
       />
       {(props.errorMsg && 
-         <div className="input-error">{props.errorMsg}</div>
+         <div className={`input-error ${props.errorStyle}`}>{props.errorMsg}</div>
       )}
     </BaseInput>
   );

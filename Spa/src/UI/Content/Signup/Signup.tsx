@@ -7,6 +7,7 @@ import { useRequest } from 'Hooks/Request/useRequest';
 import { useUserSignupValidation } from 'Hooks/Validation/UserSignup/useUserSignupValidation';
 import './Signup.scss';
 import FetchStatus from 'Components/ApiFetch/FetchStatus';
+import Input from 'Components/Input/Input';
 var debug = require('debug')('ui:Signup')
 
 const Signup: React.FunctionComponent<{}> = (props: {}) => {
@@ -27,7 +28,6 @@ const Signup: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const handleSubmitClickEvent: React.EventHandler<React.MouseEvent<HTMLInputElement>> = async (e) => {
-    debug('clicked update butuon')
     // final check validation ...
     validate()
       .then(() => {
@@ -48,7 +48,7 @@ const Signup: React.FunctionComponent<{}> = (props: {}) => {
 
   return (
     <div className="signup-form-cover">
-      <h2 className="signup-form-title">Signup Form</h2>
+      <h2 className="signup-form-title">Signup</h2>
       <FetchStatus 
         currentFetchStatus={currentRequestStatus} 
         setFetchStatus={setRequestStatus} 
@@ -57,32 +57,62 @@ const Signup: React.FunctionComponent<{}> = (props: {}) => {
         failureMsg={'requesting user signup failed'}
       />
       <form className="signup-form-content">
-        <div className="signup-form-content-item signup-form-content-name">
-          <label htmlFor="name" className="signup-form-content-item-label">User Name</label>
-          <input type="text" name="name" id="name" className="signup-form-content-item-input" placeholder="enter your name..." value={currentUserSignupStatus.name} onFocus={handleInitialFocusEvent} onChange={handleInputChangeEvent} />
-          {(currentValidationError.name && <div className="input-error">{currentValidationError.name}</div>)}
-        </div>
-        <div className="signup-form-content-item signup-form-content-email">
-          <label htmlFor="email" className="signup-form-content-item-label">Email</label>
-          <input type="email" name="email" id="email" className="signup-form-content-item-input" placeholder="enter your email..." value={currentUserSignupStatus.email} onFocus={handleInitialFocusEvent} onChange={handleInputChangeEvent} />
-          {(currentValidationError.email && <div className="input-error">{currentValidationError.email}</div>)}
-        </div>
-        <div className="signup-form-content-item signup-form-content-password">
-          <label htmlFor="password" className="signup-form-content-item-label">Password</label>
-          <input type="password" name="password" id="password" className="signup-form-content-item-input" placeholder="enter your password..." value={currentUserSignupStatus.password} onFocus={handleInitialFocusEvent} onChange={handleInputChangeEvent} />
-          {(currentValidationError.password && <div className="input-error">{currentValidationError.password}</div>)}
-        </div>
-        <div className="signup-form-content-item signup-form-content-password-confirm">
-          <label htmlFor="confirm" className="signup-form-content-item-label">Password Confirm</label>
-          <input type="password" name="confirm" id="confirm" className="signup-form-content-item-input" placeholder="enter your password again..." value={currentUserSignupStatus.confirm} onFocus={handleInitialFocusEvent} onChange={handleInputChangeEvent} />
-          {(currentValidationError.confirm && <div className="input-error">{currentValidationError.confirm}</div>)}
-        </div>
-        <div className="">
-          <span>if you alreay have account </span><Link to='/login' >Login Page</Link>
+        <Input 
+          id={"name"}
+          inputStyle={"black-input"}
+          inputValue={currentUserSignupStatus.name}
+          label={"Name"}
+          name={"name"}
+          onInputChange={handleInputChangeEvent}
+          onInputFocus={handleInitialFocusEvent}
+          placeholder={"enter your name..."}
+          errorMsg={currentValidationError.name}
+          errorStyle={'small-input-error'}
+        />
+        <Input 
+          id={"email"}
+          inputStyle={"black-input"}
+          inputValue={currentUserSignupStatus.email}
+          label={"Email"}
+          name={"email"}
+          onInputChange={handleInputChangeEvent}
+          onInputFocus={handleInitialFocusEvent}
+          placeholder={"enter your email..."}
+          errorMsg={currentValidationError.email}
+          errorStyle={'small-input-error'}
+        />
+        <Input 
+          id={"password"}
+          inputStyle={"black-input"}
+          inputValue={currentUserSignupStatus.password}
+          label={"Password"}
+          name={"password"}
+          onInputChange={handleInputChangeEvent}
+          onInputFocus={handleInitialFocusEvent}
+          placeholder={"enter your password..."}
+          errorMsg={currentValidationError.password}
+          errorStyle={'small-input-error'}
+          inputType={'password'}
+        />
+        <Input 
+          id={"confirm"}
+          inputStyle={"black-input"}
+          inputValue={currentUserSignupStatus.confirm}
+          label={"Confirm"}
+          name={"confirm"}
+          onInputChange={handleInputChangeEvent}
+          onInputFocus={handleInitialFocusEvent}
+          placeholder={"enter your password again ..."}
+          errorMsg={currentValidationError.confirm}
+          errorStyle={'small-input-error'}
+          inputType={'password'}
+        />
+        <div className="signup-login-link-wrapper">
+          <span>if you alreay have account, </span><Link to='/login' >Login Page</Link>
         </div>
         <div className="signup-form-content-btn-wrapper">
-          {(currentValidationError.submit && <div className="input-error">{currentValidationError.submit}</div>)}
-          <input className="signup-form-content-btn" type="button" onClick={handleSubmitClickEvent} value="Signup" />
+          {(currentValidationError.submit && <div className="small-input-error">{currentValidationError.submit}</div>)}
+          <input className="btn" type="button" onClick={handleSubmitClickEvent} value="Signup" />
         </div>
       </form>
     </div>

@@ -2,8 +2,10 @@ import * as React from 'react'
 import { BlogType } from 'domain/blog/BlogType';
 
 export declare type BaseInputPropType = React.PropsWithChildren<{
-  wrapperStyle: string
-  labelStyle: string
+  wrapperStyle?: string
+  labelStyle?: string
+  errorStyle?: string
+  inputType?: string
   label: string
   id: string
 }>
