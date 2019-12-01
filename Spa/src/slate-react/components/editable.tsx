@@ -47,6 +47,7 @@ export const Editable = (
     renderDecoration?: (props: CustomDecorationProps) => JSX.Element
     renderElement?: (props: CustomElementProps) => JSX.Element
     renderMark?: (props: CustomMarkProps) => JSX.Element
+    name?: string
   } & React.HTMLAttributes<HTMLDivElement>
 ) => {
   const {
@@ -369,6 +370,7 @@ export const Editable = (
   return (
     <ReadOnlyContext.Provider value={readOnly}>
       <div
+        data-name={props.name ? props.name : ''}
         // COMPAT: The Grammarly Chrome extension works by changing the DOM
         // out from under `contenteditable` elements, which leads to weird
         // behaviors so we have to disable it like editor. (2017/04/24)
