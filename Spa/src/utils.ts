@@ -31,3 +31,7 @@ export const buildQueryString = (queryStringObject: QueryStringType = {}): strin
     .map(key => esc(key) + '=' + esc(queryStringObject[key]))
     .join('&')
 }
+
+export const generateBlogContentPublicImageUrl = (userId: string, imageName: string): URL => {
+  return new URL(process.env.PUBLIC_IMAGE_PATH + userId + '/' + imageName, process.env.API1_URL)
+}

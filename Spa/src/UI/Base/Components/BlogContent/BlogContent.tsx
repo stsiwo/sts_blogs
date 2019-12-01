@@ -10,9 +10,12 @@ import { Editor } from 'slate'
 import { CustomElementProps, CustomElement } from 'src/slate-react/components/custom';
 import { AiOutlinePicLeft, AiOutlinePicRight, AiOutlinePicCenter, AiOutlineFullscreen } from 'react-icons/ai';
 import { FaBold, FaCode, FaItalic, FaImage } from 'react-icons/fa';
+import { generateBlogContentPublicImageUrl } from 'src/utils';
 
 declare type ImageCustomElementProps = CustomElementProps & {
   src: string
+  publicSrc: URL
+  imageFile?: Blob // extract this when saving. need to remove.
 }
 
 const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogContentPropType) => {
@@ -97,34 +100,27 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
       else if (command.type === 'insert_image') {
         const tempInput = document.createElement('input')
         tempInput.type = 'file'
-        let tempFile: File = null
         tempInput.onchange = (e) => {
-          console.log('on change image')
-          tempFile = (e.target as HTMLInputElement).files[0]
+          const tempFile: File = (e.target as HTMLInputElement).files[0]
           const imgSrc: string = window.URL.createObjectURL(tempFile);
-          console.log(imgSrc)
           const text: Text = { text: '', marks: [] }
           const element: Element = {
-            type: 'image', children: [text], src: imgSrc, attributes: {
+            type: 'image', 
+            children: [text], 
+            src: imgSrc, 
+            publicSrc: generateBlogContentPublicImageUrl('1', tempFile.name),
+            imageFile: tempFile, // need to remove when saving. extract file into formdata separately
+            attributes: {
               onLoad: (e: React.SyntheticEvent) => {
                 window.URL.revokeObjectURL(imgSrc)
               },
-              onClick: (e: React.SyntheticEvent) => {
-                // display pop-up menu
-                //(e.currentTarget as HTMLImageElement).style.display = 'block';
-                //(e.currentTarget as HTMLImageElement).style.margin = '0 auto';
-              }
             }
           }
           const nextDefaultElement: Element = defaultElement
-          console.log(element)
           Editor.insertNodes(editor, element)
           Editor.insertNodes(editor, nextDefaultElement)
         }
         tempInput.click();
-        console.log(tempFile)
-        console.log(editor)
-
       }
 
       // Otherwise, fall back to the built-in `exec` logic for everything else.
@@ -157,9 +153,6 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
   }
 
   const ImageElement: React.FunctionComponent<ImageCustomElementProps> = props => {
-    console.log('inside image element')
-    console.log(props)
-
     const figureRef: React.MutableRefObject<HTMLElement> = React.useRef(null)
     const popupRef: React.MutableRefObject<HTMLDivElement> = React.useRef(null)
 
@@ -259,8 +252,6 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
   }, [])
 
   const DefaultElement: React.FunctionComponent<CustomElementProps> = props => {
-    console.log('default element')
-    console.log(props)
     return <p {...props.attributes}>{props.children}</p>
   }
 
@@ -280,6 +271,7 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
       editor={editor}
       defaultValue={defaultValue}
       onChange={value => {
+        console.log(value)
         // Save the value to Local Storage.
         const content = JSON.stringify(value)
         localStorage.setItem('content', content)
@@ -329,7 +321,6 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
           renderMark={renderMark}
           onKeyDown={(event: React.KeyboardEvent) => {
             if (!event.ctrlKey) {
-              console.log('not ctrlKey')
               return
             }
 
