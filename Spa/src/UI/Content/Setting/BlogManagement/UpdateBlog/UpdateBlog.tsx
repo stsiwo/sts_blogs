@@ -180,7 +180,6 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
           inputValue={currentBlog.tags}
           label={"Tags"}
           labelStyle={"grid-input-label blog-detail-input-label"}
-          onInputChange={handleSubTitleChangeEvent}
           onInputFocus={handleInitialFocusEvent}
           wrapperStyle={'blog-detail-input-wrapper'}
           currentBlog={currentBlog}

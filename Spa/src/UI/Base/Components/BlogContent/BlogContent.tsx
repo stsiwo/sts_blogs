@@ -30,7 +30,7 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
     ],
   }
 
-  const defaultValue: Element[] = [
+  const defaultValue: Element[] = props.value ? JSON.parse(props.value) : [
     defaultElement
   ]
 
@@ -266,6 +266,7 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
     }
   }, [])
 
+
   return (
     <Slate
       editor={editor}
@@ -275,6 +276,9 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
         // Save the value to Local Storage.
         const content = JSON.stringify(value)
         localStorage.setItem('content', content)
+        props.onChange(content)
+        // need to save request every time user change content
+        // better to use rxjs to controll how to request
       }}
     >
       <>
@@ -316,9 +320,11 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
         </div>
         <Editable
           className="blog-content-editable"
-          placeholder="start writing your blog here ..."
+          placeholder={props.placeholder}
           renderElement={renderElement}
           renderMark={renderMark}
+          onFocus={props.onFocus}
+          name={props.name}
           onKeyDown={(event: React.KeyboardEvent) => {
             if (!event.ctrlKey) {
               return

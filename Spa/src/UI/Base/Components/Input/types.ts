@@ -23,7 +23,6 @@ export declare type InputPropType = BaseInputPropType & {
 export declare type TagInputPropType = BaseInputPropType & {
   inputStyle: string
   inputValue: any
-  onInputChange: React.EventHandler<React.ChangeEvent<HTMLInputElement>>
   onInputFocus: React.EventHandler<React.FocusEvent<HTMLInputElement>>
   currentBlog: BlogType 
   setBlog: React.Dispatch<React.SetStateAction<BlogType>>

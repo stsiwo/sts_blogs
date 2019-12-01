@@ -94,10 +94,10 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
     window.URL.revokeObjectURL(currentBlog.mainImageUrl);
   }
 
-  const handleContentChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
+  const handleContentChangeEvent = (content: string): void => {
     setBlog({
       ...currentBlog,
-      content: e.currentTarget.value
+      content: content 
     })
   }
 
@@ -167,20 +167,20 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
           inputValue={currentBlog.tags}
           label={"Tags"}
           labelStyle={"grid-input-label blog-detail-input-label"}
-          onInputChange={handleSubTitleChangeEvent}
           onInputFocus={handleInitialFocusEvent}
           wrapperStyle={'blog-detail-input-wrapper'}
           currentBlog={currentBlog}
           setBlog={setBlog}
         />
-        <BlogContent />
-        <div className="blog-detail-input-wrapper">
-          <label htmlFor="content" className="grid-input-label blog-detail-input-label">
-            Content
-            </label>
-          <input type="text" name="content" id="content" className="black-input grid-input" placeholder="enter blog content..." value={currentBlog.content} onChange={handleTitleChangeEvent} onFocus={handleInitialFocusEvent} />
-          {(currentValidationError.content && <div className="input-error">{currentValidationError.content}</div>)}
-        </div>
+        <BlogContent 
+          name="content"
+          id="content"
+          value={currentBlog.content} 
+          placeholder="enter blog content..."
+          onChange={handleContentChangeEvent} 
+          onFocus={handleInitialFocusEvent} 
+          errorMsg={currentValidationError.content}
+        />
         <input type="hidden" name='creationDate' value={currentBlog.createdDate.toJSON()} />
         <div className="blog-detail-input-wrapper">
           <input type="button" className="btn" value="Save" name='submit' onClick={handleSaveBlogClickEvent} onFocus={handleInitialFocusEvent} />
