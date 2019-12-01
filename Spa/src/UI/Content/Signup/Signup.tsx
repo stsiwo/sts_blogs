@@ -56,7 +56,7 @@ const Signup: React.FunctionComponent<{}> = (props: {}) => {
         successMsg={'requesting user signup success'}
         failureMsg={'requesting user signup failed'}
       />
-      <form className="signup-form-content">
+      <form className="signup-login-form-content">
         <Input 
           id={"name"}
           inputStyle={"black-input"}
