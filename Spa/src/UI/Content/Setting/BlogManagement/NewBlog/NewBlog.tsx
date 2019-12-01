@@ -23,9 +23,9 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
   const { currentValidationError, touch, validate } = useBlogValidation({ domain: currentBlog })
   const { currentRequestStatus: currentNewBlogStatus, setRequestStatus: setNewBlogStatus, sendRequest: saveRequest } = useRequest({})
   const { blogId } = useParams();
-  const userId = useAuthContext()
+  const { auth } = useAuthContext()
   /** anything else **/
-  const path: string = '/users/' + userId + '/blogs/'
+  const path: string = '/users/' + auth.user.id + '/blogs/'
   const method: RequestMethodEnum = RequestMethodEnum.POST
 
   /** EH **/
@@ -39,9 +39,9 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
     formData.set('content', state.content)
     formData.set('createdDate', state.createdDate.toJSON())
     formData.set('tags', JSON.stringify(Array.from(state.tags)))
-    for (const image in state.blogImages) {
+    state.blogImages.forEach((image: File) => {
       formData.append('blogImages[]', image)
-    }
+    })
     return formData
   }
 
@@ -190,6 +190,7 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
           setBlog={setBlog}
         />
         <BlogContent 
+          userId={auth.user.id}
           name="content"
           id="content"
           value={currentBlog.content} 

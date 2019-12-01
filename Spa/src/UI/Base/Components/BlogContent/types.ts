@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 export declare type BlogContentPropType = {
+  userId: string
   name: string
   id: string
   value: string

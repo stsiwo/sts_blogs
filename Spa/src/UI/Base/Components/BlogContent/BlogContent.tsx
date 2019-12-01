@@ -107,7 +107,7 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
             type: 'image', 
             children: [text], 
             src: imgSrc, 
-            publicSrc: generateBlogContentPublicImageUrl('1', tempFile.name),
+            publicSrc: generateBlogContentPublicImageUrl(props.userId, tempFile.name),
             imageFile: tempFile, // need to remove when saving. extract file into formdata separately
             attributes: {
               onLoad: (e: React.SyntheticEvent) => {
