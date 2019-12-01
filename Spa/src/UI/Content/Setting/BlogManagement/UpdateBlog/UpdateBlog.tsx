@@ -11,6 +11,7 @@ import { BlogResponseDataType, RequestMethodEnum } from 'requests/types';
 import './UpdateBlog.scss';
 import Input from 'Components/Input/Input';
 import TagInput from 'Components/Input/TagInput';
+import BlogContent from 'Components/BlogContent/BlogContent';
 var debug = require('debug')('ui:UpdateBlog')
 
 const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
@@ -23,7 +24,7 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
   const { currentRequestStatus: currentBlogUpdateStatus, setRequestStatus: setBlogUpdateStatus, sendRequest: updateRequest } = useRequest({})
   const { currentRequestStatus: currentBlogFetchStatus, setRequestStatus: setBlogFetchStatus, sendRequest: fetchBlog } = useRequest({})
   const { blogId } = useParams();
-  const userId = useAuthContext()
+  const { auth } = useAuthContext()
 
   /** lifecycle **/
   React.useEffect(() => {
@@ -50,7 +51,15 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
     formData.set('mainImageUrl', state.mainImageUrl)
     formData.set('content', state.content)
     formData.set('createdDate', state.createdDate.toJSON())
-    formData.set('tags', JSON.stringify(state.tags))
+    formData.set('tags', JSON.stringify(Array.from(state.tags)))
+    state.blogImages.forEach((image: File) => {
+      formData.append('blogImages[]', image)
+    })
+    /** 
+     * put with form data does not work
+     * so use 'method spoofing
+     **/
+    formData.set('_method', 'PUT')
     return formData
   }
 
@@ -61,7 +70,7 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
         debug('validation passed at save button event handler')
         updateRequest({
           path: '/blogs/' + blogId,
-          method: RequestMethodEnum.PUT,
+          method: RequestMethodEnum.POST,
           headers: { 'content-type': 'multipart/form-data' },
           data: mapStateToFormData(currentBlog),
         })
@@ -104,14 +113,26 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
     window.URL.revokeObjectURL(currentBlog.mainImageUrl);
   }
 
-  const handleContentChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
-    setBlog({
-      ...currentBlog,
-      content: e.currentTarget.value
+  const handleContentChangeEvent = (content: string, imageFiles: File[]): void => {
+    setBlog((prev: BlogType) => {
+      return {
+        ...prev,
+        content: content,
+        blogImages: imageFiles
+      }
     })
+    /**
+     *  if i write this currentBlog does not contain any value when send this to child component and update it
+     *  #REFACTOR
+     *
+     * setBlog({
+     *  ...currentBlog,
+     *  content: content 
+     **/
   }
 
   const handleInitialFocusEvent: React.EventHandler<React.FocusEvent<HTMLInputElement>> = (e) => {
+    const targetName: string = e.currentTarget.name ? e.currentTarget.name : e.currentTarget.getAttribute('data-name')
     touch(e.currentTarget.name)
   }
 
@@ -185,13 +206,16 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
           currentBlog={currentBlog}
           setBlog={setBlog}
         />
-        <div className="blog-detail-input-wrapper">
-          <label htmlFor="content" className="grid-input-label blog-detail-input-label">
-            Content
-            </label>
-          <input type="text" name="content" id="content" className="black-input grid-input" placeholder="enter blog content..." value={currentBlog.content} onChange={handleTitleChangeEvent} onFocus={handleInitialFocusEvent} />
-          {(currentValidationError.content && <div className="input-error">{currentValidationError.content}</div>)}
-        </div>
+        <BlogContent 
+          userId={auth.user.id}
+          name="content"
+          id="content"
+          value={currentBlog.content} 
+          placeholder="enter blog content..."
+          onChange={handleContentChangeEvent} 
+          onFocus={handleInitialFocusEvent} 
+          errorMsg={currentValidationError.content}
+        />
         <div className="blog-detail-input-wrapper">
           <input type="button" className="btn" value="Save" name='submit' onClick={handleSaveBlogClickEvent} onFocus={handleInitialFocusEvent} />
           {(currentValidationError.submit && <div className="input-error">{currentValidationError.submit}</div>)}

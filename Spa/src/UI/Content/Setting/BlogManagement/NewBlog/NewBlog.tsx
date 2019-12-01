@@ -98,8 +98,6 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const handleContentChangeEvent = (content: string, imageFiles: File[]): void => {
-    console.log('handle content change event')
-    console.log(currentBlog)
     setBlog((prev: BlogType) => {
       return {
         ...prev,
