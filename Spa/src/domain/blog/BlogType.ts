@@ -11,6 +11,7 @@ export declare type BlogType = {
   createdDate: Date
   author?: AuthorType,
   tags?: Set<string>,
+  blogImages?: File[],
 }
 
 export const initialBlogState: BlogType = {

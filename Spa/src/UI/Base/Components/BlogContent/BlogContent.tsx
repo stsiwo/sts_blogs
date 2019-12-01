@@ -273,10 +273,19 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
       defaultValue={defaultValue}
       onChange={value => {
         console.log(value)
+        // extract files 
+        const imageList = value.reduce<File[]>((cur: File[], node: Element) => {
+          if (node.type === 'image') {
+            cur.push(node.imageFile)
+          }
+          return cur
+        }, [])
+        console.log('can extract image')
+        console.log(imageList)
         // Save the value to Local Storage.
         const content = JSON.stringify(value)
         localStorage.setItem('content', content)
-        props.onChange(content)
+        props.onChange(content, imageList)
         // need to save request every time user change content
         // better to use rxjs to controll how to request
       }}

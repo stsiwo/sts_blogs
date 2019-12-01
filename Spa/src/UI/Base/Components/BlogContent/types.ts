@@ -5,7 +5,7 @@ export declare type BlogContentPropType = {
   id: string
   value: string
   placeholder: string
-  onChange: (content: string) => void 
+  onChange: (content: string, imageFiles: File[]) => void 
   onFocus: React.EventHandler<React.FocusEvent<HTMLInputElement>>
   errorMsg: string
 }

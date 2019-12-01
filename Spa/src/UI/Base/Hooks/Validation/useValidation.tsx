@@ -26,14 +26,6 @@ const createInitialInputTouchedError = <D extends object = {}>(domain: D): Input
 
 export const useValidation = <D extends object>(input: UseValidationStatusInputType<D>): UseValidationStatusOutputType<D> => {
 
-  const test: ValidationType<UserSignupType> = {
-    name: 'name',
-    confirm: 'confirm',
-    email: 'email',
-    password: 'password',
-    submit: ''
-  }
-
   const initialValidationError = createInitialValidationError<D>(input.domain)
   const initialInputTouched = createInitialInputTouchedError<D>(input.domain)
 

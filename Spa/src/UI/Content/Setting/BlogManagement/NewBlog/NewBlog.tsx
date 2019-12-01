@@ -94,15 +94,29 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
     window.URL.revokeObjectURL(currentBlog.mainImageUrl);
   }
 
-  const handleContentChangeEvent = (content: string): void => {
-    setBlog({
-      ...currentBlog,
-      content: content 
+  const handleContentChangeEvent = (content: string, imageFiles: File[]): void => {
+    console.log('handle content change event')
+    console.log(currentBlog)
+    setBlog((prev: BlogType) => {
+      return {
+        ...prev,
+        content: content,
+        imageFiles: imageFiles
+      }
     })
+    /**
+     *  if i write this currentBlog does not contain any value when send this to child component and update it
+     *  #REFACTOR
+     *
+     * setBlog({
+     *  ...currentBlog,
+     *  content: content 
+     **/
   }
 
   const handleInitialFocusEvent: React.EventHandler<React.FocusEvent<HTMLInputElement>> = (e) => {
-    touch(e.currentTarget.name)
+    const targetName: string = e.currentTarget.name ? e.currentTarget.name : e.currentTarget.getAttribute('data-name')
+    touch(targetName)
   }
 
   /** render **/
