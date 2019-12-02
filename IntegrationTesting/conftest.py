@@ -1,9 +1,14 @@
 import pytest
+from typing import Dict
 
 
 @pytest.fixture
-def sampleFixture():
-    print('set up sample fixture')
+def app():
+    print('setup app fixture')
 
-    yield None
-    print('tear down sample fixture')
+    app: Dict = {
+            "url": 'http://0.0.0.0:8080'
+            }
+
+    yield app
+    print('tear down app fixture')
