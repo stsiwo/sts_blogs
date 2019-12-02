@@ -10,6 +10,10 @@ import { getBlogTestData } from '../../../../tests/data/BlogFaker';
 import { dateFormatOption } from 'src/utils';
 import { useResponsive } from 'Hooks/Responsive/useResponsive';
 import { ScreenSizeStatusType } from 'Hooks/Responsive/types';
+import { FaBookmark, FaThumbsUp } from 'react-icons/fa';
+import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
+import BePartOfIt from 'Components/BePartOfIt/BePartOfIt';
+import ManageYourBlogs from 'Components/ManageYourBlogs/ManageYourBlogs';
 const mainImage = require('../../../../tests/data/images/colorful-1280x1280.jpg');
 const avatarImage = require('../../../../tests/data/images/coffe-4289545_640.jpg');
 const redImage = require('../../../../tests/data/images/red-girl-1920x1279.jpg');
@@ -23,6 +27,7 @@ const Blog: React.FunctionComponent<{}> = (props: {}) => {
   const [currentBlog, setBlog] = React.useState<BlogType>(initialBlogState)
   const { currentRequestStatus: currentBlogFetchStatus, setRequestStatus: setBlogFetchStatus, sendRequest: fetchBlog } = useRequest({})
   const currentScreenSize: ScreenSizeStatusType = useResponsive()
+  const { auth } = useAuthContext()
 
   React.useEffect(() => {
     fetchBlog({
@@ -81,9 +86,25 @@ const Blog: React.FunctionComponent<{}> = (props: {}) => {
           <div className="blog-content-wrapper" role='blog-content'>
             {currentBlog.content}
           </div>
+          <div className="clap-bookmark-wrapper">
+            <div className="icon-wrapper">
+              <FaBookmark className="icon" />
+            </div>
+            <div className="icon-wrapper">
+              <FaThumbsUp className="icon" />
+            </div>
+          </div>
+          <div className="related-blog-list">
+          </div>
         </div>
       </div>
       <div className="aside-wrapper">
+        {(!auth.authed &&
+          <BePartOfIt />
+        )}
+        {(auth.authed &&
+          <ManageYourBlogs />
+        )}
       </div>
     </div>
   );
