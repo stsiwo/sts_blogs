@@ -40,30 +40,27 @@ const Menu: React.FunctionComponent<{}> = (props: {}) => {
         </div>
       )}
       <li className="header-menu-li">
-        <Link className="header-menu-li-link" to="./" >item1</Link>
-      </li>
-      <li className="header-menu-li">
-        <Link className="header-menu-li-link" to="./" >item2</Link>
-      </li>
-      <li className="header-menu-li">
-        <Link className="header-menu-li-link" to="./" >item3</Link>
-      </li>
-      <li className="header-menu-li">
-        <Link className="header-menu-li-link" to="./" >item4</Link>
+        <Link className="header-menu-li-link" to="/blogs" >Blogs</Link>
       </li>
       {auth.authed &&
-        <li className="header-menu-li">
-          <Link className="header-menu-li-link" to="/logout" >Logout</Link>
-        </li>}
+        <>
+          <li className="header-menu-li">
+            <Link className="header-menu-li-link" to="/setting" >Account</Link>
+          </li>
+          <li className="header-menu-li">
+            <Link className="header-menu-li-link" to="/logout" >Logout</Link>
+          </li>
+        </>
+      }
       {!auth.authed &&
         <React.Fragment>
-          <li className="header-menu-li">
-            <Link className="header-menu-li-link" to="/signup" >Signup</Link>
-          </li>
-          <li className="header-menu-li">
-            <Link className="header-menu-li-link" to="/login" >Login</Link>
-          </li>
-        </React.Fragment>
+        <li className="header-menu-li">
+          <Link className="header-menu-li-link" to="/signup" >Signup</Link>
+        </li>
+        <li className="header-menu-li">
+          <Link className="header-menu-li-link" to="/login" >Login</Link>
+        </li>
+      </React.Fragment>
       }
     </ul>
   );

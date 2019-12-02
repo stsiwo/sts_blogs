@@ -111,7 +111,7 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
     return blogList.map((blog: BlogType) => {
       return (
         <Link to={`/blog/${blog.id}`} className="blog-list-items-item-wrapper" key={blog.id} role="blog-item">
-          <BlogItem blog={blog}/>
+          <BlogItem blog={blog} />
         </Link>
       )
     })
@@ -126,29 +126,27 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   return (
     <div className="context-wrapper">
       <div className="main-wrapper">
-        <BlogListController 
-          currentFetchStatus={currentInitialBlogsFetchStatus} 
+        <BlogListController
+          currentFetchStatus={currentInitialBlogsFetchStatus}
           setFetchStatus={setInitialBlogsFetchStatus}
-          handleRefreshClickEvent={handleRefreshClickEvent} 
+          handleRefreshClickEvent={handleRefreshClickEvent}
           handleCancelClickEvent={handleCancelClickEvent}
-          handleFilterSortNavClickEvent={handleFilterSortNavClickEvent} 
+          handleFilterSortNavClickEvent={handleFilterSortNavClickEvent}
           currentPaginationStatus={currentPaginationStatus}
           setPaginationStatus={setPaginationStatus}
         />
         <div className="blog-list-items-wrapper">
           {renderBlogs(getBlogTestData())}
         </div>
-        <div className="blog-list-pagination-wrapper">
-          <Pagination currentPaginationStatus={currentPaginationStatus} setPaginationStatus={setPaginationStatus} />
-        </div>
+        <Pagination currentPaginationStatus={currentPaginationStatus} setPaginationStatus={setPaginationStatus} />
       </div>
       <div className="aside-wrapper">
         <BePartOfIt />
-        <BlogFilterSort 
-          currentFilters={currentFilters} 
-          currentSort={currentSort} 
-          setFilters={setFilters} 
-          setSort={setSort} 
+        <BlogFilterSort
+          currentFilters={currentFilters}
+          currentSort={currentSort}
+          setFilters={setFilters}
+          setSort={setSort}
         />
       </div>
     </div>

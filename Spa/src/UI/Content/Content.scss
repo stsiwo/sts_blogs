@@ -1,11 +1,9 @@
 @import '../Base/Css/GlobalVariables';
 
 .content-wrapper {
-  position: relative;
-  top: $headerHeight; 
   width: 100%;
   max-width: $desktopContentWidth; 
-  margin: 0 auto;
+  margin: $headerHeight auto 200px auto; 
 }
 
 
