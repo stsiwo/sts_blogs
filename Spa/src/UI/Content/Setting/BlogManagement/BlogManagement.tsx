@@ -138,7 +138,7 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
 
     return blogs.map((blog: BlogType) => {
       return (
-        <BlogItem blog={blog} handleDeleteBlogClickEvent={handleDeleteBlogClickEvent}  />
+        <BlogItem blog={blog} handleDeleteBlogClickEvent={handleDeleteBlogClickEvent} isEditDeleteOverlay />
       )
     })
   }

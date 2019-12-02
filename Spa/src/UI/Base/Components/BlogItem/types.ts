@@ -5,6 +5,7 @@ export declare type BlogItemPropType = {
   blog: BlogType
   divRef?: React.MutableRefObject<HTMLDivElement>
   handleDeleteBlogClickEvent?: React.EventHandler<React.MouseEvent<HTMLDivElement>>
+  isEditDeleteOverlay?: boolean
 
 }
 

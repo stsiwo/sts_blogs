@@ -102,6 +102,8 @@ const BlogItem: React.FunctionComponent<BlogItemPropType> = (props: BlogItemProp
     return Array.from(tagSet).map((tag: string) => <div className="blog-list-filter-tags-tag" key={tag}>{tag}</div>)
   }
 
+  const isOverlay: boolean = props.isEditDeleteOverlay ? props.isEditDeleteOverlay : false
+
   return (
     <div className="blog-list-item-wrapper" onMouseEnter={handleBlogItemMouseEnterEvent} onMouseLeave={handleBlogItemMouseLeaveEvent} role="blog-item">
       <img className="blog-list-item-img" src={props.blog.mainImageUrl} alt="blog item" width="150px" height="100px" />
@@ -117,7 +119,7 @@ const BlogItem: React.FunctionComponent<BlogItemPropType> = (props: BlogItemProp
           <img src={props.blog.author.avatarUrl} alt="avatar image" className="blog-list-item-desc-author-img" />
           <p className="blog-list-item-desc-author-name">{props.blog.author.name}</p>
         </div>
-        {(currentOverlayState.componentShow &&
+        {(isOverlay && currentOverlayState.componentShow &&
           <BlogItemOverlay
             currentOverlayState={currentOverlayState}
             setOverlayState={setOverlayState}
