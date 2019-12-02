@@ -12,7 +12,7 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
-      title: 'idp_client_spa',
+      title: 'STS',
       meta: { viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no' },
       template: 'src/index.html',
       inject: true
