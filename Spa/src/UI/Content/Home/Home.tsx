@@ -58,7 +58,9 @@ const Home: React.FunctionComponent<{}> = (props: {}) => {
           <div className="home-blog-tabs-wrapper">
             <button className="tab" >Recent</button>
             <button className="tab" >Popular</button>
-            <button className="tab" >Recommended</button>
+            {(auth.authed &&
+              <button className="tab" >Recommended</button>
+            )}
           </div>
           <div className="home-blog-list-wrapper">
             {renderBlogs()}
