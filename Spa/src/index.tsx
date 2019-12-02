@@ -21,7 +21,7 @@ var debug = require('debug')('ui:App')
 
 const App = (props: any) => {
   debug('Component start')
-  const [auth, dispatch] = useUpdateAuthContextReducer({
+  const [auth, authDispatch] = useUpdateAuthContextReducer({
     authed: true,
     user: getUserTestData(1)[0]
   })
@@ -32,7 +32,7 @@ const App = (props: any) => {
   return (
     <div className="app-wrapper">
       <CssGlobalContext.Provider value={CssGlobalContextDefaultState}>
-        <AuthContext.Provider value={{ auth, dispatch }}>
+        <AuthContext.Provider value={{ auth, authDispatch }}>
           <Provider store={store}>
             <Router>
               <Header />

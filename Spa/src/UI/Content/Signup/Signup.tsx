@@ -15,7 +15,7 @@ const Signup: React.FunctionComponent<{}> = (props: {}) => {
   const [currentUserSignupStatus, setUserSignupStatus] = React.useState<UserSignupType>(initialUserSignupStatus)
   const { currentRequestStatus, setRequestStatus, sendRequest } = useRequest({})
   const { currentValidationError, touch, validate } = useUserSignupValidation({ domain: currentUserSignupStatus })
-  const { dispatch } = useAuthContext()
+  const { authDispatch } = useAuthContext()
 
   const handleInputChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
     currentUserSignupStatus[e.currentTarget.name as keyof UserSignupType] = e.currentTarget.value
@@ -39,7 +39,7 @@ const Signup: React.FunctionComponent<{}> = (props: {}) => {
           data: JSON.stringify(currentUserSignupStatus),
         })
           .then((data: UserResponseDataType) => {
-            if (data) dispatch({ type: 'login', user: data.user as UserType })
+            if (data) authDispatch({ type: 'login', user: data.user as UserType })
           })
       }, () => {
         debug('validation failed at save button event handler') 

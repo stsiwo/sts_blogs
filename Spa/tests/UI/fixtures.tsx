@@ -42,13 +42,13 @@ export const ContextWrapperComponent: React.FunctionComponent<ContextWrapperComp
     }
   }
 
-  const [auth, dispatch] = useUpdateAuthContextReducer(defaultAuth)
+  const [auth, authDispatch] = useUpdateAuthContextReducer(defaultAuth)
 
   console.log(auth)
 
   return (
     <CssGlobalContext.Provider value={CssGlobalContextDefaultState}>
-      <AuthContext.Provider value={{ auth, dispatch }}>
+      <AuthContext.Provider value={{ auth, authDispatch }}>
         <Provider store={store}>
           <Router>
             <TargetComponent />

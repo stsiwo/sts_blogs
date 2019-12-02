@@ -2,7 +2,7 @@ import { UserType } from "domain/user/UserType";
 import { Action } from "redux";
 
 export declare type AuthContextType = {
-  dispatch: React.Dispatch<AuthContextActionType>,
+  authDispatch: React.Dispatch<AuthContextActionType>,
   auth: AuthType 
 }
 

@@ -16,12 +16,14 @@ export const useAuthContext = (): AuthContextType => {
 const updateAuthContextReducer: Reducer<AuthType, AuthContextActionType> = (state, action) => {
   switch (action.type) {
     case 'login':
+      console.log('(context) login case reducer')
       storeUserInfo(action.user)
       return {
         authed: true,
         user: action.user
       }
     case 'logout':
+      console.log('(context) logout case reducer')
       removeUserInfo()
       return {
         authed: false

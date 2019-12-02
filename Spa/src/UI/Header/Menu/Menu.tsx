@@ -17,7 +17,7 @@ const Menu: React.FunctionComponent<{}> = (props: {}) => {
   const ulRef = React.useRef<HTMLUListElement>()
   const currentScreenSize = useResponsive()
 
-  const { auth } = useAuthContext()
+  const { auth, authDispatch } = useAuthContext()
   //const aniProps = useSpring({ width: isNavBarOpen ? currentScreenWidth + 'px' : '0px' })
 
   const handleCloseNavBarClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = (e) => {
@@ -29,6 +29,13 @@ const Menu: React.FunctionComponent<{}> = (props: {}) => {
       ulRef.current.style.width = isNavBarOpen ? '100%' : '0px'
     }
   })
+
+  const handleLogoutClickEvent: React.EventHandler<React.MouseEvent<HTMLElement>> = (e) => {
+    console.log("logout clicked")
+     authDispatch({
+       type: 'logout'
+     })
+  }
 
   return (
     <ul className="header-menu-ul" ref={ulRef}>
@@ -48,7 +55,7 @@ const Menu: React.FunctionComponent<{}> = (props: {}) => {
             <Link className="header-menu-li-link" to="/setting" >Account</Link>
           </li>
           <li className="header-menu-li">
-            <Link className="header-menu-li-link" to="/logout" >Logout</Link>
+            <Link className="header-menu-li-link" to="/" onClick={handleLogoutClickEvent}>Logout</Link>
           </li>
         </>
       }

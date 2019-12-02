@@ -56,8 +56,8 @@ export const request = async (request: RequestContentType): Promise<ResponseResu
       // if 401 (unauthorized error), remove userInfo from localStorage
       if (error.response.status === 401) {
         // is it ok to use hook inside catch clause?? #DOUBT
-        const { dispatch } = useAuthContext()
-        dispatch({
+      const { authDispatch } = useAuthContext()
+        authDispatch({
           type: 'logout'
         })
       }
