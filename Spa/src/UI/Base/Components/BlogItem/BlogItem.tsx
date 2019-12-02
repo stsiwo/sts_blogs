@@ -103,33 +103,50 @@ const BlogItem: React.FunctionComponent<BlogItemPropType> = (props: BlogItemProp
   }
 
   const isOverlay: boolean = props.isEditDeleteOverlay ? props.isEditDeleteOverlay : false
-
-  return (
-    <div className="blog-list-item-wrapper" onMouseEnter={handleBlogItemMouseEnterEvent} onMouseLeave={handleBlogItemMouseLeaveEvent} role="blog-item">
-      <img className="blog-list-item-img" src={props.blog.mainImageUrl} alt="blog item" width="150px" height="100px" />
-      <div className="blog-list-item-desc">
-        <h2 className="blog-list-item-desc-title">{props.blog.title}</h2>
-        {(!currentScreenSize.isMobileL &&
-          <h3 className="blog-list-item-desc-subtitle">{props.blog.subtitle}</h3>)}
-        <div className="blog-list-item-desc-detail">
-          {renderTags(props.blog.tags)}
-          <p className="blog-list-item-desc-detail-date">{props.blog.createdDate.toLocaleDateString("en-US", dateFormatOption)}</p>
+  
+  const renderBlogItem: () => React.ReactNode = () => {
+    return (
+      <div className="blog-list-item-wrapper" onMouseEnter={handleBlogItemMouseEnterEvent} onMouseLeave={handleBlogItemMouseLeaveEvent} role="blog-item">
+        <img className="blog-list-item-img" src={props.blog.mainImageUrl} alt="blog item" width="150px" height="100px" />
+        <div className="blog-list-item-desc">
+          <h2 className="blog-list-item-desc-title">{props.blog.title}</h2>
+          {(!currentScreenSize.isMobileL &&
+            <h3 className="blog-list-item-desc-subtitle">{props.blog.subtitle}</h3>)}
+          <div className="blog-list-item-desc-detail">
+            {renderTags(props.blog.tags)}
+            <p className="blog-list-item-desc-detail-date">{props.blog.createdDate.toLocaleDateString("en-US", dateFormatOption)}</p>
+          </div>
+          <div className="blog-list-item-desc-author">
+            <img src={props.blog.author.avatarUrl} alt="avatar image" className="blog-list-item-desc-author-img" />
+            <p className="blog-list-item-desc-author-name">{props.blog.author.name}</p>
+          </div>
+          {(isOverlay && currentOverlayState.componentShow &&
+            <BlogItemOverlay
+              currentOverlayState={currentOverlayState}
+              setOverlayState={setOverlayState}
+              handleDeleteBlogClickEvent={props.handleDeleteBlogClickEvent}
+              blogId={props.blog.id}
+            />
+          )}
         </div>
-        <div className="blog-list-item-desc-author">
-          <img src={props.blog.author.avatarUrl} alt="avatar image" className="blog-list-item-desc-author-img" />
-          <p className="blog-list-item-desc-author-name">{props.blog.author.name}</p>
-        </div>
-        {(isOverlay && currentOverlayState.componentShow &&
-          <BlogItemOverlay
-            currentOverlayState={currentOverlayState}
-            setOverlayState={setOverlayState}
-            handleDeleteBlogClickEvent={props.handleDeleteBlogClickEvent}
-            blogId={props.blog.id}
-          />
-        )}
       </div>
-    </div>
-  );
+    );
+  }
+
+  if (!isOverlay) {
+    return (
+      <Link to={`/blogs/${props.blog.id}`} className="black-link" key={props.blog.id} role="blog-item">
+        {renderBlogItem()}
+      </Link >
+    );
+  } 
+  else {
+    return (
+      <>
+      {renderBlogItem()}
+      </>
+    );
+  }
 }
 
 export default BlogItem;
