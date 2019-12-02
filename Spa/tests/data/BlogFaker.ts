@@ -17,6 +17,7 @@ export const getBlogTestData = (num: number = 20): BlogType[] => {
       subtitle: faker.lorem.sentences(),
       content: faker.lorem.paragraphs(10),
       createdDate: faker.date.past(),
+      mainImageUrl: faker.image.abstract(),
       author: getUserTestData(1)[0] as AuthorType, 
       tags: new Set<string>(new Array<string>(tagNum).fill(null).map(() => (faker.random.word())))
     })

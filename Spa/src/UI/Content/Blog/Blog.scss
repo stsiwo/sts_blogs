@@ -2,37 +2,66 @@
 @import '../../Base/Css/Mixins';
 
 .blog-wrapper {
-  width: 100%;
-  min-width: 300px;
-  max-width: 600px;
-  text-align: center;
-  margin: 20px auto 0 auto;
   box-sizing: border-box;
-  padding: 0 10px;
+  padding: 10px;
+}
+
+.blog-main-img {
+  max-width: 100%;
+  margin: 0 auto;
+  display: block;
+}
+
+.title-subtitle-wrapper { 
+  max-width: 100%;
+  height: 500px; // might need to change
+  background-size: contain;
+  background-position: center;
+  position: relative;
+  background-repeat: no-repeat;
+}
+
+.title-subtitle-content {
+  position: absolute; 
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 .blog-title {
-
+  font-size: $titleFontSize;
+  text-align: center;
 }
 
 .blog-subtitle {
+  text-align: center;
   font-weight: normal;
   font-size: $subTitleFontSize;
-
-}
-
-.blog-tags-wrapper {
 }
 
 .blog-author-wrapper {
+  display: flex;
+  justify-content: flex-start; 
+  align-items: center;
+  box-sizing: border-box;
+  padding: 5px;
+  margin: 5px 0;
 }
 
 .blog-author-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
 }
 
 .blog-author-name {
+  margin: 0 10px;
+}
+
+.blog-date {
+  margin-left: auto;
 }
 
 .blog-content-wrapper {
-  font-size: $subTitleFontSize; 
+  margin: 20px 0;
+  font-size: 1.2em; 
 }

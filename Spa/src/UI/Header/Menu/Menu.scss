@@ -37,7 +37,7 @@
   padding: 5px;
 
   @media only screen and (max-width: $laptopSize + "px") {
-    font-size: $titileFontSize;
+    font-size: $titleFontSize;
     margin: 3px 0;
     clear: right; // prevent be beside in the menu close icon
     position: relative;

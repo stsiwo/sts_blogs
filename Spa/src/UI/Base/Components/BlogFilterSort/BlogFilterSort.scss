@@ -44,7 +44,7 @@
 .filter-sort-aside-title {
   text-align: left; 
   @media only screen and (max-width: $tabletSize + "px") {
-    font-size: $titileFontSize;
+    font-size: $titleFontSize;
   }
   @media only screen and (min-width: $tabletSize + 1 + "px") {
     font-size: 1.5em; // must match with 'be part of it' title font size
