@@ -21,6 +21,8 @@ import { getBlogTestData } from '../../../../tests/data/BlogFaker';
 import './BlogList.scss';
 import BlogListController from 'Components/BlogListController/BlogListController';
 import BePartOfIt from 'Components/BePartOfIt/BePartOfIt';
+import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
+import ManageYourBlogs from 'Components/ManageYourBlogs/ManageYourBlogs';
 var debug = require('debug')('ui:BlogList')
 
 declare type FetchResultType = {
@@ -49,6 +51,7 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   const { currentFilters, currentSort, setFilters, setSort } = useBlogFilterSort({})
   const { currentRequestStatus: currentInitialBlogsFetchStatus, setRequestStatus: setInitialBlogsFetchStatus, sendRequest: sendBlogsFetchRequest, currentCancelSource } = useRequest({})
   const [currentRefreshCount, setRefreshCount] = React.useState<number>(null)
+  const { auth } = useAuthContext()
 
   const queryString = {
     offset: currentPaginationStatus.offset,
@@ -141,7 +144,12 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
         <Pagination currentPaginationStatus={currentPaginationStatus} setPaginationStatus={setPaginationStatus} />
       </div>
       <div className="aside-wrapper">
-        <BePartOfIt />
+        {(!auth.authed &&
+          <BePartOfIt />
+        )}
+        {(auth.authed &&
+          <ManageYourBlogs />
+        )}
         <BlogFilterSort
           currentFilters={currentFilters}
           currentSort={currentSort}

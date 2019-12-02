@@ -12,6 +12,9 @@ import { useCssGlobalContext } from 'Contexts/CssGlobalContext/CssGlobalContext'
 import { useResponsive } from 'Hooks/Responsive/useResponsive';
 import BlogItem from 'Components/BlogItem/BlogItem';
 import { getBlogTestData } from '../../../../tests/data/BlogFaker';
+import BePartOfIt from 'Components/BePartOfIt/BePartOfIt';
+import ManageYourBlogs from 'Components/ManageYourBlogs/ManageYourBlogs';
+import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
 
 
 const Home: React.FunctionComponent<{}> = (props: {}) => {
@@ -24,6 +27,7 @@ const Home: React.FunctionComponent<{}> = (props: {}) => {
   const [currentPopularBlogs, setPopularBlogs] = React.useState<BlogType>()
   const [currentRecommendedBlogs, setRecommendedBlogs] = React.useState<BlogType>()
   const currentScreenSize = useResponsive()
+  const { auth } = useAuthContext()
 
   const handleSearchIconClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = (e) => {
     searchInputRef.current.style.width = currentSearchInputAnimationStatus.width.value[+currentSearchInputAnimationStatus.isNextDisplay]
@@ -35,7 +39,7 @@ const Home: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const renderBlogs: () => React.ReactNode = () => {
-    return getBlogTestData(5).map((blog: BlogType) => <BlogItem blog={blog}/>)
+    return getBlogTestData(5).map((blog: BlogType) => <BlogItem blog={blog} />)
   }
 
   return (
@@ -61,11 +65,12 @@ const Home: React.FunctionComponent<{}> = (props: {}) => {
           </div>
         </div>
         <div className="aside-wrapper">
-          <div className="be-part-of-it-wrapper">
-            <h2 className="be-part-of-it-title">Be Part of It</h2>
-            <p className="be-part-of-it-desc">Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
-            <button className="btn">Join</button>
-          </div>
+          {(!auth.authed &&
+            <BePartOfIt />
+          )}
+          {(auth.authed &&
+            <ManageYourBlogs />
+          )}
         </div>
       </div>
     </div>

@@ -9,6 +9,7 @@ import { useProfileValidation } from 'Hooks/Validation/Profile/useProfileValidat
 import FetchStatus from 'Components/ApiFetch/FetchStatus';
 import ImageInput from 'Components/Input/ImageInput';
 import Input from 'Components/Input/Input';
+import ManageYourBlogs from 'Components/ManageYourBlogs/ManageYourBlogs';
 var debug = require('debug')('ui:Profile')
 
 
@@ -212,6 +213,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
         </div>
       </div>
       <div className="aside-wrapper">
+        <ManageYourBlogs />
       </div>
     </div>
   );
