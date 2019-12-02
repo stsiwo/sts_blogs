@@ -7,7 +7,6 @@ import NewBlog from './BlogManagement/NewBlog/NewBlog';
 import UpdateBlog from './BlogManagement/UpdateBlog/UpdateBlog';
 import Profile from './Profile/Profile';
 import './Setting.scss';
-import SettingHome from './SettingHome/SettingHome';
 var debug = require('debug')('ui:Setting')
 
 declare type SettingNavItemType = {
@@ -54,7 +53,6 @@ const Setting: React.FunctionComponent<{}> = (props: {}) => {
       </aside>
       <article className="setting-content">
         {/** update for PrivateAuthRoute for authenticated user to access **/}
-        <AuthRoute exact path={`${path}`} component={SettingHome} />
         <AuthRoute exact path={`${path}/profile`} component={Profile} />
         <AuthRoute exact path={`${path}/blogs`} component={BlogManagement} />
         <AuthRoute exact path={`${path}/blogs/new`} component={NewBlog} />

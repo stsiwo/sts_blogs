@@ -52,7 +52,7 @@ const Menu: React.FunctionComponent<{}> = (props: {}) => {
       {auth.authed &&
         <>
           <li className="header-menu-li">
-            <Link className="header-menu-li-link" to="/setting" >Account</Link>
+            <Link className="header-menu-li-link" to="/setting/profile" >Account</Link>
           </li>
           <li className="header-menu-li">
             <Link className="header-menu-li-link" to="/" onClick={handleLogoutClickEvent}>Logout</Link>
