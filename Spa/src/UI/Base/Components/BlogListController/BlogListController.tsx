@@ -41,7 +41,7 @@ const BlogListController: React.FunctionComponent<BlogListControllerPropType> = 
         </div>
       )}
       {(auth.authed &&
-        <Link to="./new" className="aside-new-blog-link" role='new-blog-link'>
+        <Link to="./blogs/new" className="aside-new-blog-link" role='new-blog-link'>
           <div className="icon-wrapper-row">
             <div className="icon-wrapper">
               <AiOutlineFileAdd className="icon" />
