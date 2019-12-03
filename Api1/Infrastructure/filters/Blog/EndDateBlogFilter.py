@@ -1,7 +1,6 @@
 from Infrastructure.filters.Blog.BlogFilter import BlogFilter
-from sqlalchemy.orm.query import Query
 from typing import List, Dict
-from sqlalchemy import or_
+from sqlalchemy import or_, and_
 from utils.util import parseStrToDate
 
 
@@ -12,10 +11,11 @@ class EndDateBlogFilter(BlogFilter):
     def __init__(self):
         pass
 
-    def getFilter(self, query: Query, values: Dict) -> Query:
+    def getFilter(self, values: Dict):
+        filterExpression = True
         for value in values['value']:
-            if values['orOp']:
-                query = query.filter(or_(self._entity.createdDate <= parseStrToDate(value)))
+            if values['orOp']:  # don't use this for now
+                filterExpression = or_(filterExpression, self._entity.createdDate <= parseStrToDate(value))
             else:
-                query = query.filter(self._entity.createdDate <= parseStrToDate(value))
-        return query
+                filterExpression = and_(filterExpression, self._entity.createdDate <= parseStrToDate(value))
+        return filterExpression

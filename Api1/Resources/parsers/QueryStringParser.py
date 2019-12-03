@@ -9,12 +9,15 @@ class QueryStringParser(object):
 
     def parse(self, args: MultiDict) -> Dict:
         argsDict: Dict = {}
+        argsDict['orOp'] = False
         for key, value in args.lists():
-            if key == 'page' or key == 'limit':
+            if key == 'orOp':
+                argsDict[key] = True
+            elif key == 'page' or key == 'limit' or key == 'sort':
                 argsDict[key] = value[0]
             else:
                 argsDict[key] = {
                         'value': value,
-                        'orOp': False
+                        'orOp': False  # don't use this for now
                         }
         return argsDict

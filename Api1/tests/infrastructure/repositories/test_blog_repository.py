@@ -2,16 +2,57 @@ from Infrastructure.repositories.BlogRepository import BlogRepository
 from Infrastructure.DataModels.BlogModel import Blog
 from utils.util import printObject
 import pytest
+from typing import Dict
 
 
 @pytest.mark.blog_repo
-def test_br1_get_all(blogsSeededFixture):
+def test_br1_get_all_should_return_orOp_filtered_pagination_object(blogsSeededFixture):
 
     blogRepo = BlogRepository()
+    dummyQS: Dict = {
+            'orOp': True,
+            'tags': {
+                'value': ['react'],
+                'orOp': False
+                },
+            'keyword': {
+                'value': ['no'],
+                'orOp': False
+                },
+            }
 
-    result = blogRepo.getAll()
+    result = blogRepo.getAll(dummyQS)
+
+    printObject(result)
 
     assert len(result['data']) != 0
+    for blog in result['data']:
+        assert any(tag.name == 'react' for tag in blog.tags)
+
+
+@pytest.mark.blog_repo
+def test_br1_get_all_should_return_no_orOp_filtered_pagination_object(blogsSeededFixture):
+
+    blogRepo = BlogRepository()
+    dummyQS: Dict = {
+            'orOp': False,
+            'tags': {
+                'value': ['react'],
+                'orOp': False
+                },
+            'startDate': {
+                'value': ['2003-01-01T00:00:00.000Z'],
+                'orOp': False
+                },
+            }
+
+    result = blogRepo.getAll(dummyQS)
+
+    printObject(result)
+
+    assert len(result['data']) != 0
+    for blog in result['data']:
+        assert any(tag.name == 'react' for tag in blog.tags)
 
 
 @pytest.mark.blog_repo

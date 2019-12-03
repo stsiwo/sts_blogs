@@ -1,7 +1,7 @@
 from Infrastructure.filters.Blog.BlogFilter import BlogFilter
 from sqlalchemy.orm.query import Query
 from typing import List, Dict
-from sqlalchemy import or_
+from sqlalchemy import or_, and_
 
 
 class TagsBlogFilter(BlogFilter):
@@ -11,10 +11,12 @@ class TagsBlogFilter(BlogFilter):
     def __init__(self):
         pass
 
-    def getFilter(self, query: Query, values: Dict) -> Query:
+    def getFilter(self, values: Dict) -> Query:
+        filterExpression = True
         for value in values['value']:
             if values['orOp']:
-                query = query.filter(or_(self._entity.tags.any(name=value)))
+                filterExpression = or_(filterExpression, self._entity.tags.any(name=value))
             else:
-                query = query.filter(self._entity.tags.any(name=value))
-        return query
+                filterExpression = and_(filterExpression, self._entity.tags.any(name=value))
+
+        return filterExpression

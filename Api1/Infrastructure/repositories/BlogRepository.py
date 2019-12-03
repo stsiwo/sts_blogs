@@ -4,6 +4,8 @@ from typing import List, Dict
 from Infrastructure.filters.Blog.BlogFilterBuilder import BlogFilterBuilder
 from sqlalchemy.orm.query import Query
 from flask_sqlalchemy import Pagination
+from sqlalchemy import or_
+from domain.blog.sort import SortMap
 
 
 class BlogRepository(BaseRepository[Blog]):
@@ -15,9 +17,24 @@ class BlogRepository(BaseRepository[Blog]):
         self._blogFilterBuilder = BlogFilterBuilder()
 
     def getAll(self, queryString: Dict = {}) -> Dict:
+
+        # base
         query: Query = self._session.query(Blog).group_by(Blog.id)
-        query = self._blogFilterBuilder.build(query, queryString)
+
+        # filters
+        # query = self._blogFilterBuilder.build(query, queryString)
+        query = query.filter(self._blogFilterBuilder.build(queryString))
+
+        # sort
+        sortMap: Dict = SortMap.get(queryString.get('sort', '0'))
+        query = query.order_by(sortMap.get('order')(getattr(Blog, sortMap.get('attr'))))
+
+        print('sql query: ')
+        print(query)
+
+        # pagination
         pagination: Pagination = query.paginate(page=int(queryString.get('page', 1)), per_page=int(queryString.get('limit', 20)))
+
         return {
                 'page': pagination.page,
                 'limit': pagination.per_page,

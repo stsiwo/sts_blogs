@@ -14,6 +14,5 @@ class BlogFilter(ABC):
         pass
 
     @abstractmethod
-    def getFilter(self, query: Query, values: Dict) -> Query:
-        """ values is { value: List, orOp: bool } """
+    def getFilter(self, values: Dict):
         pass
