@@ -23,6 +23,7 @@ import BlogListController from 'Components/BlogListController/BlogListController
 import BePartOfIt from 'Components/BePartOfIt/BePartOfIt';
 import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
 import ManageYourBlogs from 'Components/ManageYourBlogs/ManageYourBlogs';
+import { useLocation } from 'react-router';
 var debug = require('debug')('ui:BlogList')
 
 declare type FetchResultType = {
@@ -35,9 +36,14 @@ export declare type CancelTokenSourceProto = {
   id: number
 }
 
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+
 const BlogList: React.FunctionComponent<{}> = (props: {}) => {
 
   const path = '/blogs'
+  const query = useQuery()
   /** state **/
   const [currentBlogs, setBlogs] = React.useState([] as BlogType[])
 
@@ -48,7 +54,14 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   const currentScreenSize = useResponsive()
   const dispatch = useDispatch()
   const { currentPaginationStatus, setPaginationStatus } = usePagination({})
-  const { currentFilters, currentSort, setFilters, setSort } = useBlogFilterSort({})
+  const { currentFilters, currentSort, setFilters, setSort } = useBlogFilterSort({
+    initialTags: [
+      {
+        name: query.get('tags') 
+      }
+    ],
+    initialKeyword: query.get('keyword') 
+  })
   const { currentRequestStatus: currentInitialBlogsFetchStatus, setRequestStatus: setInitialBlogsFetchStatus, sendRequest: sendBlogsFetchRequest, currentCancelSource } = useRequest({})
   const [currentRefreshCount, setRefreshCount] = React.useState<number>(null)
   const { auth } = useAuthContext()

@@ -23,6 +23,8 @@ export declare type FilterType = {
 }
 
 export declare type UseBlogFilterSortInput = {
+  initialTags?: TagType[]
+  initialKeyword?: string
 }
 
 export declare type UseBlogFilterSortOutput = {

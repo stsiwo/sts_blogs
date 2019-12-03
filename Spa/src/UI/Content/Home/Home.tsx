@@ -18,6 +18,7 @@ import ManageYourBlogs from 'Components/ManageYourBlogs/ManageYourBlogs';
 import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
 import { useRequest } from 'Hooks/Request/useRequest';
 import { RequestMethodEnum, BlogListResponseDataType, QueryStringType } from 'requests/types';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 declare type BlogOptionType = {
   recent: BlogType[]
@@ -35,7 +36,7 @@ declare type BlogOptionListType = {
 }
 
 
-const Home: React.FunctionComponent<{}> = (props: {}) => {
+const Home: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComponentProps<{}>) => {
 
   // search input ref
   const searchInputRef = React.useRef<HTMLInputElement>()
@@ -68,6 +69,12 @@ const Home: React.FunctionComponent<{}> = (props: {}) => {
       ...prev,
       active: selectedOption as keyof BlogOptionType
     }))
+  }
+
+  const handleSearchKeyDownEvent: React.EventHandler<React.KeyboardEvent<HTMLInputElement>> = (e) => {
+    if (e.key == 'Enter' && e.currentTarget.value !== '') {
+      props.history.push('/blogs?keyword=' + e.currentTarget.value + '&tags=' + e.currentTarget.value)
+    }
   }
 
   const queryStringOption: QueryStringOptionType = React.useMemo<QueryStringOptionType>(() => ({
@@ -114,7 +121,7 @@ const Home: React.FunctionComponent<{}> = (props: {}) => {
   return (
     <div className="home-wrapper">
       <div className="home-search-bar-wrapper">
-        <input type='text' className="input" placeholder="enter keyword or tags for blog search ..." ref={searchInputRef} />
+        <input type='text' className="hidden-input" placeholder="enter keyword or tags for blog search ..." ref={searchInputRef} onKeyDown={handleSearchKeyDownEvent}/>
         <div className="icon-wrapper" onClick={handleSearchIconClickEvent}>
           <GoSearch className="icon" />
         </div>
@@ -148,6 +155,6 @@ const Home: React.FunctionComponent<{}> = (props: {}) => {
   );
 }
 
-export default Home;
+export default withRouter(Home);
 
 
