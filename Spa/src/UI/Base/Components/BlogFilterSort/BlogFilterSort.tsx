@@ -10,7 +10,8 @@ import { Link } from 'react-router-dom';
 import { StateType } from 'states/types';
 import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
 import { useResponsive } from 'Hooks/Responsive/useResponsive';
-import { SortType, BlogFilterSortPropType } from './types';
+import { BlogFilterSortPropType } from './types';
+import { sortList, SortType } from 'domain/blog/Sort';
 import { TagType } from 'domain/tag/TagType';
 import './BlogFilterSort.scss'
 import { MdClose } from 'react-icons/md';
@@ -113,37 +114,8 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
     }
   })
 
-  /** anything else **/
-  const sortList: SortType[] = [
-    {
-      title: 'Date Asc',
-      value: 0
-    },
-    {
-      title: 'Title Asc',
-      value: 2
-    },
-    {
-      title: 'Clap Asc',
-      value: 4
-    },
-    {
-      title: 'Date Desc',
-      value: 1
-    },
-    {
-      title: 'Title Desc',
-      value: 3
-    },
-    {
-      title: 'Clap Desc',
-      value: 5
-    },
-  ]
-
   /** reach max tags limit: 10 tags **/
   const isTagsLimit: boolean = props.currentFilters.tags.length >= 10
-
 
   /** render **/
   const renderCurrentTags = () => {

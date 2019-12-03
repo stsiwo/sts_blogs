@@ -22,11 +22,6 @@ export declare type FilterType = {
   keyword: string
 }
 
-export declare type SortType = {
-  value: number
-  title: string
-}
-
 export declare type UseBlogFilterSortInput = {
 }
 

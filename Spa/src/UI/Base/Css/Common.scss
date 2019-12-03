@@ -98,11 +98,16 @@ body {
   outline: none; 
 }
 
-.tab:active {
-  background-color: grey;
+.active-tab {
+  background-color: black;
   color: white;
   outline: none; 
-  box-shadow: none; 
+}
+
+.tab:active {
+  background-color: black;
+  color: white;
+  outline: none; 
 }
 
 .btn {

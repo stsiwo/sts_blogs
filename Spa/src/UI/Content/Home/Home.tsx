@@ -2,6 +2,7 @@ import * as React from 'react';
 import './Home.scss';
 import { GoSearch } from 'react-icons/go'
 import { BlogType } from 'domain/blog/BlogType';
+import { SortEnum } from 'domain/blog/Sort';
 
 //test image
 const whiteAvatar = require('../../../../tests/data/images/white-1920x1280.jpg');
@@ -15,6 +16,23 @@ import { getBlogTestData } from '../../../../tests/data/BlogFaker';
 import BePartOfIt from 'Components/BePartOfIt/BePartOfIt';
 import ManageYourBlogs from 'Components/ManageYourBlogs/ManageYourBlogs';
 import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
+import { useRequest } from 'Hooks/Request/useRequest';
+import { RequestMethodEnum, BlogListResponseDataType, QueryStringType } from 'requests/types';
+
+declare type BlogOptionType = {
+  recent: BlogType[]
+  popular: BlogType[]
+  recommended: BlogType[]
+}
+
+declare type QueryStringOptionType = {
+  [P in keyof BlogOptionType]: QueryStringType
+}
+
+declare type BlogOptionListType = {
+  active: keyof BlogOptionType
+  blogs: BlogOptionType
+}
 
 
 const Home: React.FunctionComponent<{}> = (props: {}) => {
@@ -23,9 +41,15 @@ const Home: React.FunctionComponent<{}> = (props: {}) => {
   const searchInputRef = React.useRef<HTMLInputElement>()
   // search input display status
   const [currentSearchInputAnimationStatus, setSearchInputAnimationStatus] = React.useState<CssPropertyAnimationType>(searchInputAnimationStatus)
-  const [currentRecentBlogs, setRecentBlogs] = React.useState<BlogType>()
-  const [currentPopularBlogs, setPopularBlogs] = React.useState<BlogType>()
-  const [currentRecommendedBlogs, setRecommendedBlogs] = React.useState<BlogType>()
+  const [currentBlogOptionList, setBlogOptionList] = React.useState<BlogOptionListType>({
+    active: 'recent',
+    blogs: {
+      recent: [],
+      popular: [],
+      recommended: [],
+    }
+  })
+  const { currentRequestStatus: currentBlogsRequestStatus, sendRequest: sendBlogsRequest } = useRequest({})
   const currentScreenSize = useResponsive()
   const { auth } = useAuthContext()
 
@@ -38,8 +62,53 @@ const Home: React.FunctionComponent<{}> = (props: {}) => {
     })
   }
 
+  const handleSelectedBlogOptionClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
+    const selectedOption: string = e.currentTarget.getAttribute('data-option')
+    setBlogOptionList((prev: BlogOptionListType) => ({
+      ...prev,
+      active: selectedOption as keyof BlogOptionType
+    }))
+  }
+
+  const queryStringOption: QueryStringOptionType = React.useMemo<QueryStringOptionType>(() => ({
+    recent: {
+      limit: 5,
+      sort: SortEnum.DATE_ASC
+    },
+    popular: {
+      limit: 5,
+      tags: '',
+    },
+    recommended: {
+      limit: 5,
+      sort: SortEnum.CLAP_ASC
+    }
+  }), [])
+
+  React.useEffect(() => {
+    sendBlogsRequest({
+      path: '/blogs',
+      method: RequestMethodEnum.GET,
+      queryString: queryStringOption[currentBlogOptionList.active],
+    })
+      .then((data: BlogListResponseDataType) => {
+        if (data) {
+          setBlogOptionList((prev: BlogOptionListType) => ({
+            active: prev.active,
+            blogs: {
+              ...prev.blogs,
+              recent: data.blogs,
+            }
+          }))
+        }
+      })
+  }, [
+    currentBlogOptionList.active 
+  ])
+
   const renderBlogs: () => React.ReactNode = () => {
-    return getBlogTestData(5).map((blog: BlogType) => <BlogItem blog={blog} />)
+    const currentBlogOption: string = currentBlogOptionList.active
+    return currentBlogOptionList.blogs[currentBlogOption as keyof BlogOptionType].map((blog: BlogType) => <BlogItem blog={blog} />)
   }
 
   return (
@@ -56,10 +125,10 @@ const Home: React.FunctionComponent<{}> = (props: {}) => {
       <div className="context-wrapper">
         <div className="main-wrapper">
           <div className="home-blog-tabs-wrapper">
-            <button className="tab" >Recent</button>
-            <button className="tab" >Popular</button>
+            <button className={"tab " + (currentBlogOptionList.active === 'recent' && 'active-tab')} onClick={handleSelectedBlogOptionClickEvent} data-option={"recent"}>Recent</button>
+            <button className={"tab " + (currentBlogOptionList.active === 'popular' && 'active-tab')} onClick={handleSelectedBlogOptionClickEvent} data-option={"popular"}>Popular</button>
             {(auth.authed &&
-              <button className="tab" >Recommended</button>
+              <button className={"tab " + (currentBlogOptionList.active === 'recommended' && 'active-tab')} onClick={handleSelectedBlogOptionClickEvent} data-option={"recommended"}>Recommended</button>
             )}
           </div>
           <div className="home-blog-list-wrapper">
