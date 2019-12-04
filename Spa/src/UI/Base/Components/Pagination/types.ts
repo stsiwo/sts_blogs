@@ -14,7 +14,7 @@ export declare type PageLimitSelectPropType = {
 }
 
 export declare type PaginationStatusType = {
-  offset: number
+  page: number
   limit: number
   totalCount: number
 }
@@ -30,14 +30,13 @@ export declare type UsePaginationOutputType = {
 export declare type BuildPaginationResultType = {
   pageList: PageType[]
   maxPageNum: number
-  maxPageNumOffset: number
+  page: number
 }
 
 /** type for each page button **/
 export declare type PageType = {
   /** page number of the page button **/
   pageNum: number
-  offset: number
   /** css for the page button **/
   /** either non-selected or selected **/
   css: string

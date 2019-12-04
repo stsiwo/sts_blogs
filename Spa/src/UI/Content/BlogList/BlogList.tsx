@@ -67,7 +67,7 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   const { auth } = useAuthContext()
 
   const queryString = {
-    offset: currentPaginationStatus.offset,
+    page: currentPaginationStatus.page,
     limit: currentPaginationStatus.limit,
     tags: currentFilters.tags.map((tag: TagType) => tag.name),
     startDate: currentFilters.creationDate.start ? currentFilters.creationDate.start.toJSON() : null,

@@ -5,33 +5,31 @@ import { BuildPaginationResultType, PageType } from './types';
  * helper hook for pagination 
  *
  **/
-export const buildPagination: (offset: number, totalCount: number, limit: number) => BuildPaginationResultType = (offset, totalCount, limit) => {
-  const pageNumList: number[] = generatePageNumList(totalCount, limit, offset);
+export const buildPagination: (totalCount: number, limit: number, page: number) => BuildPaginationResultType = (totalCount, limit, page) => {
+  const pageNumList: number[] = generatePageNumList(totalCount, limit, page);
   const pageList: PageType[] = pageNumList.map((pageNum) => {
-    const currentPageNum = calculateCurrentPageNum(offset, limit);
+    const currentPageNum = page 
     return {
       pageNum: pageNum,
-      offset: calculateOffset(pageNum, limit),
       ...(currentPageNum === pageNum && { css: "pagination-btn pagination-btn-selected" }),
       ...(currentPageNum !== pageNum && { css: "pagination-btn" }),
     } as PageType;
   })
   const maxPageNum: number = calculateMaxPageNum(totalCount, limit);
-  const maxPageNumOffset: number = calculateOffset(maxPageNum, limit);
 
   return {
+    page: page,
     pageList: pageList,
     maxPageNum: maxPageNum,
-    maxPageNumOffset: maxPageNumOffset
   }
 }
 
-const generatePageNumList: (totalCount: number, limit: number, offset: number) => number[] = (totalCount, limit, offset) => {
+const generatePageNumList: (totalCount: number, limit: number, page: number) => number[] = (totalCount, limit, page) => {
 
   const btnNum = 5;
   const leftBtnNum = 2;
   const rightBtnNum = 2;
-  const currentPageNum = (offset !== 0) ? offset / limit : 1;
+  const currentPageNum = page;
   const maxPageNum = calculateMaxPageNum(totalCount, limit);
 
   if (totalCount <= limit) return [];
@@ -51,14 +49,7 @@ const generatePageNumList: (totalCount: number, limit: number, offset: number) =
   }
 }
 
-const calculateOffset: (pageNum: number, limit: number) => number = (pageNum, limit) => {
-  return (pageNum - 1) * limit;
-}
-
 const calculateMaxPageNum: (totalCount: number, limit: number) => number = (totalCount, limit) => {
   return Math.ceil(totalCount / limit);
 }
 
-const calculateCurrentPageNum: (offset: number, limit: number) => number = (offset, limit) => {
-  return (offset !== 0) ? offset / limit : 1;
-}

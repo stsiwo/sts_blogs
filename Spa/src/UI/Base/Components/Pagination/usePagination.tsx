@@ -4,7 +4,7 @@ import { UsePaginationInputType, UsePaginationOutputType, PaginationStatusType }
 
 export const usePagination = (input: UsePaginationInputType): UsePaginationOutputType => {
   const [currentPaginationStatus, setPaginationStatus] = React.useState<PaginationStatusType>({
-    offset: 0,
+    page: 1,
     limit: 20,
     totalCount: 0
   })
