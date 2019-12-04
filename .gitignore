@@ -8,10 +8,13 @@ env/
 # cache
 __pycache__/
 
-# npm node module
-node_modules/
+# env file
+.env*
 
 ### SPA ###
+
+# npm node module
+node_modules/
 
 # env
 .env.*

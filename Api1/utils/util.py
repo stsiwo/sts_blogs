@@ -2,6 +2,16 @@ import pprint
 from collections.abc import Iterable
 import json
 from datetime import datetime
+from typing import Dict
+
+
+def ppDict(target: Dict, indent=0):
+    for key, value in target.items():
+        if isinstance(value, dict):
+            print('/t' + str(key) + ": ")
+            ppDict(value)
+        else:
+            print('\t' + str(key) + ': ' + str(value))
 
 
 def prettyPrint(target):

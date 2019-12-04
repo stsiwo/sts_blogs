@@ -3,6 +3,7 @@ from flask_cors import CORS
 from Configs.extensions import (
         api, db, jwt, migrate, ma, bcrypt
         )
+from utils.util import printObject, ppDict
 
 
 # the order must be kept
@@ -10,6 +11,8 @@ def configureApp(config_object="Configs.settings"):
 
     # config
     app.config.from_object(config_object)
+
+    ppDict(app.config)
 
     # ygmail config (register and connection)
     import Configs.ygmailConfig

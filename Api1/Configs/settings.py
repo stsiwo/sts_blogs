@@ -2,8 +2,19 @@ from dotenv import load_dotenv
 import os
 from pathlib import Path
 
-# env file
-env_path = Path('.').parent / '.env'
+# load env file based on the 'FLASK_ENV'
+currentEnv = os.getenv('FLASK_ENV', 'DEVELOPMENT').upper()
+env_path = Path('.').parent / '.env.development'
+
+if currentEnv == 'TESTING':
+    env_path = Path('.').parent / '.env.testing'
+elif currentEnv == 'DEVELOPMENT':
+    env_path = Path('.').parent / '.env.development'
+elif currentEnv == 'STAGING':
+    env_path = Path('.').parent / '.env.staging'
+elif currentEnv == 'PRODUCTION':
+    env_path = Path('.').parent / '.env.production'
+
 load_dotenv(dotenv_path=env_path)
 
 # jwt config
@@ -28,14 +39,15 @@ JWT_REFRESH_COOKIE_PATH = '/token/refresh'
 JWT_COOKIE_CSRF_PROTECT = True
 
 # Set the secret key to sign the JWTs with
-JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'super-secret')
+JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
 
 # db config
-SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/api1.db'
+SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI', 'sqlite:////tmp/api1.db')
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # image files
-UPLOAD_FOLDER = 'uploads'
+UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER', 'uploads')
+
 PUBLIC_FILE_FOLDER = 'images'
 
 # custome error handling
@@ -51,6 +63,8 @@ FORGOT_PASSWORD_TOKEN_EXPIRY = 1800
 
 # client spa url
 CLIENT_SPA_URL = os.getenv('CLIENT_SPA_URL', 'http://localhost')
+
+TESTING = os.getenv('TESTING', False)
 
 # yagmail
 # MYGMAIL_USERNAME = os.getenv('MYGMAIL_USERNAME')

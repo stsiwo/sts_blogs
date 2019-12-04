@@ -76,12 +76,12 @@ def testFileStorage():
 def application():
     print('setup application fixture ...')
     db_fd, app.config['DATABASE'] = tempfile.mkstemp()
-    app.config['TESTING'] = True
     # RuntimeError: Session backend did not open a session. Check the configuration
+    # app.config['TESTING'] = True  move to .env.testing
     # need to set secret key
-    app.config['SECRET_KEY'] = 'sekrit!'
-    app.config['SQLALCHEMY_ECHO'] = True
-    app.config['UPLOAD_FOLDER'] = 'temp/uploads'
+    # app.config['SECRET_KEY'] = 'sekrit!'
+    # app.config['SQLALCHEMY_ECHO'] = True
+    # app.config['UPLOAD_FOLDER'] = 'temp/uploads'
 
     yield app
 
