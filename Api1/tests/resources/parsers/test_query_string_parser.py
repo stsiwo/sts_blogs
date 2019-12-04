@@ -9,19 +9,19 @@ def test_query_string_parser():
     dummyQueryStringMultiDict = MultiDict()
     dummyQueryStringMultiDict.add('limit', '30')
     dummyQueryStringMultiDict.add('page', '1')
-    dummyQueryStringMultiDict.add('tags', 'tag1')
-    dummyQueryStringMultiDict.add('tags', 'tag2')
-    dummyQueryStringMultiDict.add('tags', 'tag3')
-    dummyQueryStringMultiDict.add('tags', 'tag4')
+    dummyQueryStringMultiDict.add('tags', 'tag1,tag2,tag3,tag4')
     dummyQueryStringMultiDict.add('keyword', 'hey,hey')
     dummyQueryStringMultiDict.add('startDate', '1996-10-15T00:05:32.000Z')
     dummyQueryStringMultiDict.add('endDate', '1996-10-15T00:05:32.000Z')
 
     result = queryStringParser.parse(dummyQueryStringMultiDict)
 
+    printObject(result)
+
     expectedResult = {
             'limit': '30',
             'page': '1',
+            'orOp': False,
             'tags': {
                 'value': ['tag1', 'tag2', 'tag3', 'tag4'],
                 'orOp': False

@@ -15,6 +15,11 @@ class QueryStringParser(object):
                 argsDict[key] = True
             elif key == 'page' or key == 'limit' or key == 'sort':
                 argsDict[key] = value[0]
+            elif key == 'tags':
+                argsDict[key] = {
+                        'value': value[0].split(","),
+                        'orOp': False  # don't use this for now
+                        }
             else:
                 argsDict[key] = {
                         'value': value,
