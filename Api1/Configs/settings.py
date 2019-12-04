@@ -17,8 +17,9 @@ elif currentEnv == 'PRODUCTION':
 
 load_dotenv(dotenv_path=env_path)
 
-# jwt config
+FLASK_APP = './run.py'
 
+# jwt config
 # Configure application to store JWTs in cookies
 JWT_TOKEN_LOCATION = ['cookies']
 

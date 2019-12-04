@@ -6,7 +6,7 @@ class Tag(BaseModel):
 
     __tablename__ = 'tags'
 
-    name = db.Column(db.VARCHAR, primary_key=True)
+    name = db.Column(db.VARCHAR(16), primary_key=True)
 
     # lower-case and remove space
     @staticmethod

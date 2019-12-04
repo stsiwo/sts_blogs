@@ -11,7 +11,7 @@ tags = db.Table(
         ),
         db.Column(
             'tag_name',
-            db.VARCHAR,
+            db.VARCHAR(16),
             db.ForeignKey('tags.name'),
             primary_key=True
             ),
