@@ -11,6 +11,9 @@ __pycache__/
 # env file
 .env*
 
+# asset
+Api1/uploads/
+
 ### SPA ###
 
 # npm node module
