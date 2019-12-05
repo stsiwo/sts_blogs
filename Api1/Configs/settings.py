@@ -40,7 +40,7 @@ JWT_REFRESH_COOKIE_PATH = '/token/refresh'
 JWT_COOKIE_CSRF_PROTECT = True
 
 # Set the secret key to sign the JWTs with
-JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
+JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'testing')
 
 # db config
 SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI', 'sqlite:////tmp/api1.db')
@@ -58,7 +58,7 @@ PUBLIC_FILE_FOLDER = 'images'
 UPLOAD_ENDPOINT = '/{}'.format(UPLOAD_FOLDER)
 
 # itsdangrous
-SIGNER_SECRET_KEY = os.getenv('SIGNER_SECRET_KEY')
+SIGNER_SECRET_KEY = os.getenv('SIGNER_SECRET_KEY', 'testing')
 # 30 min
 FORGOT_PASSWORD_TOKEN_EXPIRY = 1800
 
