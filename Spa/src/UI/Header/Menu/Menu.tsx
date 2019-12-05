@@ -38,10 +38,10 @@ const Menu: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   return (
-    <ul className="header-menu-ul" ref={ulRef}>
+    <ul className="header-menu-ul" ref={ulRef} role="menu">
       {(currentScreenSize.isLTELaptop &&
-        <div className="header-menu-close-icon-row">
-          <div className="icon-wrapper" onClick={handleCloseNavBarClickEvent}>
+        <div className="header-menu-close-icon-row" >
+          <div className="icon-wrapper" onClick={handleCloseNavBarClickEvent} role="menu-close-icon">
             <MdClose className="icon header-menu-close-icon" />
           </div>
         </div>
