@@ -29,15 +29,15 @@ jobs:
           working_directory: ./Api1
           command: |
             printenv
-            echo $CLIENT_SPA_URL > .env.testing
-            echo $JWT_COOKIE_SECURE >> .env.testing
-            echo $JWT_SECRET_KEY >> .env.testing
-            echo $SECRET_KEY >> .env.testing
-            echo $SIGNER_SECRET_KEY >> .env.testing
-            echo $SQLALCHEMY_DATABASE_URI >> .env.testing
-            echo $SQLALCHEMY_ECHO >> .env.testing
-            echo $TESTING >> .env.testing
-            echo $UPLOAD_FOLDER >> .env.testing
+            echo CLIENT_SPA_URL=$CLIENT_SPA_URL > .env.testing
+            echo JWT_COOKIE_SECURE=$JWT_COOKIE_SECURE >> .env.testing
+            echo JWT_SECRET_KEY=$JWT_SECRET_KEY >> .env.testing
+            echo SECRET_KEY=$SECRET_KEY >> .env.testing
+            echo SIGNER_SECRET_KEY=$SIGNER_SECRET_KEY >> .env.testing
+            echo SQLALCHEMY_DATABASE_URI=$SQLALCHEMY_DATABASE_URI >> .env.testing
+            echo SQLALCHEMY_ECHO=$SQLALCHEMY_ECHO >> .env.testing
+            echo TESTING=$TESTING >> .env.testing
+            echo UPLOAD_FOLDER=$UPLOAD_FOLDER >> .env.testing
             head ./.env.testing
       - run: 
           name: Install Dependencies 
