@@ -35,8 +35,8 @@ def test_tags_filter(exSession, blogsSeededFixture):
     filteredBlogs = dummyQuery.all()
 
     for blog in filteredBlogs:
-        assert blog.tags[0].name == 'js'
-        assert blog.tags[1].name == 'webpack'
+        assert (tag.name == 'js' for tag in blog.tags)
+        assert (tag.name == 'webpack' for tag in blog.tags)
 
 
 def test_keyword(exSession, blogsSeededFixture):

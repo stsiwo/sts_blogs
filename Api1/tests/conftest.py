@@ -26,6 +26,10 @@ from werkzeug.datastructures import FileStorage
 
 app = main
 
+###
+# database setup: use flask migration and command to setup initial database and data
+###
+
 
 @pytest.fixture
 def testImageFile():
@@ -97,11 +101,8 @@ def database(application, request):
 
     db.app = application
 
-    db.create_all()
-
     def fin():
         print("teardown database ...")
-        clear_data(db)
 
     request.addfinalizer(fin)
     return db
@@ -206,7 +207,7 @@ def usersSeededFixture(application, exSession, testExistingFileStorage):
 
 
 @pytest.fixture
-def blogsSeededFixture(exSession, usersSeededFixture, tagsSeededFixture):
+def blogsSeededFixture(exSession, usersSeededFixture):
     print("setup blogsSeededFixture fixture")
 
     memberUser = usersSeededFixture
