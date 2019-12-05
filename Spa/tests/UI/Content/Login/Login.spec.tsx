@@ -70,7 +70,7 @@ describe('l-c1: Login Component testing', () => {
       fireEvent.focus(emailInput) // need to focus to enable to display validation error on dom
       fireEvent.change(emailInput, { target: { value: '' } })
       const emailErrorNode = await waitForElement(() => getByText('email is a required field'))
-      fireEvent.click(getByText('Login'))
+      fireEvent.click(getByRole('login-btn'))
       await waitForElement(() => getByText('please fix validation errors before submit'))
       expect(api.request).toHaveBeenCalledTimes(0)
     })
@@ -99,7 +99,7 @@ describe('l-c1: Login Component testing', () => {
       fireEvent.focus(passwordInput) // need to focus to enable to display validation error on dom
       fireEvent.change(passwordInput, { target: { value: '' } })
       const passwordErrorNode = await waitForElement(() => getByText('password is a required field'))
-      fireEvent.click(getByText('Login'))
+      fireEvent.click(getByRole('login-btn'))
       await waitForElement(() => getByText('please fix validation errors before submit'))
       expect(api.request).toHaveBeenCalledTimes(0)
     })
@@ -110,7 +110,7 @@ describe('l-c1: Login Component testing', () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Login} isAuth />
       )
-      const confirmInput = await waitForElement(() => getByLabelText('Password Confirm'))
+      const confirmInput = await waitForElement(() => getByLabelText('Confirm'))
       fireEvent.focus(confirmInput) // need to focus to enable to display validation error on dom
       fireEvent.change(confirmInput, { target: { value: '' } })
       const confirmErrorNode = await waitForElement(() => getByText('confirm is a required field'))
@@ -124,11 +124,11 @@ describe('l-c1: Login Component testing', () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Login} isAuth />
       )
-      const confirmInput = await waitForElement(() => getByLabelText('Password Confirm'))
+      const confirmInput = await waitForElement(() => getByLabelText('Confirm'))
       fireEvent.focus(confirmInput) // need to focus to enable to display validation error on dom
       fireEvent.change(confirmInput, { target: { value: '' } })
       const confirmErrorNode = await waitForElement(() => getByText('confirm is a required field'))
-      fireEvent.click(getByText('Login'))
+      fireEvent.click(getByRole('login-btn'))
       await waitForElement(() => getByText('please fix validation errors before submit'))
       expect(api.request).toHaveBeenCalledTimes(0)
     })
@@ -140,7 +140,7 @@ describe('l-c1: Login Component testing', () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Login} isAuth />
       )
-      const confirmInput = await waitForElement(() => getByLabelText('Password Confirm'))
+      const confirmInput = await waitForElement(() => getByLabelText('Confirm'))
       fireEvent.focus(confirmInput) // need to focus to enable to display validation error on dom
       fireEvent.change(confirmInput, { target: { value: 'match' } })
       const confirmErrorNode = await waitForElement(() => getByText('passwords must match'))
@@ -154,11 +154,11 @@ describe('l-c1: Login Component testing', () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Login} isAuth />
       )
-      const confirmInput = await waitForElement(() => getByLabelText('Password Confirm'))
+      const confirmInput = await waitForElement(() => getByLabelText('Confirm'))
       fireEvent.focus(confirmInput) // need to focus to enable to display validation error on dom
       fireEvent.change(confirmInput, { target: { value: 'match' } })
       const confirmErrorNode = await waitForElement(() => getByText('passwords must match'))
-      fireEvent.click(getByText('Login'))
+      fireEvent.click(getByRole('login-btn'))
       await waitForElement(() => getByText('please fix validation errors before submit'))
       expect(api.request).toHaveBeenCalledTimes(0)
     })
@@ -170,7 +170,7 @@ describe('l-c1: Login Component testing', () => {
         <ContextWrapperComponent component={Login} />
       )
       const loginNode = await waitForElement(() => getByText('Signup Page'))
-      expect(loginNode.getAttribute('href')).toBe('/login')
+      expect(loginNode.getAttribute('href')).toBe('/signup')
     })
   })
 
@@ -191,7 +191,7 @@ describe('l-c1: Login Component testing', () => {
       const inputs = await waitForElement(() => [
         getByLabelText('Email'),
         getByLabelText('Password'),
-        getByLabelText('Password Confirm'),
+        getByLabelText('Confirm'),
       ])
 
       seedInputTestValues(inputs, [
@@ -200,7 +200,7 @@ describe('l-c1: Login Component testing', () => {
         'test-password'
       ])
 
-      fireEvent.click(getByText('Login'))
+      fireEvent.click(getByRole('login-btn'))
       await wait(() => {
         expect(api.request).toHaveBeenCalledTimes(1)
       })
@@ -216,7 +216,7 @@ describe('l-c1: Login Component testing', () => {
       const inputs = await waitForElement(() => [
         getByLabelText('Email'),
         getByLabelText('Password'),
-        getByLabelText('Password Confirm'),
+        getByLabelText('Confirm'),
       ])
 
       seedInputTestValues(inputs, [
@@ -225,7 +225,7 @@ describe('l-c1: Login Component testing', () => {
         'test-password'
       ])
 
-      fireEvent.click(getByText('Login'))
+      fireEvent.click(getByRole('login-btn'))
       // wait for expectation meet otherwise async timeout
       await wait(() => {
         expect(getByText('requesting user login success')).toBeInTheDocument()
@@ -242,7 +242,7 @@ describe('l-c1: Login Component testing', () => {
       const inputs = await waitForElement(() => [
         getByLabelText('Email'),
         getByLabelText('Password'),
-        getByLabelText('Password Confirm'),
+        getByLabelText('Confirm'),
       ])
 
       seedInputTestValues(inputs, [
@@ -251,7 +251,7 @@ describe('l-c1: Login Component testing', () => {
         'test-password'
       ])
 
-      fireEvent.click(getByText('Login'))
+      fireEvent.click(getByRole('login-btn'))
       // wait for expectation meet otherwise async timeout
       await wait(() => {
         expect(getByText('requesting user login failed')).toBeInTheDocument()
@@ -268,7 +268,7 @@ describe('l-c1: Login Component testing', () => {
       const inputs = await waitForElement(() => [
         getByLabelText('Email'),
         getByLabelText('Password'),
-        getByLabelText('Password Confirm'),
+        getByLabelText('Confirm'),
       ])
 
       seedInputTestValues(inputs, [
@@ -277,7 +277,7 @@ describe('l-c1: Login Component testing', () => {
         'test-password'
       ])
 
-      fireEvent.click(getByText('Login'))
+      fireEvent.click(getByRole('login-btn'))
       // wait for expectation meet otherwise async timeout
       await wait(() => {
         expect(getByText('requesting user login failed')).toBeInTheDocument()

@@ -10,15 +10,16 @@ import FetchStatus from 'Components/ApiFetch/FetchStatus';
 import { useDispatch } from 'react-redux';
 import Input from 'Components/Input/Input';
 import { useRouteMatch } from 'react-router';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 var debug = require('debug')('ui:Login')
 
-const Login: React.FunctionComponent<{}> = (props: {}) => {
+const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComponentProps<{}>) => {
 
   const [currentUserLoginStatus, setUserLoginStatus] = React.useState<UserLoginType>(initialUserLoginStatus)
   const { currentRequestStatus, setRequestStatus, sendRequest } = useRequest({})
   const { currentValidationError, touch, validate } = useUserLoginValidation({ domain: currentUserLoginStatus })
 
-  const { dispatch } = useDispatch()
+  const { auth, authDispatch } = useAuthContext()
   const { url, path } = useRouteMatch()
 
   const handleInputChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
@@ -45,7 +46,10 @@ const Login: React.FunctionComponent<{}> = (props: {}) => {
           data: JSON.stringify(currentUserLoginStatus)
         })
           .then((data: UserResponseDataType) => {
-            if (data) dispatch({ type: 'login', user: data.user as UserType })
+            if (data) {
+              authDispatch({ type: 'login', user: data.user as UserType })
+              props.history.push('/')
+            }
           })
       }, () => {
         debug('validation failed at save button event handler')
@@ -106,13 +110,13 @@ const Login: React.FunctionComponent<{}> = (props: {}) => {
         </div>
         <div className="login-form-content-btn-wrapper">
           {(currentValidationError.submit && <div className="input-error">{currentValidationError.submit}</div>)}
-          <input className="btn" type="button" onClick={handleSubmitClickEvent} value="Login" />
+          <input className="btn" type="button" onClick={handleSubmitClickEvent} value="Login" role="login-btn"/>
         </div>
       </form>
     </div >
   );
 }
 
-export default Login;
+export default withRouter(Login);
 
 
