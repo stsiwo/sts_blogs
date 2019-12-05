@@ -7,7 +7,7 @@ class Comment(BaseModel):
     __tablename__ = 'comments'
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.VARCHAR(16), nullable=False)
+    title = db.Column(db.VARCHAR(1000), nullable=False)
     content = db.Column(db.Text, nullable=False)
 
     blogId = db.Column(db.Integer, db.ForeignKey('blogs.id'), nullable=False)

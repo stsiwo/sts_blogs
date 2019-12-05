@@ -12,10 +12,10 @@ class User(BaseModel):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.VARCHAR(16), nullable=False)
-    email = db.Column(db.VARCHAR(16), unique=True, nullable=False)
-    _password = db.Column('password', db.VARCHAR(16), nullable=False)
-    avatarUrl = db.Column(db.VARCHAR(16), nullable=True)
+    name = db.Column(db.VARCHAR(1000), nullable=False)
+    email = db.Column(db.VARCHAR(1000), unique=True, nullable=False)
+    _password = db.Column('password', db.VARCHAR(1000), nullable=False)
+    avatarUrl = db.Column(db.VARCHAR(1000), nullable=True)
 
     roles = db.relationship('Role', secondary=roles, lazy='subquery',
                             backref=db.backref('users', lazy=True))

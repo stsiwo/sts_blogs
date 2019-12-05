@@ -8,6 +8,6 @@ from flask_marshmallow import Marshmallow
 bcrypt = Bcrypt()
 db: SQLAlchemy = SQLAlchemy()
 ma = Marshmallow()
-migrate = Migrate()
+migrate = Migrate(compare_type=True)
 jwt = JWTManager()
 api = Api()

@@ -7,4 +7,4 @@ class Role(BaseModel):
     __tablename__ = 'roles'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.VARCHAR(16), nullable=False)
+    name = db.Column(db.VARCHAR(1000), nullable=False)

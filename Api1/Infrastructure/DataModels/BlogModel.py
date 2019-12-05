@@ -8,9 +8,9 @@ class Blog(BaseModel):
     __tablename__ = 'blogs'
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.VARCHAR(16), nullable=False)
-    subtitle = db.Column(db.VARCHAR(16), nullable=False)
-    mainImageUrl = db.Column(db.VARCHAR(16), nullable=True)
+    title = db.Column(db.VARCHAR(1000), nullable=False)
+    subtitle = db.Column(db.VARCHAR(1000), nullable=False)
+    mainImageUrl = db.Column(db.VARCHAR(1000), nullable=True)
     content = db.Column(db.Text, nullable=False)
 
     userId = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
