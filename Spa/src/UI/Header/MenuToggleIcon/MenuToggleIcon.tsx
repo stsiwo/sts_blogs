@@ -14,7 +14,7 @@ const MenuToggleIcon: React.FunctionComponent<{}> = (props: {}) => {
     }
 
     return (
-      <i className="icon-wrapper header-menu-toggle-icon" onClick={handleMenuToggleIconEvent}>
+      <i className="icon-wrapper header-menu-toggle-icon" onClick={handleMenuToggleIconEvent} role="menu-toggle-icon">
         <MdMenu className="icon"/>
       </i>
     );
