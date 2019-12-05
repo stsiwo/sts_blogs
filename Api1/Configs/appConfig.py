@@ -3,7 +3,10 @@ from flask_cors import CORS
 from Configs.extensions import (
         api, db, jwt, migrate, ma, bcrypt
         )
-from commands import seed_cli
+from commands import (
+        seed_cli,
+        app_cli
+        )
 
 
 # the order must be kept
@@ -14,6 +17,7 @@ def configureApp(config_object="Configs.settings"):
 
     # commands
     app.cli.add_command(seed_cli)
+    app.cli.add_command(app_cli)
 
     # ygmail config (register and connection)
     import Configs.ygmailConfig

@@ -1,3 +1,4 @@
+from Configs.app import app
 from flask.cli import AppGroup
 from Configs.extensions import db
 from Infrastructure.DataModels.RoleModel import Role
@@ -5,6 +6,7 @@ from Infrastructure.DataModels.TagModel import Tag
 
 
 seed_cli = AppGroup('seed')
+app_cli = AppGroup('app')
 
 
 @seed_cli.command('roles')
@@ -41,3 +43,8 @@ def add_tags():
     db.session.add(Tag(name='webpack'))
     db.session.add(Tag(name='js'))
     db.session.commit()
+
+
+@app_cli.command('show-config')
+def show_config():
+    print(app.config)

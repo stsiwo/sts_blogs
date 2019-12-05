@@ -24,6 +24,19 @@ jobs:
       - image: circleci/python:3.6.8-stretch-browsers
     steps:
       - checkout # need to exclude env and migration folder. oh already excluded !! nice
+      - run:  # this works only local, don't include sensitive info inside this file. when testing in circleci server, remove this 'run'
+          name: Set Env Vars 
+          working_directory: ./Api1
+          command: |
+            export JWT_COOKIE_SECURE=False
+            export JWT_SECRET_KEY=keepThisbSecret
+            export SQLALCHEMY_DATABASE_URI=sqlite:////tmp/api1.db
+            export TESTING=True
+            export SECRET_KEY=mustBeSecretl
+            export SQLALCHEMY_ECHO=True
+            export UPLOAD_FOLDER=temp/uploads 
+            export SIGNER_SECRET_KEY=keepThisSecret
+            export CLIENT_SPA_URL=http://localhost
       - run: 
           name: Install Dependencies 
           working_directory: ./Api1
@@ -51,4 +64,4 @@ jobs:
           working_directory: ./Api1
           command: |
             . venv/bin/activate
-            # python -m pytest 
+            python -m pytest 
