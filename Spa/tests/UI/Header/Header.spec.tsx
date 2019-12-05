@@ -25,6 +25,7 @@ describe('h-c1: Header Component testing', () => {
    * ** <= laptop screen
    *
    * ltle1. (component) should render MenuToggleIcon
+   * ltle2. (EH) should open menu nav bar 
    *
    * ** > laptop screen
    *
@@ -72,6 +73,20 @@ describe('h-c1: Header Component testing', () => {
         )
         await wait(() => {
           expect(getByRole("menu-toggle-icon")).toBeInTheDocument()
+        })
+      })
+    })
+
+    test('ltle2. (EH) should open menu nav bar', async () => {
+      await act(async () => {
+        const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+          <ContextWrapperComponent component={Header} isAuth />
+        )
+        const menuToggleIcon = await waitForElement(() => getByRole('menu-toggle-icon'))
+        menuToggleIcon.click()
+        await wait(() => {
+          console.log(getByRole('menu').style.width)
+          expect(getByRole('menu').style.width).toBe('100%')
         })
       })
     })
