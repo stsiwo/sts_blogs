@@ -156,61 +156,6 @@ def setupTempUploadDirWithTestImageFile(application, setupTempUploadDir):
     yield None
 
 
-@pytest.fixture(scope="session", autouse=True)
-def rolesSeededFixture(database, application):
-    print("setup rolesSeededFixture fixture")
-
-    database.session.add(generateRoleModel(name='admin'))
-    database.session.add(generateRoleModel(name='member'))
-
-    database.session.commit()
-
-    roles = database.session.query(Role).all()
-    printObject(roles)
-
-    yield None
-    print("teardown rolesSeededFixture fixture")
-
-
-@pytest.fixture(scope="session", autouse=True)
-def tagsSeededFixture(database, application):
-    print("setup tagsSeededFixture fixture")
-
-    database.session.bulk_save_objects(
-                [
-                    Tag(name='ui'),
-                    Tag(name='frontend'),
-                    Tag(name='backend'),
-                    Tag(name='css'),
-                    Tag(name='sql'),
-                    Tag(name='python'),
-                    Tag(name='typscript'),
-                    Tag(name='react'),
-                    Tag(name='angular'),
-                    Tag(name='sqlalchemy'),
-                    Tag(name='php'),
-                    Tag(name='laravel'),
-                    Tag(name='flask'),
-                    Tag(name='django'),
-                    Tag(name='oop'),
-                    Tag(name='designpattern'),
-                    Tag(name='nodejs'),
-                    Tag(name='csharp'),
-                    Tag(name='autofac'),
-                    Tag(name='unittesting'),
-                    Tag(name='mock'),
-                    Tag(name='pytest'),
-                    Tag(name='webpack'),
-                    Tag(name='js')
-                ]
-            )
-
-    database.session.commit()
-
-    yield None
-    print("teardown tagsSeededFixture fixture")
-
-
 @pytest.fixture(autouse=True)
 def exSession(database, request, application):
     """ flask-sqla session connected to external transaction
