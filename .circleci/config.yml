@@ -28,7 +28,6 @@ jobs:
           name: create env file 
           working_directory: ./Api1
           command: |
-            printenv
             echo CLIENT_SPA_URL=$CLIENT_SPA_URL > .env.testing
             echo JWT_COOKIE_SECURE=$JWT_COOKIE_SECURE >> .env.testing
             echo JWT_SECRET_KEY=$JWT_SECRET_KEY >> .env.testing
@@ -44,7 +43,6 @@ jobs:
           working_directory: ./Api1
           command: |
             ls -al 
-            printenv
             python3 -m venv venv
             . venv/bin/activate
             pip install -r requirements.txt
@@ -67,4 +65,4 @@ jobs:
           working_directory: ./Api1
           command: |
             . venv/bin/activate
-            # python -m pytest 
+            python -m pytest 
