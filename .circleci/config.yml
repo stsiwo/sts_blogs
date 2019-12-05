@@ -1,33 +1,5 @@
 version: 2
 jobs:
-  build:
-    docker:
-      - image: circleci/node:10.16.3    
-    steps:
-      - checkout
-      - run:
-          echo "build step"
-  test:
-    docker:
-      - image: circleci/node:10.16.3    
-    steps:
-      - checkout
-      - run:
-          echo "test step"
-  deploy:
-    docker:
-      - image: circleci/node:10.16.3    
-    steps:
-      - checkout
-      - run:
-          echo "deploy step"
-workflows: 
-  version: 2
-  build_and_test_and_deploy:
-    jobs:
-      - build
-      - test
-      - deploy
   #   build:
   #     docker:
   #       - image: circleci/node:10.16.3    
@@ -47,37 +19,37 @@ workflows:
   #           working_directory: ./Spa
   #           command: |
   #          npx jest tests/
-  # build:
-  #   docker:
-  #     - image: circleci/python:3.6.8-stretch-browsers
-  #   steps:
-  #     - checkout # need to exclude env and migration folder. oh already excluded !! nice
-  #     - run: 
-  #         name: Install Dependencies 
-  #         working_directory: ./Api1
-  #         command: |
-  #           ls -al 
-  #           python3 -m venv venv
-  #           . venv/bin/activate
-  #           pip install -r requirements.txt
-  #     - restore_cache:
-  #         keys:
-  #           - dep1-{{ checksum "./Api1/requirements.txt" }}
-  #     - run:
-  #         name: Setup SQLight database 
-  #         working_directory: ./Api1
-  #         command: |
-  #           rm -r ./migrations
-  #           . venv/bin/activate
-  #           export FLASK_ENV=TESTING
-  #           export FLASK_APP=./run.py
-  #           flask app show-config
-  #           flask db init
-  #           flask db migrate
-  #           flask db upgrade
-  #     - run:
-  #         name: Run Test
-  #         working_directory: ./Api1
-  #         command: |
-  #           . venv/bin/activate
-  #           python -m pytest 
+  build:
+    docker:
+      - image: circleci/python:3.6.8-stretch-browsers
+    steps:
+      - checkout 
+      - run: 
+          name: Install Dependencies 
+          working_directory: ./Api1
+          command: |
+            ls -al 
+            printenv
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+      - restore_cache:
+          keys:
+            - dep1-{{ checksum "./Api1/requirements.txt" }}
+      - run:
+          name: Setup SQLight database 
+          working_directory: ./Api1
+          command: |
+            . venv/bin/activate
+            export FLASK_ENV=TESTING
+            export FLASK_APP=./run.py
+            flask app show-config
+            flask db init
+            flask db migrate
+            flask db upgrade
+      - run:
+          name: Run Test
+          working_directory: ./Api1
+          command: |
+            . venv/bin/activate
+            # python -m pytest 
