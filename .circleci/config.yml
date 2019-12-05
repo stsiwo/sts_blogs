@@ -60,6 +60,8 @@ jobs:
             flask db init
             flask db migrate
             flask db upgrade
+            flask seed roles
+            flask seed tags
       - run:
           name: Run Test
           working_directory: ./Api1
