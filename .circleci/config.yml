@@ -23,7 +23,7 @@ jobs:
     docker:
       - image: circleci/python:3.6.8-stretch-browsers
     steps:
-      - checkout
+      - checkout # need to exclude env and migration folder. oh already excluded !! nice
       - run: 
           name: Install Dependencies 
           working_directory: ./Api1
@@ -36,8 +36,19 @@ jobs:
           keys:
             - dep1-{{ checksum "./Api1/requirements.txt" }}
       - run:
+          name: Setup SQLight database 
+          working_directory: ./Api1
+          command: |
+            rm -r ./migrations
+            . venv/bin/activate
+            export FLASK_ENV=TESTING
+            export FLASK_APP=./run.py
+            flask db init
+            flask db migrate
+            flask db upgrade
+      - run:
           name: Run Test
           working_directory: ./Api1
           command: |
             . venv/bin/activate
-            python -m pytest 
+            # python -m pytest 
