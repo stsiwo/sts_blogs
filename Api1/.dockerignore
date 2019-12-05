@@ -2,3 +2,8 @@ env/
 
 *.swp
 *.swo
+
+.env*
+
+# db-migrations
+migrations/

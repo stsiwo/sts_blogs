@@ -95,7 +95,6 @@ def application():
 def database(application, request):
     print('setup database fixture ...')
 
-    application.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/api1-test.db'
     db.app = application
 
     db.create_all()
@@ -213,7 +212,7 @@ def tagsSeededFixture(database, application):
 
 
 @pytest.fixture(autouse=True)
-def exSession(database, request):
+def exSession(database, request, application):
     """ flask-sqla session connected to external transaction
         purpose: to rollback test-func-specific seeded data and any commit involved in the test func
         refs:
@@ -221,7 +220,7 @@ def exSession(database, request):
             - https://github.com/pallets/flask-sqlalchemy/pull/249
         """
     print("setting up joining session to external transaction fixture ...")
-    engine = create_engine('sqlite:////tmp/api1-test.db')
+    engine = create_engine(application.config.get('SQLALCHEMY_DATABASE_URI'))
     connection = engine.connect()
     transaction = connection.begin()
     options = dict(bind=connection, binds={})
@@ -296,11 +295,11 @@ def client(application):
 
 
 @pytest.fixture
-def session():
+def session(application):
     print("setup session fixture")
     # enable echo executed query statement
     # engine = create_engine('sqlite:////tmp/api1.db', echo=True)
-    engine = create_engine('sqlite:////tmp/api1.db')
+    engine = create_engine(application.config.get('SQLALCHEMY_DATABASE_URI'))
     session = scoped_session(sessionmaker(bind=engine))
     yield session
     session.rollback()

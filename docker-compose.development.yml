@@ -1,15 +1,15 @@
 version: '3.4'
 services:
-  spa:
-    #image: spa:dev
-    build: 
-      context: './Spa'
-      target: development
-    volumes:
-      - "/app/node_modules"
-      - "$PWD/Spa/:/app"
-    ports: 
-      - "80:8080"
+  #  spa:
+  #    #image: spa:dev
+  #    build: 
+  #      context: './Spa'
+  #      target: development
+  #    volumes:
+  #      - "/app/node_modules"
+  #      - "$PWD/Spa/:/app"
+  #    ports: 
+  #      - "80:8080"
   api1:
     build: 
       context: './Api1'
