@@ -36,6 +36,7 @@ describe('bm-c1: Signup Component testing', () => {
    * a13. (DOM) should show 'signup success' message when signup completed 
    * a14. (DOM) should show "signup failure" message when signup failed because of network issue
    * a15. (DOM) should show "signup failure" message when signup failed because of 4xx or 5xx error
+   * a16. (EH) should route signup user to home after signup successfully 
    *
    **/
 
@@ -62,7 +63,7 @@ describe('bm-c1: Signup Component testing', () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Signup} isAuth />
       )
-      const nameInput = await waitForElement(() => getByLabelText('User Name'))
+      const nameInput = await waitForElement(() => getByLabelText('Name'))
       fireEvent.focus(nameInput) // need to focus to enable to display validation error on dom
       fireEvent.change(nameInput, { target: { value: '' } })
       const nameErrorNode = await waitForElement(() => getByText('name is a required field'))
@@ -76,11 +77,11 @@ describe('bm-c1: Signup Component testing', () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Signup} isAuth />
       )
-      const nameInput = await waitForElement(() => getByLabelText('User Name'))
+      const nameInput = await waitForElement(() => getByLabelText('Name'))
       fireEvent.focus(nameInput) // need to focus to enable to display validation error on dom
       fireEvent.change(nameInput, { target: { value: '' } })
       const nameErrorNode = await waitForElement(() => getByText('name is a required field'))
-      fireEvent.click(getByText('Signup'))
+      fireEvent.click(getByRole('signup-btn'))
       await waitForElement(() => getByText('please fix validation errors before submit'))
       expect(api.request).toHaveBeenCalledTimes(0)
     })
@@ -109,7 +110,7 @@ describe('bm-c1: Signup Component testing', () => {
       fireEvent.focus(emailInput) // need to focus to enable to display validation error on dom
       fireEvent.change(emailInput, { target: { value: '' } })
       const emailErrorNode = await waitForElement(() => getByText('email is a required field'))
-      fireEvent.click(getByText('Signup'))
+      fireEvent.click(getByRole('signup-btn'))
       await waitForElement(() => getByText('please fix validation errors before submit'))
       expect(api.request).toHaveBeenCalledTimes(0)
     })
@@ -138,7 +139,7 @@ describe('bm-c1: Signup Component testing', () => {
       fireEvent.focus(passwordInput) // need to focus to enable to display validation error on dom
       fireEvent.change(passwordInput, { target: { value: '' } })
       const passwordErrorNode = await waitForElement(() => getByText('password is a required field'))
-      fireEvent.click(getByText('Signup'))
+      fireEvent.click(getByRole('signup-btn'))
       await waitForElement(() => getByText('please fix validation errors before submit'))
       expect(api.request).toHaveBeenCalledTimes(0)
     })
@@ -149,7 +150,7 @@ describe('bm-c1: Signup Component testing', () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Signup} isAuth />
       )
-      const confirmInput = await waitForElement(() => getByLabelText('Password Confirm'))
+      const confirmInput = await waitForElement(() => getByLabelText('Confirm'))
       fireEvent.focus(confirmInput) // need to focus to enable to display validation error on dom
       fireEvent.change(confirmInput, { target: { value: '' } })
       const confirmErrorNode = await waitForElement(() => getByText('confirm is a required field'))
@@ -163,11 +164,11 @@ describe('bm-c1: Signup Component testing', () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Signup} isAuth />
       )
-      const confirmInput = await waitForElement(() => getByLabelText('Password Confirm'))
+      const confirmInput = await waitForElement(() => getByLabelText('Confirm'))
       fireEvent.focus(confirmInput) // need to focus to enable to display validation error on dom
       fireEvent.change(confirmInput, { target: { value: '' } })
       const confirmErrorNode = await waitForElement(() => getByText('confirm is a required field'))
-      fireEvent.click(getByText('Signup'))
+      fireEvent.click(getByRole('signup-btn'))
       await waitForElement(() => getByText('please fix validation errors before submit'))
       expect(api.request).toHaveBeenCalledTimes(0)
     })
@@ -179,7 +180,7 @@ describe('bm-c1: Signup Component testing', () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Signup} isAuth />
       )
-      const confirmInput = await waitForElement(() => getByLabelText('Password Confirm'))
+      const confirmInput = await waitForElement(() => getByLabelText('Confirm'))
       fireEvent.focus(confirmInput) // need to focus to enable to display validation error on dom
       fireEvent.change(confirmInput, { target: { value: 'match' } })
       const confirmErrorNode = await waitForElement(() => getByText('passwords must match'))
@@ -193,11 +194,11 @@ describe('bm-c1: Signup Component testing', () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Signup} isAuth />
       )
-      const confirmInput = await waitForElement(() => getByLabelText('Password Confirm'))
+      const confirmInput = await waitForElement(() => getByLabelText('Confirm'))
       fireEvent.focus(confirmInput) // need to focus to enable to display validation error on dom
       fireEvent.change(confirmInput, { target: { value: 'match' } })
       const confirmErrorNode = await waitForElement(() => getByText('passwords must match'))
-      fireEvent.click(getByText('Signup'))
+      fireEvent.click(getByRole('signup-btn'))
       await waitForElement(() => getByText('please fix validation errors before submit'))
       expect(api.request).toHaveBeenCalledTimes(0)
     })
@@ -220,10 +221,10 @@ describe('bm-c1: Signup Component testing', () => {
         <ContextWrapperComponent component={Signup} isAuth />
       )
       const inputs = await waitForElement(() => [
-        getByLabelText('User Name'),
+        getByLabelText('Name'),
         getByLabelText('Email'),
         getByLabelText('Password'),
-        getByLabelText('Password Confirm'),
+        getByLabelText('Confirm'),
       ])
 
       seedInputTestValues(inputs, [
@@ -233,7 +234,7 @@ describe('bm-c1: Signup Component testing', () => {
         'test-password'
       ])
 
-      fireEvent.click(getByText('Signup'))
+      fireEvent.click(getByRole('signup-btn'))
       await wait(() => {
         expect(api.request).toHaveBeenCalledTimes(1)
       })
@@ -247,10 +248,10 @@ describe('bm-c1: Signup Component testing', () => {
         <ContextWrapperComponent component={Signup} isAuth />
       )
       const inputs = await waitForElement(() => [
-        getByLabelText('User Name'),
+        getByLabelText('Name'),
         getByLabelText('Email'),
         getByLabelText('Password'),
-        getByLabelText('Password Confirm'),
+        getByLabelText('Confirm'),
       ])
 
       seedInputTestValues(inputs, [
@@ -260,38 +261,10 @@ describe('bm-c1: Signup Component testing', () => {
         'test-password'
       ])
 
-      fireEvent.click(getByText('Signup'))
+      fireEvent.click(getByRole('signup-btn'))
       // wait for expectation meet otherwise async timeout
       await wait(() => {
         expect(getByText('requesting user signup success')).toBeInTheDocument()
-      })
-    })
-  })
-
-  test('a15. (DOM) should show "signup failure" message when signup failed because of 4xx or 5xx error', async () => {
-    api.request = jest.fn().mockReturnValue(Promise.reject(internalServerError500Response))
-    await act(async () => {
-      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
-        <ContextWrapperComponent component={Signup} isAuth />
-      )
-      const inputs = await waitForElement(() => [
-        getByLabelText('User Name'),
-        getByLabelText('Email'),
-        getByLabelText('Password'),
-        getByLabelText('Password Confirm'),
-      ])
-
-      seedInputTestValues(inputs, [
-        'test-user',
-        'test@test.com',
-        'test-password',
-        'test-password'
-      ])
-
-      fireEvent.click(getByText('Signup'))
-      // wait for expectation meet otherwise async timeout
-      await wait(() => {
-        expect(getByText('requesting user signup failed')).toBeInTheDocument()
       })
     })
   })
@@ -303,10 +276,10 @@ describe('bm-c1: Signup Component testing', () => {
         <ContextWrapperComponent component={Signup} isAuth />
       )
       const inputs = await waitForElement(() => [
-        getByLabelText('User Name'),
+        getByLabelText('Name'),
         getByLabelText('Email'),
         getByLabelText('Password'),
-        getByLabelText('Password Confirm'),
+        getByLabelText('Confirm'),
       ])
 
       seedInputTestValues(inputs, [
@@ -316,13 +289,42 @@ describe('bm-c1: Signup Component testing', () => {
         'test-password'
       ])
 
-      fireEvent.click(getByText('Signup'))
+      fireEvent.click(getByRole('signup-btn'))
       // wait for expectation meet otherwise async timeout
       await wait(() => {
         expect(getByText('requesting user signup failed')).toBeInTheDocument()
       })
     })
   })
+
+  test('a15. (DOM) should show "signup failure" message when signup failed because of 4xx or 5xx error', async () => {
+    api.request = jest.fn().mockReturnValue(Promise.reject(internalServerError500Response))
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={Signup} isAuth />
+      )
+      const inputs = await waitForElement(() => [
+        getByLabelText('Name'),
+        getByLabelText('Email'),
+        getByLabelText('Password'),
+        getByLabelText('Confirm'),
+      ])
+
+      seedInputTestValues(inputs, [
+        'test-user',
+        'test@test.com',
+        'test-password',
+        'test-password'
+      ])
+
+      fireEvent.click(getByRole('signup-btn'))
+      // wait for expectation meet otherwise async timeout
+      await wait(() => {
+        expect(getByText('requesting user signup failed')).toBeInTheDocument()
+      })
+    })
+  })
+
   afterEach(() => {
     console.log('bm-c1: afterEach ')
   })
@@ -331,6 +333,37 @@ describe('bm-c1: Signup Component testing', () => {
     console.log('bm-c1: afterAll ')
   })
 
+  /** 
+   * how to check 'props.history.push' is called??
+   **/
+  test('a16. (EH) should route signup user to home after signup successfully', async () => {
+    api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={Signup} />
+      )
+      const inputs = await waitForElement(() => [
+        getByLabelText('Name'),
+        getByLabelText('Email'),
+        getByLabelText('Password'),
+        getByLabelText('Confirm'),
+      ])
+
+      seedInputTestValues(inputs, [
+        'test-user',
+        'test@test.com',
+        'test-password',
+        'test-password'
+      ])
+
+      fireEvent.click(getByRole('signup-btn'))
+      // wait for expectation meet otherwise async timeout
+      await wait(() => {
+        debug()
+        expect(getByRole('slogan')).toBeInTheDocument()
+      })
+    })
+  })
 })
 
 

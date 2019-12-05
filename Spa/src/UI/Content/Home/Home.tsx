@@ -126,7 +126,7 @@ const Home: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComp
           <GoSearch className="icon" />
         </div>
       </div>
-      <div className="home-title-wrapper">
+      <div className="home-title-wrapper" role="slogan">
         <h1 className="home-slogan">Share Your Knowledge and Expand What You Can Do</h1>
       </div>
       <div className="context-wrapper">

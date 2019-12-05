@@ -8,9 +8,10 @@ import { useUserSignupValidation } from 'Hooks/Validation/UserSignup/useUserSign
 import './Signup.scss';
 import FetchStatus from 'Components/ApiFetch/FetchStatus';
 import Input from 'Components/Input/Input';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 var debug = require('debug')('ui:Signup')
 
-const Signup: React.FunctionComponent<{}> = (props: {}) => {
+const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComponentProps<{}>) => {
 
   const [currentUserSignupStatus, setUserSignupStatus] = React.useState<UserSignupType>(initialUserSignupStatus)
   const { currentRequestStatus, setRequestStatus, sendRequest } = useRequest({})
@@ -39,7 +40,12 @@ const Signup: React.FunctionComponent<{}> = (props: {}) => {
           data: JSON.stringify(currentUserSignupStatus),
         })
           .then((data: UserResponseDataType) => {
-            if (data) authDispatch({ type: 'login', user: data.user as UserType })
+            if (data) {
+              console.log('got response with user data')
+              authDispatch({ type: 'login', user: data.user as UserType })
+              console.log('before redirect')
+              props.history.push('/')               
+            }
           })
       }, () => {
         debug('validation failed at save button event handler') 
@@ -112,14 +118,14 @@ const Signup: React.FunctionComponent<{}> = (props: {}) => {
         </div>
         <div className="signup-form-content-btn-wrapper">
           {(currentValidationError.submit && <div className="small-input-error">{currentValidationError.submit}</div>)}
-          <input className="btn" type="button" onClick={handleSubmitClickEvent} value="Signup" />
+          <input className="btn" type="button" onClick={handleSubmitClickEvent} value="Signup" role="signup-btn"/>
         </div>
       </form>
     </div>
   );
 }
 
-export default Signup;
+export default withRouter(Signup);
 
 
 
