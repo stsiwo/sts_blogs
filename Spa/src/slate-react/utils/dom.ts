@@ -4,7 +4,7 @@
 
 /**
  * encounter: ReferenceError: is not defined when testing with jest
- * change 'globalThis' 
+ * change 'globalThis' (2019/12/06) 
  **/
 
 // COMPAT: This is required to prevent TypeScript aliases from doing some very
