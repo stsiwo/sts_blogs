@@ -8,8 +8,6 @@ import { Link } from 'react-router-dom';
 import { TagType } from 'domain/tag/TagType';
 import { dateFormatOption } from 'src/utils';
 import { useRouteMatch } from 'react-router';
-const whiteAvatar = require('../../../../../tests/data/images/white-1920x1280.jpg');
-const redImage = require('../../../../../tests/data/images/red-girl-1920x1279.jpg');
 
 
 const BlogItemOverlay: React.FunctionComponent<BlogItemOverlayPropsType> = (props: BlogItemOverlayPropsType) => {

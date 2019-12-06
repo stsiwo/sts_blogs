@@ -32,7 +32,7 @@ const Setting: React.FunctionComponent<{}> = (props: {}) => {
     return settingNavList.map((settingItem: SettingNavItemType) => {
       return (
         <li className="setting-list-li" key={settingItem.name}>
-          <Link to={`${url}/${settingItem.name}`} className="link">
+          <Link to={`${url}/${settingItem.name}`} className="link" role={`${settingItem.name}-link`}>
             {settingItem.label}
           </Link>
         </li>
