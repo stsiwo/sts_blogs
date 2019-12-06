@@ -5,7 +5,7 @@ module.exports = {
   ],
   "testRegex": "\\.(spec|test)\\.tsx?$",
   "moduleNameMapper": {
-      "\\.(css|scss|less)$": "identity-obj-proxy",
+      "\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "identity-obj-proxy",
       // sometime, might encounter 'cannot find module' error. 
       // change the order of below mapping helps solve the error
       "^Hooks(.*)$": "<rootDir>/src/UI/Base/Hooks$1", 
