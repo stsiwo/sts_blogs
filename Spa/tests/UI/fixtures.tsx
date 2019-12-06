@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, MemoryRouter } from 'react-router-dom';
 import { CssGlobalContextDefaultState } from 'Contexts/CssGlobalContext/CssGlobalContextDefaultState';
 import { store } from 'configs/storeConfig'
 import { CssGlobalContext } from 'Contexts/CssGlobalContext/CssGlobalContext';
@@ -27,6 +27,7 @@ export const getAllContextComponent = (TargetComponent: React.ComponentType) => 
 declare type ContextWrapperComponentPropsType = {
   component: React.ComponentType
   isAuth?: boolean
+  initialRoute?: string
 }
 
 /** create this because of useReducer hook **/
@@ -46,13 +47,15 @@ export const ContextWrapperComponent: React.FunctionComponent<ContextWrapperComp
 
   console.log(auth)
 
+  const initialRoute: string = props.initialRoute ? props.initialRoute : "/"
+
   return (
     <CssGlobalContext.Provider value={CssGlobalContextDefaultState}>
       <AuthContext.Provider value={{ auth, authDispatch }}>
         <Provider store={store}>
-          <Router>
+          <MemoryRouter initialEntries={[initialRoute]} initialIndex={0}>
             <TargetComponent />
-          </Router>
+          </MemoryRouter>
         </Provider>
       </AuthContext.Provider>
     </CssGlobalContext.Provider>
