@@ -83,6 +83,8 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
     })
       .then((data: BlogListResponseDataType) => {
         if (data) {
+          console.log("fetch success and receive data")
+          console.log(data.blogs.length)
           setBlogs(data.blogs)
 
           // assign new total count of pagination
@@ -135,7 +137,6 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   }
   /** render **/
   const renderBlogs = (blogs: BlogType[]): React.ReactNode => {
-
     return blogs.map((blog: BlogType) => {
       return (
         <BlogItem blog={blog} handleDeleteBlogClickEvent={handleDeleteBlogClickEvent} isEditDeleteOverlay />
@@ -165,13 +166,12 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
           failureMsg={'failed'}
         />
         <div className="blog-management-items-wrapper">
-          {/**(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FETCHING &&
-            <p role="fetching">fetching ... </p>)**/}
-          {/**(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING &&
-            currentBlogs.length === 0 && <p>blogs are empty</p>)**/}
-          {/**(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING &&
-            currentBlogs.length !== 0 && renderBlogs(currentBlogs))**/}
-          {renderBlogs(getBlogTestData())}
+          {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FETCHING &&
+            <p role="fetching">fetching ... </p>)}
+          {(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING &&
+            currentBlogs.length === 0 && <p>blogs are empty</p>)}
+          {(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING &&
+            currentBlogs.length !== 0 && renderBlogs(currentBlogs))}
         </div>
         <Pagination
           currentPaginationStatus={currentPaginationStatus}

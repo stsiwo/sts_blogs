@@ -8,6 +8,7 @@ import { blogGET200NonEmptyResponse, blogGET200EmptyResponse } from '../../../..
 import { ContextWrapperComponent } from '../../../fixtures';
 import BlogManagement from 'ui/Content/Setting/BlogManagement/BlogManagement';
 import { CssGlobalContextDefaultState } from 'Contexts/CssGlobalContext/CssGlobalContextDefaultState';
+import Content from 'ui/Content/Content';
 
 
 describe('bm-c1: BlogManagement Component testing', () => {
@@ -54,7 +55,10 @@ describe('bm-c1: BlogManagement Component testing', () => {
    * ** > tablet **
    *
    * gtt1. (responsive) should not display sort filter icon
-   * gtt2. (responsive) should display sort filter aside 
+   *
+   * ** > laptop **
+   *
+   * gttlt1. (responsive) should display sort filter aside 
    *
    **/
 
@@ -91,7 +95,7 @@ describe('bm-c1: BlogManagement Component testing', () => {
       // wait for initial fetch finish and render blog list
       await waitForElement(() => getAllByRole('blog-item'))
 
-      fireEvent.click(getByText('refresh'))
+      fireEvent.click(getByRole('refresh-icon'))
 
       await waitForElement(() => getAllByRole('blog-item'))
 
@@ -175,6 +179,8 @@ describe('bm-c1: BlogManagement Component testing', () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
         <ContextWrapperComponent component={BlogManagement} isAuth />
       )
+      const blogListNodes = await waitForElement(() => getAllByRole('blog-item'))
+      fireEvent.mouseEnter(blogListNodes[0])
       const deleteBtns = await waitForElement(() => getAllByRole('blog-edit-link'))
       expect(deleteBtns[0].getAttribute('href')).toContain('1')
     })
@@ -186,7 +192,9 @@ describe('bm-c1: BlogManagement Component testing', () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
         <ContextWrapperComponent component={BlogManagement} isAuth />
       )
-      const deleteBtns = await waitForElement(() => getAllByRole('blog-delete-btn'))
+      const blogListNodes = await waitForElement(() => getAllByRole('blog-item'))
+      fireEvent.mouseEnter(blogListNodes[0])
+      const deleteBtns = await waitForElement(() => getAllByRole('blog-delete-icon'))
       fireEvent.click(deleteBtns[0])
       
       await wait(() => {
@@ -214,9 +222,9 @@ describe('bm-c1: BlogManagement Component testing', () => {
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
-        <ContextWrapperComponent component={BlogManagement} isAuth />
+        <ContextWrapperComponent component={Content} isAuth initialRoute={'/setting/blogs'}/>
       )
-      expect(document.getElementsByClassName('aside-new-blog-link')[0].getAttribute('href')).toBe('/new')
+      expect(document.getElementsByClassName('aside-new-blog-link')[0].getAttribute('href')).toBe('/setting/blogs/new')
     })
   })
 
@@ -371,7 +379,7 @@ describe('bm-c1: BlogManagement Component testing', () => {
       fireEvent.click(thirdPageBtn)
     })
     expect(api.request).toHaveBeenCalledTimes(2)
-    expect((api.request as any).mock.calls[1][0].url).toContain('offset=40')
+    expect((api.request as any).mock.calls[1][0].url).toContain('page=3&limit=20')
   })
 
   test("a20. (EH) should start api request when last page number is click and url must contain the number", async () => {
@@ -385,7 +393,7 @@ describe('bm-c1: BlogManagement Component testing', () => {
       fireEvent.click(lastPageBtn)
     })
     expect(api.request).toHaveBeenCalledTimes(2)
-    expect((api.request as any).mock.calls[1][0].url).toContain('offset=9980')
+    expect((api.request as any).mock.calls[1][0].url).toContain('page=25&limit=20')
   })
 
   describe('bm-t-c1: <= tablet screen size', () => {
@@ -408,8 +416,10 @@ describe('bm-c1: BlogManagement Component testing', () => {
         const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
           <ContextWrapperComponent component={BlogManagement} isAuth />
         )
+        await wait(() => {
+          expect(getByRole('filter-sort-icon')).toBeInTheDocument()
+        })
 
-        expect(getByRole('filter-sort-icon')).toBeInTheDocument()
       })
     })
 
@@ -417,13 +427,13 @@ describe('bm-c1: BlogManagement Component testing', () => {
       api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
 
       await act(async () => {
-        const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
+        const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText, queryByRole } = render(
           <ContextWrapperComponent component={BlogManagement} isAuth />
         )
 
         await wait(() => {
-          const filterSortAside = queryByRole(container, 'filter-sort-aside')
-          expect(filterSortAside).toBeNull()
+          const filterSortAside = queryByRole('filter-sort-aside')
+          expect(filterSortAside.style.height).toBe('0px')
         })
       })
     })
@@ -508,7 +518,29 @@ describe('bm-c1: BlogManagement Component testing', () => {
       })
     })
 
-    test("gtt2. (responsive) should display sort filter aside ", async () => {
+    afterEach(() => {
+      console.log('bm-c1: afterEach: medium screen size')
+    })
+
+    afterAll(() => {
+      console.log('bm-c1: afterAll: medium screen size')
+    })
+
+  })
+
+  describe('bm-c1: > laptop screen size', () => {
+
+    beforeAll(() => {
+      console.log('bm-c1: beforeAll: laptop screen size')
+      Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: CssGlobalContextDefaultState.laptopSize + 1 })
+      window.dispatchEvent(new Event('resize'));
+    })
+
+    beforeEach(() => {
+      console.log('bm-c1: beforeEach: laptop screen size')
+    })
+
+    test("gttlt1. (responsive) should display sort filter aside ", async () => {
       api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
 
       await act(async () => {
@@ -517,7 +549,7 @@ describe('bm-c1: BlogManagement Component testing', () => {
         )
 
         await wait(() => {
-          expect(getByRole('filter-sort-aside')).toBeInTheDocument()
+          expect(getByRole('filter-sort-aside').style.height).not.toBe('0px')
         })
       })
     })
@@ -532,7 +564,6 @@ describe('bm-c1: BlogManagement Component testing', () => {
     })
 
   })
-
   afterEach(() => {
     console.log('bm-c1: afterEach ')
   })

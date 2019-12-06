@@ -158,7 +158,7 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
     <aside role="filter-sort-aside" className="filter-sort-aside-wrapper" ref={filterSortBarWrapperRef}>
       {(currentScreenSize.isLTETablet &&
         <div className="close-icon-row" onClick={handleFilterSortNavCloseClickEvent}>
-          <div className="icon-wrapper" >
+          <div className="icon-wrapper" role="filter-sort-icon">
             <MdClose className="icon filter-sort-aside-content-close-icon" />
           </div>
         </div>

@@ -53,7 +53,7 @@ const BlogItemOverlay: React.FunctionComponent<BlogItemOverlayPropsType> = (prop
             <FaEdit className="icon" />
           </div>
         </Link>
-        <div className="white-icon-wrapper">
+        <div className="white-icon-wrapper" role="blog-delete-icon" onClick={props.handleDeleteBlogClickEvent}>
           <MdDeleteForever className="icon" />
         </div>
       </div>
