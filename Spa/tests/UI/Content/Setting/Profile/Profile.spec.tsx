@@ -10,7 +10,7 @@ import Profile from 'ui/Content/Setting/Profile/Profile';
 import { CssGlobalContextDefaultState } from 'Contexts/CssGlobalContext/CssGlobalContextDefaultState';
 
 
-describe('bm-c1: Profile Component testing', () => {
+describe('p-c1: Profile Component testing', () => {
 
   /**
    * prerequisite 
@@ -43,11 +43,11 @@ describe('bm-c1: Profile Component testing', () => {
    **/
 
   beforeAll(() => {
-    console.log('bm-c1: beforeAll ')
+    console.log('p-c1: beforeAll ')
   })
 
   beforeEach(() => {
-    console.log('bm-c1: beforeEach ')
+    console.log('p-c1: beforeEach ')
   })
 
   /** test for use case which does not matter screen size  here**/
@@ -71,7 +71,7 @@ describe('bm-c1: Profile Component testing', () => {
       )
 
       await wait(() => {
-        expect(getByLabelText('Name:').getAttribute('value')).toBeTruthy()
+        expect(getByLabelText('New User Name').getAttribute('value')).toBeTruthy()
       })
     })
   })
@@ -83,7 +83,7 @@ describe('bm-c1: Profile Component testing', () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Profile} isAuth />
       )
-      const nameInput = await waitForElement(() => getByLabelText('Name:'))
+      const nameInput = await waitForElement(() => getByLabelText('New User Name'))
       fireEvent.change(nameInput,
         {
           target: {
@@ -103,7 +103,7 @@ describe('bm-c1: Profile Component testing', () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Profile} isAuth />
       )
-      const nameInput = await waitForElement(() => getByLabelText('Name:'))
+      const nameInput = await waitForElement(() => getByLabelText('New User Name'))
       fireEvent.focus(nameInput) // need to focus to enable to display validation error on dom
       fireEvent.change(nameInput,{ target: { value: '' }})
       const nameErrorNode = await waitForElement(() => getByText('name is a required field'))
@@ -119,7 +119,7 @@ describe('bm-c1: Profile Component testing', () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Profile} isAuth />
       )
-      const nameInput = await waitForElement(() => getByLabelText('Name:'))
+      const nameInput = await waitForElement(() => getByLabelText('New User Name'))
       fireEvent.focus(nameInput) // need to focus to enable to display validation error on dom
       fireEvent.change(nameInput,{ target: { value: '' }})
       const nameErrorNode = await waitForElement(() => getByText('name is a required field'))
@@ -138,7 +138,7 @@ describe('bm-c1: Profile Component testing', () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Profile} isAuth />
       )
-      const emailInput = await waitForElement(() => getByLabelText('Email:'))
+      const emailInput = await waitForElement(() => getByLabelText('New Email'))
       fireEvent.focus(emailInput) // need to focus to enable to display validation error on dom
       fireEvent.change(emailInput,{ target: { value: '' }})
       const emailErrorNode = await waitForElement(() => getByText('email is a required field'))
@@ -153,7 +153,7 @@ describe('bm-c1: Profile Component testing', () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Profile} isAuth />
       )
-      const emailInput = await waitForElement(() => getByLabelText('Email:'))
+      const emailInput = await waitForElement(() => getByLabelText('New Email'))
       fireEvent.focus(emailInput) // need to focus to enable to display validation error on dom
       fireEvent.change(emailInput,{ target: { value: '' }})
       const emailErrorNode = await waitForElement(() => getByText('email is a required field'))
@@ -172,7 +172,7 @@ describe('bm-c1: Profile Component testing', () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Profile} isAuth />
       )
-      const passwordInput = await waitForElement(() => getByLabelText('Password:'))
+      const passwordInput = await waitForElement(() => getByLabelText('New Password'))
       fireEvent.focus(passwordInput) // need to focus to enable to display validation error on dom
       fireEvent.change(passwordInput,{ target: { value: '' }})
       const passwordErrorNode = await waitForElement(() => getByText('password is a required field'))
@@ -187,7 +187,7 @@ describe('bm-c1: Profile Component testing', () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Profile} isAuth />
       )
-      const passwordInput = await waitForElement(() => getByLabelText('Password:'))
+      const passwordInput = await waitForElement(() => getByLabelText('New Password'))
       fireEvent.focus(passwordInput) // need to focus to enable to display validation error on dom
       fireEvent.change(passwordInput,{ target: { value: '' }})
       const passwordErrorNode = await waitForElement(() => getByText('password is a required field'))
@@ -205,8 +205,8 @@ describe('bm-c1: Profile Component testing', () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Profile} isAuth />
       )
-      const confirmInput = await waitForElement(() => getByLabelText('Confirm:'))
-      const passwordInput = await waitForElement(() => getByLabelText('Password:'))
+      const confirmInput = await waitForElement(() => getByLabelText('Password Confirm'))
+      const passwordInput = await waitForElement(() => getByLabelText('New Password'))
       fireEvent.change(confirmInput,{ target: { value: '' }})
       fireEvent.change(passwordInput,{ target: { value: '' }})
       fireEvent.focus(confirmInput) // need to focus to enable to display validation error on dom
@@ -222,8 +222,8 @@ describe('bm-c1: Profile Component testing', () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Profile} isAuth />
       )
-      const confirmInput = await waitForElement(() => getByLabelText('Confirm:'))
-      const passwordInput = await waitForElement(() => getByLabelText('Password:'))
+      const confirmInput = await waitForElement(() => getByLabelText('Password Confirm'))
+      const passwordInput = await waitForElement(() => getByLabelText('New Password'))
       fireEvent.focus(confirmInput) // need to focus to enable to display validation error on dom
       fireEvent.focus(passwordInput) // need to focus to enable to display validation error on dom
       fireEvent.change(confirmInput,{ target: { value: '' }})
@@ -243,7 +243,7 @@ describe('bm-c1: Profile Component testing', () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Profile} isAuth />
       )
-      const confirmInput = await waitForElement(() => getByLabelText('Confirm:'))
+      const confirmInput = await waitForElement(() => getByLabelText('Password Confirm'))
       fireEvent.focus(confirmInput) // need to focus to enable to display validation error on dom
       fireEvent.change(confirmInput,{ target: { value: 'sample' }})
       const confirmErrorNode = await waitForElement(() => getByText('passwords must match'))
@@ -258,7 +258,7 @@ describe('bm-c1: Profile Component testing', () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Profile} isAuth />
       )
-      const confirmInput = await waitForElement(() => getByLabelText('Confirm:'))
+      const confirmInput = await waitForElement(() => getByLabelText('Password Confirm'))
       fireEvent.focus(confirmInput) // need to focus to enable to display validation error on dom
       fireEvent.change(confirmInput,{ target: { value: 'sample' }})
       const confirmErrorNode = await waitForElement(() => getByText('passwords must match'))
@@ -340,11 +340,11 @@ describe('bm-c1: Profile Component testing', () => {
     })
   })
   afterEach(() => {
-    console.log('bm-c1: afterEach ')
+    console.log('p-c1: afterEach ')
   })
 
   afterAll(() => {
-    console.log('bm-c1: afterAll ')
+    console.log('p-c1: afterAll ')
   })
 
 })
