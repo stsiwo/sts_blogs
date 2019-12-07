@@ -4,19 +4,19 @@
 
 /**
  * encounter: ReferenceError: is not defined when testing with jest
- * change 'globalThis' (2019/12/06) 
+ * remove 'globalThis' (2019/12/06) if this cause in production, fix this again 
  **/
 
 // COMPAT: This is required to prevent TypeScript aliases from doing some very
 // weird things for Slate's types with the same name as globals. (2019/11/27)
 // https://github.com/microsoft/TypeScript/issues/35002
-type DOMNode = Node
-type DOMComment = Comment
-type DOMElement = Element
-type DOMText = Text
-type DOMRange = Range
-type DOMSelection = Selection
-type DOMStaticRange = StaticRange
+declare type DOMNode = Node
+declare type DOMComment = Comment
+declare type DOMElement = Element
+declare type DOMText = Text
+declare type DOMRange = Range
+declare type DOMSelection = Selection
+declare type DOMStaticRange = StaticRange
 export {
   DOMNode,
   DOMComment,
