@@ -55,12 +55,12 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   const dispatch = useDispatch()
   const { currentPaginationStatus, setPaginationStatus } = usePagination({})
   const { currentFilters, currentSort, setFilters, setSort } = useBlogFilterSort({
-    initialTags: [
+    initialTags: query.get('tags') ? [
       {
         name: query.get('tags') 
       }
-    ],
-    initialKeyword: query.get('keyword') 
+    ] : [],
+    initialKeyword: query.get('keyword')
   })
   const { currentRequestStatus: currentInitialBlogsFetchStatus, setRequestStatus: setInitialBlogsFetchStatus, sendRequest: sendBlogsFetchRequest, currentCancelSource } = useRequest({})
   const [currentRefreshCount, setRefreshCount] = React.useState<number>(null)
@@ -79,6 +79,8 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   React.useEffect(() => {
     debug("start useEffect")
     // might can move to inside eh of refresh click
+    console.log('before request')
+    console.log(currentFilters)
 
     debug("start send blog fetch request")
     sendBlogsFetchRequest({
@@ -150,7 +152,9 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
           setPaginationStatus={setPaginationStatus}
         />
         <div className="blog-list-items-wrapper">
-          {renderBlogs(getBlogTestData())}
+          {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FETCHING && <p role="fetching">fetching ... </p>)}
+          {(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING && currentBlogs.length === 0 && <p>blogs are empty</p>)}
+          {(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING && currentBlogs.length !== 0 && renderBlogs(currentBlogs))}
         </div>
         <Pagination currentPaginationStatus={currentPaginationStatus} setPaginationStatus={setPaginationStatus} />
       </div>

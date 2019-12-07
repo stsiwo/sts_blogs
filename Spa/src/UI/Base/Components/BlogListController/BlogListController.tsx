@@ -30,7 +30,7 @@ const BlogListController: React.FunctionComponent<BlogListControllerPropType> = 
           </div>
         )}
         {(props.currentFetchStatus.status === ResponseResultStatusEnum.FETCHING &&
-          <div className="icon-wrapper" onClick={props.handleCancelClickEvent}>
+          <div className="icon-wrapper" onClick={props.handleCancelClickEvent} role="cancel-icon">
             <MdCancel className="icon" />
           </div>
         )}
@@ -43,7 +43,7 @@ const BlogListController: React.FunctionComponent<BlogListControllerPropType> = 
         </div>
       )}
       {(auth.authed &&
-        <Link to={`${url}/new`} className="aside-new-blog-link" role='new-blog-link'>
+        <Link to={`setting/blogs/new`} className="aside-new-blog-link" role='new-blog-link'>
           <div className="icon-wrapper-row">
             <div className="icon-wrapper">
               <AiOutlineFileAdd className="icon" />

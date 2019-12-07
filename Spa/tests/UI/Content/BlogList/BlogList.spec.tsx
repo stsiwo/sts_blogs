@@ -8,9 +8,10 @@ import { CssGlobalContextDefaultState } from "Contexts/CssGlobalContext/CssGloba
 import BlogList from "ui/Content/BlogList/BlogList";
 import { blogGET200EmptyResponse, blogGET200NonEmptyResponse } from "../../../requests/fixtures";
 import { ContextWrapperComponent } from "../../fixtures";
+import Content from 'ui/Content/Content';
 
 
-describe('bl-c1: MenuToogleIcon Component testing', () => {
+describe('bl-c1: BlogList Component testing', () => {
 
   /**
    * prerequisite 
@@ -54,7 +55,10 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
    * ** > tablet **
    *
    * gtt1. (responsive) should not display sort filter icon
-   * gtt2. (responsive) should display sort filter aside 
+   *
+   * ** > laptop **
+   *
+   * gttlt1. (responsive) should display sort filter aside 
    *
    **/
 
@@ -92,7 +96,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
       // wait for initial fetch finish and render blog list
       await waitForElement(() => getAllByRole('blog-item'))
 
-      fireEvent.click(getByText('refresh'))
+      fireEvent.click(getByRole('refresh-icon'))
 
       await waitForElement(() => getAllByRole('blog-item'))
 
@@ -109,7 +113,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
     })
   }
 
-  // does not work
+  // need to think how to test 'cancel' feature
   test("a5. (EH) should cancel api request when 'cancel' button is clicked after 'refresh' button is clicked", async () => {
 
     api.request = jest.fn().mockResolvedValue(blogGET200NonEmptyResponse)
@@ -117,10 +121,10 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
       const { getByText, getByRole, getAllByRole, debug } = render(
         <ContextWrapperComponent component={BlogList} />
       )
-      const refreshBtn = await waitForElement(() => getByText('refresh'))
+      const refreshBtn = await waitForElement(() => getByRole('refresh-icon'))
       api.request = jest.fn().mockReturnValue(delayedResolvedValue(blogGET200NonEmptyResponse))
       fireEvent.click(refreshBtn)
-      const cancelBtn = await waitForElement(() => getByText('cancel'))
+      const cancelBtn = await waitForElement(() => getByRole('cancel-icon'))
       fireEvent.click(cancelBtn)
       const msg = await waitForElement(() => getByText('refresh request is canceled'))
       console.log(msg)
@@ -172,51 +176,14 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
     })
   })
 
-  test("a9. (responsive) (guest) should display 'member only' message at 'create new blog' button", async () => {
-    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200EmptyResponse))
-
-    await act(async () => {
-      const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
-        <ContextWrapperComponent component={BlogList} />
-      )
-      await waitForElement(() => getByText('blogs are empty'))
-      expect(getByText('Member Only')).toBeInTheDocument()
-    })
-  })
-
-  test("a10. (Route) (guest) should route guest user to login/signup when 'create new blog' is clicked (just only check url string at Link component)", async () => {
-    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200EmptyResponse))
-
-    await act(async () => {
-      const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
-        <ContextWrapperComponent component={BlogList} />
-      )
-      expect(document.getElementsByClassName('aside-new-blog-link')[0].getAttribute('href')).toBe('/login')
-
-    })
-  })
-
-  test("a11. (DOM) (member) should not display 'member only' message at 'create new blog' button", async () => {
-    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200EmptyResponse))
-
-    await act(async () => {
-      const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
-        <ContextWrapperComponent component={BlogList} isAuth />
-      )
-      const memberOnlyNode = queryByText(container, 'Member Only')
-      expect(memberOnlyNode).toBeNull()
-
-    })
-  })
-
   test("a12. (Route) (member) should route member user to /blogs/new  when 'create new blog' is clicked (just only check url string at Link component)", async () => {
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200EmptyResponse))
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
-        <ContextWrapperComponent component={BlogList} isAuth />
+        <ContextWrapperComponent component={Content} isAuth initialRoute="/blogs"/>
       )
-      expect(document.getElementsByClassName('aside-new-blog-link')[0].getAttribute('href')).toBe('/new')
+      expect(document.getElementsByClassName('aside-new-blog-link')[0].getAttribute('href')).toBe('/setting/blogs/new')
     })
   })
 
@@ -368,9 +335,10 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
         <ContextWrapperComponent component={BlogList} />
       )
-      await waitForElement(() => getAllByRole('blog-item'))
+      const blogItemList = await waitForElement(() => getAllByRole('blog-item'))
+      expect(blogItemList[0].getAttribute('href')).toBe('/blogs/1')
+
     })
-    expect(document.getElementsByClassName('blog-list-items-item-wrapper')[0].getAttribute('href')).toBe('/blog/1')
   })
 
   test("a20.  (EH) should start api request when new page number is click and url must contain the number", async () => {
@@ -384,7 +352,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
       fireEvent.click(thirdPageBtn)
     })
     expect(api.request).toHaveBeenCalledTimes(2)
-    expect((api.request as any).mock.calls[1][0].url).toContain('offset=40')
+    expect((api.request as any).mock.calls[1][0].url).toContain('page=3')
   })
 
   test("a21. (EH) should start api request when last page number is click and url must contain the number", async () => {
@@ -398,7 +366,7 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
       fireEvent.click(lastPageBtn)
     })
     expect(api.request).toHaveBeenCalledTimes(2)
-    expect((api.request as any).mock.calls[1][0].url).toContain('offset=9980')
+    expect((api.request as any).mock.calls[1][0].url).toContain('page=25&limit=20')
   })
 
   describe('bl-c1: <= tablet screen size', () => {
@@ -430,13 +398,13 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
       api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
 
       await act(async () => {
-        const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
+        const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText, queryByRole } = render(
           <ContextWrapperComponent component={BlogList} />
         )
 
         await wait(() => {
-          const filterSortAside = queryByRole(container, 'filter-sort-aside')
-          expect(filterSortAside).toBeNull()
+          const filterSortAside = queryByRole('filter-sort-aside')
+          expect(filterSortAside.style.height).toBe('0px')
         })
       })
     })
@@ -497,7 +465,29 @@ describe('bl-c1: MenuToogleIcon Component testing', () => {
       })
     })
 
-    test("gtt2. (responsive) should display sort filter aside ", async () => {
+    afterEach(() => {
+      console.log('bl-c1: afterEach: medium screen size')
+    })
+
+    afterAll(() => {
+      console.log('bl-c1: afterAll: medium screen size')
+    })
+
+  })
+
+  describe('bl-c1: > laptop screen size', () => {
+
+    beforeAll(() => {
+      console.log('bl-c1: beforeAll: medium screen size')
+      Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: CssGlobalContextDefaultState.laptopSize + 1 })
+      window.dispatchEvent(new Event('resize'));
+    })
+
+    beforeEach(() => {
+      console.log('bl-c1: beforeEach: medium screen size')
+    })
+
+    test("gttlt1. (responsive) should display sort filter aside ", async () => {
       api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
 
       await act(async () => {
