@@ -5,20 +5,20 @@ import { UserSignupType } from 'domain/user/UserType';
 var debug = require('debug')('ui:hook:useValidation')
 
 const createInitialValidationError = <D extends object = {}>(domain: D): ValidationType<D> => {
-  const initialValidationError = Object.keys(domain).reduce((pre: DomainValidationType<D>, cur: string) => {
+  const initialValidationError = Object.keys(domain).reduce<DomainValidationType<D>>((pre: DomainValidationType<D>, cur: string) => {
     pre[cur as keyof DomainValidationType<D>] = ''
     return pre
-  }, {}) as ValidationType<D>
+  }, {} as DomainValidationType<D>) as ValidationType<D>
 
   initialValidationError.submit = ''
   return initialValidationError as ValidationType<D>
 }
 
 const createInitialInputTouchedError = <D extends object = {}>(domain: D): InputTouchedType<D> => {
-  const initialInputTouched = Object.keys(domain).reduce((pre: DomainInputTouchedType<D>, cur: string) => {
+  const initialInputTouched = Object.keys(domain).reduce<DomainInputTouchedType<D>>((pre: DomainInputTouchedType<D>, cur: string) => {
     pre[cur as keyof DomainInputTouchedType<D>] = false
     return pre
-  }, {}) as InputTouchedType<D>
+  }, {} as DomainInputTouchedType<D>) as InputTouchedType<D>
 
   initialInputTouched.submit = false
   return initialInputTouched as InputTouchedType<D>
