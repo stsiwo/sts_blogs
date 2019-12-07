@@ -7,7 +7,7 @@ import { useRequest } from 'Hooks/Request/useRequest';
 import { useBlogValidation } from 'Hooks/Validation/Blog/useBlogValidation';
 import * as React from 'react';
 import { useParams } from 'react-router';
-import { BlogResponseDataType, RequestMethodEnum } from 'requests/types';
+import { BlogResponseDataType, RequestMethodEnum, ResponseResultStatusEnum } from 'requests/types';
 import './UpdateBlog.scss';
 import Input from 'Components/Input/Input';
 import TagInput from 'Components/Input/TagInput';
@@ -37,7 +37,10 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
       // since resolve promise in the 'catch'
       .then((data: BlogResponseDataType) => {
         debug('then func of fetchBlog func')
-        if (data) setBlog(data.blog)
+        if (data) {
+          console.log(data.blog)
+          setBlog(data.blog)
+        }
       })
   }, []);
 
@@ -136,11 +139,11 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
     touch(e.currentTarget.name)
   }
 
-  //if (currentBlogFetchStatus.status === ResponseResultStatusEnum.FETCHING) return (<p>fetching your data</p>)
+  if (currentBlogFetchStatus.status === ResponseResultStatusEnum.FETCHING) return (<p>fetching your data</p>)
 
-  //if (currentBlogFetchStatus.status === ResponseResultStatusEnum.FAILURE) return (<p>sorry.. your data is not available now</p>)
+  if (currentBlogFetchStatus.status === ResponseResultStatusEnum.FAILURE) return (<p>sorry.. your data is not available now</p>)
 
-  return (//currentBlogFetchStatus.status === ResponseResultStatusEnum.SUCCESS &&
+  return (currentBlogFetchStatus.status === ResponseResultStatusEnum.SUCCESS &&
     <div className="context-wrapper">
       <div className="main-wrapper">
         <h2 className="profile-title">Update Blog</h2>
@@ -217,8 +220,8 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
           errorMsg={currentValidationError.content}
         />
         <div className="blog-detail-input-wrapper">
-          <input type="button" className="btn" value="Save" name='submit' onClick={handleSaveBlogClickEvent} onFocus={handleInitialFocusEvent} />
-          {(currentValidationError.submit && <div className="input-error">{currentValidationError.submit}</div>)}
+          <input type="button" className="btn" value="Save" name='submit' onClick={handleSaveBlogClickEvent} onFocus={handleInitialFocusEvent} role='save-btn'/>
+          {(currentValidationError.submit && <div className="small-input-error">{currentValidationError.submit}</div>)}
         </div>
         <input type="hidden" name='creationDate' value={currentBlog.createdDate.toJSON()} />
       </div>

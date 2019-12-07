@@ -327,6 +327,7 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
           <FaImage className="small-icon" />
         </div>
         <Editable
+          role="blog-content-editable"
           className="blog-content-editable"
           placeholder={props.placeholder}
           renderElement={renderElement}
