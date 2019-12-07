@@ -17,5 +17,6 @@ jobs:
       - run:
           name: Run Test
           working_directory: ./Spa
+          # add '-w 1' to prevent 'no enough memory' error
           command: |
             npx jest -w 1 tests/
