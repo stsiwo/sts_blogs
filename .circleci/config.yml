@@ -18,4 +18,4 @@ jobs:
           name: Run Test
           working_directory: ./Spa
           command: |
-            npx jest tests/
+            npx jest -w 1 tests/
