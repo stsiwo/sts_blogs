@@ -43,6 +43,10 @@ describe('ub-c1: UpdateBlog Component testing', () => {
 
   beforeAll(() => {
     console.log('ub-c1: beforeAll ')
+    /**
+     *  Error: Uncaught [TypeError: window.getSelection is not a function]
+     *  : need to mock this
+     **/
     window.getSelection = () => {
       return {
         removeAllRanges: () => { }

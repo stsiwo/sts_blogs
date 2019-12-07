@@ -199,7 +199,7 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
         />
         <input type="hidden" name='creationDate' value={currentBlog.createdDate.toJSON()} />
         <div className="blog-detail-input-wrapper">
-          <input type="button" className="btn" value="Save" name='submit' onClick={handleSaveBlogClickEvent} onFocus={handleInitialFocusEvent} />
+          <input type="button" className="btn" value="Save" name='submit' onClick={handleSaveBlogClickEvent} onFocus={handleInitialFocusEvent} role="save-btn"/>
           {(currentValidationError.submit && <div className="input-error">{currentValidationError.submit}</div>)}
         </div>
       </div>
