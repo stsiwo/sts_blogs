@@ -2,7 +2,7 @@ import '@testing-library/jest-dom/extend-expect';
 // import react-testing methods
 import { fireEvent, queryByRole, queryByText, render, wait, waitForElement } from '@testing-library/react';
 import * as React from 'react';
-import { act } from 'react-dom/test-utils';
+import { act, Simulate } from 'react-dom/test-utils';
 import { api } from 'requests/api';
 import { blogGET200NonEmptyResponse, blogGET200EmptyResponse } from '../../../../requests/fixtures';
 import { ContextWrapperComponent } from '../../../fixtures';
@@ -104,17 +104,19 @@ describe('bm-c1: BlogManagement Component testing', () => {
 
   })
 
-  test("a3. (EH) should cancel api request when 'cancel' button is clicked after 'refresh' button is clicked", async () => {
+  // need to think how to test 'cancel' feature
+  // temply comment out
+  //test("a3. (EH) should cancel api request when 'cancel' button is clicked after 'refresh' button is clicked", async () => {
 
-    // api.request = jest.fn()
-    //   .mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse)
-    //     .then((data) => new Promise(resolve => setTimeout(() => {
-    //       resolve(data)
-    //     }, 3000))))
+  //  // api.request = jest.fn()
+  //  //   .mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse)
+  //  //     .then((data) => new Promise(resolve => setTimeout(() => {
+  //  //       resolve(data)
+  //  //     }, 3000))))
 
-    expect(1).toBe(0)
+  //  expect(1).toBe(0)
 
-  })
+  //})
 
   test("a4. (EH) should start api request with new limit value when page limit selector is changed", async () => {
 
@@ -196,7 +198,7 @@ describe('bm-c1: BlogManagement Component testing', () => {
       fireEvent.mouseEnter(blogListNodes[0])
       const deleteBtns = await waitForElement(() => getAllByRole('blog-delete-icon'))
       fireEvent.click(deleteBtns[0])
-      
+
       await wait(() => {
         expect(api.request).toHaveBeenCalledTimes(2)
         expect((api.request as any).mock.calls[1][0].url).toContain('1')
@@ -222,7 +224,7 @@ describe('bm-c1: BlogManagement Component testing', () => {
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
-        <ContextWrapperComponent component={Content} isAuth initialRoute={'/setting/blogs'}/>
+        <ContextWrapperComponent component={Content} isAuth initialRoute={'/setting/blogs'} />
       )
       expect(document.getElementsByClassName('aside-new-blog-link')[0].getAttribute('href')).toBe('/setting/blogs/new')
     })
@@ -350,22 +352,18 @@ describe('bm-c1: BlogManagement Component testing', () => {
         <ContextWrapperComponent component={BlogManagement} isAuth />
       )
       await waitForElement(() => getByText('blogs are empty'))
-      const sortInput = getByLabelText('Title Desc')
+      const sortInput = getByLabelText('Title Desc') // sort id = 3
 
       /** 
        * #BUG??: fireEvent.change does not trigger event on radio input
+       * -> workaround is to use 'Simulate.change()'
        **/
-      fireEvent.change(sortInput,
-        {
-          target:
-          {
-            value: '3',
-          },
-        })
-
+      Simulate.change(sortInput)
+      await wait(() => {
+        expect(api.request).toHaveBeenCalledTimes(2)
+        expect((api.request as any).mock.calls[1][0].url).toContain('sort=3')
+      })
     })
-    expect(api.request).toHaveBeenCalledTimes(2)
-    expect((api.request as any).mock.calls[1][0].url).toContain('sort=3')
   })
 
   test("a19. (EH) should start api request when new page number is click and url must contain the number", async () => {

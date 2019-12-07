@@ -4,13 +4,16 @@ import { buildQueryString } from "../src/utils";
 describe('utils testing', () => {
 
   test('buildQueryString function', () => {
+  
+    const date = new Date().toJSON()
+
     const dummy: QueryStringType = {
       param1: 'param1',
       param2: null,
       param3: undefined,
       param5: 0,
       param4: '',
-      date: new Date().toJSON(),
+      date: date,
       emptyArray: [],
       emptyString: '',
       tags: [
@@ -21,7 +24,7 @@ describe('utils testing', () => {
       ],
     }
 
-    expect(buildQueryString(dummy)).toBe('?param1=param1&param2=2&param3=3')
+    expect(buildQueryString(dummy)).toBe('?param1=param1&date=' + date + '&tags=test1,test2,test3,test4')
   })
 
   test('Date object test', () => {

@@ -25,10 +25,9 @@ export const buildQueryString = (queryStringObject: QueryStringType = {}): strin
 
   if (isEmpty(queryStringObject)) return ''
 
-  const esc = encodeURIComponent
   return '?' + Object.keys(queryStringObject)
     .filter(key => queryStringObject[key] !== null && queryStringObject[key] !== undefined && queryStringObject[key].lenth != 0 && queryStringObject[key] != '')
-    .map(key => esc(key) + '=' + esc(queryStringObject[key]))
+    .map(key => key + '=' + queryStringObject[key])
     .join('&')
 }
 
