@@ -52,11 +52,11 @@ const Blog: React.FunctionComponent<{}> = (props: {}) => {
     );
   }
 
-  //if (currentBlogFetchStatus.status === ResponseResultStatusEnum.FETCHING) return (<p>fetching your data</p>)
+  if (currentBlogFetchStatus.status === ResponseResultStatusEnum.FETCHING) return (<p>fetching your data</p>)
 
-  //if (currentBlogFetchStatus.status === ResponseResultStatusEnum.FAILURE) return (<p>sorry.. requested blog is not available now</p>)
+  if (currentBlogFetchStatus.status === ResponseResultStatusEnum.FAILURE) return (<p>sorry.. requested blog is not available now</p>)
 
-  return (//currentBlogFetchStatus.status === ResponseResultStatusEnum.SUCCESS &&
+  return (currentBlogFetchStatus.status === ResponseResultStatusEnum.SUCCESS &&
     <div className="context-wrapper">
       <div className="main-wrapper">
         <div className="blog-wrapper">
