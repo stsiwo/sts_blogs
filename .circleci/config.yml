@@ -1,70 +1,21 @@
 version: 2
 jobs:
-  #   build:
-  #     docker:
-  #       - image: circleci/node:10.16.3    
-  #     steps:
-  #       - checkout
-  #       - run: 
-  #           name: Install Dependencies 
-  #           working_directory: ./Spa
-  #           command: |
-  #             ls -al 
-  #             npm install
-  #       - restore_cache:
-  #           keys:
-  #             - dep1-{{ checksum "./Spa/package-lock.json" }}
-  #       - run:
-  #           name: Run Test
-  #           working_directory: ./Spa
-  #           command: |
-  #          npx jest tests/
   build:
     docker:
-      - image: circleci/python:3.6.8-stretch-browsers
+      - image: circleci/node:10.16.3    
     steps:
-      - checkout 
-      - run: 
-          name: create env file 
-          working_directory: ./Api1
-          command: |
-            echo CLIENT_SPA_URL=$CLIENT_SPA_URL > .env.testing
-            echo JWT_COOKIE_SECURE=$JWT_COOKIE_SECURE >> .env.testing
-            echo JWT_SECRET_KEY=$JWT_SECRET_KEY >> .env.testing
-            echo SECRET_KEY=$SECRET_KEY >> .env.testing
-            echo SIGNER_SECRET_KEY=$SIGNER_SECRET_KEY >> .env.testing
-            echo SQLALCHEMY_DATABASE_URI=$SQLALCHEMY_DATABASE_URI >> .env.testing
-            echo SQLALCHEMY_ECHO=$SQLALCHEMY_ECHO >> .env.testing
-            echo TESTING=$TESTING >> .env.testing
-            echo UPLOAD_FOLDER=$UPLOAD_FOLDER >> .env.testing
-            head ./.env.testing
+      - checkout
       - run: 
           name: Install Dependencies 
-          working_directory: ./Api1
+          working_directory: ./Spa
           command: |
             ls -al 
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install -r requirements.txt
+            npm install
       - restore_cache:
           keys:
-            - dep1-{{ checksum "./Api1/requirements.txt" }}
-      - run:
-          name: Setup SQLight database 
-          working_directory: ./Api1
-          command: |
-            . venv/bin/activate
-            export FLASK_ENV=TESTING
-            export FLASK_APP=./run.py
-            flask app show-config
-            flask db init
-            flask db migrate
-            flask db upgrade
-            flask seed roles
-            flask seed tags
+            - dep1-{{ checksum "./Spa/package-lock.json" }}
       - run:
           name: Run Test
-          working_directory: ./Api1
+          working_directory: ./Spa
           command: |
-            . venv/bin/activate
-            python -m pytest 
+            npx jest tests/
