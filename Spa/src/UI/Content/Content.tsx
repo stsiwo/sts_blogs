@@ -15,12 +15,12 @@ const Content: React.FunctionComponent<{}> = (props: {}) => {
   return (
     <section className="content-wrapper">
       <Route path="/" exact component={Home} /> 
-      {/** siince setting has route, remove 'exact' **/}
-      <AuthRoute path="/setting" component={Setting} /> 
       <Route path="/login" exact component={Login} /> 
       <Route path="/signup" exact component={Signup} /> 
       <Route path="/blogs" exact component={BlogList} /> 
       <Route path="/blogs/:id" exact component={Blog} /> 
+      {/** siince setting has route, remove 'exact' **/}
+      <AuthRoute path="/setting" component={Setting} /> 
     </section>
   );
 }
