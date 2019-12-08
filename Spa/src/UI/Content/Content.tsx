@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import Blog from './Blog/Blog';
 import BlogList from './BlogList/BlogList';
 import './Content.scss';
@@ -14,13 +14,15 @@ const Content: React.FunctionComponent<{}> = (props: {}) => {
 
   return (
     <section className="content-wrapper">
-      <Route path="/" exact component={Home} /> 
-      <Route path="/login" exact component={Login} /> 
-      <Route path="/signup" exact component={Signup} /> 
-      <Route path="/blogs" exact component={BlogList} /> 
-      <Route path="/blogs/:id" exact component={Blog} /> 
-      {/** siince setting has route, remove 'exact' **/}
-      <AuthRoute path="/setting" component={Setting} /> 
+      <Switch>
+        <Route path="/" exact component={Home} />
+        <Route path="/login" exact component={Login} />
+        <Route path="/signup" exact component={Signup} />
+        <Route path="/blogs" exact component={BlogList} />
+        <Route path="/blogs/:id" exact component={Blog} />
+        {/** siince setting has route, remove 'exact' **/}
+        <AuthRoute path="/setting" component={Setting} />
+      </Switch>
     </section>
   );
 }
