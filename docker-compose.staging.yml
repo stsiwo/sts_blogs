@@ -1,19 +1,14 @@
 version: '3.4'
 services:
-  spa:
+  webserver:
     build: 
       context: './Spa'
       target: staging
     environment:
       - NODE_ENV=staging 
+    env_file:
+      - "./Spa/.env.prod"
     volumes:
-      - "/app/node_modules"
-      - "$PWD/Spa/:/app"
-#  webserver: 
-#    image: nginx
-#    volumes:
-#      - "$PWD/WebServer/default.conf:/etc/nginx/conf.d/default.conf:ro"
-#    ports: 
-#      - "8080:80"
-  # db: in-memory in dev
-
+      - "$PWD/WebServer/default.conf:/etc/nginx/conf.d/default.conf:ro"
+    ports: 
+      - "80:80"

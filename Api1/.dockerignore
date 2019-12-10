@@ -5,5 +5,5 @@ env/
 
 .env*
 
-# db-migrations
+# db-migrations (temply)
 migrations/
