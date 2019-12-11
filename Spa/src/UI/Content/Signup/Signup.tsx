@@ -1,4 +1,4 @@
-import { initialUserSignupStatus, UserSignupType, UserType } from 'domain/user/UserType';
+import { initialUserSignupStatus, UserSignupType, UserType, UserSignupRequestDataType } from 'domain/user/UserType';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { RequestMethodEnum, ResponseResultStatusEnum, UserResponseDataType } from 'requests/types';
@@ -29,6 +29,10 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
   }
 
   const handleSubmitClickEvent: React.EventHandler<React.MouseEvent<HTMLInputElement>> = async (e) => {
+    // extract 'confirm' for request data
+    const tempUserSignupData: UserSignupType = Object.assign({}, currentUserSignupStatus)
+    delete tempUserSignupData.confirm
+    const userSignupRequestData: UserSignupRequestDataType = tempUserSignupData as UserSignupRequestDataType
     // final check validation ...
     validate()
       .then(() => {
@@ -37,33 +41,33 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
           path: '/signup',
           method: RequestMethodEnum.POST,
           headers: { 'content-type': 'application/json' },
-          data: JSON.stringify(currentUserSignupStatus),
+          data: JSON.stringify(userSignupRequestData),
         })
           .then((data: UserResponseDataType) => {
             if (data) {
               console.log('got response with user data')
               authDispatch({ type: 'login', user: data.user as UserType })
               console.log('before redirect')
-              props.history.push('/')               
+              props.history.push('/')
             }
           })
       }, () => {
-        debug('validation failed at save button event handler') 
+        debug('validation failed at save button event handler')
       })
   }
 
   return (
     <div className="signup-form-cover">
       <h2 className="signup-form-title">Signup</h2>
-      <FetchStatus 
-        currentFetchStatus={currentRequestStatus} 
-        setFetchStatus={setRequestStatus} 
+      <FetchStatus
+        currentFetchStatus={currentRequestStatus}
+        setFetchStatus={setRequestStatus}
         fetchingMsg={'requesting user signup ...'}
         successMsg={'requesting user signup success'}
         failureMsg={'requesting user signup failed'}
       />
       <form className="signup-login-form-content">
-        <Input 
+        <Input
           id={"name"}
           inputStyle={"black-input"}
           inputValue={currentUserSignupStatus.name}
@@ -75,7 +79,7 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
           errorMsg={currentValidationError.name}
           errorStyle={'small-input-error'}
         />
-        <Input 
+        <Input
           id={"email"}
           inputStyle={"black-input"}
           inputValue={currentUserSignupStatus.email}
@@ -87,7 +91,7 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
           errorMsg={currentValidationError.email}
           errorStyle={'small-input-error'}
         />
-        <Input 
+        <Input
           id={"password"}
           inputStyle={"black-input"}
           inputValue={currentUserSignupStatus.password}
@@ -100,7 +104,7 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
           errorStyle={'small-input-error'}
           inputType={'password'}
         />
-        <Input 
+        <Input
           id={"confirm"}
           inputStyle={"black-input"}
           inputValue={currentUserSignupStatus.confirm}
@@ -118,7 +122,7 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
         </div>
         <div className="signup-form-content-btn-wrapper">
           {(currentValidationError.submit && <div className="small-input-error">{currentValidationError.submit}</div>)}
-          <input className="btn" type="button" onClick={handleSubmitClickEvent} value="Signup" role="signup-btn"/>
+          <input className="btn" type="button" onClick={handleSubmitClickEvent} value="Signup" role="signup-btn" />
         </div>
       </form>
     </div>

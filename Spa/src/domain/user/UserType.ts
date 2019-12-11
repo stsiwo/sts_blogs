@@ -25,11 +25,15 @@ export const initialUserState: UserType = {
   role: null, 
 }
 
-export declare type UserLoginType = {
+export declare type UserLoginRequestDataType = {
   email: string
   password: string
-  confirm: string
 }
+
+
+export declare type UserLoginType = {
+  confirm: string
+} & UserLoginRequestDataType
 
 export const initialUserLoginStatus: UserLoginType = {
   email: '',
@@ -37,12 +41,16 @@ export const initialUserLoginStatus: UserLoginType = {
   confirm: '',
 }
 
-export declare type UserSignupType = {
+export declare type UserSignupRequestDataType = {
   name: string
   email: string
   password: string
-  confirm: string
 }
+
+export declare type UserSignupType = {
+  confirm: string
+} & UserSignupRequestDataType
+
 
 export const initialUserSignupStatus: UserSignupType = {
   name: '',

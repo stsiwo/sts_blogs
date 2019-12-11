@@ -40,6 +40,12 @@ describe('bm-c1: Signup Component testing', () => {
    *
    **/
 
+  /**
+   * TODO: ADD BEBLOW TEST
+   *  - request data test
+   *    - e.g., each field
+   **/
+
   // the order of values must match node array
   const seedInputTestValues = (targetNodes: HTMLElement[], values: string[]): void => {
     targetNodes.forEach((node: HTMLElement, index: number) => {
