@@ -1,9 +1,10 @@
 server {
-    listen       80;
-    server_name  sample;
+    listen       80 default_server;
+    server_name  stsiwo.info;
 
     #charset koi8-r;
-    #access_log  /var/log/nginx/host.access.log  main;
+    access_log  /var/log/nginx/stsiwo.info.access.log  main;
+    error_log /var/log/nginx/stsiwo.info.error.log info;
 
     location / {
         root   /var/www;
@@ -64,3 +65,6 @@ server {
     #    deny  all;
     #}
 }
+
+include /etc/nginx/conf.d/api.stsiwo.info;
+

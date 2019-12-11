@@ -22,7 +22,8 @@ services:
     env_file:
       - "./Spa/.env.prod"
     volumes:
-      - "$PWD/WebServer/default.conf:/etc/nginx/conf.d/default.conf:ro"
+      - "$PWD/WebServer/stsiwo.info:/etc/nginx/conf.d/default.conf:ro"
+      - "$PWD/WebServer/api.stsiwo.info:/etc/nginx/conf.d/api.stsiwo.info:ro"
     ports: 
       - "80:80"
     depends_on:
@@ -31,7 +32,6 @@ services:
     build: 
       context: './Api1'
       target: development
-    # image: api1:dev
     volumes:
       - "$PWD/Api1/:/app"
     env_file:
