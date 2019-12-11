@@ -7,8 +7,8 @@ class BaseModel(db.Model):
 
     __abstract__ = True
 
-    createdDate = db.Column('created_date', db.DateTime, server_default=func.now(), nullable=False)
-    updatedDate = db.Column('updated_date', db.DateTime, server_default=func.now(), nullable=False)
+    createdDate = db.Column('created_date', db.DateTime(True), server_default=func.now(), nullable=False)
+    updatedDate = db.Column('updated_date', db.DateTime(True), server_default=func.now(), nullable=False)
     deleted = db.Column(db.Boolean, server_default='0', nullable=False)
 
     def as_dict(self):

@@ -3,6 +3,10 @@ from flask.cli import AppGroup
 from Configs.extensions import db
 from Infrastructure.DataModels.RoleModel import Role
 from Infrastructure.DataModels.TagModel import Tag
+from Infrastructure.DataModels.UserModel import User
+from Infrastructure.DataModels.BlogModel import Blog
+from click import ClickException
+from tests.data.generators.BlogGenerator import generateBlogModelV2
 
 
 seed_cli = AppGroup('seed')
@@ -42,6 +46,105 @@ def add_tags():
     db.session.add(Tag(name='pytest'))
     db.session.add(Tag(name='webpack'))
     db.session.add(Tag(name='js'))
+    db.session.commit()
+
+
+@seed_cli.command('test-users')
+def add_test_users():
+    roles = db.session.query(Role).all()
+
+    if len(roles) == 0:
+        raise ClickException("run 'flask seed roles' first")
+
+    memberRole = [role for role in roles if role.name == 'member']
+    adminRole = [role for role in roles if role.name == 'admin']
+
+    db.session.add(
+            User(
+                name="test member",
+                email="test@member.com",
+                password="test_member",
+                roles=memberRole
+                )
+            )
+
+    # admin
+    db.session.add(
+            User(
+                name="test admin",
+                email="test@admin.com",
+                password="test_admin",
+                roles=adminRole
+                )
+            )
+
+    db.session.add(
+            User(
+                name="test member1",
+                email="test@member1.com",
+                password="test_member1",
+                roles=memberRole
+                )
+            )
+    db.session.add(
+            User(
+                name="test member2",
+                email="test@member2.com",
+                password="test_member2",
+                roles=memberRole
+                )
+            )
+    db.session.add(
+            User(
+                name="test member3",
+                email="test@member3.com",
+                password="test_member3",
+                roles=memberRole
+                )
+            )
+    db.session.add(
+            User(
+                name="test member4",
+                email="test@member4.com",
+                password="test_member4",
+                roles=memberRole
+                )
+            )
+
+    db.session.add(
+            User(
+                name="test member5",
+                email="test@member5.com",
+                password="test_member5",
+                roles=memberRole
+                )
+            )
+
+    db.session.commit()
+
+
+@seed_cli.command('test-blogs')
+def add_test_blogs():
+
+    memberUser = db.session.query(User).filter(User.name == 'test member').first()
+    adminUser = db.session.query(User).filter(User.name == 'test admin').first()
+    memberUser1 = db.session.query(User).filter(User.name == 'test member1').first()
+
+    for i in range(100):
+        db.session.add(generateBlogModelV2(user=memberUser))
+
+    for i in range(100):
+        db.session.add(generateBlogModelV2(user=adminUser))
+
+    for i in range(3):
+        db.session.add(generateBlogModelV2(user=memberUser1))
+
+    db.session.commit()
+
+
+@seed_cli.command('delete-blogs')
+def delete_test_blogs():
+    db.session.query(Blog).delete()
     db.session.commit()
 
 
