@@ -2,7 +2,7 @@ FROM node:8.16.2-alpine as development
 WORKDIR /app
 
 # for 'source' command
-RUN apk add --no-cache bash
+# RUN apk add --no-cache bash
 
 COPY . . 
 
