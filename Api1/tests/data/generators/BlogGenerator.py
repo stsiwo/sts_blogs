@@ -47,6 +47,8 @@ def generateBlogModelV2(
     subtitle = fake.sentence() if subtitle is None else subtitle
     content = fake.sentence() if content is None else content
     createdDate = fake.past_datetime(start_date="-30y", tzinfo=pytz.timezone('US/Pacific')) if createdDate is None else createdDate
+    # need to wrap faker's datetime with pure datetime otherwise mysql complains about it:
+    # error: 'datetime' object has no attribute 'translate'
     createdDate = datetime.datetime(year=createdDate.year, month=createdDate.month, day=createdDate.day, hour=createdDate.hour, minute=createdDate.minute, second=createdDate.second, microsecond=createdDate.microsecond, tzinfo=createdDate.tzinfo, fold=createdDate.fold)
 
     blog = Blog(
