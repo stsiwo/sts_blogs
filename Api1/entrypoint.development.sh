@@ -16,4 +16,4 @@ done
 flask db upgrade
 flask seed roles
 flask seed tags
-python ./run.py
+gunicorn -c python:wsgi_config run:main

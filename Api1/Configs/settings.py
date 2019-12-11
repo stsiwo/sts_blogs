@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 import os
 from pathlib import Path
 
+
 # load env file based on the 'FLASK_ENV'
 currentEnv = os.getenv('FLASK_ENV', 'DEVELOPMENT').upper()
 env_path = Path('.').parent / '.env.development'
@@ -16,6 +17,7 @@ elif currentEnv == 'PRODUCTION':
     env_path = Path('.').parent / '.env.production'
 
 load_dotenv(dotenv_path=env_path)
+
 
 FLASK_APP = './run.py'
 
