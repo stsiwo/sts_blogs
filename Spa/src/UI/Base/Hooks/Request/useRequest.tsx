@@ -49,12 +49,12 @@ export const useRequest = (input: UseRequestStatusInputType): UseRequestStatusOu
       .catch((result: ResponseResultType) => {
         debug('fetch data then clause failed at sendRequest')
         /** this is called when above 'then' caluse failed **/
-        /** esp, 'args.callback' internal error **/
+        /** or 'request' function reject promise **/
         setRequestStatus({
           status: ResponseResultStatusEnum.FAILURE,
           errorMsg: result.errorMsg
         })
-        return Promise.resolve()
+        return Promise.resolve(result)
       })
   }
 
