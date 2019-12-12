@@ -11,6 +11,8 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 RUN apk del .build-deps
 # need this one beside 'jpeg-dev' above and need to separate from it 
+# because of this PIL error : libjpeg no such file or directory
+# https://stackoverflow.com/questions/56407216/django-does-not-find-pillow-though-installed
 RUN apk add libjpeg 
 
 COPY entrypoint.testing.sh ./
