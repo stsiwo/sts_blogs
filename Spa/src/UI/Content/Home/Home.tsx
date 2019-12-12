@@ -35,6 +35,11 @@ declare type BlogOptionListType = {
   blogs: BlogOptionType
 }
 
+declare type ScrollPosStateType = {
+  x: number
+  y: number
+}
+
 
 const Home: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComponentProps<{}>) => {
 
@@ -53,6 +58,39 @@ const Home: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComp
   const { currentRequestStatus: currentBlogsRequestStatus, sendRequest: sendBlogsRequest } = useRequest({})
   const currentScreenSize = useResponsive()
   const { auth } = useAuthContext()
+
+  /**
+   * scrolling bugs:
+   *  - when re-rending component because of 'recent', 'popular' change,
+   *    scrollY is always set to 0 after re-rending.
+   *  - how to keep or stay the same position after reloading
+   *  ticket: https://app.clickup.com/t/3ed6c4
+   **/
+  const [curScrollPos, setScrollPos] = React.useState<ScrollPosStateType>({
+    x: window.scrollX,
+    y: window.scrollY
+  })
+
+  React.useEffect(() => {
+
+    function keepTrackScrollPos() {
+      setScrollPos({
+        x: window.scrollX,
+        y: window.scrollY
+      })
+    }
+    window.addEventListener("scroll", keepTrackScrollPos)
+
+    return () => {
+      window.removeEventListener("scroll", keepTrackScrollPos)
+    }
+  })
+
+  React.useEffect(() => {
+    console.log('inside effect to set scroll position')
+    console.log(curScrollPos.y)
+    window.scrollTo(curScrollPos.x, curScrollPos.y)
+  })
 
   const handleSearchIconClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = (e) => {
     searchInputRef.current.style.width = currentSearchInputAnimationStatus.width.value[+currentSearchInputAnimationStatus.isNextDisplay]
@@ -92,6 +130,8 @@ const Home: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComp
     }
   }), [])
 
+
+
   React.useEffect(() => {
     sendBlogsRequest({
       path: '/blogs',
@@ -122,8 +162,6 @@ const Home: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComp
     return currentBlogOptionList.blogs[currentBlogOption as keyof BlogOptionType].map((blog: BlogType) => <BlogItem blog={blog} />)
   }
 
-  console.log(currentBlogOptionList.blogs[currentBlogOptionList.active as keyof BlogOptionType])
-
   return (
     <div className="home-wrapper">
       <div className="home-search-bar-wrapper">
@@ -152,7 +190,7 @@ const Home: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComp
               currentBlogOptionList.blogs[currentBlogOptionList.active as keyof BlogOptionType].length === 0 &&
               <p>blogs are empty</p>
             )}
-            {(currentBlogsRequestStatus.status !== ResponseResultStatusEnum.FAILURE &&
+            {(currentBlogsRequestStatus.status === ResponseResultStatusEnum.FAILURE &&
               <p>blogs are not currently available</p>
             )}
             {(currentBlogsRequestStatus.status !== ResponseResultStatusEnum.FETCHING &&

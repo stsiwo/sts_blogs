@@ -16,6 +16,7 @@ import Footer from 'ui/Footer/Footer';
 // enable debug
 process.env.DEBUG
 
+
 var debug = require('debug')('ui:App')
 
 
