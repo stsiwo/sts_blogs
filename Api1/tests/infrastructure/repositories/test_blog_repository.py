@@ -25,8 +25,8 @@ def test_br1_get_all_should_return_orOp_filtered_pagination_object(blogsSeededFi
 
     printObject(result)
 
-    assert len(result['data']) != 0
-    for blog in result['data']:
+    assert len(result['blogs']) != 0
+    for blog in result['blogs']:
         assert any(tag.name == 'react' for tag in blog.tags)
 
 
@@ -50,8 +50,8 @@ def test_br1_get_all_should_return_no_orOp_filtered_pagination_object(blogsSeede
 
     printObject(result)
 
-    assert len(result['data']) != 0
-    for blog in result['data']:
+    assert len(result['blogs']) != 0
+    for blog in result['blogs']:
         assert any(tag.name == 'react' for tag in blog.tags)
 
 

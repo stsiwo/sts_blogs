@@ -32,7 +32,7 @@ def test_b03_blogs_get_endpoint_should_return_202_and_blogs_json(client, blogsSe
 
     assert data is not None
 
-    for blog in data['data']:
+    for blog in data['blogs']:
         assert blog['id'] is not None
 
 
@@ -47,7 +47,7 @@ def test_b04_blogs_get_endpoint_should_return_202_and_blogs_json_with_user_depen
 
     assert data is not None
 
-    for blog in data['data']:
+    for blog in data['blogs']:
         assert blog['user']['id'] is not None
 
 
@@ -62,7 +62,7 @@ def test_b041_blogs_get_endpoint_should_return_queried_blogs(client, blogsSeeded
 
     assert data is not None
 
-    for blog in data['data']:
+    for blog in data['blogs']:
         assert blog['id'] is not None
 
 
