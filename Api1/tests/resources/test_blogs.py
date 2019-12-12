@@ -67,6 +67,33 @@ def test_b041_blogs_get_endpoint_should_return_queried_blogs(client, blogsSeeded
 
 
 @pytest.mark.blogs_src
+@pytest.mark.blogs_src_get
+def test_b041_blogs_get_endpoint_should_return_specified_view_model(client, blogsSeededFixture):
+
+    response = client.get('/blogs?limit=30&page=1&tags=js&tags=webpack')
+    assert 200 == response.status_code
+
+    data = decodeResponseByteJsonToDictionary(response.data)
+
+    assert data is not None
+
+    for blog in data['blogs']:
+        assert blog['id'] is not None
+        assert blog['mainImageUrl'] is not None
+        assert blog['title'] is not None
+        assert blog['subtitle'] is not None
+        assert blog['content'] is not None
+        assert blog['tags'] is not None
+        assert blog['createdDate'] is not None
+        assert blog['author'] is not None
+        assert blog['author']['id'] is not None
+        assert blog['author']['name'] is not None
+        assert blog['author']['_password'] is None
+        assert blog['author']['email'] is None
+        assert blog['author']['avatarUrl'] is not None
+
+
+@pytest.mark.blogs_src
 @pytest.mark.blogs_src_put
 def test_b05_blogs_put_endpoint_should_return_401_code_since_unauthorized_access(client, database, application, multipartHttpHeaders):
 

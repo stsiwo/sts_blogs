@@ -8,4 +8,4 @@ class BlogSchema(ma.ModelSchema):
     class Meta:
         model = Blog
 
-    user = Nested(UserSchema)
+    author = Nested(UserSchema)
