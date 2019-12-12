@@ -10,4 +10,4 @@ flask db migrate
 flask db upgrade
 flask seed roles
 flask seed tags
-python -m pytest 
+python -m pytest $1 $2

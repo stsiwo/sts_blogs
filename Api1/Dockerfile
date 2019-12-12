@@ -16,8 +16,9 @@ RUN apk del .build-deps
 RUN apk add libjpeg 
 
 COPY entrypoint.testing.sh ./
-RUN chmod +x ./entrypoint.testing.sh
-CMD /bin/sh ./entrypoint.testing.sh
+RUN ["chmod", "+x", "./entrypoint.testing.sh"]
+ENTRYPOINT ["./entrypoint.testing.sh"]
+CMD []
 
 
 FROM python:3.8-alpine as development
