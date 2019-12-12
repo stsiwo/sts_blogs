@@ -17,7 +17,7 @@ import BePartOfIt from 'Components/BePartOfIt/BePartOfIt';
 import ManageYourBlogs from 'Components/ManageYourBlogs/ManageYourBlogs';
 import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
 import { useRequest } from 'Hooks/Request/useRequest';
-import { RequestMethodEnum, BlogListResponseDataType, QueryStringType } from 'requests/types';
+import { RequestMethodEnum, BlogListResponseDataType, QueryStringType, ResponseResultStatusEnum, ErrorResponseDataType } from 'requests/types';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 declare type BlogOptionType = {
@@ -98,31 +98,41 @@ const Home: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComp
       method: RequestMethodEnum.GET,
       queryString: queryStringOption[currentBlogOptionList.active],
     })
-      .then((data: BlogListResponseDataType) => {
-        if (data) {
-          setBlogOptionList((prev: BlogOptionListType) => ({
-            active: prev.active,
-            blogs: {
-              ...prev.blogs,
-              recent: data.blogs,
+      .then((data: BlogListResponseDataType | ErrorResponseDataType) => {
+        console.log('data in then')
+        console.log(data)
+        if ('blogs' in data) {
+          console.log('data after resolved fetch')
+          console.log(data)
+          setBlogOptionList((prev: BlogOptionListType) => {
+            console.log(prev)
+            console.log('before set blogs')
+            return {
+              active: currentBlogOptionList.active,
+              blogs: {
+                ...prev.blogs,
+                [currentBlogOptionList.active]: (data as BlogListResponseDataType).blogs,
+              }
             }
-          }))
+          })
         }
       })
   }, [
-    currentBlogOptionList.active 
-  ])
+      currentBlogOptionList.active
+    ])
 
   const renderBlogs: () => React.ReactNode = () => {
     const currentBlogOption: string = currentBlogOptionList.active
     return currentBlogOptionList.blogs[currentBlogOption as keyof BlogOptionType].map((blog: BlogType) => <BlogItem blog={blog} />)
   }
 
+  console.log(currentBlogOptionList.blogs[currentBlogOptionList.active as keyof BlogOptionType])
+
   return (
     <div className="home-wrapper">
       <div className="home-search-bar-wrapper">
-        <input type='text' className="hidden-input" placeholder="enter keyword or tags for blog search ..." ref={searchInputRef} onKeyDown={handleSearchKeyDownEvent}/>
-        <div className="icon-wrapper" onClick={handleSearchIconClickEvent}>
+        <input type='text' className="hidden-input" placeholder="enter keyword or tags for blog search ..." ref={searchInputRef} onKeyDown={handleSearchKeyDownEvent} role="search-input" />
+        <div className="icon-wrapper" onClick={handleSearchIconClickEvent} role="search-icon">
           <GoSearch className="icon" />
         </div>
       </div>
@@ -139,7 +149,20 @@ const Home: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComp
             )}
           </div>
           <div className="home-blog-list-wrapper">
-            {renderBlogs()}
+            {(currentBlogsRequestStatus.status === ResponseResultStatusEnum.FETCHING &&
+              <p role="fetching">fetching ... </p>
+            )}
+            {(currentBlogsRequestStatus.status !== ResponseResultStatusEnum.FETCHING &&
+              currentBlogOptionList.blogs[currentBlogOptionList.active as keyof BlogOptionType].length === 0 &&
+              <p>blogs are empty</p>
+            )}
+            {(currentBlogsRequestStatus.status !== ResponseResultStatusEnum.FAILURE &&
+              <p>blogs are not currently available</p>
+            )}
+            {(currentBlogsRequestStatus.status !== ResponseResultStatusEnum.FETCHING &&
+              currentBlogOptionList.blogs[currentBlogOptionList.active as keyof BlogOptionType].length !== 0 &&
+              renderBlogs()
+            )}
           </div>
         </div>
         <div className="aside-wrapper">
