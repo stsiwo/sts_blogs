@@ -45,6 +45,7 @@ def configureApp(config_object="Configs.settings"):
     # IMPORTANT: db.init_app must be before ma.init_app
     # ============================================================
     bcrypt.init_app(app)
+    # db must be before ma
     db.init_app(app)
     ma.init_app(app)
     migrate.init_app(app, db)
