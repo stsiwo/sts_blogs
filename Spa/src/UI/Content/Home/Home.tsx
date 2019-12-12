@@ -99,14 +99,10 @@ const Home: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComp
       queryString: queryStringOption[currentBlogOptionList.active],
     })
       .then((data: BlogListResponseDataType | ErrorResponseDataType) => {
-        console.log('data in then')
-        console.log(data)
-        if ('blogs' in data) {
-          console.log('data after resolved fetch')
-          console.log(data)
+        console.log('inside "then" at Home')
+        if ((data as BlogListResponseDataType).blogs) {
+          console.log('fetch success at Home')
           setBlogOptionList((prev: BlogOptionListType) => {
-            console.log(prev)
-            console.log('before set blogs')
             return {
               active: currentBlogOptionList.active,
               blogs: {

@@ -103,6 +103,8 @@ const BlogItem: React.FunctionComponent<BlogItemPropType> = (props: BlogItemProp
   const isOverlay: boolean = props.isEditDeleteOverlay ? props.isEditDeleteOverlay : false
   
   const renderBlogItem: () => React.ReactNode = () => {
+    console.log("created Date data type")
+    console.log(typeof props.blog.createdDate)
     return (
       <div className="blog-list-item-wrapper" onMouseEnter={handleBlogItemMouseEnterEvent} onMouseLeave={handleBlogItemMouseLeaveEvent} role="blog-item">
         <img className="blog-list-item-img" src={props.blog.mainImageUrl} alt="blog item" width="150px" height="100px" />
