@@ -51,7 +51,9 @@ def configureApp(config_object="Configs.settings"):
     jwt.init_app(app)
 
     # cores
-    CORS(app, origins=[app.config['CLIENT_SPA_URL'] + '/*'])
+    # CORS(app, origins=[app.config['CLIENT_SPA_URL'] + '/*'])
+    # temply available all origin. fix this before production
+    CORS(app, origins=['*'])
 
     return app
 
