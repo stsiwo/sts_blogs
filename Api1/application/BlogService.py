@@ -28,11 +28,11 @@ class BlogService(object):
 
         result: Dict = self._blogRepository.getAll(queryString)
 
-        if len(result['data']) == 0:
+        if len(result['blogs']) == 0:
             raise BlogNotFoundException
 
         # transform data model to view model of blog
-        result['data']: List[Dict] = [self._blogSchema.dump(blog) for blog in result['data']]
+        result['blogs']: List[Dict] = [self._blogSchema.dump(blog) for blog in result['blogs']]
 
         return result
 

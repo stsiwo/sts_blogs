@@ -39,7 +39,7 @@ class BlogRepository(BaseRepository[Blog]):
                 'page': pagination.page,
                 'limit': pagination.per_page,
                 'totalCount': pagination.total,
-                'data': pagination.items,
+                'blogs': pagination.items,
                 }
 
     def get(self, id: str) -> Blog:
