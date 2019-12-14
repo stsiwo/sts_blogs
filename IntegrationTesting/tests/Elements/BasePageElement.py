@@ -6,6 +6,7 @@ class BasePageElement(object):
 
     def __set__(self, obj, value):
         """Sets the text to the value supplied"""
+        print('start setting value to Element')
         driver = obj.driver
         WebDriverWait(driver, 100).until(
             lambda driver: driver.find_element_by_css_selector(self.locator))

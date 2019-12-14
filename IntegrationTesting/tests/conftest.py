@@ -14,7 +14,6 @@ def target_driver(request):
              command_executor=seleniumServerUrl,
              desired_capabilities=DesiredCapabilities.CHROME
          )
-    target_driver.get('http://stsiwo.info')
 
     def fin():
         print('start teardown target_driver')
@@ -24,9 +23,15 @@ def target_driver(request):
     return target_driver
 
 
+# called every test func
 @pytest.fixture
-def target_base_url():
-    return target_base_url
+def target_driver_with_base_url(target_driver):
+    target_driver.get('http://stsiwo.info')
+    # need this one to avoid 'NosuchElementException'
+    # - esp for when find element by link test
+    # reference: https://stackoverflow.com/questions/6936149/how-to-use-find-element-by-link-text-properly-to-not-raise-nosuchelementexcept
+    target_driver.implicitly_wait(10)
+    return target_driver
 
 
 # # def pytest_addoption(parser):
