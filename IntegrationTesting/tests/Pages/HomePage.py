@@ -39,8 +39,8 @@ class HomePage(BasePage):
 
     def click_blogs_nav_menu_item(self):
         """click blogs nav menu item (route to BlogList Page)"""
+        self.take_screenshot('blogs-nav-item')
         nav_menu_blog = self.driver.find_element(*HeaderComponentLocators.BLOGS_NAV_ITEM)
-        self.take_screenshot('test')
         nav_menu_blog.click()
 
     def click_search_icon(self):

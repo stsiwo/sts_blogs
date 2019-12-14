@@ -34,6 +34,34 @@ def target_driver_with_base_url(target_driver):
     return target_driver
 
 
+@pytest.fixture
+def target_driver_with_base_url_with_mobile_ssize(target_driver_with_base_url):
+    target_driver_with_base_url.set_window_position(0, 0)
+    target_driver_with_base_url.set_window_size(425, 1000)
+    return target_driver_with_base_url
+
+
+@pytest.fixture
+def target_driver_with_base_url_with_tablet_ssize(target_driver_with_base_url):
+    target_driver_with_base_url.set_window_position(0, 0)
+    target_driver_with_base_url.set_window_size(768, 1000)
+    return target_driver_with_base_url
+
+
+@pytest.fixture
+def target_driver_with_base_url_with_laptop_ssize(target_driver_with_base_url):
+    target_driver_with_base_url.set_window_position(0, 0)
+    target_driver_with_base_url.set_window_size(1024, 1000)
+    return target_driver_with_base_url
+
+
+@pytest.fixture
+def target_driver_with_base_url_with_desktop_ssize(target_driver_with_base_url):
+    target_driver_with_base_url.set_window_position(0, 0)
+    target_driver_with_base_url.set_window_size(1440, 1000)
+    return target_driver_with_base_url
+
+
 # # def pytest_addoption(parser):
 # #     parser.addoption(
 # #         "--user", action="store", default="all", help="target user; 'guest', 'member', or 'amdin'"

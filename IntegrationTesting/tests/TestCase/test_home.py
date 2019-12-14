@@ -1,6 +1,7 @@
 from tests.Pages.HomePage import HomePage
 from tests.Pages.SignupPage import SignupPage
 from tests.Pages.BlogListPage import BlogListPage
+from tests.Pages.LoginPage import LoginPage
 import pytest
 
 
@@ -18,6 +19,9 @@ def test_should_display_title_in_header(target_driver_with_base_url):
     assert home_page.get_title_in_header() == 'STS'
 
 
+@pytest.mark.mobile
+@pytest.mark.tablet
+@pytest.mark.laptop
 def test_should_display_blogs_nav_menu_item_in_header(target_driver_with_base_url):
 
     home_page = HomePage(target_driver_with_base_url)
@@ -25,6 +29,9 @@ def test_should_display_blogs_nav_menu_item_in_header(target_driver_with_base_ur
     assert home_page.get_blogs_nav_menu_item_as_text() == 'Blogs'
 
 
+@pytest.mark.mobile
+@pytest.mark.tablet
+@pytest.mark.laptop
 def test_should_display_signup_nav_menu_item_in_header(target_driver_with_base_url):
 
     home_page = HomePage(target_driver_with_base_url)
@@ -32,6 +39,9 @@ def test_should_display_signup_nav_menu_item_in_header(target_driver_with_base_u
     assert home_page.get_signup_nav_menu_item_as_text() == 'Signup'
 
 
+@pytest.mark.mobile
+@pytest.mark.tablet
+@pytest.mark.laptop
 def test_should_display_login_nav_menu_item_in_header(target_driver_with_base_url):
 
     home_page = HomePage(target_driver_with_base_url)
@@ -39,21 +49,55 @@ def test_should_display_login_nav_menu_item_in_header(target_driver_with_base_ur
     assert home_page.get_login_nav_menu_item_as_text() == 'Login'
 
 
-@pytest.mark.temp
-def test_should_route_to_blog_list_page_when_click_blogs_link_in_header(target_driver_with_base_url):
+@pytest.mark.desktop
+def test_should_route_to_blog_list_page_when_click_blogs_link_in_header(target_driver_with_base_url_with_desktop_ssize):
 
-    home_page = HomePage(target_driver_with_base_url)
+    home_page = HomePage(target_driver_with_base_url_with_desktop_ssize)
 
     # click blogs nav item
     home_page.click_blogs_nav_menu_item()
 
     # get blog_list page object with current url
-    blog_list_page = BlogListPage(target_driver_with_base_url)
+    blog_list_page = BlogListPage(target_driver_with_base_url_with_desktop_ssize)
 
     # assert blog list page is correctly loaded
     # TODO: add some id text to identify 'BlogList' page
-    # for now, i use 'Sort by' as id for BlogList but should be more identical one r.t. relying on the other concern 
+    # for now, i use 'Sort by' as id for BlogList but should be more identical one r.t. relying on the other concern
     assert blog_list_page.does_have_text_in_page('Sort by')
+
+
+@pytest.mark.desktop
+def test_should_route_to_signup_page_when_click_blogs_link_in_header(target_driver_with_base_url_with_desktop_ssize):
+
+    home_page = HomePage(target_driver_with_base_url_with_desktop_ssize)
+
+    # click blogs nav item
+    home_page.click_blogs_nav_menu_item()
+
+    # get signup page object with current url
+    signup_page = SignupPage(target_driver_with_base_url_with_desktop_ssize)
+
+    # assert blog list page is correctly loaded
+    # TODO: add some id text to identify 'BlogList' page
+    # for now, i use 'Sort by' as id for BlogList but should be more identical one r.t. relying on the other concern
+    assert signup_page.does_have_text_in_page('Signup')
+
+
+@pytest.mark.desktop
+def test_should_route_to_login_page_when_click_blogs_link_in_header(target_driver_with_base_url_with_desktop_ssize):
+
+    home_page = HomePage(target_driver_with_base_url_with_desktop_ssize)
+
+    # click blogs nav item
+    home_page.click_blogs_nav_menu_item()
+
+    # get login page object with current url
+    login_page = LoginPage(target_driver_with_base_url_with_desktop_ssize)
+
+    # assert blog list page is correctly loaded
+    # TODO: add some id text to identify 'BlogList' page
+    # for now, i use 'Sort by' as id for BlogList but should be more identical one r.t. relying on the other concern
+    assert login_page.does_have_text_in_page('Login')
 
 
 def test_should_route_search_result_page_when_search_in_home(target_driver_with_base_url):
