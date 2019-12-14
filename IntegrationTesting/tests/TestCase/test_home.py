@@ -9,7 +9,7 @@ def test_home_title(target_driver_with_base_url):
 
     home_page = HomePage(target_driver_with_base_url)
 
-    assert home_page.driver.title == 'STS'
+    assert home_page.is_title_matches('STS')
 
 
 def test_should_display_title_in_header(target_driver_with_base_url):

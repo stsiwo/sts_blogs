@@ -1,7 +1,5 @@
 from selenium.webdriver.support.ui import WebDriverWait
 from tests.Pages.BasePage import BasePage
-from tests.Elements.SearchInputElement import SearchInputElement
-from tests.Elements.SearchIconElement import SearchIconElement
 from tests.Locators.HomePageLocators import HomePageLocators
 from tests.Locators.HeaderComponentLocators import HeaderComponentLocators
 from selenium.webdriver.common.keys import Keys
@@ -12,10 +10,6 @@ class HomePage(BasePage):
 
     # Declares a variable that will contain the retrieved input
     # search_input_element = SearchInputElement()
-
-    def is_title_matches(self):
-        """Verifies that the hardcoded input "Python" appears in page title"""
-        return "STS" in self.driver.title
 
     def get_title_in_header(self):
         """return title string in header logo"""
@@ -96,8 +90,3 @@ class HomePage(BasePage):
         search_input_element.send_keys(text)
         # trigger move to search result page
         search_input_element.send_keys(Keys.RETURN)
-
-    def does_have_text_in_page(self, text: str):
-        print(self.driver.page_source)
-
-        return text in self.driver.page_source
