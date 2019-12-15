@@ -3,13 +3,20 @@ from tests.Pages.BasePage import BasePage
 from tests.Locators.HomePageLocators import HomePageLocators
 from tests.Locators.HeaderComponentLocators import HeaderComponentLocators
 from selenium.webdriver.common.keys import Keys
+from tests.config import base_url
 
 
 class HomePage(BasePage):
     """Home page action methods come here. I.e. Python.org"""
 
-    # Declares a variable that will contain the retrieved input
-    # search_input_element = SearchInputElement()
+    def __init__(self, driver):
+        super().__init__(driver)
+        # only set base url for HomePage
+        self.driver.get(base_url)
+        # need this one to avoid 'NosuchElementException'
+        # - esp for when find element by link test
+        # reference: https://stackoverflow.com/questions/6936149/how-to-use-find-element-by-link-text-properly-to-not-raise-nosuchelementexcept
+        self.driver.implicitly_wait(10)
 
     def get_title_in_header(self):
         """return title string in header logo"""

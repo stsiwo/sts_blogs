@@ -18,13 +18,13 @@ import pytest
 #     print(target_browser)
 #     assert 0
 
-def test_ssize(target_browser_with_all_ssize):
-    assert 0
-
-
-def test_ssize2(target_browser_with_lte_laptop_size):
-    assert 0
-
-
-def test_ssize3(target_browser_with_lte_tablet_size):
-    assert 0
+# def test_ssize(target_browser_with_all_ssize):
+#     assert 0
+# 
+# 
+# def test_ssize2(target_browser_with_lte_laptop_size):
+#     assert 0
+# 
+# 
+# def test_ssize3(target_browser_with_lte_tablet_size):
+#     assert 0
