@@ -28,3 +28,7 @@ import pytest
 # 
 # def test_ssize3(target_browser_with_lte_tablet_size):
 #     assert 0
+
+# def test_params(params_fix):
+#     print(params_fix)
+#     assert 0

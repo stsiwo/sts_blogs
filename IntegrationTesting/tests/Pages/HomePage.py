@@ -4,6 +4,9 @@ from tests.Locators.HomePageLocators import HomePageLocators
 from tests.Locators.HeaderComponentLocators import HeaderComponentLocators
 from selenium.webdriver.common.keys import Keys
 from tests.config import base_url
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 
 
 class HomePage(BasePage):
@@ -16,7 +19,12 @@ class HomePage(BasePage):
         # need this one to avoid 'NosuchElementException'
         # - esp for when find element by link test
         # reference: https://stackoverflow.com/questions/6936149/how-to-use-find-element-by-link-text-properly-to-not-raise-nosuchelementexcept
-        self.driver.implicitly_wait(10)
+        delay = 3  # seconds
+        try:
+            myElem = WebDriverWait(self.driver, delay).until(EC.presence_of_element_located((By.ID, 'root')))
+            print("Page is ready!")
+        except TimeoutException:
+            print("Loading took too much time!")
 
     def get_title_in_header(self):
         """return title string in header logo"""
@@ -25,6 +33,7 @@ class HomePage(BasePage):
 
     def get_blogs_nav_menu_item_as_text(self):
         """return blogs nav menu item title as string in header"""
+        self.take_screenshot('multi')
         nav_menu_blog = self.driver.find_element(*HeaderComponentLocators.BLOGS_NAV_ITEM)
         return nav_menu_blog.text
 
