@@ -2,7 +2,7 @@ from tests.Pages.HomePage import HomePage
 from tests.Pages.SignupPage import SignupPage
 from tests.Pages.BlogListPage import BlogListPage
 from tests.Pages.LoginPage import LoginPage
-from tests.config import animation_duration_sc
+import tests.config as cfg
 import pytest
 pytestmark = [pytest.mark.laptop, pytest.mark.home]
 
@@ -43,10 +43,10 @@ def test_should_display_nav_menu_bar_in_header_when_click_menu_toggle_icon(targe
     home_page = HomePage(target_driver_with_base_url_with_laptop_ssize)
 
     # click menu toggle icon
-    home_page.click_element_in_header('menu_toggle_icon', waiting_element_locator=None, animation_duration_sc=animation_duration_sc)
+    home_page.click_element_in_header('menu_toggle_icon', waiting_element_locator=None, animation_duration_sc=cfg.animation_duration_sc)
 
     # check menu element size (should not be 0) with animation
-    assert home_page.get_size_of_element_in_header('menu')['width'] >= 1000
+    assert home_page.get_size_of_element_in_header('menu')['width'] >= cfg.ssize_width_laptop - 50
 
 
 def test_should_close_nav_menu_bar_in_header_when_click_menu_close_btn(target_driver_with_base_url_with_laptop_ssize):
@@ -54,10 +54,10 @@ def test_should_close_nav_menu_bar_in_header_when_click_menu_close_btn(target_dr
     home_page = HomePage(target_driver_with_base_url_with_laptop_ssize)
 
     # click menu toggle icon
-    home_page.click_element_in_header('menu_toggle_icon', waiting_element_locator=None, animation_duration_sc=animation_duration_sc)
+    home_page.click_element_in_header('menu_toggle_icon', waiting_element_locator=None, animation_duration_sc=cfg.animation_duration_sc)
 
     # click menu close icon
-    home_page.click_element_in_header('menu_close_icon', waiting_element_locator=None, animation_duration_sc=animation_duration_sc)
+    home_page.click_element_in_header('menu_close_icon', waiting_element_locator=None, animation_duration_sc=cfg.animation_duration_sc)
 
     # check menu element size (should not be 0) with animation
     assert home_page.get_size_of_element_in_header('menu')['width'] == 0
@@ -68,7 +68,7 @@ def test_should_route_to_blog_list_page_when_click_blogs_link_in_header(target_d
     home_page = HomePage(target_driver_with_base_url_with_laptop_ssize)
 
     # click menu toggle icon
-    home_page.click_element_in_header('menu_toggle_icon', waiting_element_locator=None, animation_duration_sc=animation_duration_sc)
+    home_page.click_element_in_header('menu_toggle_icon', waiting_element_locator=None, animation_duration_sc=cfg.animation_duration_sc)
 
     # click blogs nav item
     home_page.click_element_in_header('blogs_menu_link')
@@ -87,7 +87,7 @@ def test_should_route_to_signup_page_when_click_blogs_link_in_header(target_driv
     home_page = HomePage(target_driver_with_base_url_with_laptop_ssize)
 
     # click menu toggle icon
-    home_page.click_element_in_header('menu_toggle_icon', waiting_element_locator=None, animation_duration_sc=animation_duration_sc)
+    home_page.click_element_in_header('menu_toggle_icon', waiting_element_locator=None, animation_duration_sc=cfg.animation_duration_sc)
 
     # click blogs nav item
     home_page.click_element_in_header('signup_menu_link')
@@ -106,7 +106,7 @@ def test_should_route_to_login_page_when_click_blogs_link_in_header(target_drive
     home_page = HomePage(target_driver_with_base_url_with_laptop_ssize)
 
     # click menu toggle icon
-    home_page.click_element_in_header('menu_toggle_icon', waiting_element_locator=None, animation_duration_sc=animation_duration_sc)
+    home_page.click_element_in_header('menu_toggle_icon', waiting_element_locator=None, animation_duration_sc=cfg.animation_duration_sc)
 
     # click blogs nav item
     home_page.click_element_in_header('blogs_menu_link')
