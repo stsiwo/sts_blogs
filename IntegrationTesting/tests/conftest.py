@@ -3,6 +3,7 @@ from selenium import webdriver
 from typing import Dict
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import urllib.parse
+import queue
 
 target_base_url = 'http://stsiwo.info'
 seleniumServerUrl = 'http://127.0.0.1:4444/wd/hub'
@@ -21,6 +22,108 @@ def target_driver(request):
 
     request.addfinalizer(fin)
     return target_driver
+
+
+def get_driver_with_ssize(driver, x=425, y=1000):
+    driver.set_window_position(0, 0)
+    driver.set_window_size(x, y)
+    return driver
+
+
+@pytest.fixture(scope='session')
+def all_ssize(target_driver):
+    ssizes = [
+            get_driver_with_ssize(target_driver, x=425, y=1000),
+            get_driver_with_ssize(target_driver, x=768, y=1000),
+            get_driver_with_ssize(target_driver, x=1024, y=1000),
+            get_driver_with_ssize(target_driver, x=1440, y=1000)
+            ]
+    return {
+            'list': ssizes,
+            'pointer': -1
+            }
+
+
+@pytest.fixture()
+def target_browser_with_all_ssize(all_ssize):
+    print('start target_browser_with_all_ssize')
+    all_ssize['pointer'] = all_ssize['pointer'] + 1
+    if all_ssize['pointer'] == len(all_ssize['list']):
+        all_ssize['pointer'] = 0
+
+    print(all_ssize['pointer'])
+    yield all_ssize['list'][all_ssize['pointer']]
+    print('teardown target_browser_with_all_ssize')
+
+
+@pytest.fixture(scope='session')
+def lte_laptop_size(target_driver):
+    ssizes = [
+            get_driver_with_ssize(target_driver, x=425, y=1000),
+            get_driver_with_ssize(target_driver, x=768, y=1000),
+            get_driver_with_ssize(target_driver, x=1024, y=1000),
+            ]
+    return {
+            'list': ssizes,
+            'pointer': -1
+            }
+
+
+@pytest.fixture()
+def target_browser_with_lte_laptop_size(lte_laptop_size):
+    print('start target_browser_with_lte_laptop_size')
+    lte_laptop_size['pointer'] = lte_laptop_size['pointer'] + 1
+    if lte_laptop_size['pointer'] == len(lte_laptop_size['list']):
+        lte_laptop_size['pointer'] = 0
+
+    print(lte_laptop_size['pointer'])
+    yield lte_laptop_size['list'][lte_laptop_size['pointer']]
+    print('teardown target_browser_with_lte_laptop_size')
+
+
+@pytest.fixture(scope='session')
+def lte_tablet_size(target_driver):
+    ssizes = [
+            get_driver_with_ssize(target_driver, x=425, y=1000),
+            get_driver_with_ssize(target_driver, x=768, y=1000),
+            ]
+    return {
+            'list': ssizes,
+            'pointer': -1
+            }
+
+
+@pytest.fixture()
+def target_browser_with_lte_tablet_size(lte_tablet_size):
+    print('start target_browser_with_lte_tablet_size')
+    lte_tablet_size['pointer'] = lte_tablet_size['pointer'] + 1
+    if lte_tablet_size['pointer'] == len(lte_tablet_size['list']):
+        lte_tablet_size['pointer'] = 0
+
+    print(lte_tablet_size['pointer'])
+    yield lte_tablet_size['list'][lte_tablet_size['pointer']]
+    print('teardown target_browser_with_lte_tablet_size')
+
+
+def pytest_generate_tests(metafunc):
+    print('start pytest_generate_tests')
+    if 'target_browser_with_all_ssize' in metafunc.fixturenames:
+        metafunc.parametrize(
+                'target_browser_with_all_ssize',
+                [1, 2, 3, 4],  # number of element must match with sizes['list']
+                indirect=True)
+
+    if 'target_browser_with_lte_laptop_size' in metafunc.fixturenames:
+        metafunc.parametrize(
+                'target_browser_with_lte_laptop_size',
+                [1, 2, 3],  # number of element must match with sizes['list']
+                indirect=True)
+
+    if 'target_browser_with_lte_tablet_size' in metafunc.fixturenames:
+        metafunc.parametrize(
+                'target_browser_with_lte_tablet_size',
+                [1, 2],  # number of element must match with sizes['list']
+                indirect=True)
 
 
 # called every test func
