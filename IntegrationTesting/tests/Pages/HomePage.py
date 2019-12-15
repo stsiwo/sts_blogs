@@ -1,7 +1,6 @@
 from selenium.webdriver.support.ui import WebDriverWait
-from tests.Pages.BasePage import BasePage
+from tests.Pages.HeaderPage import HeaderPage
 from tests.Locators.HomePageLocators import HomePageLocators
-from tests.Locators.HeaderComponentLocators import HeaderComponentLocators
 from selenium.webdriver.common.keys import Keys
 from tests.config import base_url
 from selenium.common.exceptions import TimeoutException
@@ -9,7 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
 
-class HomePage(BasePage):
+class HomePage(HeaderPage):
     """Home page action methods come here. I.e. Python.org"""
 
     def __init__(self, driver):
@@ -25,36 +24,6 @@ class HomePage(BasePage):
             print("Page is ready!")
         except TimeoutException:
             print("Loading took too much time!")
-
-    def get_title_in_header(self):
-        """return title string in header logo"""
-        header_logo_title = self.driver.find_element(*HeaderComponentLocators.LOGO_TITLE)
-        return header_logo_title.text
-
-    def get_size_of_menu(self):
-        nav_menu = self.driver.find_element(*HeaderComponentLocators.MENU)
-        return nav_menu.size
-
-    def get_blogs_nav_menu_item_as_text(self):
-        """return blogs nav menu item title as string in header"""
-        nav_menu_blog = self.driver.find_element(*HeaderComponentLocators.BLOGS_NAV_ITEM)
-        return nav_menu_blog.text
-
-    def get_signup_nav_menu_item_as_text(self):
-        """return signup nav menu item title as string in header"""
-        nav_menu_signup = self.driver.find_element(*HeaderComponentLocators.SIGNUP_NAV_ITEM)
-        return nav_menu_signup.text
-
-    def get_login_nav_menu_item_as_text(self):
-        """return login nav menu item title as string in header"""
-        nav_menu_login = self.driver.find_element(*HeaderComponentLocators.LOGIN_NAV_ITEM)
-        return nav_menu_login.text
-
-    def click_blogs_nav_menu_item(self):
-        """click blogs nav menu item (route to BlogList Page)"""
-        self.take_screenshot('blogs-nav-item')
-        nav_menu_blog = self.driver.find_element(*HeaderComponentLocators.BLOGS_NAV_ITEM)
-        nav_menu_blog.click()
 
     def click_search_icon(self):
         """Open search input element (animation)"""
@@ -73,14 +42,6 @@ class HomePage(BasePage):
         WebDriverWait(self.driver, 500).until(
                 lambda driver: driver.find_elements(*HomePageLocators.BLOG_TITLE)
                 )
-
-    def get_size_of_blogs_nav_menu_item(self):
-        nav_menu_blog = self.driver.find_element(*HeaderComponentLocators.BLOGS_NAV_ITEM)
-        return nav_menu_blog.size
-
-    def is_blogs_nav_menu_item_visible(self):
-        nav_menu_blog = self.driver.find_element(*HeaderComponentLocators.BLOGS_NAV_ITEM)
-        return nav_menu_blog.is_displayed()
 
     def get_number_of_blog_item_displayed(self):
         """those blogs are fetched at initial loading (filter: 'recent')
