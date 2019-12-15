@@ -11,6 +11,7 @@ class HeaderPage(BasePage):
             'logo_title': HeaderComponentLocators.LOGO_TITLE,
             'menu': HeaderComponentLocators.MENU,
             'menu_toggle_icon': HeaderComponentLocators.MENU_TOGGLE_ICON,
+            'menu_close_icon': HeaderComponentLocators.MENU_CLOSE_ICON,
             'blogs_menu_link': HeaderComponentLocators.BLOGS_NAV_ITEM,
             'signup_menu_link': HeaderComponentLocators.SIGNUP_NAV_ITEM,
             'login_menu_link': HeaderComponentLocators.LOGIN_NAV_ITEM,

@@ -8,6 +8,8 @@ class HeaderComponentLocators(object):
 
     MENU_TOGGLE_ICON = (By.CSS_SELECTOR, "i[role='menu-toggle-icon']")
 
+    MENU_CLOSE_ICON = (By.CSS_SELECTOR, "div[role='menu-close-icon']")
+
     LOGO_TITLE = (By.CLASS_NAME, "header-title")
 
     BLOGS_NAV_ITEM = (By.LINK_TEXT, "Blogs")
