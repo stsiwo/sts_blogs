@@ -12,9 +12,9 @@ def test_home_title(target_browser_with_all_ssize):
     assert home_page.is_title_matches('STS')
 
 
-def test_should_display_title_in_header(target_driver_with_base_url):
+def test_should_display_title_in_header(target_browser_with_all_ssize):
 
-    home_page = HomePage(target_driver_with_base_url)
+    home_page = HomePage(target_browser_with_all_ssize)
 
     assert home_page.get_title_in_header() == 'STS'
 

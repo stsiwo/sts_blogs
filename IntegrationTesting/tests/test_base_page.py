@@ -18,7 +18,7 @@ import pytest
 #     print(target_browser)
 #     assert 0
 
-# def test_ssize(target_browser_with_all_ssize):
+# def test_ssize(target_browser_with_gte_laptop_ssize):
 #     assert 0
 # 
 # 
