@@ -16,11 +16,6 @@ class HeaderPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
 
-    def get_title_in_header(self):
-        """return title string in header logo"""
-        header_logo_title = self.driver.find_element(*HeaderComponentLocators.LOGO_TITLE)
-        return header_logo_title.text
-
     def get_text_of_element_in_header(self, locator: str):
         if locator not in self.header_element_locators:
             raise Exception('locator you provide is not available. available locators: %s' % self.header_element_locators)

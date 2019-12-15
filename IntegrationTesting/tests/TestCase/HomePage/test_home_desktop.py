@@ -13,11 +13,12 @@ def test_home_title(target_driver_with_base_url_with_desktop_ssize):
     assert home_page.is_title_matches('STS')
 
 
+@pytest.mark.title
 def test_should_display_title_in_header(target_driver_with_base_url_with_desktop_ssize):
 
     home_page = HomePage(target_driver_with_base_url_with_desktop_ssize)
 
-    assert home_page.get_title_in_header() == 'STS'
+    assert home_page.get_text_of_element_in_header('logo_title') == 'STS'
 
 
 def test_should_display_blogs_nav_menu_item_in_header(target_driver_with_base_url_with_desktop_ssize):
