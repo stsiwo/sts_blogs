@@ -110,19 +110,19 @@ def pytest_generate_tests(metafunc):
     if 'target_browser_with_all_ssize' in metafunc.fixturenames:
         metafunc.parametrize(
                 'target_browser_with_all_ssize',
-                [1, 2, 3, 4],  # number of element must match with sizes['list']
+                ['mobile', 'tablet', 'laptop', 'desktop'],  # number of element must match with sizes['list']
                 indirect=True)
 
     if 'target_browser_with_lte_laptop_size' in metafunc.fixturenames:
         metafunc.parametrize(
                 'target_browser_with_lte_laptop_size',
-                [1, 2, 3],  # number of element must match with sizes['list']
+                ['mobile', 'tablet', 'laptop'],  # number of element must match with sizes['list']
                 indirect=True)
 
     if 'target_browser_with_lte_tablet_size' in metafunc.fixturenames:
         metafunc.parametrize(
                 'target_browser_with_lte_tablet_size',
-                [1, 2],  # number of element must match with sizes['list']
+                ['mobile', 'tablet'],  # number of element must match with sizes['list']
                 indirect=True)
 
 

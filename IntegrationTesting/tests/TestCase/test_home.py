@@ -5,9 +5,9 @@ from tests.Pages.LoginPage import LoginPage
 import pytest
 
 
-def test_home_title(target_driver_with_base_url):
+def test_home_title(target_browser_with_all_ssize):
 
-    home_page = HomePage(target_driver_with_base_url)
+    home_page = HomePage(target_browser_with_all_ssize)
 
     assert home_page.is_title_matches('STS')
 
