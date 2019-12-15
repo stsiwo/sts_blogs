@@ -1,18 +1,13 @@
 import pytest
 from selenium import webdriver
-from typing import Dict
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-import urllib.parse
-import queue
-
-target_base_url = 'http://stsiwo.info'
-seleniumServerUrl = 'http://127.0.0.1:4444/wd/hub'
+import tests.config as cfg
 
 
 @pytest.fixture(scope='session')
 def target_driver(request):
     target_driver = webdriver.Remote(
-             command_executor=seleniumServerUrl,
+             command_executor=cfg.seleniumServerUrl,
              desired_capabilities=DesiredCapabilities.CHROME
          )
 
@@ -235,7 +230,7 @@ def target_driver(request):
 # called every test func
 @pytest.fixture
 def target_driver_with_base_url(target_driver):
-    target_driver.get('http://stsiwo.info')
+    target_driver.get(cfg.base_url)
     # need this one to avoid 'NosuchElementException'
     # - esp for when find element by link test
     # reference: https://stackoverflow.com/questions/6936149/how-to-use-find-element-by-link-text-properly-to-not-raise-nosuchelementexcept
@@ -246,28 +241,28 @@ def target_driver_with_base_url(target_driver):
 @pytest.fixture
 def target_driver_with_base_url_with_mobile_ssize(target_driver_with_base_url):
     target_driver_with_base_url.set_window_position(0, 0)
-    target_driver_with_base_url.set_window_size(425, 1000)
+    target_driver_with_base_url.set_window_size(cfg.ssize_width_mobile, cfg.ssize_height)
     return target_driver_with_base_url
 
 
 @pytest.fixture
 def target_driver_with_base_url_with_tablet_ssize(target_driver_with_base_url):
     target_driver_with_base_url.set_window_position(0, 0)
-    target_driver_with_base_url.set_window_size(768, 1000)
+    target_driver_with_base_url.set_window_size(cfg.ssize_width_tablet, cfg.ssize_height)
     return target_driver_with_base_url
 
 
 @pytest.fixture
 def target_driver_with_base_url_with_laptop_ssize(target_driver_with_base_url):
     target_driver_with_base_url.set_window_position(0, 0)
-    target_driver_with_base_url.set_window_size(1024, 1000)
+    target_driver_with_base_url.set_window_size(cfg.ssize_width_laptop, cfg.ssize_height)
     return target_driver_with_base_url
 
 
 @pytest.fixture
 def target_driver_with_base_url_with_desktop_ssize(target_driver_with_base_url):
     target_driver_with_base_url.set_window_position(0, 0)
-    target_driver_with_base_url.set_window_size(1440, 1000)
+    target_driver_with_base_url.set_window_size(cfg.ssize_width_desktop, cfg.ssize_height)
     return target_driver_with_base_url
 
 
