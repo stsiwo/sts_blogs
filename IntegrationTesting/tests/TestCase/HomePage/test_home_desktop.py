@@ -13,7 +13,7 @@ def test_home_title(target_driver_with_base_url_with_desktop_ssize):
     assert home_page.is_title_matches('STS')
 
 
-@pytest.mark.title
+# HEADER
 def test_should_display_title_in_header(target_driver_with_base_url_with_desktop_ssize):
 
     home_page = HomePage(target_driver_with_base_url_with_desktop_ssize)
@@ -42,7 +42,6 @@ def test_should_display_login_nav_menu_item_in_header(target_driver_with_base_ur
     assert home_page.get_text_of_element_in_header('login_menu_link') == 'Login'
 
 
-@pytest.mark.proto
 def test_should_route_to_blog_list_page_when_click_blogs_link_in_header(target_driver_with_base_url_with_desktop_ssize):
 
     home_page = HomePage(target_driver_with_base_url_with_desktop_ssize)
@@ -64,7 +63,7 @@ def test_should_route_to_signup_page_when_click_blogs_link_in_header(target_driv
     home_page = HomePage(target_driver_with_base_url_with_desktop_ssize)
 
     # click blogs nav item
-    home_page.click_blogs_nav_menu_item()
+    home_page.click_element_in_header('signup_menu_link')
 
     # get signup page object with current url
     signup_page = SignupPage(target_driver_with_base_url_with_desktop_ssize)
@@ -80,7 +79,7 @@ def test_should_route_to_login_page_when_click_blogs_link_in_header(target_drive
     home_page = HomePage(target_driver_with_base_url_with_desktop_ssize)
 
     # click blogs nav item
-    home_page.click_blogs_nav_menu_item()
+    home_page.click_element_in_header('blogs_menu_link')
 
     # get login page object with current url
     login_page = LoginPage(target_driver_with_base_url_with_desktop_ssize)
@@ -91,12 +90,13 @@ def test_should_route_to_login_page_when_click_blogs_link_in_header(target_drive
     assert login_page.does_have_text_in_page('Login')
 
 
+# HOME
 def test_should_route_search_result_page_when_search_in_home(target_driver_with_base_url_with_desktop_ssize):
 
     home_page = HomePage(target_driver_with_base_url_with_desktop_ssize)
 
     # open search input
-    home_page.click_search_icon()
+    home_page.click_element('search_btn')
     # enter text in the input
     home_page.enter_text_in_search_input('test')
     # assert search result page is properly display
@@ -110,7 +110,7 @@ def test_should_route_signup_page_when_join_btn_is_clicked_in_home(target_driver
     home_page = HomePage(target_driver_with_base_url_with_desktop_ssize)
 
     # click join btn
-    home_page.click_join_btn()
+    home_page.click_element('join_btn')
     # get signup page object with current url
     signup_page = SignupPage(target_driver_with_base_url_with_desktop_ssize)
 
@@ -131,7 +131,7 @@ def test_should_fetch_popular_blog_when_click_popular_btn(target_driver_with_bas
     # get one of blog title before click 'popular' btn
     blog_title_before_click = home_page.get_one_of_blog_title()
     # click 'popular' btn
-    home_page.click_popular_btn()
+    home_page.click_element('popular_btn', 'blog_item_title')
     # don't need to wait the blog item appears since 'click_popular_btn' does that for you
     # get one of blog title after click 'popluar' btn
     blog_title_after_click = home_page.get_one_of_blog_title()

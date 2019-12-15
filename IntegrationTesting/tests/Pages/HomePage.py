@@ -11,6 +11,14 @@ from selenium.webdriver.common.by import By
 class HomePage(HeaderPage):
     """Home page action methods come here. I.e. Python.org"""
 
+    element_locators = {
+            'search_btn': HomePageLocators.SEARCH_BUTTON,
+            'search_input': HomePageLocators.SEARCH_INPUT,
+            'join_btn': HomePageLocators.JOIN_BUTTON,
+            'blog_item_title': HomePageLocators.BLOG_ITEM_TITLE,
+            'popular_btn': HomePageLocators.POPULAR_BUTTON,
+            }
+
     def __init__(self, driver):
         super().__init__(driver)
         # only set base url for HomePage
@@ -25,23 +33,16 @@ class HomePage(HeaderPage):
         except TimeoutException:
             print("Loading took too much time!")
 
-    def click_search_icon(self):
-        """Open search input element (animation)"""
-        search_icon_element = self.driver.find_element(*HomePageLocators.SEARCH_BUTTON)
-        search_icon_element.click()
+    def click_element(self, locator: str, waiting_element_locator: str = None):
+        if locator not in self.element_locators:
+            raise Exception('locator you provide is not available. available locators: %s' % self.element_locators)
 
-    def click_join_btn(self):
-        """click join btn (route to Signup Page)"""
-        join_btn_element = self.driver.find_element(*HomePageLocators.JOIN_BUTTON)
-        join_btn_element.click()
-
-    def click_popular_btn(self):
-        """click popular btn for request to get popular blogs"""
-        join_btn_element = self.driver.find_element(*HomePageLocators.POPULAR_BUTTON)
-        join_btn_element.click()
-        WebDriverWait(self.driver, 500).until(
-                lambda driver: driver.find_elements(*HomePageLocators.BLOG_TITLE)
-                )
+        target_element = self.driver.find_element(*self.element_locators[locator])
+        target_element.click()
+        if waiting_element_locator is not None:
+            WebDriverWait(self.driver, 500).until(
+                    lambda driver: driver.find_elements(*self.element_locators[waiting_element_locator])
+                    )
 
     def get_number_of_blog_item_displayed(self):
         """those blogs are fetched at initial loading (filter: 'recent')
@@ -50,9 +51,9 @@ class HomePage(HeaderPage):
         """
         # need to wait for initial fetching
         WebDriverWait(self.driver, 500).until(
-                lambda driver: driver.find_elements(*HomePageLocators.BLOG_TITLE)
+                lambda driver: driver.find_elements(*HomePageLocators.BLOG_ITEM_TITLE)
                 )
-        blog_title_element_list = self.driver.find_elements(*HomePageLocators.BLOG_TITLE)
+        blog_title_element_list = self.driver.find_elements(*HomePageLocators.BLOG_ITEM_TITLE)
 
         return len(blog_title_element_list)
 
@@ -64,9 +65,9 @@ class HomePage(HeaderPage):
         """
         # need to wait for initial fetching
         WebDriverWait(self.driver, 500).until(
-                lambda driver: driver.find_elements(*HomePageLocators.BLOG_TITLE)
+                lambda driver: driver.find_elements(*HomePageLocators.BLOG_ITEM_TITLE)
                 )
-        blog_title_element_list = self.driver.find_elements(*HomePageLocators.BLOG_TITLE)
+        blog_title_element_list = self.driver.find_elements(*HomePageLocators.BLOG_ITEM_TITLE)
 
         return blog_title_element_list[0].text
 

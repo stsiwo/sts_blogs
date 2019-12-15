@@ -31,16 +31,15 @@ class HeaderPage(BasePage):
         target_element.click()
 
     def get_size_of_element_in_header(self, locator: str):
+        """ use when want to check an element is on the document but hidden because of its size is 0 """
         if locator not in self.header_element_locators:
             raise Exception('locator you provide is not available. available locators: %s' % self.header_element_locators)
 
         target_element = self.driver.find_element(*self.header_element_locators[locator])
         return target_element.size
 
-    def get_size_of_blogs_nav_menu_item(self):
-        nav_menu_blog = self.driver.find_element(*HeaderComponentLocators.BLOGS_NAV_ITEM)
-        return nav_menu_blog.size
-
-    def is_blogs_nav_menu_item_visible(self):
-        nav_menu_blog = self.driver.find_element(*HeaderComponentLocators.BLOGS_NAV_ITEM)
-        return nav_menu_blog.is_displayed()
+    def check_visibility_of_element_in_header(self, locator: str):
+        if locator not in self.header_element_locators:
+            raise Exception('locator you provide is not available. available locators: %s' % self.header_element_locators)
+        target_element = self.driver.find_element(*self.header_element_locators[locator])
+        return target_element.is_displayed()
