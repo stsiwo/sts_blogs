@@ -1,5 +1,6 @@
 from selenium.webdriver.support.ui import WebDriverWait
 from tests.Pages.HeaderPage import HeaderPage
+from tests.Pages.FooterPage import FooterPage
 from tests.Locators.HomePageLocators import HomePageLocators
 from selenium.webdriver.common.keys import Keys
 from tests.config import base_url
@@ -8,7 +9,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
 
-class HomePage(HeaderPage):
+class HomePage(HeaderPage, FooterPage):
     """Home page action methods come here. I.e. Python.org"""
 
     element_locators = {

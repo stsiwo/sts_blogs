@@ -141,8 +141,9 @@ def test_should_fetch_popular_blog_when_click_popular_btn(target_driver_with_bas
     assert blog_title_before_click != blog_title_after_click
 
 
+# FOOTER
 def test_should_display_footer_content_of_about_me(target_driver_with_base_url_with_desktop_ssize):
 
     home_page = HomePage(target_driver_with_base_url_with_desktop_ssize)
 
-    assert home_page.does_have_text_in_page('About Me')
+    assert home_page.get_text_of_element_in_footer('about_me')
