@@ -7,11 +7,26 @@ import pytest
 pytestmark = [pytest.mark.tablet, pytest.mark.home]
 
 
+# COMMON
 def test_home_title(target_driver_with_base_url_with_tablet_ssize):
 
     home_page = HomePage(target_driver_with_base_url_with_tablet_ssize)
 
     assert home_page.is_title_matches('STS')
+
+
+@pytest.mark.scroll
+def test_should_not_display_scroll_y(target_driver_with_base_url_with_tablet_ssize):
+    """
+        this is to detect any overflow element and cause scroll y appears in window
+            - if this test failed, it means there is some elements overflow in window
+            and cause scrollable y
+    """
+
+    home_page = HomePage(target_driver_with_base_url_with_tablet_ssize)
+
+    assert home_page.is_scrollable_y() is not True
+    assert 0
 
 
 # HEADER
