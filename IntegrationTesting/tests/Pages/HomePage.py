@@ -31,9 +31,12 @@ class HomePage(BasePage):
         header_logo_title = self.driver.find_element(*HeaderComponentLocators.LOGO_TITLE)
         return header_logo_title.text
 
+    def get_size_of_menu(self):
+        nav_menu = self.driver.find_element(*HeaderComponentLocators.MENU)
+        return nav_menu.size
+
     def get_blogs_nav_menu_item_as_text(self):
         """return blogs nav menu item title as string in header"""
-        self.take_screenshot('multi')
         nav_menu_blog = self.driver.find_element(*HeaderComponentLocators.BLOGS_NAV_ITEM)
         return nav_menu_blog.text
 
@@ -70,6 +73,14 @@ class HomePage(BasePage):
         WebDriverWait(self.driver, 500).until(
                 lambda driver: driver.find_elements(*HomePageLocators.BLOG_TITLE)
                 )
+
+    def get_size_of_blogs_nav_menu_item(self):
+        nav_menu_blog = self.driver.find_element(*HeaderComponentLocators.BLOGS_NAV_ITEM)
+        return nav_menu_blog.size
+
+    def is_blogs_nav_menu_item_visible(self):
+        nav_menu_blog = self.driver.find_element(*HeaderComponentLocators.BLOGS_NAV_ITEM)
+        return nav_menu_blog.is_displayed()
 
     def get_number_of_blog_item_displayed(self):
         """those blogs are fetched at initial loading (filter: 'recent')

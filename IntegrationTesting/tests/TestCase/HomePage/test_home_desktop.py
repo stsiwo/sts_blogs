@@ -41,7 +41,6 @@ def test_should_display_login_nav_menu_item_in_header(target_driver_with_base_ur
     assert home_page.get_login_nav_menu_item_as_text() == 'Login'
 
 
-@pytest.mark.desktop
 def test_should_route_to_blog_list_page_when_click_blogs_link_in_header(target_driver_with_base_url_with_desktop_ssize):
 
     home_page = HomePage(target_driver_with_base_url_with_desktop_ssize)
