@@ -152,6 +152,31 @@ def target_browser_with_gte_laptop_ssize(gte_laptop_ssize):
     print('teardown target_browser_with_gte_laptop_ssize')
 
 
+@pytest.fixture(scope='session')
+def gte_tablet_ssize(target_driver):
+    ssizes = [
+            get_driver_with_ssize(target_driver, x=768, y=1000),
+            get_driver_with_ssize(target_driver, x=1024, y=1000),
+            get_driver_with_ssize(target_driver, x=1440, y=1000)
+            ]
+    return {
+            'list': ssizes,
+            'pointer': -1
+            }
+
+
+@pytest.fixture()
+def target_browser_with_gte_tablet_ssize(gte_tablet_ssize):
+    print('start target_browser_with_gte_tablet_ssize')
+    gte_tablet_ssize['pointer'] = gte_tablet_ssize['pointer'] + 1
+    if gte_tablet_ssize['pointer'] == len(gte_tablet_ssize['list']):
+        gte_tablet_ssize['pointer'] = 0
+
+    print(gte_tablet_ssize['pointer'])
+    yield gte_tablet_ssize['list'][gte_tablet_ssize['pointer']]
+    print('teardown target_browser_with_gte_tablet_ssize')
+
+
 def pytest_generate_tests(metafunc):
     print('start pytest_generate_tests')
     if 'target_browser_with_all_ssize' in metafunc.fixturenames:
@@ -182,6 +207,12 @@ def pytest_generate_tests(metafunc):
         metafunc.parametrize(
                 'target_browser_with_gte_laptop_ssize',
                 ['laptop', 'desktop'],  # number of element must match with sizes['list']
+                indirect=True)
+
+    if 'target_browser_with_gte_tablet_ssize' in metafunc.fixturenames:
+        metafunc.parametrize(
+                'target_browser_with_gte_tablet_ssize',
+                ['tablet', 'laptop', 'desktop'],  # number of element must match with sizes['list']
                 indirect=True)
 
 

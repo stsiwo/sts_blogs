@@ -19,19 +19,14 @@ def test_should_display_title_in_header(target_browser_with_all_ssize):
     assert home_page.get_title_in_header() == 'STS'
 
 
-@pytest.mark.mobile
-@pytest.mark.tablet
-@pytest.mark.laptop
-def test_should_display_blogs_nav_menu_item_in_header(target_driver_with_base_url):
+@pytest.mark.temp
+def test_should_display_blogs_nav_menu_item_in_header(target_browser_with_gte_laptop_ssize):
 
-    home_page = HomePage(target_driver_with_base_url)
+    home_page = HomePage(target_browser_with_gte_laptop_ssize)
 
     assert home_page.get_blogs_nav_menu_item_as_text() == 'Blogs'
 
 
-@pytest.mark.mobile
-@pytest.mark.tablet
-@pytest.mark.laptop
 def test_should_display_signup_nav_menu_item_in_header(target_driver_with_base_url):
 
     home_page = HomePage(target_driver_with_base_url)
@@ -39,9 +34,6 @@ def test_should_display_signup_nav_menu_item_in_header(target_driver_with_base_u
     assert home_page.get_signup_nav_menu_item_as_text() == 'Signup'
 
 
-@pytest.mark.mobile
-@pytest.mark.tablet
-@pytest.mark.laptop
 def test_should_display_login_nav_menu_item_in_header(target_driver_with_base_url):
 
     home_page = HomePage(target_driver_with_base_url)
