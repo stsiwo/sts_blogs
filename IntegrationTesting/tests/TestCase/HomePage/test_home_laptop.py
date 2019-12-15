@@ -13,19 +13,12 @@ def test_home_title(target_driver_with_base_url_with_laptop_ssize):
     assert home_page.is_title_matches('STS')
 
 
-def test_should_size_of_blogs_nav_item_to_be_zero(target_driver_with_base_url_with_laptop_ssize):
-
-    home_page = HomePage(target_driver_with_base_url_with_laptop_ssize)
-
-    assert home_page.get_size_of_blogs_nav_menu_item() == 1
-
-
 @pytest.mark.size
 def test_should_hide_menu(target_driver_with_base_url_with_laptop_ssize):
 
     home_page = HomePage(target_driver_with_base_url_with_laptop_ssize)
 
-    assert home_page.get_size_of_menu()['width'] == 0
+    assert home_page.get_size_of_element_in_header('menu')['width'] == 0
 
 
 @pytest.mark.visible

@@ -35,9 +35,12 @@ class HeaderPage(BasePage):
         target_element = self.driver.find_element(*self.header_element_locators[locator])
         target_element.click()
 
-    def get_size_of_menu(self):
-        nav_menu = self.driver.find_element(*HeaderComponentLocators.MENU)
-        return nav_menu.size
+    def get_size_of_element_in_header(self, locator: str):
+        if locator not in self.header_element_locators:
+            raise Exception('locator you provide is not available. available locators: %s' % self.header_element_locators)
+
+        target_element = self.driver.find_element(*self.header_element_locators[locator])
+        return target_element.size
 
     def get_size_of_blogs_nav_menu_item(self):
         nav_menu_blog = self.driver.find_element(*HeaderComponentLocators.BLOGS_NAV_ITEM)
