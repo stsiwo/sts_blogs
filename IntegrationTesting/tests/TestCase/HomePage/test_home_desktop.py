@@ -41,12 +41,13 @@ def test_should_display_login_nav_menu_item_in_header(target_driver_with_base_ur
     assert home_page.get_text_of_element_in_header('login_menu_link') == 'Login'
 
 
+@pytest.mark.proto
 def test_should_route_to_blog_list_page_when_click_blogs_link_in_header(target_driver_with_base_url_with_desktop_ssize):
 
     home_page = HomePage(target_driver_with_base_url_with_desktop_ssize)
 
     # click blogs nav item
-    home_page.click_blogs_nav_menu_item()
+    home_page.click_element_in_header('blogs_menu_link')
 
     # get blog_list page object with current url
     blog_list_page = BlogListPage(target_driver_with_base_url_with_desktop_ssize)
