@@ -24,21 +24,21 @@ def test_should_display_blogs_nav_menu_item_in_header(target_driver_with_base_ur
 
     home_page = HomePage(target_driver_with_base_url_with_desktop_ssize)
 
-    assert home_page.get_blogs_nav_menu_item_as_text() == 'Blogs'
+    assert home_page.get_text_of_element('blogs_menu_link') == 'Blogs'
 
 
 def test_should_display_signup_nav_menu_item_in_header(target_driver_with_base_url_with_desktop_ssize):
 
     home_page = HomePage(target_driver_with_base_url_with_desktop_ssize)
 
-    assert home_page.get_signup_nav_menu_item_as_text() == 'Signup'
+    assert home_page.get_text_of_element('signup_menu_link') == 'Signup'
 
 
 def test_should_display_login_nav_menu_item_in_header(target_driver_with_base_url_with_desktop_ssize):
 
     home_page = HomePage(target_driver_with_base_url_with_desktop_ssize)
 
-    assert home_page.get_login_nav_menu_item_as_text() == 'Login'
+    assert home_page.get_text_of_element('login_menu_link') == 'Login'
 
 
 def test_should_route_to_blog_list_page_when_click_blogs_link_in_header(target_driver_with_base_url_with_desktop_ssize):
@@ -57,7 +57,6 @@ def test_should_route_to_blog_list_page_when_click_blogs_link_in_header(target_d
     assert blog_list_page.does_have_text_in_page('Sort by')
 
 
-@pytest.mark.desktop
 def test_should_route_to_signup_page_when_click_blogs_link_in_header(target_driver_with_base_url_with_desktop_ssize):
 
     home_page = HomePage(target_driver_with_base_url_with_desktop_ssize)
@@ -74,7 +73,6 @@ def test_should_route_to_signup_page_when_click_blogs_link_in_header(target_driv
     assert signup_page.does_have_text_in_page('Signup')
 
 
-@pytest.mark.desktop
 def test_should_route_to_login_page_when_click_blogs_link_in_header(target_driver_with_base_url_with_desktop_ssize):
 
     home_page = HomePage(target_driver_with_base_url_with_desktop_ssize)
