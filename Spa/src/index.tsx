@@ -12,6 +12,9 @@ import Header from 'ui/Header/Header';
 import { getUserTestData } from '../tests/data/UserFaker';
 import Footer from 'ui/Footer/Footer';
 
+// import css for debug (only development)
+if (process.env.NODE_ENV === 'development') require('ui/Base/Css/Debug.scss');
+
 
 // enable debug
 process.env.DEBUG
