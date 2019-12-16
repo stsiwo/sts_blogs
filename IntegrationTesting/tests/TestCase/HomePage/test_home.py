@@ -41,11 +41,13 @@ def test_should_display_title_in_header(responsive_target):
 
 
 @marks.desktop_ssize
+@pytest.mark.ttest
 def test_should_display_blogs_nav_menu_item_in_header(responsive_target):
 
     home_page = HomePage(responsive_target['driver'])
 
     assert home_page.get_text_of_element_in_header('blogs_menu_link') == 'Blogs'
+    assert 0
 
 
 @marks.desktop_ssize

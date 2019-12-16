@@ -4,6 +4,15 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import tests.config as cfg
 
 
+def pytest_addoption(parser):
+    parser.addoption(
+        "--driver", action="store", default="all", help="type of driver you want to use with test. available options: chrome, firefox"
+    )
+    parser.addoption(
+        "--ssize", action="store", default="all", help="type of driver you want to use with test. available options: chrome, firefox"
+    )
+
+
 @pytest.fixture(params=['chrome', 'firefox'], scope='session')
 def target_driver(request):
     if 'chrome' == request.param:
@@ -62,10 +71,17 @@ def responsive_target(target_driver_with_base_url, request):
 
 @pytest.fixture(autouse=True)
 def selective_responsive(request, responsive_target):
+    ssize_option = request.config.getoption('--ssize')
+    available_ssize_options = ['mobile', 'tablet', 'laptop', 'desktop']
+
+    if ssize_option not in available_ssize_options:
+        raise Exception('provided ssize option ({}) is not supoorted. available options are {}'.format(ssize_option, available_ssize_options))
+
     if request.node.get_closest_marker('responsive'):
-        print(request.node.get_closest_marker('responsive'))
         if responsive_target.get('size_type') not in request.node.get_closest_marker('responsive').kwargs['size']:
-            pytest.skip('skipped on this size: {}'.format(responsive_target.get('size_type')))
+            pytest.skip('skipped on this size because of marks: {}'.format(responsive_target.get('size_type')))
+        if ssize_option != 'all' and ssize_option not in request.node.get_closest_marker('responsive').kwargs['size']:
+            pytest.skip('skipped on this size because of command line option: {}'.format(ssize_option))
 
 
 @pytest.fixture
