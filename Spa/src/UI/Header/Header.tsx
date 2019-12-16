@@ -28,7 +28,7 @@ const Header: React.FunctionComponent<{}> = (props: {}) => {
 
   return (
     <header className="header-wrapper">
-      <Link to="/" className="black-link" role="title-link">
+      <Link to="/" className="black-link header-title-link" role="title-link">
         <h1 className="header-title">STS</h1>
       </Link>
       {(currentScreenSize.isLTELaptop && renderMenuSidebar())}
