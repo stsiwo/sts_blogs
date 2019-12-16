@@ -15,6 +15,13 @@ def pytest_addoption(parser):
 
 @pytest.fixture(params=['chrome', 'firefox'], scope='session')
 def target_driver(request):
+    driver_option = request.config.getoption('--driver')
+    print(driver_option)
+
+    # skip not selected driver by command line option
+    if driver_option != 'all' and driver_option != request.param:
+        pytest.skip('skipped on this size because of command line option: {}'.format(driver_option))
+
     if 'chrome' == request.param:
         print('target driver is chrome')
         target_driver = webdriver.Remote(
@@ -72,14 +79,16 @@ def responsive_target(target_driver_with_base_url, request):
 @pytest.fixture(autouse=True)
 def selective_responsive(request, responsive_target):
     ssize_option = request.config.getoption('--ssize')
-    available_ssize_options = ['mobile', 'tablet', 'laptop', 'desktop']
+    available_ssize_options = ['mobile', 'tablet', 'laptop', 'desktop', 'all']
 
     if ssize_option not in available_ssize_options:
         raise Exception('provided ssize option ({}) is not supoorted. available options are {}'.format(ssize_option, available_ssize_options))
 
     if request.node.get_closest_marker('responsive'):
+        # if test function does hot have responsive mark with its ssize, skip
         if responsive_target.get('size_type') not in request.node.get_closest_marker('responsive').kwargs['size']:
             pytest.skip('skipped on this size because of marks: {}'.format(responsive_target.get('size_type')))
+        # also, if command line option is specified about ssize, not specified ssize test is skipped
         if ssize_option != 'all' and ssize_option not in request.node.get_closest_marker('responsive').kwargs['size']:
             pytest.skip('skipped on this size because of command line option: {}'.format(ssize_option))
 
