@@ -15,7 +15,6 @@ def test_home_title(responsive_target):
     home_page = HomePage(responsive_target['driver'])
 
     assert home_page.is_title_matches('STS')
-    assert 0
 
 
 @pytest.mark.scroll
