@@ -15,6 +15,7 @@ def test_home_title(responsive_target):
     home_page = HomePage(responsive_target['driver'])
 
     assert home_page.is_title_matches('STS')
+    assert 0
 
 
 @pytest.mark.scroll
@@ -41,7 +42,6 @@ def test_should_display_title_in_header(responsive_target):
 
 
 @marks.desktop_ssize
-@pytest.mark.ttest
 def test_should_display_blogs_nav_menu_item_in_header(responsive_target):
 
     home_page = HomePage(responsive_target['driver'])

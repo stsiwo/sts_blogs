@@ -88,9 +88,13 @@ def selective_responsive(request, responsive_target):
         # if test function does hot have responsive mark with its ssize, skip
         if responsive_target.get('size_type') not in request.node.get_closest_marker('responsive').kwargs['size']:
             pytest.skip('skipped on this size because of marks: {}'.format(responsive_target.get('size_type')))
-        # also, if command line option is specified about ssize, not specified ssize test is skipped
-        if ssize_option != 'all' and ssize_option not in request.node.get_closest_marker('responsive').kwargs['size']:
-            pytest.skip('skipped on this size because of command line option: {}'.format(ssize_option))
+
+        print(ssize_option)
+        print(ssize_option not in request.node.get_closest_marker('responsive').kwargs['size'])
+        print(request.node.get_closest_marker('responsive').kwargs['size'])
+        # also, if command line option is specified about ssize and current fixture parameter is not match, skip because it is not specified ssize by user
+        if ssize_option != 'all' and ssize_option not in responsive_target['size_type']:
+            pytest.skip('skipped on this size because of command line option: {} is not {}'.format(ssize_option, responsive_target['size_type']))
 
 
 @pytest.fixture
