@@ -42,16 +42,21 @@ def target_driver_with_base_url(target_driver):
 def responsive_target(target_driver_with_base_url, request):
     target_driver_with_base_url.set_window_position(0, 0)
     if 'mobile' == request.param:
-        target_driver_with_base_url.set_window_size(cfg.ssize_width_mobile, cfg.ssize_height)
+        model_size = {'width': cfg.ssize_width_mobile, 'height': cfg.ssize_height}
+        target_driver_with_base_url.set_window_size(model_size['width'], model_size['height'])
     if 'tablet' == request.param:
-        target_driver_with_base_url.set_window_size(cfg.ssize_width_tablet, cfg.ssize_height)
+        model_size = {'width': cfg.ssize_width_tablet, 'height': cfg.ssize_height}
+        target_driver_with_base_url.set_window_size(model_size['width'], model_size['height'])
     if 'laptop' == request.param:
-        target_driver_with_base_url.set_window_size(cfg.ssize_width_laptop, cfg.ssize_height)
+        model_size = {'width': cfg.ssize_width_laptop, 'height': cfg.ssize_height}
+        target_driver_with_base_url.set_window_size(model_size['width'], model_size['height'])
     if 'desktop' == request.param:
-        target_driver_with_base_url.set_window_size(cfg.ssize_width_desktop, cfg.ssize_height)
+        model_size = {'width': cfg.ssize_width_desktop, 'height': cfg.ssize_height}
+        target_driver_with_base_url.set_window_size(model_size['width'], model_size['height'])
     return {
             'driver': target_driver_with_base_url,
-            'size': request.param
+            'size_type': request.param,
+            'model_size': model_size
             }
 
 
@@ -59,8 +64,8 @@ def responsive_target(target_driver_with_base_url, request):
 def selective_responsive(request, responsive_target):
     if request.node.get_closest_marker('responsive'):
         print(request.node.get_closest_marker('responsive'))
-        if responsive_target.get('size') not in request.node.get_closest_marker('responsive').kwargs['size']:
-            pytest.skip('skipped on this size: {}'.format(responsive_target.get('size')))
+        if responsive_target.get('size_type') not in request.node.get_closest_marker('responsive').kwargs['size']:
+            pytest.skip('skipped on this size: {}'.format(responsive_target.get('size_type')))
 
 
 @pytest.fixture
