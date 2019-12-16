@@ -4,12 +4,20 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import tests.config as cfg
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(params=['chrome', 'firefox'], scope='session')
 def target_driver(request):
-    target_driver = webdriver.Remote(
-             command_executor=cfg.seleniumServerUrl,
-             desired_capabilities=DesiredCapabilities.CHROME
-         )
+    if 'chrome' == request.param:
+        print('target driver is chrome')
+        target_driver = webdriver.Remote(
+                 command_executor=cfg.seleniumServerUrl,
+                 desired_capabilities=DesiredCapabilities.CHROME
+             )
+    if 'firefox' == request.param:
+        print('target driver is firefox')
+        target_driver = webdriver.Remote(
+                 command_executor=cfg.seleniumServerUrl,
+                 desired_capabilities=DesiredCapabilities.FIREFOX
+             )
 
     def fin():
         print('start teardown target_driver')
@@ -17,6 +25,70 @@ def target_driver(request):
 
     request.addfinalizer(fin)
     return target_driver
+
+
+# called every test func
+@pytest.fixture
+def target_driver_with_base_url(target_driver):
+    target_driver.get(cfg.base_url)
+    # need this one to avoid 'NosuchElementException'
+    # - esp for when find element by link test
+    # reference: https://stackoverflow.com/questions/6936149/how-to-use-find-element-by-link-text-properly-to-not-raise-nosuchelementexcept
+    target_driver.implicitly_wait(10)
+    return target_driver
+
+
+@pytest.fixture(params=['mobile', 'tablet', 'laptop', 'desktop'])
+def responsive_target(target_driver_with_base_url, request):
+    target_driver_with_base_url.set_window_position(0, 0)
+    if 'mobile' == request.param:
+        target_driver_with_base_url.set_window_size(cfg.ssize_width_mobile, cfg.ssize_height)
+    if 'tablet' == request.param:
+        target_driver_with_base_url.set_window_size(cfg.ssize_width_tablet, cfg.ssize_height)
+    if 'laptop' == request.param:
+        target_driver_with_base_url.set_window_size(cfg.ssize_width_laptop, cfg.ssize_height)
+    if 'desktop' == request.param:
+        target_driver_with_base_url.set_window_size(cfg.ssize_width_desktop, cfg.ssize_height)
+    return {
+            'driver': target_driver_with_base_url,
+            'size': request.param
+            }
+
+
+@pytest.fixture(autouse=True)
+def selective_responsive(request, responsive_target):
+    if request.node.get_closest_marker('responsive'):
+        print(request.node.get_closest_marker('responsive'))
+        if responsive_target.get('size') not in request.node.get_closest_marker('responsive').kwargs['size']:
+            pytest.skip('skipped on this size: {}'.format(responsive_target.get('size')))
+
+
+@pytest.fixture
+def target_driver_with_base_url_with_mobile_ssize(target_driver_with_base_url):
+    target_driver_with_base_url.set_window_position(0, 0)
+    target_driver_with_base_url.set_window_size(cfg.ssize_width_mobile, cfg.ssize_height)
+    return target_driver_with_base_url
+
+
+@pytest.fixture
+def target_driver_with_base_url_with_tablet_ssize(target_driver_with_base_url):
+    target_driver_with_base_url.set_window_position(0, 0)
+    target_driver_with_base_url.set_window_size(cfg.ssize_width_tablet, cfg.ssize_height)
+    return target_driver_with_base_url
+
+
+@pytest.fixture
+def target_driver_with_base_url_with_laptop_ssize(target_driver_with_base_url):
+    target_driver_with_base_url.set_window_position(0, 0)
+    target_driver_with_base_url.set_window_size(cfg.ssize_width_laptop, cfg.ssize_height)
+    return target_driver_with_base_url
+
+
+@pytest.fixture
+def target_driver_with_base_url_with_desktop_ssize(target_driver_with_base_url):
+    target_driver_with_base_url.set_window_position(0, 0)
+    target_driver_with_base_url.set_window_size(cfg.ssize_width_desktop, cfg.ssize_height)
+    return target_driver_with_base_url
 
 
 #  multiple screen size with fixture does not work!!
@@ -225,45 +297,6 @@ def target_driver(request):
 #                 'target_browser_with_gte_tablet_ssize',
 #                 ['tablet', 'laptop', 'desktop'],  # number of element must match with sizes['list']
 #                 indirect=True)
-
-
-# called every test func
-@pytest.fixture
-def target_driver_with_base_url(target_driver):
-    target_driver.get(cfg.base_url)
-    # need this one to avoid 'NosuchElementException'
-    # - esp for when find element by link test
-    # reference: https://stackoverflow.com/questions/6936149/how-to-use-find-element-by-link-text-properly-to-not-raise-nosuchelementexcept
-    target_driver.implicitly_wait(10)
-    return target_driver
-
-
-@pytest.fixture
-def target_driver_with_base_url_with_mobile_ssize(target_driver_with_base_url):
-    target_driver_with_base_url.set_window_position(0, 0)
-    target_driver_with_base_url.set_window_size(cfg.ssize_width_mobile, cfg.ssize_height)
-    return target_driver_with_base_url
-
-
-@pytest.fixture
-def target_driver_with_base_url_with_tablet_ssize(target_driver_with_base_url):
-    target_driver_with_base_url.set_window_position(0, 0)
-    target_driver_with_base_url.set_window_size(cfg.ssize_width_tablet, cfg.ssize_height)
-    return target_driver_with_base_url
-
-
-@pytest.fixture
-def target_driver_with_base_url_with_laptop_ssize(target_driver_with_base_url):
-    target_driver_with_base_url.set_window_position(0, 0)
-    target_driver_with_base_url.set_window_size(cfg.ssize_width_laptop, cfg.ssize_height)
-    return target_driver_with_base_url
-
-
-@pytest.fixture
-def target_driver_with_base_url_with_desktop_ssize(target_driver_with_base_url):
-    target_driver_with_base_url.set_window_position(0, 0)
-    target_driver_with_base_url.set_window_size(cfg.ssize_width_desktop, cfg.ssize_height)
-    return target_driver_with_base_url
 
 
 # # def pytest_addoption(parser):
