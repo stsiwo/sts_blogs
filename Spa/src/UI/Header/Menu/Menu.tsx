@@ -20,7 +20,7 @@ const Menu: React.FunctionComponent<{}> = (props: {}) => {
   const { auth, authDispatch } = useAuthContext()
   //const aniProps = useSpring({ width: isNavBarOpen ? currentScreenWidth + 'px' : '0px' })
 
-  const handleCloseNavBarClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = (e) => {
+  const handleCloseNavBarClickEvent: React.EventHandler<React.MouseEvent<HTMLElement>> = (e) => {
     dispatch(toggleNavBarActionCreator(false))
   }
 
@@ -31,6 +31,7 @@ const Menu: React.FunctionComponent<{}> = (props: {}) => {
   })
 
   const handleLogoutClickEvent: React.EventHandler<React.MouseEvent<HTMLElement>> = (e) => {
+    handleLogoutClickEvent(e)
     console.log("logout clicked")
      authDispatch({
        type: 'logout'
@@ -47,12 +48,12 @@ const Menu: React.FunctionComponent<{}> = (props: {}) => {
         </div>
       )}
       <li className="header-menu-li">
-        <Link className="header-menu-li-link" to="/blogs" >Blogs</Link>
+        <Link className="header-menu-li-link" to="/blogs" onClick={handleCloseNavBarClickEvent} >Blogs</Link>
       </li>
       {auth.authed &&
         <>
           <li className="header-menu-li">
-            <Link className="header-menu-li-link" to="/setting/profile" >Account</Link>
+            <Link className="header-menu-li-link" to="/setting/profile" onClick={handleCloseNavBarClickEvent}>Account</Link>
           </li>
           <li className="header-menu-li">
             <Link className="header-menu-li-link" to="/" onClick={handleLogoutClickEvent}>Logout</Link>
@@ -62,10 +63,10 @@ const Menu: React.FunctionComponent<{}> = (props: {}) => {
       {!auth.authed &&
         <React.Fragment>
         <li className="header-menu-li">
-          <Link className="header-menu-li-link" to="/signup" >Signup</Link>
+          <Link className="header-menu-li-link" to="/signup" onClick={handleCloseNavBarClickEvent}>Signup</Link>
         </li>
         <li className="header-menu-li">
-          <Link className="header-menu-li-link" to="/login" >Login</Link>
+          <Link className="header-menu-li-link" to="/login" onClick={handleCloseNavBarClickEvent}>Login</Link>
         </li>
       </React.Fragment>
       }
