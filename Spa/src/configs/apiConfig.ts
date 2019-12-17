@@ -13,5 +13,8 @@ export const apiConfig: AxiosRequestConfig = {
       return value
     });
   },
+  // `withCredentials` indicates whether or not cross-site Access-Control requests
+  // should be made using credentials
+  withCredentials: true, // default
 
 }

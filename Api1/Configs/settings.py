@@ -18,6 +18,13 @@ elif currentEnv == 'PRODUCTION':
 
 load_dotenv(dotenv_path=env_path)
 
+###
+# NOTE: python-env
+#   - value of all env file is converted to str (not any other type e.g., bool)
+#     so you can't put bool value in env file as value.
+#     for now, empty string value is considered as False in python and '1' value (or any string) is considiered as True
+#     and use 'bool' function when assinging to config
+###
 
 FLASK_APP = './run.py'
 
@@ -27,7 +34,9 @@ JWT_TOKEN_LOCATION = ['cookies']
 
 # Only allow JWT cookies to be sent over https. In production, this
 # should likely be True
-JWT_COOKIE_SECURE = os.getenv('JWT_COOKIE_SECURE', False)
+JWT_COOKIE_SECURE = bool(os.getenv('JWT_COOKIE_SECURE', False))
+
+JWT_COOKIE_DOMAIN = os.getenv('JWT_COOKIE_DOMAIN', 'aaa')
 
 # Set the cookie paths, so that you are only sending your access token
 # cookie to the access endpoints, and only sending your refresh token
@@ -65,9 +74,10 @@ SIGNER_SECRET_KEY = os.getenv('SIGNER_SECRET_KEY', 'testing')
 FORGOT_PASSWORD_TOKEN_EXPIRY = 1800
 
 # client spa url
-CLIENT_SPA_URL = os.getenv('CLIENT_SPA_URL', 'http://localhost')
+CLIENT_SPA_URL = os.getenv('CLIENT_SPA_URL', '')
+DEV_CLIENT_SPA_URL = os.getenv('DEV_CLIENT_SPA_URL', '')
 
-TESTING = os.getenv('TESTING', False)
+TESTING = bool(os.getenv('TESTING', False))
 
 # yagmail
 # MYGMAIL_USERNAME = os.getenv('MYGMAIL_USERNAME')

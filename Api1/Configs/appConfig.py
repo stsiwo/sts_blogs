@@ -15,6 +15,10 @@ def configureApp(config_object="Configs.settings"):
     # config
     app.config.from_object(config_object)
 
+    print("*** app config ***\n")
+    for key in app.config:
+        print('{}: {}'.format(key, app.config.get(key)))
+
     # commands
     app.cli.add_command(seed_cli)
     app.cli.add_command(app_cli)
@@ -52,9 +56,11 @@ def configureApp(config_object="Configs.settings"):
     jwt.init_app(app)
 
     # cores
+    # withCredentials in client: only one domain is allowed to communicate
     # CORS(app, origins=[app.config['CLIENT_SPA_URL'] + '/*'])
+    CORS(app, origins=[app.config['DEV_CLIENT_SPA_URL'] + "/*"])
     # temply available all origin. fix this before production
-    CORS(app, origins=['*'])
+    # CORS(app, origins=['*'])
 
     return app
 

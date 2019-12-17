@@ -59,39 +59,6 @@ const Home: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComp
   const currentScreenSize = useResponsive()
   const { auth } = useAuthContext()
 
-  /**
-   * scrolling bugs:
-   *  - when re-rending component because of 'recent', 'popular' change,
-   *    scrollY is always set to 0 after re-rending.
-   *  - how to keep or stay the same position after reloading
-   *  ticket: https://app.clickup.com/t/3ed6c4
-   **/
-  const [curScrollPos, setScrollPos] = React.useState<ScrollPosStateType>({
-    x: window.scrollX,
-    y: window.scrollY
-  })
-
-  React.useEffect(() => {
-
-    function keepTrackScrollPos() {
-      setScrollPos({
-        x: window.scrollX,
-        y: window.scrollY
-      })
-    }
-    window.addEventListener("scroll", keepTrackScrollPos)
-
-    return () => {
-      window.removeEventListener("scroll", keepTrackScrollPos)
-    }
-  })
-
-  React.useEffect(() => {
-    console.log('inside effect to set scroll position')
-    console.log(curScrollPos.y)
-    window.scrollTo(curScrollPos.x, curScrollPos.y)
-  })
-
   const handleSearchIconClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = (e) => {
     searchInputRef.current.style.width = currentSearchInputAnimationStatus.width.value[+currentSearchInputAnimationStatus.isNextDisplay]
     searchInputRef.current.style.padding = currentSearchInputAnimationStatus.padding.value[+currentSearchInputAnimationStatus.isNextDisplay]
@@ -102,6 +69,8 @@ const Home: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComp
   }
 
   const handleSelectedBlogOptionClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
+    e.preventDefault() // this prevents scroll y to move to top when click this?? not to top but still make it move.
+    // solve above problem by adding min-height to fetched blogs item wrapper.
     const selectedOption: string = e.currentTarget.getAttribute('data-option')
     setBlogOptionList((prev: BlogOptionListType) => ({
       ...prev,

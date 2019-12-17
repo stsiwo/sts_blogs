@@ -26,6 +26,7 @@
 
 .home-blog-list-wrapper {
   margin: 10px;
+  min-height: 600px; // this prevent scroll y to top when click btn
 }
 
 
