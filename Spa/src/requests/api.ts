@@ -11,7 +11,15 @@ const instance: AxiosInstanceWithCancelToken = axios.create(apiConfig)
 instance.CancelToken = axios.CancelToken
 instance.isCancel = axios.isCancel
 
-export const api = instance
+axios.defaults.baseURL = apiConfig.baseURL
+axios.defaults.timeout = apiConfig.timeout
+axios.defaults.transformResponse = apiConfig.transformResponse
+axios.defaults.withCredentials = apiConfig.withCredentials
+
+console.log('axios defaults')
+console.log(axios.defaults)
+
+export const api = axios
 
 // base static cancel token class
 // you can get token factory object by calling source() 

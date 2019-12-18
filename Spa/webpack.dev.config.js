@@ -12,7 +12,7 @@ module.exports = merge(common, {
     contentBase: __dirname,
     hot: true,
     historyApiFallback: true,
-    port: 8080
+    port: 80 
   },
   output: {
     filename: '[name].bundle.js',
