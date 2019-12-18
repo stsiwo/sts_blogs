@@ -11,6 +11,9 @@ const instance: AxiosInstanceWithCancelToken = axios.create(apiConfig)
 instance.CancelToken = axios.CancelToken
 instance.isCancel = axios.isCancel
 
+// for the sake of 'withCredentials' (github issues saied that instance axios with 'withCredentials' does not work)
+// but this might not be true. so make sure if it works with instance 
+// for now, change instance to global axios
 axios.defaults.baseURL = apiConfig.baseURL
 axios.defaults.timeout = apiConfig.timeout
 axios.defaults.transformResponse = apiConfig.transformResponse
