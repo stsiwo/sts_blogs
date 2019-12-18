@@ -38,6 +38,8 @@ JWT_COOKIE_SECURE = bool(os.getenv('JWT_COOKIE_SECURE', False))
 
 JWT_COOKIE_DOMAIN = os.getenv('JWT_COOKIE_DOMAIN', 'aaa')
 
+JWT_COOKIE_SAMESITE = None
+
 # Set the cookie paths, so that you are only sending your access token
 # cookie to the access endpoints, and only sending your refresh token
 # to the refresh endpoint. Technically this is optional, but it is in
@@ -56,6 +58,9 @@ JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'testing')
 # db config
 SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI', 'sqlite:////tmp/api1.db')
 SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+# SESSION_COOKIE_SAMESITE = None
+SESSION_COOKIE_HTTPONLY = True
 
 # image files
 UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER', 'uploads')

@@ -11,4 +11,6 @@ flask db migrate
 flask db upgrade
 flask seed roles
 flask seed tags
+flask seed test-users
+flask seed test-blogs
 python3 ./run.py
