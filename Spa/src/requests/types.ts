@@ -3,11 +3,11 @@ import { CancelToken } from "axios";
 import { UserType } from "domain/user/UserType";
 
 export enum ResponseResultStatusEnum {
-  INITIAL,
-  FETCHING,
-  SUCCESS,
-  FAILURE,
-  CANCEL,
+  INITIAL = 0,
+  FETCHING = 1,
+  SUCCESS = 2,
+  FAILURE = 3,
+  CANCEL = 4,
 }
 
 export enum RequestMethodEnum {
