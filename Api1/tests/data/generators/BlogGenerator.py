@@ -38,6 +38,7 @@ def generateBlogModelV2(
         subtitle=None,
         content=None,
         user=None,
+        clap=None,
         tags=[],
         mainImageUrl=None,
         createdDate=None
@@ -46,6 +47,7 @@ def generateBlogModelV2(
     title = fake.sentence() if title is None else title
     subtitle = fake.sentence() if subtitle is None else subtitle
     content = fake.sentence() if content is None else content
+    clap = fake.random_int(min=0, max=100, step=1) if clap is None else clap
     createdDate = fake.past_datetime(start_date="-30y", tzinfo=pytz.timezone('US/Pacific')) if createdDate is None else createdDate
     # need to wrap faker's datetime with pure datetime otherwise mysql complains about it:
     # error: 'datetime' object has no attribute 'translate'
@@ -56,6 +58,7 @@ def generateBlogModelV2(
             subtitle=subtitle,
             content='',  # temply empty
             userId=user.id,
+            clap=clap,
             tags=tags,
             mainImageUrl=mainImageUrl,
             createdDate=createdDate
