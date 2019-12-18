@@ -12,6 +12,7 @@ class Blog(BaseModel):
     subtitle = db.Column(db.VARCHAR(1000), nullable=False)
     mainImageUrl = db.Column(db.VARCHAR(1000), nullable=True)
     content = db.Column(db.Text, nullable=False)
+    clap = db.Column(db.Integer, server_default='0', nullable=False)
 
     userId = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
