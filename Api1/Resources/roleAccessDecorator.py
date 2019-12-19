@@ -12,6 +12,7 @@ def requires_jwt_role_claim(targetRoles: Set[str]):
     def decorator(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
+            print('start handling check auth role claim at requires_jwt_role_claim decorator')
             roleClaims = get_jwt_claims()['roles']
             if targetRoles.isdisjoint(set(roleClaims)):
                 raise UnauthorizedException(message='unauthorized role', type=UnauthorizedExceptionTypeEnum.UNAUTHORIZED_ROLE)

@@ -53,3 +53,14 @@ def _isPrimitive(obj):
 
 def parseStrToDate(value: str):
     return datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%fZ')
+
+
+def mapCookieInHeaderToDictionary(headers):
+
+    tokenDict = {}
+
+    for header in headers:
+        if header[0] == 'Set-Cookie':
+            token = header[1].replace(";", "=").split("=")
+            tokenDict[token[0]] = token[1]
+    return tokenDict

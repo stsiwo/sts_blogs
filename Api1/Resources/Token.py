@@ -25,6 +25,7 @@ class TokenRefresh(Resource):
     def __init__(self):
         self._tokenService = TokenService()
 
+    @jwt_refresh_token_required
     def post(self):
         print('start handling refresh token at refresh endpoint')
         currentIdentity = get_jwt_identity()

@@ -2,7 +2,7 @@ from Configs.extensions import jwt
 from flask import jsonify
 
 
-@jwt.invalid_token_loader()
+@jwt.invalid_token_loader
 def my_invalid_token_loader(reason_why_jwt_is_invalid):
     print('***start handling invalid access token (jwt) at invalid_token_loader mw')
     print(reason_why_jwt_is_invalid)

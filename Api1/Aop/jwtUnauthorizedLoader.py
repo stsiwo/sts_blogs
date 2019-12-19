@@ -3,7 +3,7 @@ from flask import jsonify
 from exceptions.UnauthorizedException import UnauthorizedExceptionTypeEnum
 
 
-@jwt.unauthorized_loader()
+@jwt.unauthorized_loader
 def my_unauthorized_loader(reason_why_jwt_not_found):
     print('***start handling unauthorized (not jwt found) at unauthorized_loader mw')
     print(reason_why_jwt_not_found)

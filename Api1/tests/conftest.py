@@ -23,6 +23,7 @@ from application.EmailService import EmailClient
 from utils.util import parseStrToDate
 import pathlib
 from werkzeug.datastructures import FileStorage
+import time
 
 app = main
 
@@ -321,6 +322,66 @@ def authedClient(client, usersSeededFixture):
     client.set_cookie('localhost', 'csrf_refresh_token', tokenDict['csrf_refresh_token'])
 
     yield client
+
+
+@pytest.fixture
+def authedClientForTokenTest(application, client, usersSeededFixture):
+
+    def get(access_token_expiry: int = 1, refresh_token_expiry: int = 1):
+
+        # set exipred access token (AT) and no expired refresh token (RT)
+        application.config['JWT_ACCESS_TOKEN_EXPIRES'] = access_token_expiry
+        application.config['JWT_REFRESH_TOKEN_EXPIRES'] = refresh_token_expiry
+
+        mimetype = 'application/json'
+        headers = {
+            'Content-Type': mimetype,
+            'Accept': mimetype
+        }
+        rv = client.post('/login', 'http://localhost', json={
+            'email': 'test@test.com',
+            'password': 'test'
+            }, headers=headers)
+
+        tokenDict = {}
+
+        for header in rv.headers:
+            if header[0] == 'Set-Cookie':
+                token = header[1].replace(";", "=").split("=")
+                tokenDict[token[0]] = token[1]
+
+        print('*** extracted access & refresh & its csrf token')
+        printObject(tokenDict)
+
+        # IMPORTANT NOTE
+        # content should just access_token itself. DO NOT include any other info such as path, httpOnly
+        client.set_cookie('localhost', 'access_token_cookie', tokenDict['access_token_cookie'])
+        client.set_cookie('localhost', 'refresh_token_cookie', tokenDict['refresh_token_cookie'])
+        client.set_cookie('localhost', 'csrf_access_token', tokenDict['csrf_access_token'])
+        client.set_cookie('localhost', 'csrf_refresh_token', tokenDict['csrf_refresh_token'])
+
+        print('*** csrf_access_token: {}'.format(tokenDict['csrf_access_token']))
+
+        # NOTE: wait access token to be expired
+        #   - value must match with JWT_ACCESS_TOKEN_EXPIRES value in above
+        #   - value '1' does not work
+        #   - value '2' does work!!! the value should be expiry time + 1 sec
+        print('*** wait access token is expired')
+        time.sleep(2)
+
+        def teardown():
+            # remove tokens for clean up
+            print('*** start remove token of authedClientWithExpiredATAndNoExpiredRT client')
+            client.post('/token/remove', headers={
+                'X-CSRF-TOKEN': tokenDict['csrf_access_token']
+                })
+
+        client.teardown = teardown
+
+        return client
+
+    yield get
+    print('*** teardown authedClientWithExpiredATAndNoExpiredRT fixture')
 
 
 @pytest.fixture
