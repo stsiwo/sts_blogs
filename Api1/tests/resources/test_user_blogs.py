@@ -89,7 +89,7 @@ def test_ub06_blogs_get_endpoint_should_return_202_and_blogs_json_with_user_depe
     assert data is not None
 
     for blog in data:
-        assert blog['user']['id'] == userId
+        assert blog['author']['id'] == userId
 
 
 @pytest.mark.user_blog_src

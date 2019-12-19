@@ -9,7 +9,7 @@ from Infrastructure.transactionDecorator import db_transaction
 from itsdangerous import BadSignature, SignatureExpired
 from Infrastructure.repositories.UserRepository import UserRepository
 from utils.util import printObject
-from exceptions.SignatureExpiredException import SignatureExpiredException
+from exceptions.ResetPasswordTokenExpiredException import ResetPasswordTokenExpiredException
 from exceptions.BadSignatureException import BadSignatureException
 from exceptions.EmailNotFoundException import EmailNotFoundException
 
@@ -51,7 +51,7 @@ class PasswordResetService(object):
             userId = decodeForgotPasswordToken(token)
 
         except SignatureExpired as e:
-            raise SignatureExpiredException
+            raise ResetPasswordTokenExpiredException
         except BadSignature as e:
             raise BadSignatureException
         else:

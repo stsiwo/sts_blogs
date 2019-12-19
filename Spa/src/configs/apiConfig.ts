@@ -1,4 +1,5 @@
-import { AxiosRequestConfig } from "axios";
+import { AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
+import { ErrorResponseDataType } from "requests/types";
 
 export const apiConfig: AxiosRequestConfig = {
   baseURL: process.env.API1_URL,
@@ -18,3 +19,4 @@ export const apiConfig: AxiosRequestConfig = {
   withCredentials: true, // default
 
 }
+

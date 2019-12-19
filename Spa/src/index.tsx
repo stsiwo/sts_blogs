@@ -18,11 +18,12 @@ if (process.env.NODE_ENV === 'development') require('ui/Base/Css/Debug.scss');
 
 // enable debug
 process.env.DEBUG
+console.log('env vars:')
+console.log(process.env.DEBUG)
+
 
 
 var debug = require('debug')('ui:App')
-
-
 const App = (props: any) => {
   debug('Component start')
   //const [auth, authDispatch] = useUpdateAuthContextReducer({

@@ -93,8 +93,6 @@ def test_b041_blogs_get_endpoint_should_return_specified_view_model(client, blog
         assert blog['author'] is not None
         assert blog['author']['id'] is not None
         assert blog['author']['name'] is not None
-        assert blog['author']['_password'] is None
-        assert blog['author']['email'] is None
         assert blog['author']['avatarUrl'] is not None
 
 

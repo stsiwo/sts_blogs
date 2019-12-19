@@ -61,7 +61,7 @@ def test_pr_post04_password_reset_post_endpoint_should_return_400_code_since_tok
     printObject(data)
 
     assert response.status_code == 400
-    assert data['title'] == 'signature expired'
+    assert data['title'] == 'reset password token expired'
 
 
 def test_pr_post05_password_reset_post_endpoint_should_return_204_code_for_successfully_update_password(client, httpHeaders, usersSeededFixture):

@@ -4,6 +4,8 @@ from flask_jwt_extended import (
 )
 from flask import Response, jsonify
 from typing import Set
+from exceptions.UnauthorizedExceptionTypeEnum import UnauthorizedExceptionTypeEnum
+from exceptions.UnauthorizedException import UnauthorizedException
 
 
 def requires_jwt_role_claim(targetRoles: Set[str]):
@@ -12,10 +14,7 @@ def requires_jwt_role_claim(targetRoles: Set[str]):
         def decorated_function(*args, **kwargs):
             roleClaims = get_jwt_claims()['roles']
             if targetRoles.isdisjoint(set(roleClaims)):
-                response: Response = jsonify({})
-                # unauthorized
-                response.status_code = 401
-                return response
+                raise UnauthorizedException(message='unauthorized role', type=UnauthorizedExceptionTypeEnum.UNAUTHORIZED_ROLE)
             else:
                 return f(*args, **kwargs)
         return decorated_function

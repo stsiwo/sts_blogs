@@ -1,7 +1,7 @@
 from flask import jsonify, Response
 from Configs.app import app
 from exceptions.BadSignatureException import BadSignatureException
-from exceptions.SignatureExpiredException import SignatureExpiredException
+from exceptions.ResetPasswordTokenExpiredException import ResetPasswordTokenExpiredException
 from exceptions.BlogNotFoundException import BlogNotFoundException
 from exceptions.EmailNotFoundException import EmailNotFoundException
 from exceptions.EmailServiceException import EmailServiceException
@@ -9,6 +9,8 @@ from exceptions.CommentNotFoundException import CommentNotFoundException
 from exceptions.PasswordInvalidException import PasswordInvalidException
 from exceptions.UploadedFileException import UploadedFileException
 from exceptions.UserNotFoundException import UserNotFoundException
+from exceptions.UnauthorizedException import UnauthorizedException
+from exceptions.InvalidJwtTokenException import InvalidJwtTokenException
 
 
 def constructResponse(error):
@@ -22,8 +24,8 @@ def badSignature(error):
     return constructResponse(error)
 
 
-@app.errorhandler(SignatureExpiredException)
-def signatureExpired(error):
+@app.errorhandler(ResetPasswordTokenExpiredException)
+def resetPasswordTokenExpired(error):
     return constructResponse(error)
 
 
@@ -59,4 +61,14 @@ def uploadedFile(error):
 
 @app.errorhandler(UserNotFoundException)
 def userNotFound(error):
+    return constructResponse(error)
+
+
+@app.errorhandler(UnauthorizedException)
+def unauthorized(error):
+    return constructResponse(error)
+
+
+@app.errorhandler(InvalidJwtTokenException)
+def invalidJetToken(error):
     return constructResponse(error)

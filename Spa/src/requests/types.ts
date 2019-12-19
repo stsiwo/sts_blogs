@@ -18,6 +18,13 @@ export enum RequestMethodEnum {
   DELETE = 'delete',
 }
 
+export enum Error401ResponseDataTypeEnum {
+  ACCESS_TOKEN_EXPIRED = 0,
+  ACCESS_TOKEN_AND_REFRESH_TOKEN_EXPIRED = 1,
+  NEITHER_ACCESS_TOKEN_AND_REFRESH_TOKEN_EXIST = 2,
+  UNAUTHORIZED_ROLE = 3
+}
+
 export declare type ResponseResultType = {
   data?: any
   status: ResponseResultStatusEnum
@@ -52,6 +59,7 @@ export declare type RequestContentType = {
 }
 
 export declare type ErrorResponseDataType = {
+  type: Error401ResponseDataTypeEnum,
   title: string,
   message: string, 
   status: number

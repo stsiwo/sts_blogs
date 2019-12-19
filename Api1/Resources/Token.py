@@ -7,25 +7,7 @@ from flask_jwt_extended import (
     set_access_cookies
 )
 from flask_restful import Resource
-
-# use this when jwt authentication needed
-# @jwt_required
-# username = get_jwt_identity()
-
-
-class TokenRefresh(Resource):
-    @jwt_refresh_token_required
-    def post(self):
-        # Create the new access token
-        current_user = get_jwt_identity()
-        access_token = create_access_token(identity=current_user)
-
-        # Set the access JWT and CSRF double submit protection cookies
-        # in this response
-        resp = jsonify({'refresh': True})
-        resp.status_code = 200
-        set_access_cookies(resp, access_token)
-        return resp
+from application.TokenService import TokenService
 
 
 class TokenRemove(Resource):
@@ -34,3 +16,24 @@ class TokenRemove(Resource):
         resp.status_code = 200
         unset_jwt_cookies(resp)
         return resp
+
+
+class TokenRefresh(Resource):
+
+    _tokenService: TokenService
+
+    def __init__(self):
+        self._tokenService = TokenService()
+
+    def post(self):
+        print('start handling refresh token at refresh endpoint')
+        currentIdentity = get_jwt_identity()
+
+        # construct response
+        response = jsonify({'success': True})
+        response.status_code = 200
+
+        # create jwt tokens
+        self._tokenService.createJwtToken(response, currentIdentity)
+
+        return response
