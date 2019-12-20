@@ -18,4 +18,8 @@ ssize_width_laptop = 1024
 
 ssize_width_desktop = 1440
 
+available_driver_options = ['chrome', 'firefox']
+
 available_page_options = ['home', 'signup']
+
+available_ssize_options = ['mobile', 'tablet', 'laptop', 'desktop']

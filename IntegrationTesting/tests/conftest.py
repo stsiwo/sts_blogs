@@ -8,14 +8,17 @@ import tests.config as cfg
 
 def pytest_addoption(parser):
     parser.addoption(
-        "--driver", action="store", default="all", help="type of driver you want to use with test. available options: chrome, firefox"
+        "--driver", action="store", default="all", help="type of driver you want to use with test. available options: {}".format(cfg.available_driver_options)
     )
     parser.addoption(
-        "--ssize", action="store", default="all", help="type of driver you want to use with test. available options: chrome, firefox"
+        "--ssize", action="store", default="all", help="type of screen size you want to use with test. available options: {}".format(cfg.available_ssize_options)
+    )
+    parser.addoption(
+        "--page", action="store", default="all", help="type of page you want to use with test. available options: {}".format(cfg.available_page_options)
     )
 
 
-@pytest.fixture(params=['chrome', 'firefox'], scope='session')
+@pytest.fixture(params=cfg.available_driver_options, scope='session')
 def target_driver(request):
     driver_option = request.config.getoption('--driver')
     print(driver_option)
@@ -56,7 +59,7 @@ def target_driver_with_base_url(target_driver):
     return target_driver
 
 
-@pytest.fixture(params=['mobile', 'tablet', 'laptop', 'desktop'])
+@pytest.fixture(params=cfg.available_ssize_options)
 def responsive_target(target_driver_with_base_url, request):
     target_driver_with_base_url.set_window_position(0, 0)
     if 'mobile' == request.param:
@@ -89,29 +92,32 @@ def TargetPage(request):
 @pytest.fixture(autouse=True)
 def selective_marks(request, responsive_target, TargetPage):
     ssize_option = request.config.getoption('--ssize')
-    available_ssize_options = ['mobile', 'tablet', 'laptop', 'desktop', 'all']
+    available_ssize_command_options = [*cfg.available_ssize_options, 'all']
 
-    if ssize_option not in available_ssize_options:
-        raise Exception('provided ssize option ({}) is not supoorted. available options are {}'.format(ssize_option, available_ssize_options))
+    if ssize_option not in available_ssize_command_options:
+        raise Exception('provided ssize option ({}) is not supoorted. available options are {}'.format(ssize_option, available_ssize_command_options))
 
     if request.node.get_closest_marker('responsive'):
         # if test function does hot have responsive mark with its ssize, skip
         if responsive_target.get('size_type') not in request.node.get_closest_marker('responsive').kwargs['size']:
             pytest.skip('skipped on this size because of marks: {}'.format(responsive_target.get('size_type')))
 
-        print(ssize_option)
-        print(ssize_option not in request.node.get_closest_marker('responsive').kwargs['size'])
-        print(request.node.get_closest_marker('responsive').kwargs['size'])
         # also, if command line option is specified about ssize and current fixture parameter is not match, skip because it is not specified ssize by user
         if ssize_option != 'all' and ssize_option not in responsive_target['size_type']:
             pytest.skip('skipped on this size because of command line option: {} is not {}'.format(ssize_option, responsive_target['size_type']))
 
-    # page_option = request.config.getoption('--page')
-    # available_page_options = ['home', 'signup', 'all']
+    page_option = request.config.getoption('--page')
+    available_page_command_options = [*cfg.available_page_options, 'all']
+
+    if page_option not in available_page_command_options:
+        raise Exception('provided page option ({}) is not supoorted. available options are {}'.format(page_option, available_ssize_command_options))
 
     if request.node.get_closest_marker('page'):
         if TargetPage.name not in request.node.get_closest_marker('page').kwargs['page']:
             pytest.skip('skipped on this size because of not selected marks: {}'.format(TargetPage.name))
+
+        if page_option != 'all' and page_option != TargetPage.name:
+            pytest.skip('skipped on this page because of command line option: {} is not {}'.format(page_option, TargetPage.name))
 
 
 @pytest.fixture
