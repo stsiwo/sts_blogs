@@ -13,4 +13,5 @@ desktop_ssize = pytest.mark.responsive(size=['desktop'])
 # short hand for page mark
 home_page = pytest.mark.page(page=['home'])
 signup_page = pytest.mark.page(page=['signup'])
+login_page = pytest.mark.page(page=['login'])
 all_page = pytest.mark.page(page=cfg.available_page_options)

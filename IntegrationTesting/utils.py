@@ -1,5 +1,8 @@
 import pprint
 from collections.abc import Iterable
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.common.exceptions import TimeoutException
 
 pp = pprint.PrettyPrinter()
 
@@ -34,3 +37,11 @@ def _isPrimitive(obj):
 def _printObject(target: object):
     props = vars(target)
     prettyPrint([(key, props[key]) for key in props])
+
+
+def wait_for_element(driver, locator_by, locator_value):
+    try:
+        myElem = WebDriverWait(driver, 3).until(EC.presence_of_element_located((locator_by, locator_value)))
+        print("Page is ready!")
+    except TimeoutException:
+        print("Loading took too much time!")

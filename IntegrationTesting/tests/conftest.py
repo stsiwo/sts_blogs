@@ -3,6 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from tests.Pages.HomePage import HomePage
 from tests.Pages.SignupPage import SignupPage
+from tests.Pages.LoginPage import LoginPage
 import tests.config as cfg
 
 
@@ -76,6 +77,8 @@ def TargetPage(request):
         return HomePage
     if 'signup' == request.param:
         return SignupPage
+    if 'login' == request.param:
+        return LoginPage
 
 
 @pytest.fixture(autouse=True)
