@@ -60,22 +60,22 @@ def target_driver_with_base_url(target_driver):
 
 
 @pytest.fixture(params=cfg.available_ssize_options)
-def responsive_target(target_driver_with_base_url, request):
-    target_driver_with_base_url.set_window_position(0, 0)
+def responsive_target(target_driver, request):
+    target_driver.set_window_position(0, 0)
     if 'mobile' == request.param:
         model_size = {'width': cfg.ssize_width_mobile, 'height': cfg.ssize_height}
-        target_driver_with_base_url.set_window_size(model_size['width'], model_size['height'])
+        target_driver.set_window_size(model_size['width'], model_size['height'])
     if 'tablet' == request.param:
         model_size = {'width': cfg.ssize_width_tablet, 'height': cfg.ssize_height}
-        target_driver_with_base_url.set_window_size(model_size['width'], model_size['height'])
+        target_driver.set_window_size(model_size['width'], model_size['height'])
     if 'laptop' == request.param:
         model_size = {'width': cfg.ssize_width_laptop, 'height': cfg.ssize_height}
-        target_driver_with_base_url.set_window_size(model_size['width'], model_size['height'])
+        target_driver.set_window_size(model_size['width'], model_size['height'])
     if 'desktop' == request.param:
         model_size = {'width': cfg.ssize_width_desktop, 'height': cfg.ssize_height}
-        target_driver_with_base_url.set_window_size(model_size['width'], model_size['height'])
+        target_driver.set_window_size(model_size['width'], model_size['height'])
     return {
-            'driver': target_driver_with_base_url,
+            'driver': target_driver,
             'size_type': request.param,
             'model_size': model_size
             }
