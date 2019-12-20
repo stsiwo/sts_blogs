@@ -58,12 +58,3 @@ def test_should_fetch_popular_blog_when_click_popular_btn(responsive_target):
     # #TODO: fix implementation so that 'popular' click run different query
     # after fix this, this should pass
     assert blog_title_before_click != blog_title_after_click
-
-
-# FOOTER
-@marks.all_ssize
-def test_should_display_footer_content_of_about_me(responsive_target):
-
-    home_page = HomePage(responsive_target['driver'])
-
-    assert home_page.get_text_of_element_in_footer('about_me')
