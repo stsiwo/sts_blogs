@@ -48,17 +48,6 @@ def target_driver(request):
     return target_driver
 
 
-# called every test func
-@pytest.fixture
-def target_driver_with_base_url(target_driver):
-    target_driver.get(cfg.base_url)
-    # need this one to avoid 'NosuchElementException'
-    # - esp for when find element by link test
-    # reference: https://stackoverflow.com/questions/6936149/how-to-use-find-element-by-link-text-properly-to-not-raise-nosuchelementexcept
-    target_driver.implicitly_wait(10)
-    return target_driver
-
-
 @pytest.fixture(params=cfg.available_ssize_options)
 def responsive_target(target_driver, request):
     target_driver.set_window_position(0, 0)
