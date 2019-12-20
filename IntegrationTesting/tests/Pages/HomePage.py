@@ -12,6 +12,8 @@ from selenium.webdriver.common.by import By
 class HomePage(HeaderPage, FooterPage):
     """Home page action methods come here. I.e. Python.org"""
 
+    name = 'home'
+
     element_locators = {
             'search_btn': HomePageLocators.SEARCH_BUTTON,
             'search_input': HomePageLocators.SEARCH_INPUT,

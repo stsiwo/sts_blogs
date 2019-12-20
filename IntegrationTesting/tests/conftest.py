@@ -1,6 +1,8 @@
 import pytest
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from tests.Pages.HomePage import HomePage
+from tests.Pages.SignupPage import SignupPage
 import tests.config as cfg
 
 
@@ -76,8 +78,16 @@ def responsive_target(target_driver_with_base_url, request):
             }
 
 
+@pytest.fixture(params=cfg.available_page_options)
+def TargetPage(request):
+    if 'home' == request.param:
+        return HomePage
+    if 'signup' == request.param:
+        return SignupPage
+
+
 @pytest.fixture(autouse=True)
-def selective_responsive(request, responsive_target):
+def selective_marks(request, responsive_target, TargetPage):
     ssize_option = request.config.getoption('--ssize')
     available_ssize_options = ['mobile', 'tablet', 'laptop', 'desktop', 'all']
 
@@ -95,6 +105,13 @@ def selective_responsive(request, responsive_target):
         # also, if command line option is specified about ssize and current fixture parameter is not match, skip because it is not specified ssize by user
         if ssize_option != 'all' and ssize_option not in responsive_target['size_type']:
             pytest.skip('skipped on this size because of command line option: {} is not {}'.format(ssize_option, responsive_target['size_type']))
+
+    # page_option = request.config.getoption('--page')
+    # available_page_options = ['home', 'signup', 'all']
+
+    if request.node.get_closest_marker('page'):
+        if TargetPage.name not in request.node.get_closest_marker('page').kwargs['page']:
+            pytest.skip('skipped on this size because of not selected marks: {}'.format(TargetPage.name))
 
 
 @pytest.fixture
