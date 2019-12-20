@@ -7,29 +7,6 @@ import tests.config as cfg
 pytestmark = [pytest.mark.signup]
 
 
-# COMMON
-@marks.all_ssize
-def test_signup_title(responsive_target):
-
-    signup_page = SignupPage(responsive_target['driver'])
-
-    assert signup_page.is_title_matches('STS')
-
-
-@pytest.mark.scroll
-@marks.all_ssize
-def test_should_not_display_scroll_y(responsive_target):
-    """
-        this is to detect any overflow element and cause scroll y appears in window
-            - if this test failed, it means there is some elements overflow in window
-            and cause scrollable y
-    """
-
-    signup_page = SignupPage(responsive_target['driver'])
-
-    assert signup_page.is_scrollable_y() is not True
-
-
 # HEADER
 @marks.all_ssize
 def test_should_display_title_in_header(responsive_target):

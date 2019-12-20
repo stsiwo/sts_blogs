@@ -22,6 +22,12 @@ class BasePage(object):
         self.driver.get_screenshot_as_file('/tmp/%s-%s.png' % (file_name, now))
 
     def is_scrollable_y(self):
-        is_scrollable_y = self.driver.execute_script("return document.getElementById('root').clientWidth < document.getElementById('root').scrollWidth")
-        print(is_scrollable_y)
+        # clientWidth = self.driver.execute_script("return document.getElementById('root').clientWidth")
+        # scrollWidth = self.driver.execute_script("return document.getElementById('root').scrollWidth")
+        # print('clientWidth: {}'.format(clientWidth))
+        # print('scrollWidth: {}'.format(scrollWidth))
+        # NOTE: even if there is no scrollbar, there is a little gap between client and scroll width (maybe because of css for debugging; 1px border for every element)
+        #  - so if the gap is less than 16px (size of scroll bar), there is no overflowing element.
+        is_scrollable_y = self.driver.execute_script("return (document.getElementById('root').scrollWidth - document.getElementById('root').clientWidth) > 16")
+
         return is_scrollable_y
