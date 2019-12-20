@@ -59,7 +59,7 @@ export declare type RequestContentType = {
 }
 
 export declare type ErrorResponseDataType = {
-  type: Error401ResponseDataTypeEnum,
+  type?: Error401ResponseDataTypeEnum,
   title: string,
   message: string, 
   status: number

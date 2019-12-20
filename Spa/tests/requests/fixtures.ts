@@ -1,6 +1,6 @@
 import { AxiosResponse, AxiosError } from "axios";
 import { getBlogTestData } from "../data/BlogFaker";
-import { ErrorResponseDataType, BlogListResponseDataType, UserResponseDataType, BlogResponseDataType } from "requests/types";
+import { ErrorResponseDataType, BlogListResponseDataType, UserResponseDataType, BlogResponseDataType, Error401ResponseDataTypeEnum } from "requests/types";
 import { getUserTestData } from "../data/UserFaker";
 
 export const noDateGET200Response: AxiosResponse<{}> = {
@@ -72,7 +72,7 @@ export const networkError: AxiosError = {
   config: null,
   name: 'Error',
   isAxiosError: true,
-  message: 'netowrk error'
+  message: 'network error'
 }
 
 export const internalServerError500Response: AxiosResponse<ErrorResponseDataType> = {
@@ -99,6 +99,7 @@ export const badRequest400Response: AxiosResponse<ErrorResponseDataType> = {
 
 export const unauthorized401Response: AxiosResponse<ErrorResponseDataType> = {
   data: {
+    type: Error401ResponseDataTypeEnum.ACCESS_TOKEN_EXPIRED,
     title: 'unauthorized 401 response title',
     message: 'unauthorized 401 response message',
   } as ErrorResponseDataType,
@@ -106,6 +107,112 @@ export const unauthorized401Response: AxiosResponse<ErrorResponseDataType> = {
   statusText: 'Unauthorized',
   headers: {},
   config: {},
+}
+
+export const unauthorized401WithAccessTokenExpiredResponse: AxiosError<ErrorResponseDataType> = {
+  name: 'unauthorized error',
+  message: 'unauthorized error',
+  config: {},
+  response: {
+    data: {
+      type: Error401ResponseDataTypeEnum.ACCESS_TOKEN_EXPIRED,
+      title: 'unauthorized 401 response title',
+      message: 'The access token has expired',
+    } as ErrorResponseDataType,
+    status: 401,
+    statusText: 'Unauthorized',
+    headers: {},
+    config: {},
+  } as AxiosResponse,
+  isAxiosError: false
+}
+
+export const unauthorized401WithAtAndRtExpiredResponse: AxiosError<ErrorResponseDataType> = {
+  name: 'unauthorized error',
+  message: 'unauthorized error',
+  config: {},
+  response: {
+    data: {
+      type: Error401ResponseDataTypeEnum.ACCESS_TOKEN_AND_REFRESH_TOKEN_EXPIRED,
+      title: 'unauthorized 401 response title',
+      message: 'both refresh token and access token have expired',
+    } as ErrorResponseDataType,
+    status: 401,
+    statusText: 'Unauthorized',
+    headers: {},
+    config: {},
+  } as AxiosResponse,
+  isAxiosError: false
+}
+
+export const unauthorized401WithNoAtNorRtResponse: AxiosError<ErrorResponseDataType> = {
+  name: 'unauthorized error',
+  message: 'unauthorized error',
+  config: {},
+  response: {
+    data: {
+      type: Error401ResponseDataTypeEnum.NEITHER_ACCESS_TOKEN_AND_REFRESH_TOKEN_EXIST,
+      title: 'unauthorized 401 response title',
+      message: 'no access and refresh token are provided',
+    } as ErrorResponseDataType,
+    status: 401,
+    statusText: 'Unauthorized',
+    headers: {},
+    config: {},
+  } as AxiosResponse,
+  isAxiosError: false
+}
+
+export const unauthorized401WithUnauthorizedRoleResponse: AxiosError<ErrorResponseDataType> = {
+  name: 'unauthorized error',
+  message: 'unauthorized error',
+  config: {},
+  response: {
+    data: {
+      type: Error401ResponseDataTypeEnum.UNAUTHORIZED_ROLE,
+      title: 'unauthorized 401 response title',
+      message: 'provided token is not allowed to access/perform requested resource/action',
+    } as ErrorResponseDataType,
+    status: 401,
+    statusText: 'Unauthorized',
+    headers: {},
+    config: {},
+  } as AxiosResponse,
+  isAxiosError: false
+}
+
+export const invalidToken422Response: AxiosError<ErrorResponseDataType> = {
+  name: 'invalid token error',
+  message: 'invalid token error',
+  config: {},
+  response: {
+    data: {
+      title: 'invalid token 422 response title',
+      message: 'provided token is invalid',
+    } as ErrorResponseDataType,
+    status: 422,
+    statusText: 'Unauthorized',
+    headers: {},
+    config: {},
+  } as AxiosResponse,
+  isAxiosError: false
+}
+
+export const notFound404ResponseV2: AxiosError<ErrorResponseDataType> = {
+  name: 'not found error',
+  message: 'not found error',
+  config: {},
+  response: {
+    data: {
+      title: 'not found 404 response title',
+      message: 'not found',
+    } as ErrorResponseDataType,
+    status: 404,
+    statusText: 'Unauthorized',
+    headers: {},
+    config: {},
+  } as AxiosResponse,
+  isAxiosError: false
 }
 
 export const notFound404Response: AxiosResponse<ErrorResponseDataType> = {
@@ -127,7 +234,7 @@ declare global {
 
 /** promise delay **/
 export function delay(t: number, v: any) {
-   return new Promise(function(resolve) {
-       setTimeout(resolve.bind(null, v), t)
-   });
+  return new Promise(function(resolve) {
+    setTimeout(resolve.bind(null, v), t)
+  });
 }

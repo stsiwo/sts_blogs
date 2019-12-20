@@ -72,7 +72,7 @@ function error401Interceptor(error: AxiosError<ErrorResponseDataType>) {
 
 }
 
-axios.interceptors.response.use(null, error401Interceptor)
+//axios.interceptors.response.use(null, error401Interceptor)
 
 console.log('axios defaults')
 console.log(axios.defaults)

@@ -37,7 +37,6 @@ export const request = async (requestContent: RequestContentType): Promise<Respo
 
   }).catch((error: AxiosError<ErrorResponseDataType>) => {
     debug('api request failed. at request func')
-    console.log('api request failed. at request func')
     /** handle when cancel request **/
     if (api.isCancel(error)) {
       debug('request is cancaled')
@@ -54,14 +53,16 @@ export const request = async (requestContent: RequestContentType): Promise<Respo
     /** 4xx, 5xx status code error handling **/
     if (error.response) {
       debug('api request failed because of 4xx, 5xx status code')
-      console.log('api request failed because of 4xx, 5xx status code')
       // if 401 (unauthorized error), remove userInfo from localStorage
       if (error.response.status === 401) {
         debug('it\'s 401 error')
-        console.log('it\'s 401 error')
         /**
-         * refresh token logic
+         * 401 status logic (refresh token, invalid role, no tokens)
          *
+         * case 0: invalid role (e.g., member try to access/perform admin's resource/action) (type = INVALID_ROLE)
+         *  - maybe remove this if clause since outter clause reject the promise with same object
+         *  - procedure: (maybe need to create ui to avoid user from receive this message)
+         *    1. set message and reject so wrapping function receive the rejected promise
          * case 1: acces token cookie is expired but refresh token (type = ACCESS_TOKEN_EXPIRED)
          *  - procedure: 
          *    1. receive 401 access token is expired
@@ -79,48 +80,90 @@ export const request = async (requestContent: RequestContentType): Promise<Respo
          *  1. check error.response.data.type is ACCESS_TOKEN_EXPIRED
          *   1.1. if so, send refresh access token request
          *    1.1.1 if success, re-request with the original request 
-         *    1.1.2 if failed, return Promise.reject(error) to call catch clause in request.ts  
-         *  2. return Promise.reject(error) to call catch clause in request.ts 
+         *    1.1.2 if failed, return Promise.reject(error) to merge this outer 'catch' clause and return this reject promise (type = ACCESS_TOKEN_AND_REFRESH_TOKEN_EXPIRED)
          *
          **/
+
+        if (error.response.data.type === Error401ResponseDataTypeEnum.UNAUTHORIZED_ROLE) {
+          debug('user try to access/perform unauthorized resource/action')
+          // don't need to remove auth from localstorage
+          // since access token and refresh token is valid
+          return Promise.reject({
+            type: Error401ResponseDataTypeEnum.UNAUTHORIZED_ROLE,
+            status: ResponseResultStatusEnum.FAILURE,
+            errorMsg: error.response.data.message
+          })
+        }
         if (error.response.data.type === Error401ResponseDataTypeEnum.ACCESS_TOKEN_EXPIRED) {
-          console.log('start handling error 401 in interceptor')
+          debug('user\'s access token has expired')
+          debug("start request for refresh access token")
           // 1.1. if so, send refresh access token request
-          axios.request({
+          return api.request({
             method: RequestMethodEnum.POST,
             url: '/token/refresh',
           })
-            // 1.1.1 if success, re-request with the original request
             .then((response: AxiosResponse) => {
+              // 1.1.1 if success, re-request with the original request
               // when successfully refreshed access token (case2)
-              // TODO: #DOUBT below
-              request(requestContent)
+              // use recursive Promise; call wrapping function again since refresh access token and automatically call original request of user
+              debug("successfully got new access token from refresh request")
+              return request(requestContent)
             })
-            // 1.1.2 if failed, return Promise.reject(error) to call catch clause in request.ts
             .catch((error: AxiosError<ErrorResponseDataType>) => {
-              return Promise.reject(error)
+              // 1.1.2 if failed, return Promise.reject(error) to merge this outer 'catch' clause and return this reject promise (type = ACCESS_TOKEN_AND_REFRESH_TOKEN_EXPIRED)
+              // remove auth object from localstorage since user does not have any valid access & refresh token
+              debug("refresh access token failed. refresh token also has expired. route user to logn page")
+              // make sure to remove auth from localstorage
+              // TODO: better to move hook to ui concern (not here)
+              //const { authDispatch } = useAuthContext()
+              //authDispatch({
+              //  type: 'logout'
+              //})
+              return Promise.reject({
+                type: Error401ResponseDataTypeEnum.ACCESS_TOKEN_AND_REFRESH_TOKEN_EXPIRED,
+                status: ResponseResultStatusEnum.FAILURE,
+                errorMsg: error.response.data.message
+              })
             })
-
-          // 2. return Promise.reject(error) to call catch clause in request.ts
-          return Promise.reject(error)
+        }
+        if (error.response.data.type === Error401ResponseDataTypeEnum.NEITHER_ACCESS_TOKEN_AND_REFRESH_TOKEN_EXIST) {
+          debug('user seems does not have any tokens')
+          // make sure to remove auth from localstorage
+          // TODO: better to move hook to ui concern (not here)
+          //const { authDispatch } = useAuthContext()
+          //authDispatch({
+          //  type: 'logout'
+          //})
+          return Promise.reject({
+            type: Error401ResponseDataTypeEnum.NEITHER_ACCESS_TOKEN_AND_REFRESH_TOKEN_EXIST,
+            status: ResponseResultStatusEnum.FAILURE,
+            errorMsg: error.response.data.message
+          })
         }
 
         // need to route user to login page
         // does react does automatically (because of <AuthRoute/>?
         // or need to explicitly specify route here?
-        // who knows
-        const { authDispatch } = useAuthContext()
-        authDispatch({
-          type: 'logout'
-        })
+        // who knows?
       }
 
       /** 422 (Invalid jwt (access) token) **/
       if (error.response.status === 422) {
         debug('it\'s 422 error')
-        // TODO: implement it
+        // make sure to remove auth from localstorage
+        // TODO: better to move hook to ui concern (not here)
+        //const { authDispatch } = useAuthContext()
+        //authDispatch({
+        //  type: 'logout'
+        //})
+        return Promise.reject({
+          status: ResponseResultStatusEnum.FAILURE,
+          errorMsg: error.response.data.message
+        })
       }
 
+      // other error status like 400 (Bad Request), 404 (NOT FOUND) and so on
+      //  - just reject promise and don't need to remove auth from local storage
       return Promise.reject({
         status: ResponseResultStatusEnum.FAILURE,
         errorMsg: error.response.data.message
