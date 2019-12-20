@@ -17,7 +17,6 @@ class LoginPage(HeaderPage, FooterPage):
         super().__init__(driver)
 
         if independent:
-            print('inside independent clause')
             self.driver.get(login_url)
             # need this one to avoid 'NosuchElementException'
             # - esp for when find element by link test
