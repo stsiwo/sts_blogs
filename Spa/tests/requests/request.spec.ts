@@ -94,6 +94,7 @@ describe('r-1: request module testing', () => {
             })
 
           expect(result).toStrictEqual({
+            needLogout: true,
             type: Error401ResponseDataTypeEnum.ACCESS_TOKEN_AND_REFRESH_TOKEN_EXPIRED,
             status: ResponseResultStatusEnum.FAILURE,
             errorMsg: 'both refresh token and access token have expired'

@@ -26,6 +26,7 @@ export enum Error401ResponseDataTypeEnum {
 }
 
 export declare type ResponseResultType = {
+  needLogout?: boolean,
   data?: any
   status: ResponseResultStatusEnum
   errorMsg?: string 

@@ -113,13 +113,12 @@ export const request = async (requestContent: RequestContentType): Promise<Respo
               // 1.1.2 if failed, return Promise.reject(error) to merge this outer 'catch' clause and return this reject promise (type = ACCESS_TOKEN_AND_REFRESH_TOKEN_EXPIRED)
               // remove auth object from localstorage since user does not have any valid access & refresh token
               debug("refresh access token failed. refresh token also has expired. route user to logn page")
-              // make sure to remove auth from localstorage
-              // TODO: better to move hook to ui concern (not here)
-              //const { authDispatch } = useAuthContext()
-              //authDispatch({
-              //  type: 'logout'
-              //})
+
+              // TODO: do i need to implement this?? 
+              //  - reqeust for remove the expired tokens
+              
               return Promise.reject({
+                needLogout: true,
                 type: Error401ResponseDataTypeEnum.ACCESS_TOKEN_AND_REFRESH_TOKEN_EXPIRED,
                 status: ResponseResultStatusEnum.FAILURE,
                 errorMsg: error.response.data.message
@@ -128,12 +127,6 @@ export const request = async (requestContent: RequestContentType): Promise<Respo
         }
         if (error.response.data.type === Error401ResponseDataTypeEnum.NEITHER_ACCESS_TOKEN_AND_REFRESH_TOKEN_EXIST) {
           debug('user seems does not have any tokens')
-          // make sure to remove auth from localstorage
-          // TODO: better to move hook to ui concern (not here)
-          //const { authDispatch } = useAuthContext()
-          //authDispatch({
-          //  type: 'logout'
-          //})
           return Promise.reject({
             type: Error401ResponseDataTypeEnum.NEITHER_ACCESS_TOKEN_AND_REFRESH_TOKEN_EXIST,
             status: ResponseResultStatusEnum.FAILURE,
@@ -149,13 +142,13 @@ export const request = async (requestContent: RequestContentType): Promise<Respo
 
       /** 422 (Invalid jwt (access) token) **/
       if (error.response.status === 422) {
+        /**
+         * meaning of invalid??
+         *  - means member user try to access different member's resource??
+         *  - i'm not sure
+         *  TODO: make sure.
+         **/
         debug('it\'s 422 error')
-        // make sure to remove auth from localstorage
-        // TODO: better to move hook to ui concern (not here)
-        //const { authDispatch } = useAuthContext()
-        //authDispatch({
-        //  type: 'logout'
-        //})
         return Promise.reject({
           status: ResponseResultStatusEnum.FAILURE,
           errorMsg: error.response.data.message

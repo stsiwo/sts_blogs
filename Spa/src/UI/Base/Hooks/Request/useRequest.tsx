@@ -4,6 +4,7 @@ import { AxiosError, CancelTokenSource } from 'axios';
 import { ResponseResultStatusEnum, ResponseResultType } from 'requests/types';
 import { request, getCancelTokenSource } from 'requests/request';
 import { buildQueryString } from '../../../../utils';
+import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
 var debug = require('debug')('ui:FetchStatus')
 
 
@@ -12,6 +13,8 @@ export const useRequest = (input: UseRequestStatusInputType): UseRequestStatusOu
   const [currentRequestStatus, setRequestStatus] = React.useState<RequestStatusType>({
     status: ResponseResultStatusEnum.INITIAL
   })
+
+  const { authDispatch } = useAuthContext()
 
   const [currentCancelSource, setCancelSource] = React.useState<CancelTokenSource>(null)
 
@@ -50,6 +53,14 @@ export const useRequest = (input: UseRequestStatusInputType): UseRequestStatusOu
         debug('fetch data then clause failed at sendRequest')
         /** this is called when above 'then' caluse failed **/
         /** or 'request' function reject promise **/
+
+        /** logout if error type is 401 (ACCESS_AND_REFRESH_TOKEN_EXIPRED and INVALID_TOKEN) **/
+        if (result.needLogout) {
+          authDispatch({
+            type: 'logout'
+          })
+        }
+
         setRequestStatus({
           status: ResponseResultStatusEnum.FAILURE,
           errorMsg: result.errorMsg
