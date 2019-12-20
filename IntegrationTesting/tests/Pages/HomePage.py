@@ -21,14 +21,14 @@ class HomePage(HeaderPage, FooterPage):
             'popular_btn': HomePageLocators.POPULAR_BUTTON,
             }
 
-    def __init__(self, driver):
+    def __init__(self, driver, independent: bool = True):
         super().__init__(driver)
-        # only set base url for HomePage
-        self.driver.get(base_url)
-        # need this one to avoid 'NosuchElementException'
-        # - esp for when find element by link test
-        # reference: https://stackoverflow.com/questions/6936149/how-to-use-find-element-by-link-text-properly-to-not-raise-nosuchelementexcept
-        wait_for_element(self.driver, By.ID, 'root')
+        if independent:
+            self.driver.get(base_url)
+            # need this one to avoid 'NosuchElementException'
+            # - esp for when find element by link test
+            # reference: https://stackoverflow.com/questions/6936149/how-to-use-find-element-by-link-text-properly-to-not-raise-nosuchelementexcept
+            wait_for_element(self.driver, By.ID, 'root')
 
     def click_element(self, locator: str, waiting_element_locator: str = None):
         if locator not in self.element_locators:
