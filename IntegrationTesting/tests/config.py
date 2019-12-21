@@ -27,3 +27,9 @@ available_driver_options = ['chrome', 'firefox']
 available_page_options = ['home', 'signup', 'login']
 
 available_ssize_options = ['mobile', 'tablet', 'laptop', 'desktop']
+
+test_user_name = 'test member'
+
+test_user_email = 'test@member.com'
+
+test_user_password = 'test_member'

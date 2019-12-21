@@ -77,7 +77,7 @@ const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCom
           onInputFocus={handleInitialFocusEvent}
           placeholder={"enter your email..."}
           errorMsg={currentValidationError.email}
-          errorStyle={'small-input-error'}
+          errorStyle={'email-error small-input-error'}
         />
         <Input
           id={"password"}
@@ -89,7 +89,7 @@ const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCom
           onInputFocus={handleInitialFocusEvent}
           placeholder={"enter your password..."}
           errorMsg={currentValidationError.password}
-          errorStyle={'small-input-error'}
+          errorStyle={'password-error small-input-error'}
           inputType={'password'}
         />
         <Input
@@ -102,14 +102,14 @@ const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCom
           onInputFocus={handleInitialFocusEvent}
           placeholder={"enter your password again ..."}
           errorMsg={currentValidationError.confirm}
-          errorStyle={'small-input-error'}
+          errorStyle={'confirm-error small-input-error'}
           inputType={'password'}
         />
         <div className="signup-login-link-wrapper">
           <span>if you don&rsquo;t have account,  </span><Link to={`/signup`} >Signup Page</Link>
         </div>
         <div className="login-form-content-btn-wrapper">
-          {(currentValidationError.submit && <div className="input-error">{currentValidationError.submit}</div>)}
+          {(currentValidationError.submit && <div className="summary-error input-error">{currentValidationError.submit}</div>)}
           <input className="btn" type="button" onClick={handleSubmitClickEvent} value="Login" role="login-btn"/>
         </div>
       </form>
