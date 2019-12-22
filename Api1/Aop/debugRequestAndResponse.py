@@ -1,5 +1,5 @@
 from Configs.appConfig import app
-from flask import Response
+from flask import Response, request
 
 
 @app.after_request
@@ -20,3 +20,14 @@ def after(response: Response):
     print(response.get_data())
 
     return response
+
+
+@app.before_request
+def before_request():
+    print('*** debugging request ***')
+    print('*** request header ***')
+    print(request.headers)
+    print('*** request cookies ***')
+    print(request.cookies)
+    print('*** request data ***')
+    print(request.data)

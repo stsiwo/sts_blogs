@@ -42,8 +42,12 @@ JWT_COOKIE_DOMAIN = os.getenv('JWT_COOKIE_DOMAIN', 'aaa')
 JWT_COOKIE_SAMESITE = None
 
 JWT_ACCESS_TOKEN_EXPIRES = int(os.getenv('JWT_ACCESS_TOKEN_EXPIRES', 180))
+JWT_REFRESH_TOKEN_EXPIRES = int(os.getenv('JWT_REFRESH_TOKEN_EXPIRES', 180))
 
 JWT_SESSION_COOKIE = False
+
+# The request types that will use CSRF protection
+JWT_CSRF_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
 
 # Set the cookie paths, so that you are only sending your access token
 # cookie to the access endpoints, and only sending your refresh token

@@ -34,3 +34,9 @@ export const buildQueryString = (queryStringObject: QueryStringType = {}): strin
 export const generateBlogContentPublicImageUrl = (userId: string, imageName: string): URL => {
   return new URL(process.env.PUBLIC_IMAGE_PATH + userId + '/' + imageName, process.env.API1_URL)
 }
+
+export function getCookie(name: string): string {
+  var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  if (match) return match[2];
+  else return null;
+}

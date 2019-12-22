@@ -56,33 +56,6 @@ export const request = async (requestContent: RequestContentType): Promise<Respo
       // if 401 (unauthorized error), remove userInfo from localStorage
       if (error.response.status === 401) {
         debug('it\'s 401 error')
-        /**
-         * 401 status logic (refresh token, invalid role, no tokens)
-         *
-         * case 0: invalid role (e.g., member try to access/perform admin's resource/action) (type = INVALID_ROLE)
-         *  - maybe remove this if clause since outter clause reject the promise with same object
-         *  - procedure: (maybe need to create ui to avoid user from receive this message)
-         *    1. set message and reject so wrapping function receive the rejected promise
-         * case 1: acces token cookie is expired but refresh token (type = ACCESS_TOKEN_EXPIRED)
-         *  - procedure: 
-         *    1. receive 401 access token is expired
-         *    2. send request for refresh access token
-         *      2.1. success: get new access token
-         *        2.1.1. re-request the original request
-         *      2.2. fail; refresh token is also expired (type = ACCESS_TOKEN_AND_REFRESH_TOKEN_EXPIRED)
-         *        2.2.1. route user to login page --> the same, so delegate to request.ts
-         * case 2: client does not hvae any access token and refresh token (type = NEITHER_ACCESS_TOKEN_AND_REFRESH_TOKEN_EXIST)
-         *  - procedure: 
-         *    1. receive 401 
-         *    2. route user to login page  --> the same, so delegate to request.ts
-         *
-         * implementation: 
-         *  1. check error.response.data.type is ACCESS_TOKEN_EXPIRED
-         *   1.1. if so, send refresh access token request
-         *    1.1.1 if success, re-request with the original request 
-         *    1.1.2 if failed, return Promise.reject(error) to merge this outer 'catch' clause and return this reject promise (type = ACCESS_TOKEN_AND_REFRESH_TOKEN_EXPIRED)
-         *
-         **/
 
         if (error.response.data.type === Error401ResponseDataTypeEnum.UNAUTHORIZED_ROLE) {
           debug('user try to access/perform unauthorized resource/action')
@@ -128,6 +101,7 @@ export const request = async (requestContent: RequestContentType): Promise<Respo
         if (error.response.data.type === Error401ResponseDataTypeEnum.NEITHER_ACCESS_TOKEN_AND_REFRESH_TOKEN_EXIST) {
           debug('user seems does not have any tokens')
           return Promise.reject({
+            needLogout: true,
             type: Error401ResponseDataTypeEnum.NEITHER_ACCESS_TOKEN_AND_REFRESH_TOKEN_EXIST,
             status: ResponseResultStatusEnum.FAILURE,
             errorMsg: error.response.data.message
