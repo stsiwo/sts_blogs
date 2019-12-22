@@ -13,3 +13,6 @@ class Comment(BaseModel):
     blogId = db.Column(db.Integer, db.ForeignKey('blogs.id'), nullable=False)
 
     authorId = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+
+    # TODO: author relationship
+    # https://app.clickup.com/t/3m558t

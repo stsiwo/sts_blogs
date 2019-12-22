@@ -28,6 +28,8 @@ class BlogCommentService(object):
         if blog is None:
             raise BlogNotFoundException
 
+        # TODO: don't return 404 code when comments deos not exists. return 2xx code with empty array
+        # https://app.clickup.com/t/3m59zu
         if len(blog.comments) == 0:
             raise CommentNotFoundException
 
@@ -67,6 +69,8 @@ class BlogCommentService(object):
         if blog is None:
             raise BlogNotFoundException
 
+        # TODO: don't return 404 code when comments deos not exists. return 2xx code
+        # https://app.clickup.com/t/3m59zu
         if len(blog.comments) == 0:
             raise CommentNotFoundException
 

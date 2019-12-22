@@ -40,3 +40,6 @@ class Users(Resource):
         response = jsonify(updatedUser)
         response.status_code = 200
         return response
+
+    # TODO: implement DELETE endpoint
+    # https://app.clickup.com/t/3m5af0

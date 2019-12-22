@@ -29,7 +29,9 @@ class PasswordResetService(object):
         print("start requestForgotPasswordService service")
 
         user = self._userRepository.find(email=email)
-
+        
+        # TODO: remove this and use 'email detection feature (type ahead) in front end
+        # https://app.clickup.com/t/3m56ux
         if user is None:
             raise EmailNotFoundException
 

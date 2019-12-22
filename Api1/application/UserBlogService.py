@@ -27,8 +27,12 @@ class UserBlogService(object):
         app.logger.info("start userblog user service")
         print("start userblog user service")
 
+        # TODO; if user id does not exist, should return 404 code
+        # https://app.clickup.com/t/3m574q
         blogs: List[Blog] = self._blogRepository.find(userId=user_id)
 
+        # TODO: should not return error (404) status when blogs are not found. should return empty array with 2xx code
+        # https://app.clickup.com/t/3m574g
         if len(blogs) == 0:
             raise BlogNotFoundException(message='specified user does not have any blog')
 
@@ -40,6 +44,9 @@ class UserBlogService(object):
     def createNewBlogService(self, user_id: str, title: str, subtitle: str, content: str, mainImageFile: FileStorage = None) -> Blog:
         app.logger.info("start userblog user service")
         print("start userblog user service")
+
+        # TODO; if user id does not exist, should return 404 code
+        # https://app.clickup.com/t/3m574q
 
         mainImageUrl = self._fileService.saveImageFileToDir(mainImageFile, user_id) if mainImageFile is not None else None
 
@@ -60,8 +67,13 @@ class UserBlogService(object):
         app.logger.info("start delete all user blog service")
         print("start delete all user blog service")
 
+        # TODO; if user id does not exist, should return 404 code
+        # https://app.clickup.com/t/3m574q
+
         # delete() returns # of object deleted
         result = self._blogRepository.deleteByUserId(userId=user_id)
 
+        # TODO: should not return error (404) status when blogs are not found. should return 2xx status code
+        # https://app.clickup.com/t/3m574g
         if result == 0:
             raise BlogNotFoundException(message='specified user does not have any blog')

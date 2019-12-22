@@ -72,6 +72,9 @@ class Blogs(Resource):
     #     response.status_code = 204
     #     return response
 
+    # TODO: implement this
+    # https://app.clickup.com/t/3m5a5b
+
     # delete whole blogs
     # def delete(self):
     #     response = jsonify({})
