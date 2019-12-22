@@ -10,6 +10,7 @@ from Resources.validators.userBlogValidator import userBlogValidator
 from Infrastructure.DataModels.BlogModel import Blog
 from Resources.viewModels.BlogSchema import BlogSchema
 from utils.util import printObject
+from Resources.parsers.QueryStringParser import QueryStringParser
 
 
 class UserBlogs(Resource):
@@ -21,6 +22,7 @@ class UserBlogs(Resource):
     def __init__(self):
         self._userBlogService = UserBlogService()
         self._blogSchema = BlogSchema()
+        self._parser = QueryStringParser()
 
     # get all blogs
     # IMPORTANT NOTE ==================================
@@ -32,10 +34,11 @@ class UserBlogs(Resource):
     def get(self, user_id: str):
         app.logger.info("start processing get request at /blogs")
         print("start processing get request at /blogs")
+        queryString: Dict = self._parser.parse(request.args)
 
-        blogs: List[Dict] = self._userBlogService.getAllUserBlogService(user_id)
+        result: List[Dict] = self._userBlogService.getAllUserBlogService(queryString, userId=user_id)
 
-        response = jsonify(blogs)
+        response = jsonify(result)
         response.status_code = 200
         return response
 

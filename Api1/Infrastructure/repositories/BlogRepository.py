@@ -16,7 +16,7 @@ class BlogRepository(BaseRepository[Blog]):
         super().__init__()
         self._blogFilterBuilder = BlogFilterBuilder()
 
-    def getAll(self, queryString: Dict = {}) -> Dict:
+    def getAll(self, queryString: Dict = {}, userId: str = None) -> Dict:
 
         # base
         query: Query = self._session.query(Blog).group_by(Blog.id)
@@ -27,6 +27,11 @@ class BlogRepository(BaseRepository[Blog]):
 
         # sort
         sortMap: Dict = SortMap.get(queryString.get('sort', '0'))
+
+        # specific user
+        if userId is not None:
+            query = query.join(Blog.user, aliased=True).filter_by(id=userId)
+
         query = query.order_by(sortMap.get('order')(getattr(Blog, sortMap.get('attr'))))
 
         print('sql query: ')

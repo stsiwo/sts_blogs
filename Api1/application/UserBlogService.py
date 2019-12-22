@@ -23,22 +23,17 @@ class UserBlogService(object):
         self._blogRepository = BlogRepository()
         self._fileService = FileService()
 
-    def getAllUserBlogService(self, user_id: str) -> List[Dict]:
+    def getAllUserBlogService(self, queryString: Dict, userId: str = None) -> List[Dict]:
         app.logger.info("start userblog user service")
         print("start userblog user service")
 
         # TODO; if user id does not exist, should return 404 code
         # https://app.clickup.com/t/3m574q
-        blogs: List[Blog] = self._blogRepository.find(userId=user_id)
+        result: Dict = self._blogRepository.getAll(queryString, userId)
 
-        # TODO: should not return error (404) status when blogs are not found. should return empty array with 2xx code
-        # https://app.clickup.com/t/3m574g
-        if len(blogs) == 0:
-            raise BlogNotFoundException(message='specified user does not have any blog')
+        result['blogs']: List[Dict] = [self._blogSchema.dump(blog) for blog in result['blogs']]
 
-        serializedBlogs: List[Dict] = [self._blogSchema.dump(blog) for blog in blogs]
-
-        return serializedBlogs
+        return result
 
     @db_transaction()
     def createNewBlogService(self, user_id: str, title: str, subtitle: str, content: str, mainImageFile: FileStorage = None) -> Blog:

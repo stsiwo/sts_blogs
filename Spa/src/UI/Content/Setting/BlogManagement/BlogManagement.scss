@@ -1,3 +1,8 @@
 @import '../../../Base/Css/GlobalVariables';
 @import '../../../Base/Css/Mixins';
 
+.blog-management-items-wrapper {
+  height: 68vh;
+  max-height: 68vh;
+  overflow-y: scroll;
+}

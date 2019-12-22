@@ -154,12 +154,10 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
           failureMsg={'failed'}
         />
         <div className="blog-management-items-wrapper">
-          {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FETCHING &&
-            <p role="fetching">fetching ... </p>)}
-          {(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING &&
-            currentBlogs.length === 0 && <p>blogs are empty</p>)}
-          {(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING &&
-            currentBlogs.length !== 0 && renderBlogs(currentBlogs))}
+          {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FETCHING && <p role="fetching">fetching ... </p>)}
+          {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FAILURE  && <p>sorry.. blogs are not currently available...</p>)}
+          {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.SUCCESS && currentBlogs.length === 0 && <p>there is no blog based on the your sort & filter</p>)}
+          {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.SUCCESS && currentBlogs.length !== 0 && renderBlogs(currentBlogs))}
         </div>
         <Pagination
           currentPaginationStatus={currentPaginationStatus}
