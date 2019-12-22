@@ -1,6 +1,6 @@
 import { createContext, useContext, useReducer, Reducer, ReducerState, Dispatch, ReducerAction } from "react";
 import { AuthContextType, AuthContextActionType, AuthType } from "./types";
-import { storeUserInfo, removeUserInfo } from "../../../../storages/user";
+import { storeUserInfo, removeUserInfo, isUserLoggedIn, getUserInfo } from "../../../../storages/user";
 import { Action } from "redux";
 
 
@@ -36,7 +36,8 @@ const updateAuthContextReducer: Reducer<AuthType, AuthContextActionType> = (stat
 
 export const useUpdateAuthContextReducer = (initialAuth: AuthType = null): [ReducerState<Reducer<AuthType, AuthContextActionType>>, Dispatch<ReducerAction<Reducer<AuthType, AuthContextActionType>>>] => {
 
-  const defaultAuth = initialAuth ? initialAuth : { authed: false }
+  //const defaultAuth = initialAuth ? initialAuth : { authed: false }
+  const defaultAuth = isUserLoggedIn() ? { authed: true, user: getUserInfo() } : { authed: false }
   return useReducer(updateAuthContextReducer, defaultAuth)
 }
 
