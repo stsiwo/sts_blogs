@@ -7,5 +7,6 @@ from Resources.viewModels.RoleSchema import RoleSchema
 class UserSchema(ma.ModelSchema):
     class Meta:
         model = User
+        exclude = ['password', 'email']
 
     roles = Nested(RoleSchema, many=True)
