@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 import os
 from pathlib import Path
+from datetime import timedelta
 
 
 # load env file based on the 'FLASK_ENV'
@@ -42,6 +43,8 @@ JWT_COOKIE_SAMESITE = None
 
 JWT_ACCESS_TOKEN_EXPIRES = int(os.getenv('JWT_ACCESS_TOKEN_EXPIRES', 180))
 
+JWT_SESSION_COOKIE = False
+
 # Set the cookie paths, so that you are only sending your access token
 # cookie to the access endpoints, and only sending your refresh token
 # to the refresh endpoint. Technically this is optional, but it is in
@@ -63,6 +66,7 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # SESSION_COOKIE_SAMESITE = None
 SESSION_COOKIE_HTTPONLY = True
+# PERMANENT_SESSION_LIFETIME = timedelta(seconds=30)
 
 # image files
 UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER', 'uploads')
