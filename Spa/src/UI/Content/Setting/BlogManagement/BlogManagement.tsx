@@ -48,25 +48,13 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   const { currentRequestStatus: currentInitialBlogsFetchStatus, setRequestStatus: setInitialBlogsFetchStatus, sendRequest: sendBlogsFetchRequest, currentCancelSource: currentFetchCancelSource } = useRequest({})
   const { currentRequestStatus: currentDeleteRequestStatus, setRequestStatus: setDeleteRequestStatus, sendRequest: sendDeleteRequest, currentCancelSource: currentDeleteCancelSource } = useRequest({})
   const [currentRefreshCount, setRefreshCount] = React.useState<number>(null)
-  const callbackAfterApiFetch = (data: BlogListResponseDataType): void => {
-    // assign fetched blogs data to this state
-    if (data) {
-      setBlogs(data.blogs)
-
-      // assign new total count of pagination
-      setPaginationStatus({
-        ...currentPaginationStatus,
-        totalCount: data.totalCount
-      })
-    }
-  }
 
   const queryString = {
     page: currentPaginationStatus.page,
     limit: currentPaginationStatus.limit,
     tags: currentFilters.tags.map((tag: TagType) => tag.name),
-    startDate: currentFilters.creationDate.start ? currentFilters.creationDate.start.toJSON() : null,
-    endDate: currentFilters.creationDate.end ? currentFilters.creationDate.end.toJSON() : null,
+    startDate: currentFilters.startDate ? currentFilters.startDate.toJSON() : null,
+    endDate: currentFilters.endDate ? currentFilters.endDate.toJSON() : null,
     keyword: currentFilters.keyword,
     sort: currentSort,
   }
@@ -84,7 +72,7 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
       .then((result: ResponseResultType<BlogListResponseDataType>) => {
         if (result.status === ResponseResultStatusEnum.SUCCESS) {
           console.log("fetch success and receive data")
-          console.log(result.data.blogs.length)
+          console.log(result.data)
           setBlogs(result.data.blogs)
 
           // assign new total count of pagination

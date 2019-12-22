@@ -9,7 +9,7 @@ const Pagination: React.FunctionComponent<PaginationPropType> = (props: Paginati
 
   //const pageResult: BuildPaginationResultType = buildPagination(props.currentPaginationStatus.offset, props.currentPaginationStatus.totalCount, props.currentPaginationStatus.limit)
   // delete when it is done
-  const pageResult: BuildPaginationResultType = buildPagination(1000, 40, 1)
+  const pageResult: BuildPaginationResultType = buildPagination(props.currentPaginationStatus.totalCount, props.currentPaginationStatus.limit, props.currentPaginationStatus.page)
   /** REFACTOR **/
   // setter should be done here (not inside api fetch component)
   const handlePageClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {

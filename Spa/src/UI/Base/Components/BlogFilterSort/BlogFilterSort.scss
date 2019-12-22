@@ -20,7 +20,7 @@
   }
 
   @media only screen and (min-width: $tabletSize + 1 + "px") {
-    height: 100%;
+   // height: 100%;
   }
 }
 
@@ -97,6 +97,10 @@
 
   @media only screen and (min-width: $tabletSize + 1 + "px") {
     text-align: left;
+  }
+
+  & > .aside-filter-icon-wrapper {
+    vertical-align: middle;
   }
 }
 

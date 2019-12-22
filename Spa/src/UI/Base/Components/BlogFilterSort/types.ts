@@ -11,14 +11,10 @@ export declare type TagType = {
   name: string
 }
 
-export declare type DateRangeType = {
-  start?: Date
-  end?: Date
-}
-
 export declare type FilterType = {
   tags: TagType[]
-  creationDate: DateRangeType
+  startDate: Date
+  endDate: Date
   keyword: string
 }
 

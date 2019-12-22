@@ -11,6 +11,7 @@ const PageLimitSelect: React.FunctionComponent<PageLimitSelectPropType> = (props
     debug('select option change event handler')
     debug(e.currentTarget.value)
     props.currentPaginationStatus.limit = parseInt(e.currentTarget.value)
+    props.currentPaginationStatus.page = 1 
     props.setPaginationStatus({
       ...props.currentPaginationStatus
     })

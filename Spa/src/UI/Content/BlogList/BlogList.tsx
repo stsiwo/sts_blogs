@@ -70,8 +70,8 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
     page: currentPaginationStatus.page,
     limit: currentPaginationStatus.limit,
     tags: currentFilters.tags.map((tag: TagType) => tag.name),
-    startDate: currentFilters.creationDate.start ? currentFilters.creationDate.start.toJSON() : null,
-    endDate: currentFilters.creationDate.end ? currentFilters.creationDate.end.toJSON() : null,
+    startDate: currentFilters.startDate ? currentFilters.startDate.toJSON() : null,
+    endDate: currentFilters.endDate ? currentFilters.endDate.toJSON() : null,
     keyword: currentFilters.keyword,
     sort: currentSort,
   }
@@ -90,6 +90,8 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
     })
       .then((result: ResponseResultType<BlogListResponseDataType>) => {
         if (result.status === ResponseResultStatusEnum.SUCCESS) {
+          debug('fetch blog list success.')
+          debug(result.data.blogs)
           setBlogs(result.data.blogs)
           // assign new total count of pagination
           setPaginationStatus({
@@ -153,8 +155,9 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
         />
         <div className="blog-list-items-wrapper">
           {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FETCHING && <p role="fetching">fetching ... </p>)}
-          {(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING && currentBlogs.length === 0 && <p>blogs are empty</p>)}
-          {(currentInitialBlogsFetchStatus.status !== ResponseResultStatusEnum.FETCHING && currentBlogs.length !== 0 && renderBlogs(currentBlogs))}
+          {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FAILURE  && <p>sorry.. blogs are not currently available...</p>)}
+          {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.SUCCESS && currentBlogs.length === 0 && <p>there is no blog based on the your sort & filter</p>)}
+          {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.SUCCESS && currentBlogs.length !== 0 && renderBlogs(currentBlogs))}
         </div>
         <Pagination currentPaginationStatus={currentPaginationStatus} setPaginationStatus={setPaginationStatus} />
       </div>

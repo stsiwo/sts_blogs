@@ -9,7 +9,8 @@ export const useBlogFilterSort = (input: UseBlogFilterSortInput): UseBlogFilterS
 
   const [currentFilters, setFilters] = React.useState<FilterType>({
     tags: initialTags,
-    creationDate: {},
+    startDate: null,
+    endDate: null,
     keyword: initialKeyword 
   })
   const [currentSort, setSort] = React.useState<number>(0)

@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 import { StateType } from 'states/types';
 import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
 import { useResponsive } from 'Hooks/Responsive/useResponsive';
-import { BlogFilterSortPropType } from './types';
+import { BlogFilterSortPropType, FilterType } from './types';
 import { sortList, SortType } from 'domain/blog/Sort';
 import { TagType } from 'domain/tag/TagType';
 import './BlogFilterSort.scss'
@@ -48,14 +48,14 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
   }
 
   const handleFilterCreationDateStartChangeEvent = (startDate: Date): void => {
-    props.currentFilters.creationDate.start = startDate
+    props.currentFilters.startDate = startDate
     props.setFilters({
       ...props.currentFilters
     })
   }
 
   const handleFilterCreationDateEndChangeEvent = (endDate: Date): void => {
-    props.currentFilters.creationDate.end = endDate
+    props.currentFilters.endDate = endDate
     props.setFilters({
       ...props.currentFilters
     })
@@ -69,13 +69,30 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
 
   const handleKeywordChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
     debug('handling keyword change ...')
-    if (e.currentTarget.value === "") return false
 
     debug(e.currentTarget.value)
 
     props.currentFilters.keyword = e.currentTarget.value
     props.setFilters({
       ...props.currentFilters
+    })
+  }
+
+  const handleFilterDeleteIconClickEvent: React.EventHandler<React.MouseEvent<HTMLElement>> = (e) => {
+    const targetFilterKey = e.currentTarget.getAttribute('data-filter-key')
+    props.setFilters({
+      ...props.currentFilters,
+      [targetFilterKey]: ''
+    })
+  }
+
+  const handleTagDeleteClickEvent: React.EventHandler<React.MouseEvent<HTMLElement>> = (e) => {
+    const targetTag: string = e.currentTarget.getAttribute('data-tag')
+    props.setFilters((prev: FilterType) => {
+      prev.tags.splice(prev.tags.indexOf(targetTag as unknown as TagType), 1)
+      console.log('inside tag delete')
+      console.log(prev)
+      return { ...prev }
     })
   }
 
@@ -132,6 +149,7 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
           key={tag.name}
           wrapperStyle={wrapperStyle}
           nameStyle={nameStyle}
+          handleTagDeleteClickEvent={handleTagDeleteClickEvent}
         />
       )
     })
@@ -172,32 +190,41 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
         <div className="aside-filter-input-wrapper" >
           <label htmlFor="keyword" className="aside-filter-label">Keyword</label>&nbsp;
           <input type="text" name="keyword" id="keyword" className="white-input aside-filter-input" onChange={handleKeywordChangeEvent} value={props.currentFilters.keyword} placeholder="enter keyword here ..." />
+          <div className="small-icon-wrapper aside-filter-icon-wrapper" role="keyword-filter-delete-icon" onClick={handleFilterDeleteIconClickEvent} data-filter-key='keyword'>
+            <MdClose className="small-icon" />
+          </div>
         </div>
         <div className="aside-filter-input-wrapper" >
           <label htmlFor="start-date-input" className="aside-filter-label">Start Date</label>&nbsp;
           <DatePicker
-            selected={props.currentFilters.creationDate.start}
+            selected={props.currentFilters.startDate}
             onChange={handleFilterCreationDateStartChangeEvent}
             selectsStart
-            startDate={props.currentFilters.creationDate.start}
-            maxDate={props.currentFilters.creationDate.end}
+            startDate={props.currentFilters.startDate}
+            maxDate={props.currentFilters.endDate}
             id='start-date-input'
             className="white-input aside-filter-input"
             placeholderText="click to pick start date here ..."
           />
+          <div className="small-icon-wrapper aside-filter-icon-wrapper" role="start-date-filter-delete-icon" onClick={handleFilterDeleteIconClickEvent} data-filter-key='startDate'>
+            <MdClose className="small-icon" />
+          </div>
         </div>
         <div className="aside-filter-input-wrapper" >
           <label htmlFor="end-date-input" className="aside-filter-label">End Date</label>
           <DatePicker
-            selected={props.currentFilters.creationDate.end}
+            selected={props.currentFilters.endDate}
             onChange={handleFilterCreationDateEndChangeEvent}
             selectsEnd
-            endDate={props.currentFilters.creationDate.end}
-            minDate={props.currentFilters.creationDate.start}
+            endDate={props.currentFilters.endDate}
+            minDate={props.currentFilters.startDate}
             id="end-date-input"
             className="white-input aside-filter-input"
             placeholderText="click to pick end date here ..."
           />
+          <div className="small-icon-wrapper aside-filter-icon-wrapper" role="end-date-filter-delete-icon" onClick={handleFilterDeleteIconClickEvent} data-filter-key='endDate'>
+            <MdClose className="small-icon" />
+          </div>
         </div>
         <div className="aside-filter-input-wrapper" >
           <label htmlFor="tag" className="aside-filter-label">Tags</label>

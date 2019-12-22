@@ -1,6 +1,11 @@
 @import '../../Base/Css/GlobalVariables';
 @import '../../Base/Css/Mixins';
 
+.blog-list-items-wrapper {
+  height: 75vh;
+  max-height: 75vh;
+  overflow-y: scroll;
+}
 
 .blog-list-items-item-wrapper {
   color: black;
