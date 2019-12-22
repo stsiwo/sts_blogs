@@ -17,7 +17,7 @@ class SignupService(object):
     def __init__(self):
         self._roleRepository = RoleRepository()
         self._userRepository = UserRepository()
-        self._userSchema = UserSchema()
+        self._userSchema = UserSchema(only=['id', 'name', 'avatarUrl', 'roles'])
 
     @db_transaction()
     def registerUserService(self, name: str, email: str, password: str):

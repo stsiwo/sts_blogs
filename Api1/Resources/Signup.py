@@ -29,7 +29,7 @@ class Signup(Resource):
                 )
 
         # construct response
-        response = jsonify({'success': True})
+        response = jsonify(newUser)
         response.status_code = 200
 
         # create jwt tokens
