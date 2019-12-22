@@ -1,8 +1,10 @@
 from flask import Response
 import json
-from utils.util import prettyPrint
+from utils.util import prettyPrint, decodeResponseByteJsonToDictionary
 from Infrastructure.DataModels.UserModel import User
 from flask_jwt_extended import decode_token
+import pytest
+pytestmark = [pytest.mark.signup]
 
 
 def test_s01_signup_endpoint_no_json_data_should_response_with_400(client):
@@ -39,6 +41,28 @@ def test_s04_new_user_created_successfully(client):
         }, headers=headers)
 
     assert 200 == rv.status_code
+
+
+def test_s04_1_signup_should_return_user_view_model(client):
+
+    mimetype = 'application/json'
+    headers = {
+        'Content-Type': mimetype,
+        'Accept': mimetype
+    }
+    rv = client.post('/signup', 'http://localhost', json={
+        'name': 'test',
+        'email': 'test@test.com',
+        'password': 'password'
+        }, headers=headers)
+
+    data = decodeResponseByteJsonToDictionary(rv.data)
+    print(data)
+
+    assert 200 == rv.status_code
+    assert data['id'] is not None
+    assert data['name'] == 'test'
+    assert data['roles'] is not ['member']
 
 
 def test_s05_new_user_created_successfully_and_user_is_persisted(client, database, application):
