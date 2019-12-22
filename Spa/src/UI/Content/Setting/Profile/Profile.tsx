@@ -1,7 +1,7 @@
 import { initialUserState, UserType } from 'domain/user/UserType';
 import { initialUserInputTouchedState, initialUserValidationState, UserInputTouchedType, UserValidationType } from 'domain/user/UserValidationType';
 import * as React from 'react';
-import { RequestMethodEnum, ResponseResultStatusEnum, UserResponseDataType } from 'requests/types';
+import { RequestMethodEnum, ResponseResultStatusEnum, UserResponseDataType, ResponseResultType } from 'requests/types';
 import { useRequest } from 'Hooks/Request/useRequest';
 import * as yup from 'yup';
 import './Profile.scss';
@@ -51,9 +51,9 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
     })
       // call from previous 'catch' and 'then' of 'fetchUser'
       // since resolve promise in the 'catch'
-      .then((data: UserResponseDataType) => {
+      .then((result: ResponseResultType<UserResponseDataType>) => {
         debug('then func of fetchUser func')
-        if (data) setUser(data.user)
+        if (result.status === ResponseResultStatusEnum.SUCCESS) setUser(result.data.user)
       })
   }, []);
 

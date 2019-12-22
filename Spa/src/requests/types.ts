@@ -25,9 +25,9 @@ export enum Error401ResponseDataTypeEnum {
   UNAUTHORIZED_ROLE = 3
 }
 
-export declare type ResponseResultType = {
+export declare type ResponseResultType<T extends object = any> = {
   needLogout?: boolean,
-  data?: any
+  data?: T
   status: ResponseResultStatusEnum
   errorMsg?: string 
 }

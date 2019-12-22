@@ -7,7 +7,7 @@ import { useRequest } from 'Hooks/Request/useRequest';
 import { useBlogValidation } from 'Hooks/Validation/Blog/useBlogValidation';
 import * as React from 'react';
 import { useParams } from 'react-router';
-import { BlogResponseDataType, RequestMethodEnum, ResponseResultStatusEnum } from 'requests/types';
+import { BlogResponseDataType, RequestMethodEnum, ResponseResultStatusEnum, ResponseResultType } from 'requests/types';
 import './UpdateBlog.scss';
 import Input from 'Components/Input/Input';
 import TagInput from 'Components/Input/TagInput';
@@ -35,11 +35,10 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
     })
       // call from previous 'catch' and 'then' of 'fetchBlog'
       // since resolve promise in the 'catch'
-      .then((data: BlogResponseDataType) => {
+      .then((result: ResponseResultType<BlogResponseDataType>) => {
         debug('then func of fetchBlog func')
-        if (data) {
-          console.log(data.blog)
-          setBlog(data.blog)
+        if (result.status === ResponseResultStatusEnum.SUCCESS) {
+          setBlog(result.data.blog)
         }
       })
   }, []);

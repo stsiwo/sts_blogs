@@ -1,7 +1,7 @@
-import { initialUserLoginStatus, UserLoginType, UserType } from 'domain/user/UserType';
+import { initialUserLoginStatus, UserLoginType, UserType, UserLoginRequestDataType } from 'domain/user/UserType';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { RequestMethodEnum, ResponseResultStatusEnum, UserResponseDataType } from 'requests/types';
+import { RequestMethodEnum, ResponseResultStatusEnum, UserResponseDataType, ResponseResultType } from 'requests/types';
 import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
 import { useRequest } from 'Hooks/Request/useRequest';
 import { useUserLoginValidation } from 'Hooks/Validation/UserLogin/useUserLoginValidation';
@@ -35,6 +35,10 @@ const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCom
 
   const handleSubmitClickEvent: React.EventHandler<React.MouseEvent<HTMLInputElement>> = async (e) => {
     debug('clicked update butuon')
+    // extract 'confirm' for request data
+    const tempUserLoginData: UserLoginType = Object.assign({}, currentUserLoginStatus)
+    delete tempUserLoginData.confirm
+    const userLoginRequestData: UserLoginRequestDataType = tempUserLoginData as UserLoginRequestDataType
     // final check validation ...
     validate()
       .then(() => {
@@ -43,11 +47,11 @@ const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCom
           path: '/login',
           method: RequestMethodEnum.POST,
           headers: { 'content-type': 'application/json' },
-          data: JSON.stringify(currentUserLoginStatus)
+          data: JSON.stringify(userLoginRequestData)
         })
-          .then((data: UserResponseDataType) => {
-            if (data) {
-              authDispatch({ type: 'login', user: data.user as UserType })
+          .then((result: ResponseResultType<UserResponseDataType>) => {
+            if (result.status === ResponseResultStatusEnum.SUCCESS) {
+              authDispatch({ type: 'login', user: result.data.user as UserType })
               props.history.push('/')
             }
           })
@@ -110,7 +114,7 @@ const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCom
         </div>
         <div className="login-form-content-btn-wrapper">
           {(currentValidationError.submit && <div className="summary-error input-error">{currentValidationError.submit}</div>)}
-          <input className="btn" type="button" onClick={handleSubmitClickEvent} value="Login" role="login-btn"/>
+          <input className="btn" type="button" onClick={handleSubmitClickEvent} value="Login" role="login-btn" />
         </div>
       </form>
     </div >

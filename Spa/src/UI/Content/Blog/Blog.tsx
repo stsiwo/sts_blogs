@@ -2,7 +2,7 @@ import { BlogType, initialBlogState } from 'domain/blog/BlogType';
 import { TagType } from 'domain/tag/TagType';
 import * as React from 'react';
 import { useParams } from 'react-router';
-import { BlogResponseDataType, RequestMethodEnum, ResponseResultStatusEnum } from 'requests/types';
+import { BlogResponseDataType, RequestMethodEnum, ResponseResultStatusEnum, ResponseResultType } from 'requests/types';
 import Tag from 'Components/Tag/Tag';
 import { useRequest } from 'Hooks/Request/useRequest';
 import './Blog.scss';
@@ -36,10 +36,8 @@ const Blog: React.FunctionComponent<{}> = (props: {}) => {
     })
       // call from previous 'catch' and 'then' of 'fetchBlog'
       // since resolve promise in the 'catch'
-      .then((data: BlogResponseDataType) => {
-        if (data) setBlog(data.blog)
-        else
-          setBlog(getBlogTestData(1)[0])
+      .then((result: ResponseResultType<BlogResponseDataType>) => {
+        if (result.status === ResponseResultStatusEnum.SUCCESS) setBlog(result.data.blog)
       })
   }, []);
 

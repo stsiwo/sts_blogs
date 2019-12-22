@@ -37,17 +37,12 @@ export const useRequest = (input: UseRequestStatusInputType): UseRequestStatusOu
       .then((responseResult: ResponseResultType) => {
         debug('fetch data function receive response successfully')
         debug(responseResult)
-        /** this include 'catch' clause of 'requests' method **/
-        setRequestStatus({
-          status: responseResult.status,
-          data: responseResult.data,
-          errorMsg: responseResult.errorMsg
-        })
+        setRequestStatus(responseResult)
         /**
          * return promise with responseResult
          *  - avoid using 'callback'
          **/
-        return Promise.resolve(responseResult.data)
+        return Promise.resolve(responseResult)
       })
       .catch((result: ResponseResultType) => {
         debug('fetch data then clause failed at sendRequest')
@@ -61,10 +56,7 @@ export const useRequest = (input: UseRequestStatusInputType): UseRequestStatusOu
           })
         }
 
-        setRequestStatus({
-          status: ResponseResultStatusEnum.FAILURE,
-          errorMsg: result.errorMsg
-        })
+        setRequestStatus(result)
         return Promise.resolve(result)
       })
   }

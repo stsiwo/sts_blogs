@@ -14,7 +14,7 @@ class LoginService(object):
 
     def __init__(self):
         self._userRepository = UserRepository()
-        self._userSchema = UserSchema()
+        self._userSchema = UserSchema(only=['id', 'name', 'avatarUrl', 'roles'])
 
     def loginUserService(self, email: str, password: str):
         app.logger.info("start login user service")
@@ -28,4 +28,7 @@ class LoginService(object):
         if not loginUser.verifyPassword(password):
             raise PasswordInvalidException
 
-        return loginUser
+        userViewModel = self._userSchema.dump(loginUser)
+        print('*** user view model: {}'.format(userViewModel))
+
+        return userViewModel

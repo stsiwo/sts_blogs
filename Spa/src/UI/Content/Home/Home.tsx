@@ -17,7 +17,7 @@ import BePartOfIt from 'Components/BePartOfIt/BePartOfIt';
 import ManageYourBlogs from 'Components/ManageYourBlogs/ManageYourBlogs';
 import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
 import { useRequest } from 'Hooks/Request/useRequest';
-import { RequestMethodEnum, BlogListResponseDataType, QueryStringType, ResponseResultStatusEnum, ErrorResponseDataType } from 'requests/types';
+import { RequestMethodEnum, BlogListResponseDataType, QueryStringType, ResponseResultStatusEnum, ErrorResponseDataType, ResponseResultType } from 'requests/types';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 declare type BlogOptionType = {
@@ -107,16 +107,16 @@ const Home: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComp
       method: RequestMethodEnum.GET,
       queryString: queryStringOption[currentBlogOptionList.active],
     })
-      .then((data: BlogListResponseDataType | ErrorResponseDataType) => {
+      .then((result: ResponseResultType<BlogListResponseDataType>) => {
         console.log('inside "then" at Home')
-        if ((data as BlogListResponseDataType).blogs) {
+        if (result.status === ResponseResultStatusEnum.SUCCESS) {
           console.log('fetch success at Home')
           setBlogOptionList((prev: BlogOptionListType) => {
             return {
               active: currentBlogOptionList.active,
               blogs: {
                 ...prev.blogs,
-                [currentBlogOptionList.active]: (data as BlogListResponseDataType).blogs,
+                [currentBlogOptionList.active]: result.data.blogs,
               }
             }
           })

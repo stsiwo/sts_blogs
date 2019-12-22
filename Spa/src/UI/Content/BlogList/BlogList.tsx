@@ -15,7 +15,7 @@ import * as React from 'react';
 import { MdCancel, MdRefresh, MdSettings } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { BlogListResponseDataType, RequestMethodEnum, ResponseResultStatusEnum } from 'requests/types';
+import { BlogListResponseDataType, RequestMethodEnum, ResponseResultStatusEnum, ResponseResultType } from 'requests/types';
 import { StateType } from 'states/types';
 import { getBlogTestData } from '../../../../tests/data/BlogFaker';
 import './BlogList.scss';
@@ -88,13 +88,13 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
       method: RequestMethodEnum.GET,
       queryString: queryString
     })
-      .then((data: BlogListResponseDataType) => {
-        if (data) {
-          setBlogs(data.blogs)
+      .then((result: ResponseResultType<BlogListResponseDataType>) => {
+        if (result.status === ResponseResultStatusEnum.SUCCESS) {
+          setBlogs(result.data.blogs)
           // assign new total count of pagination
           setPaginationStatus({
             ...currentPaginationStatus,
-            totalCount: data.totalCount
+            totalCount: result.data.totalCount
           })
         }
       })

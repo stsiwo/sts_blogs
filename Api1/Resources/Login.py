@@ -26,16 +26,16 @@ class Login(Resource):
                 password=request.json.get('password'),
                 )
 
-        response = jsonify({'message': 'login success'})
+        response = jsonify({'user': loginedUser})
         response.status_code = 200
 
         # create jwt tokens
         self._tokenService.createJwtToken(
              response,
              {
-                 'id': loginedUser.id,
-                 "name": loginedUser.name,
-                 "roles": [role.name for role in loginedUser.roles]
+                 'id': loginedUser.get('id'),
+                 "name": loginedUser.get('name'),
+                 "roles": [role for role in loginedUser.get('roles')]
              })
 
         return response

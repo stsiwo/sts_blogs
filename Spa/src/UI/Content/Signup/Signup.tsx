@@ -1,7 +1,7 @@
 import { initialUserSignupStatus, UserSignupType, UserType, UserSignupRequestDataType } from 'domain/user/UserType';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { RequestMethodEnum, ResponseResultStatusEnum, UserResponseDataType } from 'requests/types';
+import { RequestMethodEnum, ResponseResultStatusEnum, UserResponseDataType, ResponseResultType } from 'requests/types';
 import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
 import { useRequest } from 'Hooks/Request/useRequest';
 import { useUserSignupValidation } from 'Hooks/Validation/UserSignup/useUserSignupValidation';
@@ -43,15 +43,14 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
           headers: { 'content-type': 'application/json' },
           data: JSON.stringify(userSignupRequestData),
         })
-          .then((data: UserResponseDataType) => {
+          .then((result: ResponseResultType<UserResponseDataType>) => {
             // this 'then' block is called only when request success
-            if (data) {
-              console.log('got response with user data')
+            if (result.status === ResponseResultStatusEnum.SUCCESS) {
               debug('got response with user data')
-              debug(data)
+              debug(result)
               authDispatch({ 
                 type: 'login', 
-                user: data.user as UserType })
+                user: result.data.user as UserType })
               console.log('before redirect')
               props.history.push('/')
             }

@@ -2,7 +2,7 @@ import { BlogType, initialBlogState } from 'domain/blog/BlogType';
 import { TagType } from 'domain/tag/TagType';
 import * as React from 'react';
 import { useParams } from 'react-router';
-import { RequestMethodEnum, ResponseResultStatusEnum } from 'requests/types';
+import { RequestMethodEnum, ResponseResultStatusEnum, ResponseResultType, BlogResponseDataType } from 'requests/types';
 import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
 import { useRequest } from 'Hooks/Request/useRequest';
 import { useBlogValidation } from 'Hooks/Validation/Blog/useBlogValidation';
@@ -56,6 +56,9 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
           headers: { 'content-type': 'multipart/form-data' },
           data: mapStateToFormData(currentBlog),
         })
+          .then((result: ResponseResultType<BlogResponseDataType>) => {
+            // do something 
+          })
       }, () => {
         debug('validation failed at save button event handler')
       })

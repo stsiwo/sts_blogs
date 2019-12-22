@@ -14,4 +14,4 @@ class UserSchema(ma.ModelSchema):
 
     roles = fields.Pluck(RoleSchema, 'name', many=True)
     # avatarUrl = urllib.parse.urljoin(app.config['HOST_NAME'], fields.String())
-    avatarUrl = fields.Function(lambda obj: urllib.parse.urljoin(app.config['HOST_NAME'], obj.avatarUrl))
+    avatarUrl = fields.Function(lambda obj: urllib.parse.urljoin(app.config['HOST_NAME'], obj.avatarUrl) if obj.avatarUrl is not None else None)

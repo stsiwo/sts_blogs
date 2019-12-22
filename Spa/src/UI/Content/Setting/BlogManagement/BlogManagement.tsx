@@ -17,7 +17,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
-import { BlogListResponseDataType, RequestMethodEnum, ResponseResultStatusEnum } from 'requests/types';
+import { BlogListResponseDataType, RequestMethodEnum, ResponseResultStatusEnum, ResponseResultType } from 'requests/types';
 import { StateType } from 'states/types';
 import { dateFormatOption } from '../../../../utils';
 import './BlogManagement.scss';
@@ -81,16 +81,16 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
       method: RequestMethodEnum.GET,
       queryString: queryString,
     })
-      .then((data: BlogListResponseDataType) => {
-        if (data) {
+      .then((result: ResponseResultType<BlogListResponseDataType>) => {
+        if (result.status === ResponseResultStatusEnum.SUCCESS) {
           console.log("fetch success and receive data")
-          console.log(data.blogs.length)
-          setBlogs(data.blogs)
+          console.log(result.data.blogs.length)
+          setBlogs(result.data.blogs)
 
           // assign new total count of pagination
           setPaginationStatus({
             ...currentPaginationStatus,
-            totalCount: data.totalCount
+            totalCount: result.data.totalCount
           })
         }
       })
