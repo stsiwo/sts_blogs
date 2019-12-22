@@ -29,7 +29,7 @@ class Signup(Resource):
                 )
 
         # construct response
-        response = jsonify(newUser)
+        response = jsonify({'user': newUser})
         response.status_code = 200
 
         # create jwt tokens
@@ -38,7 +38,7 @@ class Signup(Resource):
              {
                  'id': newUser['id'],
                  "name": newUser['name'],
-                 "roles": [role['name'] for role in newUser['roles']]
+                 "roles": [role for role in newUser['roles']]
              })
 
         return response

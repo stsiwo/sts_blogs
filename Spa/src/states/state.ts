@@ -18,7 +18,7 @@ export const initialState: StateType = {
       id: null,
       name: null,
       avatarUrl: null,
-      role: null, 
+      roles: [], 
     },
     tags: [],
     blogs: [],

@@ -47,11 +47,11 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
             // this 'then' block is called only when request success
             if (data) {
               console.log('got response with user data')
+              debug('got response with user data')
+              debug(data)
               authDispatch({ 
                 type: 'login', 
-                user: {
-                  name: currentUserSignupStatus.name,
-                } as UserType })
+                user: data.user as UserType })
               console.log('before redirect')
               props.history.push('/')
             }

@@ -13,6 +13,7 @@ __pycache__/
 
 # asset
 Api1/uploads/
+Api1/temp/
 
 # db-migrations
 Api1/migrations/

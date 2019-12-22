@@ -32,7 +32,7 @@ class FileService(object):
         if file.stream is not None and self._allowed_file(file.filename):
             # check file extension is safe
             filename: str = secure_filename(file.filename)
-            if isUpdate:
+            if isUpdate and originalFilePath is not None:
                 # extract file name from path
                 originalFileName = self._extractFileName(originalFilePath)
                 # remove existing image if isUpdate is True

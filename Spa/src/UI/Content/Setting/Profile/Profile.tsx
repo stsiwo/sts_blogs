@@ -10,6 +10,8 @@ import FetchStatus from 'Components/ApiFetch/FetchStatus';
 import ImageInput from 'Components/Input/ImageInput';
 import Input from 'Components/Input/Input';
 import ManageYourBlogs from 'Components/ManageYourBlogs/ManageYourBlogs';
+import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
+import { AuthContextType } from 'Contexts/AuthContext/types';
 var debug = require('debug')('ui:Profile')
 
 
@@ -17,38 +19,40 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
   /** update user profile **/
 
   /** state **/
-  const [currentUser, setUser] = React.useState<UserType>(initialUserState)
+  const { auth } = useAuthContext() 
+  debug(auth)
+  const [currentUser, setUser] = React.useState<UserType>(auth.user)
+  debug('before useValidation')
+  debug(currentUser)
   const { currentValidationError, touch, validate } = useProfileValidation({ domain: currentUser })
 
   const path: string = '/users/' + currentUser.id
   const method: RequestMethodEnum = RequestMethodEnum.PUT
 
   const { currentRequestStatus: currentUpdateRequestStatus, setRequestStatus: setUpdateRequestStatus, sendRequest: sendUpdateRequest } = useRequest({})
-  const { currentRequestStatus: currentBlogFetchStatus, setRequestStatus: setBlogFetchStatus, sendRequest: fetchBlog } = useRequest({})
+  const { currentRequestStatus: currentUserFetchStatus, setRequestStatus: setUserFetchStatus, sendRequest: fetchUser } = useRequest({})
 
   /** lifecycle **/
 
   const mapStateToFormData = (state: UserType): FormData => {
     const formData = new FormData()
-    if (state.id) formData.append('id', state.id)
     formData.set('name', state.name)
     formData.set('email', state.email)
     formData.set('password', state.password)
-    formData.set('confirm', state.confirm)
-    formData.set('avatarImage', state.avatarImage)
+    if (state.avatarImage) formData.set('avatarImage', state.avatarImage)
     return formData
   }
 
   React.useEffect(() => {
-    debug('initial fetch at useEffect')
-    fetchBlog({
+    debug('initial fetch for user data')
+    fetchUser({
       path: path,
       method: RequestMethodEnum.GET,
     })
-      // call from previous 'catch' and 'then' of 'fetchBlog'
+      // call from previous 'catch' and 'then' of 'fetchUser'
       // since resolve promise in the 'catch'
       .then((data: UserResponseDataType) => {
-        debug('then func of fetchBlog func')
+        debug('then func of fetchUser func')
         if (data) setUser(data.user)
       })
   }, []);
@@ -119,15 +123,15 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
     touch(e.currentTarget.name)
   }
 
-  if (currentBlogFetchStatus.status === ResponseResultStatusEnum.FETCHING) return (<p>fetching your data</p>)
+  if (currentUserFetchStatus.status === ResponseResultStatusEnum.FETCHING) return (<p>fetching your data</p>)
 
-  if (currentBlogFetchStatus.status === ResponseResultStatusEnum.FAILURE) return (<p>sorry.. your data is not available now</p>)
+  if (currentUserFetchStatus.status === ResponseResultStatusEnum.FAILURE) return (<p>sorry.. your data is not available now</p>)
 
   /**
    * IMPORTANT NOTE: input name and user state key must be matched otherwise, validation won't work
    *  - esp cause error of 'useEffect' 2nd argument inconsistency array element 
    **/
-  return (currentBlogFetchStatus.status === ResponseResultStatusEnum.SUCCESS &&
+  return (currentUserFetchStatus.status === ResponseResultStatusEnum.SUCCESS &&
     <div className="context-wrapper">
       <div className="main-wrapper">
         <h2 className="profile-title">Profile Management</h2>
@@ -183,6 +187,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
           />
           <Input
             id={"password"}
+            inputType={"password"}
             inputStyle={"black-input grid-input"}
             inputValue={currentUser.password}
             label={"New Password"}
@@ -196,6 +201,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
           />
           <Input
             id={"confirm"}
+            inputType={"password"}
             inputStyle={"black-input grid-input"}
             inputValue={currentUser.confirm}
             label={"Password Confirm"}

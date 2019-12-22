@@ -13,5 +13,5 @@ export const getUserInfo = (): UserType => {
 }
 
 export const isUserLoggedIn = (): boolean => {
-  return localStorage.getItem('auth-user') !== null ? true : false
+  return localStorage.getItem('auth-user') === null || localStorage.getItem('auth-user') === 'undefined' ? false : true
 }

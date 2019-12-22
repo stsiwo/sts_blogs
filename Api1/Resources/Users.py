@@ -16,6 +16,18 @@ class Users(Resource):
     def __init__(self):
         self._userService = UserService()
 
+    @jwt_required
+    @requires_jwt_role_claim({'admin', 'member'})
+    def get(self, user_id: str):
+        app.logger.info("start processing get request at /users")
+        print("start processing get request at /users")
+
+        userViewModel: Dict = self._userService.getUserService(userId=user_id)
+
+        response = jsonify({'user': userViewModel})
+        response.status_code = 200
+        return response
+
     # replace existing whole blogs or create whole blogs if does not exist
     # payload must be whole blogs (all properties of blog)
     # updating avatar image is different endpoint
@@ -29,7 +41,7 @@ class Users(Resource):
         updatedUser: Dict[str, str] = self._userService.updateUserService(
                 userId=user_id,
                 input=request.form,
-                avatarFile=request.files.get('avatarFile', None)
+                avatarImage=request.files.get('avatarImage', None)
                 )
 
         # successfully updated and return its serialized and updated user
@@ -37,7 +49,7 @@ class Users(Resource):
         # NOTE: don't specify body when using 204 (NO CONTENT). even if you set response body
         # HTTP ignore the response body and client only receives no body
         # =============================================================
-        response = jsonify(updatedUser)
+        response = jsonify({'user': updatedUser})
         response.status_code = 200
         return response
 

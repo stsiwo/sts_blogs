@@ -18,12 +18,25 @@ class UserService(object):
     _userRepository: UserRepository
 
     def __init__(self):
-        self._userSchema = UserSchema()
+        self._userSchema = UserSchema(only=['id', 'name', 'email', 'avatarUrl'])
         self._fileService = FileService()
         self._userRepository = UserRepository()
 
+    def getUserService(self, userId: str) -> Dict:
+        app.logger.info("start get user service")
+        print("start get user service")
+
+        targetUser = self._userRepository.get(id=userId)
+
+        if targetUser is None:
+            raise UserNotFoundException
+
+        targetUser = self._userSchema.dump(targetUser)
+
+        return targetUser
+
     @db_transaction()
-    def updateUserService(self, userId: str, input: Dict, avatarFile: FileStorage = None) -> User:
+    def updateUserService(self, userId: str, input: Dict, avatarImage: FileStorage = None) -> User:
         app.logger.info("start update user service")
         print("start update user service")
 
@@ -37,7 +50,7 @@ class UserService(object):
         targetUser.name = input.get('name')
         targetUser.email = input.get('email')
         targetUser.password = input.get('password')
-        targetUser.avatarUrl = self._fileService.updateImageFileToDir(avatarFile, targetUser.id, targetUser.avatarUrl) if avatarFile is not None else targetUser.avatarUrl
+        targetUser.avatarUrl = self._fileService.updateImageFileToDir(avatarImage, targetUser.id, targetUser.avatarUrl) if avatarImage is not None else targetUser.avatarUrl
 
         targetUser = self._userSchema.dump(targetUser)
 

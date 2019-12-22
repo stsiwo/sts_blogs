@@ -31,3 +31,7 @@ def before_request():
     print(request.cookies)
     print('*** request data ***')
     print(request.data)
+    print('*** request form ***')
+    print(request.form)
+    print('*** request files ***')
+    print(request.files)

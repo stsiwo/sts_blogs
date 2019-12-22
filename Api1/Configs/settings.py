@@ -29,6 +29,8 @@ load_dotenv(dotenv_path=env_path)
 
 FLASK_APP = './run.py'
 
+HOST_NAME = os.getenv('HOST_NAME', '')
+
 # jwt config
 # Configure application to store JWTs in cookies
 JWT_TOKEN_LOCATION = ['cookies']
@@ -75,7 +77,7 @@ SESSION_COOKIE_HTTPONLY = True
 # image files
 UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER', 'uploads')
 
-PUBLIC_FILE_FOLDER = 'images'
+PUBLIC_FILE_FOLDER = '/images'
 
 # custome error handling
 # PROPAGATE_EXCEPTIONS = True

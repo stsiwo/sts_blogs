@@ -15,7 +15,7 @@ export const AdminAuthRoute: React.FunctionComponent<AdminAuthRoutePropType> = (
 
     if (!auth.authed) return <Redirect to='/login' />
 
-    if (auth.user.role !== RoleEnum.ADMIN) return <Redirect to='/' />
+    if (auth.user.roles.includes(RoleEnum.ADMIN)) return <Redirect to='/' />
 
     return <Component {...props} />
   }} />

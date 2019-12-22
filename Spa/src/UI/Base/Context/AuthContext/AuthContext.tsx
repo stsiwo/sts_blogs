@@ -2,6 +2,7 @@ import { createContext, useContext, useReducer, Reducer, ReducerState, Dispatch,
 import { AuthContextType, AuthContextActionType, AuthType } from "./types";
 import { storeUserInfo, removeUserInfo, isUserLoggedIn, getUserInfo } from "../../../../storages/user";
 import { Action } from "redux";
+var debug = require('debug')('ui:AuthContext')
 
 
 // for provider
@@ -17,6 +18,8 @@ const updateAuthContextReducer: Reducer<AuthType, AuthContextActionType> = (stat
   switch (action.type) {
     case 'login':
       console.log('(context) login case reducer')
+      debug('action:')
+      debug(action)
       storeUserInfo(action.user)
       return {
         authed: true,
@@ -37,6 +40,8 @@ const updateAuthContextReducer: Reducer<AuthType, AuthContextActionType> = (stat
 export const useUpdateAuthContextReducer = (initialAuth: AuthType = null): [ReducerState<Reducer<AuthType, AuthContextActionType>>, Dispatch<ReducerAction<Reducer<AuthType, AuthContextActionType>>>] => {
 
   //const defaultAuth = initialAuth ? initialAuth : { authed: false }
+  console.log('inside useUpdateAuthContextReducer')
+  console.log(isUserLoggedIn())
   const defaultAuth = isUserLoggedIn() ? { authed: true, user: getUserInfo() } : { authed: false }
   return useReducer(updateAuthContextReducer, defaultAuth)
 }

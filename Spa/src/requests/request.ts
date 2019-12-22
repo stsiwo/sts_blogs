@@ -131,6 +131,7 @@ export const request = async (requestContent: RequestContentType): Promise<Respo
 
       // other error status like 400 (Bad Request), 404 (NOT FOUND) and so on
       //  - just reject promise and don't need to remove auth from local storage
+      debug('other error status like 400 (Bad Request), 404 (NOT FOUND) and so on')
       return Promise.reject({
         status: ResponseResultStatusEnum.FAILURE,
         errorMsg: error.response.data.message
