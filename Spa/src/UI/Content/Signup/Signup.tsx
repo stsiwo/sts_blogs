@@ -9,6 +9,7 @@ import './Signup.scss';
 import FetchStatus from 'Components/ApiFetch/FetchStatus';
 import Input from 'Components/Input/Input';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { useKeyupListener } from 'Hooks/KeyupListener/useKeyupListener';
 var debug = require('debug')('ui:Signup')
 
 const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComponentProps<{}>) => {
@@ -17,6 +18,7 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
   const { currentRequestStatus, setRequestStatus, sendRequest } = useRequest({})
   const { currentValidationError, touch, validate } = useUserSignupValidation({ domain: currentUserSignupStatus })
   const { authDispatch } = useAuthContext()
+  
 
   const handleInputChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
     currentUserSignupStatus[e.currentTarget.name as keyof UserSignupType] = e.currentTarget.value
@@ -28,7 +30,7 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
     touch(e.currentTarget.name)
   }
 
-  const handleSubmitClickEvent: React.EventHandler<React.MouseEvent<HTMLInputElement>> = async (e) => {
+  const _submitSignupForm: () => void = () => {
     // extract 'confirm' for request data
     const tempUserSignupData: UserSignupType = Object.assign({}, currentUserSignupStatus)
     delete tempUserSignupData.confirm
@@ -48,9 +50,10 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
             if (result.status === ResponseResultStatusEnum.SUCCESS) {
               debug('got response with user data')
               debug(result)
-              authDispatch({ 
-                type: 'login', 
-                user: result.data.user as UserType })
+              authDispatch({
+                type: 'login',
+                user: result.data.user as UserType
+              })
               console.log('before redirect')
               props.history.push('/')
             }
@@ -58,6 +61,15 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
       }, () => {
         debug('validation failed at save button event handler')
       })
+  }
+
+  useKeyupListener({
+    keyType: 'Enter',
+    listener: _submitSignupForm
+  })
+
+  const handleSubmitClickEvent: React.EventHandler<React.MouseEvent<HTMLInputElement>> = async (e) => {
+    _submitSignupForm()
   }
 
   return (

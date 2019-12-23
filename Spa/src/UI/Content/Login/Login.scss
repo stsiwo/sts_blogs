@@ -49,11 +49,6 @@
     
 }
 
-.login-form-content-btn-wrapper {
-  display: flex;
-  justify-content: flex-end;
-}
-
 .login-form-content-btn {
   @include regular-btn;
 }

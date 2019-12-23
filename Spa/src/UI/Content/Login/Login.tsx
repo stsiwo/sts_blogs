@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux';
 import Input from 'Components/Input/Input';
 import { useRouteMatch } from 'react-router';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { useKeyupListener } from 'Hooks/KeyupListener/useKeyupListener';
 var debug = require('debug')('ui:Login')
 
 const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComponentProps<{}>) => {
@@ -33,8 +34,8 @@ const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCom
     touch(e.currentTarget.name)
   }
 
-  const handleSubmitClickEvent: React.EventHandler<React.MouseEvent<HTMLInputElement>> = async (e) => {
-    debug('clicked update butuon')
+  
+  const _submitLoginForm: () => void = () => {
     // extract 'confirm' for request data
     const tempUserLoginData: UserLoginType = Object.assign({}, currentUserLoginStatus)
     delete tempUserLoginData.confirm
@@ -58,6 +59,16 @@ const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCom
       }, () => {
         debug('validation failed at save button event handler')
       })
+  }
+
+  useKeyupListener({
+    keyType: 'Enter',
+    listener: _submitLoginForm
+  })
+
+  const handleSubmitClickEvent: React.EventHandler<React.MouseEvent<HTMLInputElement>> = async (e) => {
+    debug('clicked update butuon')
+    _submitLoginForm()
   }
 
   return (
@@ -113,7 +124,7 @@ const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCom
           <span>if you don&rsquo;t have account,  </span><Link to={`/signup`} >Signup Page</Link>
         </div>
         <div className="login-form-content-btn-wrapper">
-          {(currentValidationError.submit && <div className="summary-error input-error">{currentValidationError.submit}</div>)}
+          {(currentValidationError.submit && <div className="summary-error small-input-error">{currentValidationError.submit}</div>)}
           <input className="btn" type="button" onClick={handleSubmitClickEvent} value="Login" role="login-btn" />
         </div>
       </form>
