@@ -25,7 +25,7 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
   const { blogId } = useParams();
   const { auth } = useAuthContext()
   /** anything else **/
-  const path: string = '/users/' + auth.user.id + '/blogs/'
+  const path: string = '/users/' + auth.user.id + '/blogs'
   const method: RequestMethodEnum = RequestMethodEnum.POST
 
   /** EH **/
@@ -35,7 +35,6 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
     formData.set('title', state.title)
     formData.set('subtitle', state.subtitle)
     formData.set('mainImage', state.mainImage)
-    formData.set('mainImageUrl', state.mainImageUrl)
     formData.set('content', state.content)
     formData.set('createdDate', state.createdDate.toJSON())
     formData.set('tags', JSON.stringify(Array.from(state.tags)))

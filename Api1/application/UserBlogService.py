@@ -36,7 +36,7 @@ class UserBlogService(object):
         return result
 
     @db_transaction()
-    def createNewBlogService(self, user_id: str, title: str, subtitle: str, content: str, mainImageFile: FileStorage = None) -> Blog:
+    def createNewBlogService(self, user_id: str, title: str, subtitle: str, content: str, tags: List[str] = None, mainImageFile: FileStorage = None, blogImages: List[FileStorage] = None) -> Blog:
         app.logger.info("start userblog user service")
         print("start userblog user service")
 
@@ -44,6 +44,9 @@ class UserBlogService(object):
         # https://app.clickup.com/t/3m574q
 
         mainImageUrl = self._fileService.saveImageFileToDir(mainImageFile, user_id) if mainImageFile is not None else None
+
+        for blogImage in blogImages:
+            self._fileService.saveImageFileToDir(blogImage, user_id)
 
         newBlog: Blog = Blog(
                             title=title,

@@ -231,7 +231,6 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
               </div>
             )}
           </div>
-          <span>{props.children}</span>
           <figcaption>test caption</figcaption>
         </figure>
       </>
@@ -328,7 +327,7 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
         </div>
         <Editable
           role="blog-content-editable"
-          className="blog-content-editable"
+          className="blog-content-editable clear-fix"
           placeholder={props.placeholder}
           renderElement={renderElement}
           renderMark={renderMark}

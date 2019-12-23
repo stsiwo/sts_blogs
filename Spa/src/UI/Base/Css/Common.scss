@@ -8,7 +8,7 @@ body {
 .app-wrapper {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .hidden-input {
@@ -307,4 +307,11 @@ body {
 
 .blog-detail-input {
   width: 30ch;
+}
+
+.clear-fix::after {
+   content: " ";
+   display: block;
+   height: 0;
+   clear: both;
 }

@@ -11,6 +11,7 @@ from Infrastructure.DataModels.BlogModel import Blog
 from Resources.viewModels.BlogSchema import BlogSchema
 from utils.util import printObject
 from Resources.parsers.QueryStringParser import QueryStringParser
+import ast
 
 
 class UserBlogs(Resource):
@@ -50,17 +51,22 @@ class UserBlogs(Resource):
         app.logger.info("start processing post request at /blogs")
         print("start processing post request at /blogs")
 
+        print("***content of files")
+        print(request.files.getlist('blogImages[]'))
+
         newBlog: Blog = self._userBlogService.createNewBlogService(
-                user_id,
-                request.form.get('title'),
-                request.form.get('subtitle'),
-                request.form.get('content'),
-                request.files.get('mainImageFile', None)
+                user_id=user_id,
+                title=request.form.get('title'),
+                subtitle=request.form.get('subtitle'),
+                content=request.form.get('content'),
+                tags=ast.literal_eval(request.form.get('tags', '')),
+                mainImageFile=request.files.get('mainImageFile', None),
+                blogImages=request.files.getlist('blogImages[]', None)
                 )
 
         blogSchema = self._blogSchema.dump(newBlog)
 
-        response = jsonify(blogSchema)
+        response = jsonify({'blog': blogSchema})
         response.status_code = 201
         # after db.session.commit(), newBlog.id is automcatically assigned my SQLAlchemy
         response.headers['location'] = '/blogs/' + str(newBlog.id)
