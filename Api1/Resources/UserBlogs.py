@@ -52,7 +52,7 @@ class UserBlogs(Resource):
         print("start processing post request at /blogs")
 
         print("***content of files")
-        print(request.files.getlist('blogImages[]'))
+        print(request.files.get('mainImage'))
 
         newBlog: Blog = self._userBlogService.createNewBlogService(
                 user_id=user_id,
@@ -60,7 +60,7 @@ class UserBlogs(Resource):
                 subtitle=request.form.get('subtitle'),
                 content=request.form.get('content'),
                 tags=ast.literal_eval(request.form.get('tags', '')),
-                mainImageFile=request.files.get('mainImageFile', None),
+                mainImage=request.files.get('mainImage', None),
                 blogImages=request.files.getlist('blogImages[]', None)
                 )
 
