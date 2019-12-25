@@ -11,6 +11,10 @@ export const apiConfig: AxiosRequestConfig = {
       if (key === 'createdDate') {
         return new Date(value)
       }
+      // TODO: need to distinguish blog content and comment content
+      if (key === 'content' && value) {
+        return JSON.parse(value)
+      }
       return value
     });
   },

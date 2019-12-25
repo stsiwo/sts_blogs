@@ -42,7 +42,13 @@ export const Slate = (props: {
       onChange(children, operations)
       setContext([editor])
     }
-  }, [editor])
+  // NOTE: if use this, it won't update defaultValue
+  // - this means that defaultValue is empty at the initial fetch
+  //   but after fetch the content, the defaultValue changes and i want to apply the change to 
+    // this Memo hook so i add 'defaultValue' to this
+    // otherwise, can't set fetched content as defaultValue and display the content in editar
+  }, [editor, defaultValue]) 
+  //}, [editor])
 
   EDITOR_TO_CONTEXT_LISTENER.set(editor, listener)
 

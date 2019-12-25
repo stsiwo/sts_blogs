@@ -12,6 +12,8 @@ import './UpdateBlog.scss';
 import Input from 'Components/Input/Input';
 import TagInput from 'Components/Input/TagInput';
 import BlogContent from 'Components/BlogContent/BlogContent';
+import { Node } from 'slate'
+import { replaceTmpSrcWithPublicSrc } from 'Components/BlogContent/helpers';
 var debug = require('debug')('ui:UpdateBlog')
 
 const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
@@ -50,9 +52,8 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
     formData.set('title', state.title)
     formData.set('subtitle', state.subtitle)
     formData.set('mainImage', state.mainImage)
-    formData.set('mainImageUrl', state.mainImageUrl)
-    formData.set('content', state.content)
-    formData.set('createdDate', state.createdDate.toJSON())
+    formData.set('content', JSON.stringify(state.content))
+    formData.set('updatedDate', state.createdDate.toJSON())
     formData.set('tags', JSON.stringify(Array.from(state.tags)))
     state.blogImages.forEach((image: File) => {
       formData.append('blogImages[]', image)
@@ -70,11 +71,18 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
     validate()
       .then(() => {
         debug('validation passed at save button event handler')
+
+        debug('replace temp src image with publicSrc before submit')
+        const blogDataForSubmit: BlogType = currentBlog
+        blogDataForSubmit.content = replaceTmpSrcWithPublicSrc(blogDataForSubmit.content)
+        debug(blogDataForSubmit)
+
+        debug('start update request')
         updateRequest({
           path: '/blogs/' + blogId,
           method: RequestMethodEnum.POST,
           headers: { 'content-type': 'multipart/form-data' },
-          data: mapStateToFormData(currentBlog),
+          data: mapStateToFormData(blogDataForSubmit),
         })
       }, () => {
         debug('validation failed at save button event handler')
@@ -115,7 +123,7 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
     window.URL.revokeObjectURL(currentBlog.mainImageUrl);
   }
 
-  const handleContentChangeEvent = (content: string, imageFiles: File[]): void => {
+  const handleContentChangeEvent = (content: Node[], imageFiles: File[]): void => {
     setBlog((prev: BlogType) => {
       return {
         ...prev,

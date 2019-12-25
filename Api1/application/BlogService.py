@@ -23,8 +23,9 @@ class BlogService(object):
         self._fileService = FileService()
 
     def getAllBlogService(self, queryString: Dict) -> Dict:
-        app.logger.info("start blog user service")
-        print("start blog user service")
+        """ for /blogs?query=string endpoint """
+        app.logger.info("start getAllBlogService service")
+        print("start getAllBlogService service")
 
         result: Dict = self._blogRepository.getAll(queryString)
 
@@ -35,6 +36,21 @@ class BlogService(object):
             result['blogs']: List[Dict] = []
 
         return result
+
+    def getBlogService(self, blog_id: str = None):
+        """ for /blogs/{blog_id} """
+        app.logger.info("start getBlogService service")
+        print("start getBlogService service")
+
+        blog: Blog = self._blogRepository.get(id=blog_id)
+
+        # transform data model to view model of blog
+        if blog is not None:
+            blogViewModel: Dict = self._blogSchema.dump(blog)
+        else:
+            raise BlogNotFoundException
+
+        return blogViewModel
 
     @db_transaction()
     def updateBlogService(self, blog_id: str, title: str, subtitle: str, content: str, mainImageFile: FileStorage = None) -> Dict:

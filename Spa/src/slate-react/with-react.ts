@@ -22,6 +22,7 @@ export const withReact = (editor: Editor): Editor => {
       case 'remove_text':
       case 'set_mark':
       case 'set_node': {
+        console.log('inside built-in command operation')
         for (const [node, path] of Editor.levels(editor, { at: op.path })) {
           const key = ReactEditor.findKey(editor, node)
           matches.push([path, key])

@@ -27,17 +27,27 @@ class Blogs(Resource):
         self._parser = QueryStringParser()
 
     # get all blogs
-    def get(self):
-        app.logger.info("start processing get request at /blogs")
-        print("start processing get request at /blogs")
+    def get(self, blog_id: str = None):
+        if blog_id is None:
+            app.logger.info("start processing get request at /blogs")
+            print("start processing get request at /blogs")
 
-        queryString: Dict = self._parser.parse(request.args)
-        # { items: List[blogSchema], totalCount: number }
-        result: Dict = self._blogService.getAllBlogService(queryString)
+            queryString: Dict = self._parser.parse(request.args)
+            # { items: List[blogSchema], totalCount: number }
+            result: Dict = self._blogService.getAllBlogService(queryString)
 
-        response = jsonify(result)
-        response.status_code = 200
-        return response
+            response = jsonify(result)
+            response.status_code = 200
+            return response
+        else:
+            app.logger.info("start processing get request at /blogs/{}".format(blog_id))
+            print("start processing get request at /blogs/{}".format(blog_id))
+
+            result: Dict = self._blogService.getBlogService(blog_id=blog_id)
+
+            response = jsonify({'blog': result})
+            response.status_code = 200
+            return response
 
     # replace existing whole blogs or create whole blogs if does not exist
     # payload must be whole blogs (all properties of blog)

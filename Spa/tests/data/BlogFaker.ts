@@ -15,7 +15,7 @@ export const getBlogTestData = (num: number = 20): BlogType[] => {
       id: i.toString(),
       title: faker.lorem.sentence(20),
       subtitle: faker.lorem.sentences(),
-      content: '', // tmply return empty string because of unexpected json token ...
+      content: [], // tmply return empty string because of unexpected json token ...
       createdDate: faker.date.past(),
       mainImageUrl: faker.image.abstract(),
       author: getUserTestData(1)[0] as AuthorType, 

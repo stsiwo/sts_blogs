@@ -1,5 +1,6 @@
 import { AuthorType } from "../author/AuthorType";
 import { TagType } from "../tag/TagType";
+import { Node } from 'slate'
 
 export declare type BlogType = {
   id: string,
@@ -7,7 +8,7 @@ export declare type BlogType = {
   subtitle: string,
   mainImage?: Blob,
   mainImageUrl?: string,
-  content: string,
+  content: Node[],
   createdDate: Date
   author?: AuthorType,
   tags?: Set<string>,
@@ -20,7 +21,7 @@ export const initialBlogState: BlogType = {
   subtitle: '',
   mainImage: null,
   mainImageUrl: '',
-  content: '',
+  content: [],
   tags: new Set<string>(),
   author: null,
   createdDate: new Date()

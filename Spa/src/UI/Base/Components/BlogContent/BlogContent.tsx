@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './BlogContent.scss';
-import { BlogContentPropType } from './types';
+import { BlogContentPropType, ImageCustomElementProps } from './types';
 import { Link } from 'react-router-dom';
 // Import the Slate editor factory.
 import { createEditor, Mark, NodeEntry, Text, Element } from 'slate'
@@ -11,12 +11,13 @@ import { CustomElementProps, CustomElement } from 'src/slate-react/components/cu
 import { AiOutlinePicLeft, AiOutlinePicRight, AiOutlinePicCenter, AiOutlineFullscreen } from 'react-icons/ai';
 import { FaBold, FaCode, FaItalic, FaImage } from 'react-icons/fa';
 import { generateBlogContentPublicImageUrl } from 'src/utils';
+import { FloatProperty } from 'csstype';
+var debug = require('debug')('ui:BlogContent')
 
-declare type ImageCustomElementProps = CustomElementProps & {
-  src: string
-  publicSrc: URL
-  imageFile?: Blob // extract this when saving. need to remove.
-}
+/**
+ * temporarly disable image 
+ *  - need to think how to deal with rich-text (with Slate)
+ **/
 
 const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogContentPropType) => {
 
@@ -30,9 +31,11 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
     ],
   }
 
-  const defaultValue: Element[] = props.value ? JSON.parse(props.value) : [
+  const defaultValue: Element[] = props.value.length !== 0 ? props.value as Element[] : [
     defaultElement
   ]
+  debug('*** blog content value')
+  debug(defaultValue)
 
   // Define our own custom set of helpers for common queries.
   const CustomEditor = {
@@ -62,7 +65,18 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
   const withCustom = (editor: Editor) => {
     const { exec, isVoid } = editor
 
+    editor.isVoid = (element: Element): boolean => {
+      debug('custom isVoid')
+      debug(element.type)
+      debug(element.type === 'figure' ? true : isVoid(element))
+      return element.type === 'figure' ? true : isVoid(element)
+    }
+
     editor.exec = command => {
+
+      debug('current selection')
+      debug(editor.selection)
+
       // Define a command to toggle the bold mark formatting.
       if (command.type === 'toggle_bold_mark') {
         const isActive = CustomEditor.isBoldMarkActive(editor)
@@ -85,6 +99,15 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
       }
 
       // Define a command to toggle the code block formatting.
+      else if (command.type === 'align_image_left') {
+        debug('executing command align_image_left')
+        editor.exec({
+          type: 'add_mark',
+          mark: { type: 'left_align' },
+        })
+      }
+
+      // Define a command to toggle the code block formatting.
       else if (command.type === 'toggle_code_block') {
         const isActive = CustomEditor.isCodeBlockActive(editor)
         // There is no `set_nodes` command, so we can transform the editor
@@ -96,17 +119,24 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
         )
       }
 
-      else if (command.type === 'insert_image') {
+      else if (command.type === 'insert_figure') {
         const tempInput = document.createElement('input')
         tempInput.type = 'file'
         tempInput.onchange = (e) => {
           const tempFile: File = (e.target as HTMLInputElement).files[0]
           const imgSrc: string = window.URL.createObjectURL(tempFile);
-          const text: Text = { text: '', marks: [] }
-          const element: Element = {
-            type: 'image', 
-            children: [text], 
-            src: imgSrc, 
+
+          const imgText: Text = {
+            text: '',
+            marks: [] as any[]
+          }
+
+          const imgElement: Element = {
+            type: 'image',
+            children: [
+              imgText
+            ],
+            src: imgSrc,
             publicSrc: generateBlogContentPublicImageUrl(props.userId, tempFile.name),
             imageFile: tempFile, // need to remove when saving. extract file into formdata separately
             attributes: {
@@ -115,8 +145,16 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
               },
             }
           }
+
+          const figureElement: Element = {
+            type: 'figure',
+            children: [
+              imgElement
+            ]
+          }
+
           const nextDefaultElement: Element = defaultElement
-          Editor.insertNodes(editor, element)
+          Editor.insertNodes(editor, figureElement)
           Editor.insertNodes(editor, nextDefaultElement)
         }
         tempInput.click();
@@ -143,6 +181,18 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
     return <i {...props.attributes}>{props.children}</i>
   }
 
+  const leftAlignStyle = {
+    maxWidth: '50%',
+    margin: '0 auto auto auto',
+    display: 'inline-block',
+    float: 'left' as FloatProperty
+  }
+
+  const LeftAlign: React.FunctionComponent<CustomElementProps> = props => {
+    debug('insert LeftAlign component')
+    return <span style={leftAlignStyle} {...props.attributes}>{props.children}</span>
+  }
+
   const CodeElement: React.FunctionComponent<CustomElementProps> = props => {
     return (
       <pre {...props.attributes}>
@@ -151,86 +201,15 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
     )
   }
 
-  const ImageElement: React.FunctionComponent<ImageCustomElementProps> = props => {
-    const figureRef: React.MutableRefObject<HTMLElement> = React.useRef(null)
-    const popupRef: React.MutableRefObject<HTMLDivElement> = React.useRef(null)
-
-    const [currentPopupStatus, setPopupStatus] = React.useState<boolean>(false)
-
-    const handleImageLeftAlignClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = (e) => {
-      figureRef.current.style.maxWidth = '50%'
-      figureRef.current.style.margin = '0 auto auto auto'
-      figureRef.current.style.display = 'inline-block'
-      figureRef.current.style.cssFloat = 'left'
-    }
-
-    const handleImageCenterAlignClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = (e) => {
-      figureRef.current.style.maxWidth = '50%'
-      figureRef.current.style.margin = '0 auto'
-      figureRef.current.style.display = 'block'
-      figureRef.current.style.cssFloat = 'none'
-    }
-
-    const handleImageFullSizeClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = (e) => {
-      figureRef.current.style.maxWidth = '100%'
-      figureRef.current.style.margin = '0 auto'
-      figureRef.current.style.display = 'block'
-      figureRef.current.style.cssFloat = 'none'
-    }
-
-    const handleImageRightAlignClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = (e) => {
-      figureRef.current.style.maxWidth = '50%'
-      figureRef.current.style.margin = '0 0 0 auto'
-      figureRef.current.style.display = 'block'
-      figureRef.current.style.cssFloat = 'right'
-    }
-
-    const handleImageDisplayClickEvent: React.EventHandler<React.MouseEvent<HTMLElement>> = (e) => {
-      //popupRef.current.style.display = 'block'
-      setPopupStatus(true)
-    }
-
-    React.useEffect(() => {
-      const handleImagePopupCloseWhenOutsideClickEvent = (e: Event) => {
-
-        if (figureRef.current.contains(e.target as Node)) {
-          return false;
-        }
-        setPopupStatus(false)
-      }
-      if (figureRef.current !== null) {
-        window.addEventListener('mousedown', handleImagePopupCloseWhenOutsideClickEvent);
-      }
-
-      return () => {
-        window.removeEventListener('mousedown', handleImagePopupCloseWhenOutsideClickEvent);
-      }
-
-    })
+  const FigureElement: React.FunctionComponent<ImageCustomElementProps> = props => {
     /** need to think how to handle Text at image **/
     /** where to put 'props.children' **/
+    debug('inside FigureElement: ')
+    debug(props)
     return (
       <>
-        <figure {...props.attributes} className="editable-figure" ref={figureRef} onClick={handleImageDisplayClickEvent}>
-          <div className="editable-image-wrapper">
-            <img src={props.element.src} {...props.element.attributes} className="editable-img" />
-            {(currentPopupStatus &&
-              <div className="popup-img-menu " ref={popupRef}>
-                <div className="icon-wrapper popup-img-menu-left-btn" onClick={handleImageLeftAlignClickEvent}>
-                  <AiOutlinePicLeft className="icon" />
-                </div>
-                <div className="icon-wrapper popup-img-menu-center-btn" onClick={handleImageCenterAlignClickEvent}>
-                  <AiOutlinePicCenter className="icon" />
-                </div>
-                <div className="icon-wrapper popup-img-menu-right-btn" onClick={handleImageRightAlignClickEvent}>
-                  <AiOutlinePicRight className="icon" />
-                </div>
-                <div className="icon-wrapper popup-img-menu-full-btn" onClick={handleImageFullSizeClickEvent}>
-                  <AiOutlineFullscreen className="icon" />
-                </div>
-              </div>
-            )}
-          </div>
+        <figure {...props.attributes} className="editable-figure">
+          <img src={props.element.children[0].src} {...props.element.children[0].attributes} className="editable-img" />
           <figcaption>test caption</figcaption>
         </figure>
       </>
@@ -239,12 +218,18 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
 
 
   const renderMark = React.useCallback(props => {
+    debug('inside renderMark func')
     switch (props.mark.type) {
       case 'bold': {
+        debug('start picking up bold Component as mark')
         return <BoldMark {...props} />
       }
       case 'italic': {
         return <ItalicMark {...props} />
+      }
+      case 'left_align': {
+        debug('start picking up left_align Component as mark')
+        return <LeftAlign {...props} />
       }
     }
   }, [])
@@ -257,12 +242,16 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
     switch (props.element.type) {
       case 'code':
         return <CodeElement {...props} />
-      case 'image':
-        return <ImageElement {...props} />
+      case 'figure':
+        return <FigureElement {...props} />
       default:
         return <DefaultElement {...props} />
     }
   }, [])
+
+  const customVoid: (element: Element) => boolean = (element) => {
+    return false
+  }
 
 
   return (
@@ -270,20 +259,20 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
       editor={editor}
       defaultValue={defaultValue}
       onChange={value => {
+        debug('current selection:')
+        debug(editor.selection)
         console.log(value)
-        // extract files 
+        // extract files and put those into different state
         const imageList = value.reduce<File[]>((cur: File[], node: Element) => {
           if (node.type === 'image') {
             cur.push(node.imageFile)
           }
           return cur
         }, [])
-        console.log('can extract image')
-        console.log(imageList)
         // Save the value to Local Storage.
+        props.onChange(value, imageList)
         const content = JSON.stringify(value)
         localStorage.setItem('content', content)
-        props.onChange(content, imageList)
         // need to save request every time user change content
         // better to use rxjs to controll how to request
       }}
@@ -316,15 +305,26 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
         >
           <FaItalic className="small-icon" />
         </div>
+       {/**
         <div
           className="small-icon-wrapper"
           onMouseDown={(e: React.MouseEvent<HTMLDivElement>) => {
             event.preventDefault()
-            editor.exec({ type: 'insert_image' })
+            editor.exec({ type: 'insert_figure' })
           }}
         >
           <FaImage className="small-icon" />
         </div>
+        <div
+          className="small-icon-wrapper"
+          onMouseDown={(e: React.MouseEvent<HTMLDivElement>) => {
+            event.preventDefault()
+            editor.exec({ type: 'align_image_left' })
+          }}
+        >
+          <AiOutlinePicLeft className="small-icon" />
+        </div>
+        **/}
         <Editable
           role="blog-content-editable"
           className="blog-content-editable clear-fix"

@@ -12,6 +12,9 @@ import ImageInput from 'Components/Input/ImageInput';
 import Input from 'Components/Input/Input';
 import TagInput from 'Components/Input/TagInput';
 import BlogContent from 'Components/BlogContent/BlogContent';
+import { Node } from 'slate'
+import { replaceTmpSrcWithPublicSrc } from 'Components/BlogContent/helpers';
+import cloneDeep = require('lodash/cloneDeep');
 var debug = require('debug')('ui:NewBlog')
 
 const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
@@ -35,7 +38,7 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
     formData.set('title', state.title)
     formData.set('subtitle', state.subtitle)
     formData.set('mainImage', state.mainImage)
-    formData.set('content', state.content)
+    formData.set('content', JSON.stringify(state.content))
     formData.set('createdDate', state.createdDate.toJSON())
     formData.set('tags', JSON.stringify(Array.from(state.tags)))
     state.blogImages.forEach((image: File) => {
@@ -49,11 +52,18 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
     validate()
       .then(() => {
         debug('validation passed at save button event handler')
+
+        debug('replace temp src image with publicSrc before submit')
+        const blogDataForSubmit: BlogType = cloneDeep(currentBlog)
+        blogDataForSubmit.content = replaceTmpSrcWithPublicSrc(blogDataForSubmit.content)
+        debug(blogDataForSubmit)
+
+        debug('start update request')
         saveRequest({
           path: path,
           method: method,
           headers: { 'content-type': 'multipart/form-data' },
-          data: mapStateToFormData(currentBlog),
+          data: mapStateToFormData(blogDataForSubmit),
         })
           .then((result: ResponseResultType<BlogResponseDataType>) => {
             // do something 
@@ -99,7 +109,7 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
     window.URL.revokeObjectURL(currentBlog.mainImageUrl);
   }
 
-  const handleContentChangeEvent = (content: string, imageFiles: File[]): void => {
+  const handleContentChangeEvent = (content: Node[], imageFiles: File[]): void => {
     setBlog((prev: BlogType) => {
       return {
         ...prev,
