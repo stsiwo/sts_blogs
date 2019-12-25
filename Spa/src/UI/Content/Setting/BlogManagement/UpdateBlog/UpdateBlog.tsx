@@ -80,7 +80,7 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
         debug('start update request')
         updateRequest({
           path: '/blogs/' + blogId,
-          method: RequestMethodEnum.POST,
+          method: RequestMethodEnum.PUT,
           headers: { 'content-type': 'multipart/form-data' },
           data: mapStateToFormData(blogDataForSubmit),
         })
@@ -116,6 +116,14 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
       ...currentBlog,
       mainImage: imgFile,
       mainImageUrl: imgSrc,
+    })
+  }
+
+  const handleImageRemoveClick: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
+    setBlog({
+      ...currentBlog,
+      mainImage: null,
+      mainImageUrl: null,
     })
   }
 
@@ -163,6 +171,7 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
         />
         <ImageInput
           handleImageUploadChange={handleImageUploadChange}
+          handleImageRemoveClick={handleImageRemoveClick}
           handleRevokeObjectURLOnLoad={handleRevokeObjectURLOnLoad}
           id={"update-blog-picture-input"}
           imgStyle={"blog-detail-picture-img" } 

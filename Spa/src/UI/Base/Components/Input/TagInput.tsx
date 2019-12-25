@@ -10,8 +10,9 @@ const TagInput: React.FunctionComponent<TagInputPropType> = (props: TagInputProp
   const tagInputRef = React.useRef(null)
 
   const handleTagDeleteClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = (e) => {
-    
+
     const targetTag = e.currentTarget.getAttribute('data-tag')
+
     props.currentBlog.tags.delete(targetTag)
     props.setBlog({
       ...props.currentBlog

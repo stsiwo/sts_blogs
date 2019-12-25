@@ -34,10 +34,9 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
   /** EH **/
   const mapStateToFormData = (state: BlogType): FormData => {
     const formData = new FormData()
-    if (state.id) formData.append('id', state.id)
     formData.set('title', state.title)
     formData.set('subtitle', state.subtitle)
-    formData.set('mainImage', state.mainImage)
+    if (state.mainImage ) formData.set('mainImage', state.mainImage)
     formData.set('content', JSON.stringify(state.content))
     formData.set('createdDate', state.createdDate.toJSON())
     formData.set('tags', JSON.stringify(Array.from(state.tags)))
@@ -105,6 +104,14 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
     })
   }
 
+  const handleImageRemoveClick: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
+    setBlog({
+      ...currentBlog,
+      mainImage: null,
+      mainImageUrl: null,
+    })
+  }
+
   const handleRevokeObjectURLOnLoad: React.EventHandler<React.SyntheticEvent<HTMLImageElement>> = (e) => {
     window.URL.revokeObjectURL(currentBlog.mainImageUrl);
   }
@@ -146,6 +153,7 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
         />
         <ImageInput
           handleImageUploadChange={handleImageUploadChange}
+          handleImageRemoveClick={handleImageRemoveClick}
           handleRevokeObjectURLOnLoad={handleRevokeObjectURLOnLoad}
           id={"update-blog-picture-input"}
           imgStyle={"blog-detail-picture-img"}

@@ -42,6 +42,7 @@ export declare type ImageInputPropType = {
   inputStyle: string
   inputValue: any
   handleImageUploadChange: React.EventHandler<React.ChangeEvent<HTMLInputElement>>
+  handleImageRemoveClick: React.EventHandler<React.MouseEvent<HTMLElement>>
   onInputFocus: React.EventHandler<React.FocusEvent<HTMLInputElement>>
   handleRevokeObjectURLOnLoad: React.EventHandler<React.SyntheticEvent<HTMLImageElement>>
   src: string

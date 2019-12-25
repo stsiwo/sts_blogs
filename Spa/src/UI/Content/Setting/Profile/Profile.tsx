@@ -1,17 +1,14 @@
-import { initialUserState, UserType } from 'domain/user/UserType';
-import { initialUserInputTouchedState, initialUserValidationState, UserInputTouchedType, UserValidationType } from 'domain/user/UserValidationType';
-import * as React from 'react';
-import { RequestMethodEnum, ResponseResultStatusEnum, UserResponseDataType, ResponseResultType } from 'requests/types';
-import { useRequest } from 'Hooks/Request/useRequest';
-import * as yup from 'yup';
-import './Profile.scss';
-import { useProfileValidation } from 'Hooks/Validation/Profile/useProfileValidation';
 import FetchStatus from 'Components/ApiFetch/FetchStatus';
 import ImageInput from 'Components/Input/ImageInput';
 import Input from 'Components/Input/Input';
 import ManageYourBlogs from 'Components/ManageYourBlogs/ManageYourBlogs';
 import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
-import { AuthContextType } from 'Contexts/AuthContext/types';
+import { UserType } from 'domain/user/UserType';
+import { useRequest } from 'Hooks/Request/useRequest';
+import { useProfileValidation } from 'Hooks/Validation/Profile/useProfileValidation';
+import * as React from 'react';
+import { RequestMethodEnum, ResponseResultStatusEnum, ResponseResultType, UserResponseDataType } from 'requests/types';
+import './Profile.scss';
 var debug = require('debug')('ui:Profile')
 
 
@@ -65,6 +62,14 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
       ...currentUser,
       avatarImage: imgFile,
       avatarUrl: imgSrc,
+    })
+  }
+
+  const handleImageRemoveClick: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
+    setUser({
+      ...currentUser,
+      avatarImage: null,
+      avatarUrl: null,
     })
   }
 
@@ -145,6 +150,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
         <div className="grid-content-wrapper">
           <ImageInput
             handleImageUploadChange={handleImageUploadChange}
+            handleImageRemoveClick={handleImageRemoveClick}
             handleRevokeObjectURLOnLoad={handleRevokeObjectURLOnLoad}
             id={"profile-picture-input"}
             imgStyle={"profile-picture-img"}

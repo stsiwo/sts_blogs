@@ -15,6 +15,10 @@ export const apiConfig: AxiosRequestConfig = {
       if (key === 'content' && value) {
         return JSON.parse(value)
       }
+      // convert list to set (tags
+      if (key === 'tags') {
+        return new Set(value) 
+      }
       return value
     });
   },

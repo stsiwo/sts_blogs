@@ -2,12 +2,18 @@ import * as React from 'react';
 import './ImageInput.scss';
 import { ImageInputPropType } from './types';
 import BaseInput from './BaseInput';
+import { MdClose } from 'react-icons/md';
 
 const ImageInput: React.FunctionComponent<ImageInputPropType> = (props: ImageInputPropType) => {
 
   return (
     <div className={props.wrapperStyle}>
-      <img src={props.src} className={props.imgStyle} onLoad={props.handleRevokeObjectURLOnLoad} alt="selected image ..." />
+      <img src={props.src} className={props.imgStyle} onLoad={props.handleRevokeObjectURLOnLoad} />
+      {(props.src &&
+        <div className="icon-wrapper image-delete-icon-wrapper" onClick={props.handleImageRemoveClick}>
+          <MdClose className="icon" />
+        </div>
+      )}
       <div className={props.labelWrapperStyle}>
         <label htmlFor={props.id} className={props.labelStyle}>
           {props.label}
