@@ -1,5 +1,6 @@
 import { QueryStringType } from "requests/types";
 import isEmpty = require('lodash/isEmpty');
+const  uuidv4 = require('uuid/v4')
 var debug = require('debug')('utils')
 
 
@@ -43,4 +44,9 @@ export function getCookie(name: string): string {
   var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
   if (match) return match[2];
   else return null;
+}
+
+export function generateFileWithUuidv4(targetFile: File) {
+  var blob: Blob = targetFile.slice(0, targetFile.size, targetFile.type)
+  return new File([blob], uuidv4(), { type: targetFile.type })
 }

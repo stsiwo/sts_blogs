@@ -14,6 +14,7 @@ import TagInput from 'Components/Input/TagInput';
 import BlogContent from 'Components/BlogContent/BlogContent';
 import { Node } from 'slate'
 import { replaceTmpSrcWithPublicSrc } from 'Components/BlogContent/helpers';
+import { generateFileWithUuidv4 } from 'src/utils';
 var debug = require('debug')('ui:UpdateBlog')
 
 const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
@@ -110,7 +111,8 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const handleImageUploadChange: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
-    const imgFile: File = e.currentTarget.files[0]
+    let imgFile: File = e.currentTarget.files[0]
+    imgFile = generateFileWithUuidv4(imgFile)
     const imgSrc: string = window.URL.createObjectURL(imgFile);
     setBlog({
       ...currentBlog,
