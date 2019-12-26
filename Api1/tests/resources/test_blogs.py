@@ -8,10 +8,14 @@ import json
 
 @pytest.mark.blogs_src
 @pytest.mark.blogs_src_get
-def test_b01_blogs_get_endpoint_should_return_404_since_no_blogs_data(client):
+def test_b01_blogs_get_endpoint_should_return_404_even_if_no_blogs_data(client):
 
     response = client.get('/blogs')
-    assert 404 == response.status_code
+
+    data = decodeResponseByteJsonToDictionary(response.data)
+
+    assert 200 == response.status_code
+    assert data.get('blogs') == []
 
 
 @pytest.mark.blogs_src
@@ -94,6 +98,22 @@ def test_b041_blogs_get_endpoint_should_return_specified_view_model(client, blog
         assert blog['author']['id'] is not None
         assert blog['author']['name'] is not None
         assert blog['author']['avatarUrl'] is not None
+
+
+@pytest.mark.blogs_src
+@pytest.mark.blogs_src_get_id
+def test_blogs_id_get_endpoint_should_return_404_when_specified_blog_does_not_exist(client, blogsSeededFixture):
+
+    response = client.get('/blogs/1222222')
+    assert 404 == response.status_code
+
+
+@pytest.mark.blogs_src
+@pytest.mark.blogs_src_get_id
+def test_blogs_id_get_endpoint_should_return_200_when_specified_blog_exist(client, blogsSeededFixture):
+
+    response = client.get('/blogs/1')
+    assert 200 == response.status_code
 
 
 @pytest.mark.blogs_src
