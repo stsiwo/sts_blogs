@@ -1,9 +1,12 @@
 from Configs.app import app
 from Infrastructure.DataModels.BlogModel import Blog
+from Infrastructure.DataModels.BlogImageModel import BlogImage
 from typing import Dict, List
 from Resources.viewModels.BlogSchema import BlogSchema
 from Infrastructure.transactionDecorator import db_transaction
 from Infrastructure.repositories.BlogRepository import BlogRepository
+from Infrastructure.repositories.TagRepository import TagRepository
+from Infrastructure.repositories.BlogImageRepository import BlogImageRepository
 from exceptions.BlogNotFoundException import BlogNotFoundException
 from application.FileService import FileService
 from werkzeug import FileStorage
@@ -15,11 +18,17 @@ class BlogService(object):
 
     _blogRepository: BlogRepository
 
+    _tagRepository: TagRepository
+
+    _blogImageRepository: BlogImageRepository
+
     _fileService: FileService
 
     def __init__(self):
         self._blogSchema = BlogSchema()
         self._blogRepository = BlogRepository()
+        self._tagRepository = BlogRepository()
+        self._blogImageRepository = BlogImageRepository()
         self._fileService = FileService()
 
     def getAllBlogService(self, queryString: Dict) -> Dict:
@@ -53,7 +62,7 @@ class BlogService(object):
         return blogViewModel
 
     @db_transaction()
-    def updateBlogService(self, blog_id: str, title: str, subtitle: str, content: str, mainImageFile: FileStorage = None) -> Dict:
+    def updateBlogService(self, blog_id: str, title: str, subtitle: str, content: str, tags: List[str] = None, mainImage: FileStorage = None,  blogImages: List[FileStorage] = [], isDeleteMainImage: bool = False, blogImagePaths: List[str] = []) -> Dict:
         app.logger.info("start update blog service")
         print("start update blog service")
 
@@ -64,11 +73,43 @@ class BlogService(object):
         if targetBlog is None:
             raise BlogNotFoundException
 
+        # if isDeleteMainImage (user delete main image and make it empty), delete existing image and assign mainImagePath = null
+        if isDeleteMainImage:
+            self._fileService.deleteImageFile(targetBlog.userId, targetBlog.mainImageUrl)
+            mainImageUrl = None
+
+        # if mainImage exist (user replace existing image with new one), delete existing image and save new one and assign new mainImageUrl
+        if mainImage is not None:
+            self._fileService.deleteImageFile(targetBlog.userId, targetBlog.mainImageUrl)
+            mainImageUrl = self._fileService.saveImageFileToDir(mainImage, targetBlog.userId)
+
+        # detect old image to be deleted
+        detectedPaths: List[str] = self._detectBlogImagePathsDifference(targetBlog.blogImages, blogImagePaths)
+
+        # delete old images
+        for oldPath in detectedPaths:
+            self._fileService.deleteImageFile(targetBlog.userId, oldPath)
+
+        # create newly added images
+        for blogImage in blogImages:
+            self._fileService.saveImageFileToDir(blogImage, targetBlog.userId)
+
+        # create BlogImage model if not exist
+        blogImageModelList: List[BlogImage] = [self._blogImageRepository.createIfNotExist(path=path) for path in blogImagePaths]
+
+        # create tags model if not exist
+        tagModelList: List[BlogImage] = [self._tagRepository.createIfNotExist(name=name) for name in tags]
+
         targetBlog.title = title
         targetBlog.subtitle = subtitle
         targetBlog.content = content
-        targetBlog.mainImageUrl = self._fileService.updateImageFileToDir(mainImageFile, targetBlog.userId, targetBlog.mainImageUrl) if mainImageFile is not None else targetBlog.mainImageUrl
+        targetBlog.mainImageUrl = mainImageUrl
+        targetBlog.blogImages = blogImageModelList
+        targetBlog.tags = tagModelList
 
         targetBlog = self._blogSchema.dump(targetBlog)
 
         return targetBlog
+
+    def _detectBlogImagePathsDifference(self, oldBlogImages: List[BlogImage], newBlogImagePaths: List[str]) -> List[str]:
+        return [oldBlogImage.path for oldBlogImage in oldBlogImages if oldBlogImage.path in newBlogImagePaths]

@@ -26,3 +26,5 @@ class Blog(BaseModel):
 
     # reverse relational to User
     user = db.relationship('User', back_populates='blogs', lazy='subquery')
+
+    blogImages = db.relationship('BlogImage', backref='blogs', lazy='subquery', cascade="all, delete-orphan")

@@ -18,8 +18,11 @@ class FileService(object):
     def saveImageFileToDir(self, file: FileStorage, userId: str) -> str:
         return self._saveOrUpdateImageToDir(file, userId)
 
-    def updateImageFileToDir(self, file: FileStorage, userId: str, originalFileName: str) -> str:
-        return self._saveOrUpdateImageToDir(file, userId, originalFileName, True)
+    def deleteImageFile(self, userId: str, originalFilePath: str) -> bool:
+        # extract file name from path
+        originalFileName = self._extractFileName(originalFilePath)
+        # remove existing image if isUpdate is True
+        os.remove(os.path.join(app.config['UPLOAD_FOLDER'], str(userId), originalFileName))
 
     def _allowed_file(self, filename: str) -> bool:
         return '.' in filename and filename.rsplit('.', 1)[1].lower() in self._allowedExtension
@@ -27,16 +30,11 @@ class FileService(object):
     def _extractFileName(self, originalFilePath: str) -> str:
         return ntpath.basename(originalFilePath)
 
-    def _saveOrUpdateImageToDir(self, file: FileStorage, userId: str, originalFilePath: str = None, isUpdate: bool = False):
+    def _saveOrUpdateImageToDir(self, file: FileStorage, userId: str):
 
         if file.stream is not None and self._allowed_file(file.filename):
             # check file extension is safe
             filename: str = secure_filename(file.filename)
-            if isUpdate and originalFilePath is not None:
-                # extract file name from path
-                originalFileName = self._extractFileName(originalFilePath)
-                # remove existing image if isUpdate is True
-                os.remove(os.path.join(app.config['UPLOAD_FOLDER'], str(userId), originalFileName))
             # set upload directory for the file
             imgDir = os.path.join(app.config['UPLOAD_FOLDER'], str(userId))
             # create the directory if not exists

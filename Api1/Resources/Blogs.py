@@ -3,7 +3,7 @@ from typing import Dict, List
 from flask import jsonify, request
 from application.BlogService import BlogService
 from Configs.app import app
-from Resources.validators.userBlogValidator import userBlogValidator
+from Resources.validators.userUpdateBlogValidator import userUpdateBlogValidator
 from Resources.validators.validatorDecorator import validate_request_with
 from Infrastructure.DataModels.BlogModel import Blog
 from Resources.viewModels.BlogSchema import BlogSchema
@@ -11,6 +11,7 @@ from Resources.roleAccessDecorator import requires_jwt_role_claim
 from flask_jwt_extended import jwt_required
 from utils.util import printObject
 from Resources.parsers.QueryStringParser import QueryStringParser
+import ast
 
 
 class Blogs(Resource):
@@ -53,17 +54,24 @@ class Blogs(Resource):
     # payload must be whole blogs (all properties of blog)
     @jwt_required
     @requires_jwt_role_claim({'admin', 'member'})
-    @validate_request_with(userBlogValidator)
+    @validate_request_with(userUpdateBlogValidator)
     def put(self, blog_id: str):
         app.logger.info("start processing post request at /blogs")
         print("start processing post request at /blogs")
+
+        tags = ast.literal_eval(request.form.get('tags')) if request.form.get('tags') is not None else []
+        blogImagePaths = ast.literal_eval(request.form.get('blogImagePaths')) if request.form.get('blogImagePaths') is not None else []
 
         updatedBlog: Blog = self._blogService.updateBlogService(
                 blog_id,
                 request.form.get('title'),
                 request.form.get('subtitle'),
                 request.form.get('content'),
-                request.files.get('mainImageFile', None)
+                tags=tags,
+                blogImagePaths=blogImagePaths,
+                mainImage=request.files.get('mainImage', None),
+                blogImages=request.files.getlist('blogImages[]', []),
+                isDeleteMainImage=request.form.get('isDeleteMainImage', False)
                 )
 
         # successfully updated and return its serialized and updated blog
@@ -71,7 +79,7 @@ class Blogs(Resource):
         # NOTE: don't specify body when using 204 (NO CONTENT). even if you set response body
         # HTTP ignore the response body and client only receives no body
         # =============================================================
-        response = jsonify(updatedBlog)
+        response = jsonify({'blog': updatedBlog})
         response.status_code = 200
         return response
 

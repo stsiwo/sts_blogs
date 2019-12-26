@@ -1,6 +1,7 @@
 from Configs.app import app
 from Infrastructure.DataModels.BlogModel import Blog
 from Infrastructure.DataModels.TagModel import Tag
+from Infrastructure.DataModels.BlogImageModel import BlogImage
 from typing import Dict, List, BinaryIO
 from Resources.viewModels.BlogSchema import BlogSchema
 from Infrastructure.transactionDecorator import db_transaction
@@ -41,7 +42,7 @@ class UserBlogService(object):
         return result
 
     @db_transaction()
-    def createNewBlogService(self, user_id: str, title: str, subtitle: str, content: str, tags: List[str] = None, mainImage: FileStorage = None, blogImages: List[FileStorage] = None) -> Blog:
+    def createNewBlogService(self, user_id: str, title: str, subtitle: str, content: str, tags: List[str] = [], mainImage: FileStorage = None, blogImages: List[FileStorage] = [], blogImagePaths: List[str] = []) -> Blog:
         app.logger.info("start userblog user service")
         print("start userblog user service")
 
@@ -50,8 +51,10 @@ class UserBlogService(object):
 
         mainImageUrl = self._fileService.saveImageFileToDir(mainImage, user_id) if mainImage is not None else None
 
-        for blogImage in blogImages:
-            self._fileService.saveImageFileToDir(blogImage, user_id)
+        blogImageModelList: Dict[BlogImage] = []
+
+        for blogImagePath in blogImagePaths:
+            blogImageModelList.append(BlogImage(url=blogImagePath))
 
         tagModelList: List[Tag] = [self._tagRepository.createIfNotExist(name=tag) for tag in tags]
 
@@ -61,7 +64,8 @@ class UserBlogService(object):
                             content=content,
                             userId=user_id,
                             mainImageUrl=mainImageUrl,
-                            tags=tagModelList
+                            tags=tagModelList,
+                            blogImages=blogImageModelList
                             )
 
         self._blogRepository.add(newBlog)

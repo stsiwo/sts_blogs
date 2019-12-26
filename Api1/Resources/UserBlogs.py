@@ -6,7 +6,7 @@ from typing import Dict, List
 from Resources.roleAccessDecorator import requires_jwt_role_claim
 from flask_jwt_extended import jwt_required
 from Resources.validators.validatorDecorator import validate_request_with
-from Resources.validators.userBlogValidator import userBlogValidator
+from Resources.validators.userNewBlogValidator import userNewBlogValidator
 from Infrastructure.DataModels.BlogModel import Blog
 from Resources.viewModels.BlogSchema import BlogSchema
 from utils.util import printObject
@@ -46,7 +46,7 @@ class UserBlogs(Resource):
     # create new blog
     @jwt_required
     @requires_jwt_role_claim({'admin', 'member'})
-    @validate_request_with(userBlogValidator)
+    @validate_request_with(userNewBlogValidator)
     def post(self, user_id: str):
         app.logger.info("start processing post request at /blogs")
         print("start processing post request at /blogs")
@@ -54,14 +54,18 @@ class UserBlogs(Resource):
         print("***content of files")
         print(request.files.get('mainImage'))
 
+        tags = ast.literal_eval(request.form.get('tags')) if request.form.get('tags') is not None else []
+        blogImagePaths = ast.literal_eval(request.form.get('blogImagePaths')) if request.form.get('blogImagePaths') is not None else []
+
         newBlog: Blog = self._userBlogService.createNewBlogService(
                 user_id=user_id,
                 title=request.form.get('title'),
                 subtitle=request.form.get('subtitle'),
                 content=request.form.get('content'),
-                tags=ast.literal_eval(request.form.get('tags', '')),
+                tags=tags,
+                blogImagePaths=blogImagePaths,
                 mainImage=request.files.get('mainImage', None),
-                blogImages=request.files.getlist('blogImages[]', None)
+                blogImages=request.files.getlist('blogImages[]', [])
                 )
 
         blogSchema = self._blogSchema.dump(newBlog)
