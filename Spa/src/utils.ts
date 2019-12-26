@@ -48,5 +48,5 @@ export function getCookie(name: string): string {
 
 export function generateFileWithUuidv4(targetFile: File) {
   var blob: Blob = targetFile.slice(0, targetFile.size, targetFile.type)
-  return new File([blob], uuidv4(), { type: targetFile.type })
+  return new File([blob], targetFile.name.replace(/.*(?=\.)/g, uuidv4()), { type: targetFile.type })
 }
