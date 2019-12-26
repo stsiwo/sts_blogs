@@ -18,6 +18,8 @@ class BlogImageRepository(BaseRepository[BlogImage]):
 
     def createIfNotExist(self, path: str) -> BlogImage:
         blogImage = self.get(path)
+        print("*** createIfNotExist debug")
+        print(blogImage)
         if blogImage is None:
             blogImage = BlogImage(path=path)
             self.add(blogImage)

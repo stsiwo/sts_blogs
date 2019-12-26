@@ -15,7 +15,8 @@ def generateBlogModel(
         user=None,
         tags=[],
         mainImageUrl=None,
-        createdDate=fake.date_time_between(start_date="-30y", end_date="now", tzinfo=None)
+        createdDate=fake.date_time_between(start_date="-30y", end_date="now", tzinfo=None),
+        blogImages=[],
         ):
 
     blog = Blog(
@@ -26,7 +27,8 @@ def generateBlogModel(
             userId=userId,
             tags=tags,
             mainImageUrl=mainImageUrl,
-            createdDate=createdDate
+            createdDate=createdDate,
+            blogImages=blogImages
             )
 
     blog.user = user

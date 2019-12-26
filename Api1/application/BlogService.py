@@ -73,14 +73,22 @@ class BlogService(object):
         if targetBlog is None:
             raise BlogNotFoundException
 
+        # assign mainImageUrl to existing one in the case for unchange mainImageUrl
+        mainImageUrl = targetBlog.mainImageUrl
+
         # if isDeleteMainImage (user delete main image and make it empty), delete existing image and assign mainImagePath = null
         if isDeleteMainImage:
+            app.logger.info("main image is delete in this request")
+            print("main image is delete in this request")
             self._fileService.deleteImageFile(targetBlog.userId, targetBlog.mainImageUrl)
             mainImageUrl = None
 
         # if mainImage exist (user replace existing image with new one), delete existing image and save new one and assign new mainImageUrl
         if mainImage is not None:
-            self._fileService.deleteImageFile(targetBlog.userId, targetBlog.mainImageUrl)
+            app.logger.info("include mainImage in this request")
+            print("include mainImage in this request")
+            if targetBlog.mainImageUrl is not None:  # if existing imageurl exist, if not skip deleting image
+                self._fileService.deleteImageFile(targetBlog.userId, targetBlog.mainImageUrl)
             mainImageUrl = self._fileService.saveImageFileToDir(mainImage, targetBlog.userId)
 
         # detect old image to be deleted
@@ -95,7 +103,7 @@ class BlogService(object):
             self._fileService.saveImageFileToDir(blogImage, targetBlog.userId)
 
         # create BlogImage model if not exist
-        blogImageModelList: List[BlogImage] = [self._blogImageRepository.createIfNotExist(path=path) for path in blogImagePaths]
+        blogImageModelList: List[BlogImage] = [BlogImage(path=path) for path in blogImagePaths]
 
         # create tags model if not exist
         tagModelList: List[BlogImage] = [self._tagRepository.createIfNotExist(name=name) for name in tags]
@@ -109,7 +117,9 @@ class BlogService(object):
 
         targetBlog = self._blogSchema.dump(targetBlog)
 
+        print(targetBlog)
+
         return targetBlog
 
     def _detectBlogImagePathsDifference(self, oldBlogImages: List[BlogImage], newBlogImagePaths: List[str]) -> List[str]:
-        return [oldBlogImage.path for oldBlogImage in oldBlogImages if oldBlogImage.path in newBlogImagePaths]
+        return [oldBlogImage.path for oldBlogImage in oldBlogImages if oldBlogImage.path not in newBlogImagePaths]

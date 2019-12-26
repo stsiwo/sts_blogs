@@ -10,6 +10,7 @@ from tests.data.generators.RoleGenerator import generateRoleModel
 from Infrastructure.DataModels.RoleModel import Role
 from Infrastructure.DataModels.TagModel import Tag
 from Infrastructure.DataModels.UserModel import User
+from Infrastructure.DataModels.BlogImageModel import BlogImage
 from tests.data.generators.UserGenerator import generateUserModel
 from tests.data.generators.BlogGenerator import generateBlogModel
 from tests.data.generators.CommentGenerator import generateCommentModel
@@ -24,6 +25,7 @@ from utils.util import parseStrToDate
 import pathlib
 from werkzeug.datastructures import FileStorage
 import time
+import uuid
 
 app = main
 
@@ -37,7 +39,7 @@ def testImageFile():
     file = BytesIO()
     image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
     image.save(file, 'png')
-    file.name = 'test.png'
+    file.name = str(uuid.uuid4()) + '.png'
     file.seek(0)
     yield file
 
@@ -46,7 +48,7 @@ def testImageFile():
 def testNoImageFile():
     file = BytesIO()
     file.write('this is not image file'.encode('utf-8'))
-    file.name = 'non-image-file.js'
+    file.name = str(uuid.uuid4()) + '.png'
     file.seek(0)
     yield file
 
@@ -57,9 +59,35 @@ def testExistingFileStorage():
     file = BytesIO()
     image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
     image.save(file, 'png')
-    file.name = 'test-existing.png'
+    file.name = str(uuid.uuid4()) + '.png'
     file.seek(0)
-    fileStorage: FileStorage = FileStorage(stream=file)
+    fileStorage: FileStorage = FileStorage(stream=file, content_type='image/png')
+    print(fileStorage)
+    yield fileStorage
+
+
+@pytest.fixture
+def testExistingFileStorage1():
+    print('start setup test exisitng file storage')
+    file = BytesIO()
+    image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
+    image.save(file, 'png')
+    file.name = str(uuid.uuid4()) + '.png'
+    file.seek(0)
+    fileStorage: FileStorage = FileStorage(stream=file, content_type='image/png')
+    print(fileStorage)
+    yield fileStorage
+
+
+@pytest.fixture
+def testExistingFileStorage2():
+    print('start setup test exisitng file storage')
+    file = BytesIO()
+    image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
+    image.save(file, 'png')
+    file.name = str(uuid.uuid4()) + '.png'
+    file.seek(0)
+    fileStorage: FileStorage = FileStorage(stream=file, content_type='image/png')
     print(fileStorage)
     yield fileStorage
 
@@ -70,9 +98,48 @@ def testFileStorage():
     file = BytesIO()
     image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
     image.save(file, 'png')
-    file.name = 'test-sample.png'
+    file.name = str(uuid.uuid4()) + '.png'
     file.seek(0)
-    fileStorage: FileStorage = FileStorage(stream=file)
+    fileStorage: FileStorage = FileStorage(stream=file, content_type='image/png')
+    print(fileStorage)
+    yield fileStorage
+
+
+@pytest.fixture
+def testFileStorage1():
+    print('start setup test exisitng file storage 1')
+    file = BytesIO()
+    image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
+    image.save(file, 'png')
+    file.name = str(uuid.uuid4()) + '.png'
+    file.seek(0)
+    fileStorage: FileStorage = FileStorage(stream=file, content_type='image/png')
+    print(fileStorage)
+    yield fileStorage
+
+
+@pytest.fixture
+def testFileStorage2():
+    print('start setup test exisitng file storage 2')
+    file = BytesIO()
+    image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
+    image.save(file, 'png')
+    file.name = str(uuid.uuid4()) + '.png'
+    file.seek(0)
+    fileStorage: FileStorage = FileStorage(stream=file, content_type='image/png')
+    print(fileStorage)
+    yield fileStorage
+
+
+@pytest.fixture
+def testFileStorage3():
+    print('start setup test exisitng file storage 3')
+    file = BytesIO()
+    image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
+    image.save(file, 'png')
+    file.name = str(uuid.uuid4()) + '.png'
+    file.seek(0)
+    fileStorage: FileStorage = FileStorage(stream=file, content_type='image/png')
     print(fileStorage)
     yield fileStorage
 
@@ -135,12 +202,15 @@ def setupTempUploadDir(application, request):
 
 
 @pytest.fixture
-def setupTempUploadDirWithImageFile(application, setupTempUploadDir, authedClientWithBlogSeeded, exSession, testExistingFileStorage):
+def setupTempUploadDirWithImageFile(application, setupTempUploadDir, authedClientWithBlogSeeded, exSession, testExistingFileStorage, testExistingFileStorage1, testExistingFileStorage2):
 
     authedUser = exSession.query(User).filter_by(email='test@test.com').first()
     imgDir = os.path.join(application.config['UPLOAD_FOLDER'], str(authedUser.id))
     pathlib.Path(imgDir).mkdir(parents=True, exist_ok=True)
+    # save testing file
     testExistingFileStorage.save(os.path.join(imgDir, testExistingFileStorage.filename))
+    testExistingFileStorage1.save(os.path.join(imgDir, testExistingFileStorage1.filename))
+    testExistingFileStorage2.save(os.path.join(imgDir, testExistingFileStorage2.filename))
 
     printObject(os.listdir(application.config['UPLOAD_FOLDER']))
 
@@ -417,11 +487,20 @@ def authedAdminClient(client, adminUserSeededFixture):
 
 
 @pytest.fixture
-def authedClientWithBlogSeeded(exSession, authedClient, testExistingFileStorage):
+def authedClientWithBlogSeeded(exSession, authedClient, testExistingFileStorage, testExistingFileStorage1, testExistingFileStorage2):
     print("setup seedBlogsOfAuthedClient fixture")
 
     authedUser = exSession.query(User).filter_by(email='test@test.com').first()
-    exSession.add(generateBlogModel(id=1, user=authedUser, userId=authedUser.id, mainImageUrl='/images/1/' + testExistingFileStorage.filename))
+    exSession.add(generateBlogModel(
+        id=1,
+        user=authedUser,
+        userId=authedUser.id,
+        mainImageUrl='/images/' + str(authedUser.id) + '/' + testExistingFileStorage.filename,
+        blogImages=[
+            BlogImage(path='/images/' + str(authedUser.id) + '/' + testExistingFileStorage1.filename),
+            BlogImage(path='/images/' + str(authedUser.id) + '/' + testExistingFileStorage2.filename),
+            ]
+        ))
     exSession.add(generateBlogModel(id=2, user=authedUser, userId=authedUser.id))
     exSession.add(generateBlogModel(id=3, user=authedUser, userId=authedUser.id))
     exSession.commit()
@@ -481,7 +560,8 @@ def testBlogData():
     yield {
             'title': "test-title",
             'subtitle': "test-subtitle",
-            'content': "test-content"
+            'content': "test-content",
+            'updatedDate': parseStrToDate('1999-01-01T00:00:00.000Z'),
             }
 
 
@@ -491,7 +571,8 @@ def testBlogDataWithMainImage(testImageFile):
             'title': "test-title",
             'subtitle': "test-subtitle",
             'content': "test-content",
-            'mainImageFile': testImageFile
+            'mainImageFile': testImageFile,
+            'updatedDate': parseStrToDate('1999-01-01T00:00:00.000Z'),
             }
 
 

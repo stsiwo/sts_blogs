@@ -70,7 +70,7 @@ class Blogs(Resource):
                 tags=tags,
                 blogImagePaths=blogImagePaths,
                 mainImage=request.files.get('mainImage', None),
-                blogImages=request.files.getlist('blogImages[]', []),
+                blogImages=request.files.getlist('blogImages[]'),
                 isDeleteMainImage=request.form.get('isDeleteMainImage', False)
                 )
 

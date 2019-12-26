@@ -31,6 +31,8 @@ FLASK_APP = './run.py'
 
 HOST_NAME = os.getenv('HOST_NAME', '')
 
+APP_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 # jwt config
 # Configure application to store JWTs in cookies
 JWT_TOKEN_LOCATION = ['cookies']
