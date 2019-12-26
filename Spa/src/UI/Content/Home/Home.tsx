@@ -73,7 +73,9 @@ const Home: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComp
     // solve above problem by adding min-height to fetched blogs item wrapper.
     const selectedOption: string = e.currentTarget.getAttribute('data-option')
     setBlogOptionList((prev: BlogOptionListType) => ({
-      ...prev,
+      blogs: {
+        ...prev.blogs
+      },
       active: selectedOption as keyof BlogOptionType
     }))
   }
@@ -91,11 +93,11 @@ const Home: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComp
     },
     popular: {
       limit: 5,
-      tags: '',
+      sort: SortEnum.CLAP_ASC
     },
     recommended: {
       limit: 5,
-      sort: SortEnum.CLAP_ASC
+      tags: '',
     }
   }), [])
 

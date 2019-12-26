@@ -6,6 +6,8 @@ import { act } from 'react-dom/test-utils';
 import { CssGlobalContextDefaultState } from "Contexts/CssGlobalContext/CssGlobalContextDefaultState";
 import { ContextWrapperComponent } from "../../fixtures";
 import Content from 'ui/Content/Content'
+import { api } from 'requests/api';
+import { userGET200Response } from '../../..//requests/fixtures';
 
 
 describe('h-c1: Setting Component testing', () => {
@@ -42,6 +44,7 @@ describe('h-c1: Setting Component testing', () => {
 
   /** test for use case which does not matter screen size  here**/
   test('a1. (Route) Profile link should have link to Home ("/setting/profile")', async () => {
+    api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
     await act(async () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Content} isAuth initialRoute='/setting'/>

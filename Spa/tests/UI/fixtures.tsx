@@ -7,6 +7,7 @@ import { CssGlobalContext } from 'Contexts/CssGlobalContext/CssGlobalContext';
 import { AuthContext, useUpdateAuthContextReducer } from 'Contexts/AuthContext/AuthContext';
 import { AuthType, AuthContextType } from 'Contexts/AuthContext/types';
 import { getUserTestData } from '../data/UserFaker';
+import { storeUserInfo, removeUserInfo } from 'src/storages/user';
 /** 
  * CssGlobalContext
  * Redux Provider stre
@@ -41,6 +42,9 @@ export const ContextWrapperComponent: React.FunctionComponent<ContextWrapperComp
       authed: true,
       user: getUserTestData(1)[0]
     }
+    storeUserInfo(defaultAuth.user)
+  } else {
+    removeUserInfo()
   }
 
   const [auth, authDispatch] = useUpdateAuthContextReducer(defaultAuth)

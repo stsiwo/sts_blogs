@@ -172,7 +172,7 @@ describe('bl-c1: BlogList Component testing', () => {
       )
       // ?? can't getByText event if debug show it is there
       await wait(() => {
-        expect(getByText('blogs are empty')).toBeInTheDocument()
+        expect(getByText('there is no blog based on the your sort & filter')).toBeInTheDocument()
       })
     })
   })
@@ -195,7 +195,7 @@ describe('bl-c1: BlogList Component testing', () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
         <ContextWrapperComponent component={BlogList} />
       )
-      await waitForElement(() => getByText('blogs are empty'))
+      await waitForElement(() => getByText('there is no blog based on the your sort & filter'))
       const tagInput = getByLabelText('Tags')
       fireEvent.keyDown(tagInput,
         {
@@ -219,7 +219,7 @@ describe('bl-c1: BlogList Component testing', () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
         <ContextWrapperComponent component={BlogList} />
       )
-      await waitForElement(() => getByText('blogs are empty'))
+      await waitForElement(() => getByText('there is no blog based on the your sort & filter'))
       const tagInput = getByLabelText('Tags')
       fireEvent.keyDown(tagInput,
         {
@@ -242,7 +242,7 @@ describe('bl-c1: BlogList Component testing', () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
         <ContextWrapperComponent component={BlogList} />
       )
-      await waitForElement(() => getByText('blogs are empty'))
+      await waitForElement(() => getByText('there is no blog based on the your sort & filter'))
       const keywordInput = getByLabelText('Keyword')
       fireEvent.change(keywordInput,
         {
@@ -264,7 +264,7 @@ describe('bl-c1: BlogList Component testing', () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
         <ContextWrapperComponent component={BlogList} />
       )
-      await waitForElement(() => getByText('blogs are empty'))
+      await waitForElement(() => getByText('there is no blog based on the your sort & filter'))
       const startDateInput = getByLabelText('Start Date')
 
       fireEvent.change(startDateInput,
@@ -287,7 +287,7 @@ describe('bl-c1: BlogList Component testing', () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
         <ContextWrapperComponent component={BlogList} />
       )
-      await waitForElement(() => getByText('blogs are empty'))
+      await waitForElement(() => getByText('there is no blog based on the your sort & filter'))
       const sortInput = getByLabelText('End Date')
 
       fireEvent.change(sortInput,
@@ -310,7 +310,7 @@ describe('bl-c1: BlogList Component testing', () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
         <ContextWrapperComponent component={BlogList} />
       )
-      await waitForElement(() => getByText('blogs are empty'))
+      await waitForElement(() => getByText('there is no blog based on the your sort & filter'))
       const sortInput = getByLabelText('Title Desc')
 
       /** 
@@ -363,7 +363,7 @@ describe('bl-c1: BlogList Component testing', () => {
       fireEvent.click(lastPageBtn)
     })
     expect(api.request).toHaveBeenCalledTimes(2)
-    expect((api.request as any).mock.calls[1][0].url).toContain('page=25&limit=20')
+    expect((api.request as any).mock.calls[1][0].url).toContain('page=500&limit=20')
   })
 
   describe('bl-c1: <= tablet screen size', () => {

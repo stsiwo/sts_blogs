@@ -2,7 +2,7 @@ import '@testing-library/jest-dom/extend-expect';
 // import react-testing methods
 import { fireEvent, queryByRole, queryByText, render, wait, waitForElement } from '@testing-library/react';
 import * as React from 'react';
-import { act } from 'react-dom/test-utils';
+import { act, Simulate } from 'react-dom/test-utils';
 import { api } from "requests/api";
 import { CssGlobalContextDefaultState } from "Contexts/CssGlobalContext/CssGlobalContextDefaultState";
 import Home from "ui/Content/Home/Home";
@@ -159,12 +159,17 @@ describe('bl-c1: Home Component testing', () => {
 
   test('a8. (EH) should start fetch when user click "popular" btn for popular blogs', async () => {
 
-    api.request = jest.fn().mockReturnValue(Promise.resolve(internalServerError500Response))
+    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
         <ContextWrapperComponent component={Home} />
       )
       const popularBtn = await waitForElement(() => getByText('Popular'))
+
+      /**
+       * fireEvent.click(popularBtn) make test stuck?? bugs??
+       **/
+      //Simulate.click(popularBtn)
       fireEvent.click(popularBtn)
       await wait(() => {
         expect(api.request).toHaveBeenCalledTimes(2)
@@ -174,7 +179,7 @@ describe('bl-c1: Home Component testing', () => {
 
   test('a9. (guest) should not display "recommended" blogs option', async () => {
 
-    api.request = jest.fn().mockReturnValue(Promise.resolve(internalServerError500Response))
+    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole, queryByText } = render(
         <ContextWrapperComponent component={Home} />
@@ -188,7 +193,7 @@ describe('bl-c1: Home Component testing', () => {
 
   test('a10. (member&admin) should display "recommended" blogs option', async () => {
 
-    api.request = jest.fn().mockReturnValue(Promise.resolve(internalServerError500Response))
+    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
         <ContextWrapperComponent component={Home} isAuth/>
