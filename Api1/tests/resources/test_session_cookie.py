@@ -11,7 +11,9 @@ def test_session_cookie(application, database, blogsSeededFixture, authedClient)
         user = database.session.query(User).first()
         userId = user.id
 
-    response = authedClient.get('/users/' + str(userId) + '/blogs')
+    csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
+
+    response = authedClient.get('/users/' + str(userId) + '/blogs', headers={'X-CSRF-TOKEN': csrf_token})
 
     printObject(response.data)
 

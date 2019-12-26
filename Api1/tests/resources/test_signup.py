@@ -60,9 +60,9 @@ def test_s04_1_signup_should_return_user_view_model(client):
     print(data)
 
     assert 200 == rv.status_code
-    assert data['id'] is not None
-    assert data['name'] == 'test'
-    assert data['roles'] is not ['member']
+    assert data['user']['id'] is not None
+    assert data['user']['name'] == 'test'
+    assert data['user']['roles'] is not ['member']
 
 
 def test_s05_new_user_created_successfully_and_user_is_persisted(client, database, application):

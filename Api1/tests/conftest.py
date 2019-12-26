@@ -612,5 +612,5 @@ def testUserDataWithImageForUpdate(testFileStorage):
             'name': 'updated_name',
             'email': 'updated@test.com',
             'password': 'updated_password',
-            'avatarFile': testFileStorage.stream
+            'avatarImage': testFileStorage.stream
             }

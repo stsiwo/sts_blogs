@@ -104,8 +104,8 @@ def test_u05_users_put_endpoint_should_allow_authed_user_to_return_updated_user(
     data = decodeResponseByteJsonToDictionary(response.data)
 
     assert 200 == response.status_code
-    assert testUserDataForUpdate['name'] == data['name']
-    assert testUserDataForUpdate['email'] == data['email']
+    assert testUserDataForUpdate['name'] == data['user']['name']
+    assert testUserDataForUpdate['email'] == data['user']['email']
 
 
 @pytest.mark.user_src
@@ -132,6 +132,6 @@ def test_u06_users_put_endpoint_should_allow_authed_user_to_return_updated_user_
     data = decodeResponseByteJsonToDictionary(response.data)
 
     assert 200 == response.status_code
-    assert testUserDataWithImageForUpdate['name'] == data['name']
-    assert testUserDataWithImageForUpdate['email'] == data['email']
-    assert os.path.join(application.config["PUBLIC_FILE_FOLDER"], str(userId), testFileStorage.filename) == data['avatarUrl']
+    assert testUserDataWithImageForUpdate['name'] == data['user']['name']
+    assert testUserDataWithImageForUpdate['email'] == data['user']['email']
+    assert os.path.join(str(userId), testFileStorage.filename) in data['user']['avatarUrl']
