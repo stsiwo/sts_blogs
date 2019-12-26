@@ -10,7 +10,7 @@ import { Editor } from 'slate'
 import { CustomElementProps, CustomElement } from 'src/slate-react/components/custom';
 import { AiOutlinePicLeft, AiOutlinePicRight, AiOutlinePicCenter, AiOutlineFullscreen } from 'react-icons/ai';
 import { FaBold, FaCode, FaItalic, FaImage } from 'react-icons/fa';
-import { generateBlogContentPublicImageUrl, generateBlogContentPublicImagePath } from 'src/utils';
+import { generateBlogContentPublicImageUrl, generateBlogContentPublicImagePath, generateFileWithUuidv4 } from 'src/utils';
 import { FloatProperty } from 'csstype';
 var debug = require('debug')('ui:BlogContent')
 
@@ -123,7 +123,8 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
         const tempInput = document.createElement('input')
         tempInput.type = 'file'
         tempInput.onchange = (e) => {
-          const tempFile: File = (e.target as HTMLInputElement).files[0]
+          let tempFile: File = (e.target as HTMLInputElement).files[0]
+          tempFile = generateFileWithUuidv4(tempFile)
           const imgSrc: string = window.URL.createObjectURL(tempFile);
 
           const imgText: Text = {

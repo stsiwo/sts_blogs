@@ -9,6 +9,7 @@ import { useProfileValidation } from 'Hooks/Validation/Profile/useProfileValidat
 import * as React from 'react';
 import { RequestMethodEnum, ResponseResultStatusEnum, ResponseResultType, UserResponseDataType } from 'requests/types';
 import './Profile.scss';
+import { generateFileWithUuidv4 } from 'src/utils';
 var debug = require('debug')('ui:Profile')
 
 
@@ -56,7 +57,8 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
 
 
   const handleImageUploadChange: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
-    const imgFile: File = e.currentTarget.files[0]
+    let imgFile: File = e.currentTarget.files[0]
+    imgFile = generateFileWithUuidv4(imgFile)
     const imgSrc: string = window.URL.createObjectURL(imgFile);
     setUser({
       ...currentUser,
