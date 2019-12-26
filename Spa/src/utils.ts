@@ -35,6 +35,10 @@ export const generateBlogContentPublicImageUrl = (userId: string, imageName: str
   return new URL(process.env.PUBLIC_IMAGE_PATH + userId + '/' + imageName, process.env.API1_URL)
 }
 
+export const generateBlogContentPublicImagePath = (userId: string, imageName: string): string => {
+  return process.env.PUBLIC_IMAGE_PATH + userId + '/' + imageName;
+}
+
 export function getCookie(name: string): string {
   var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
   if (match) return match[2];

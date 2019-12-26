@@ -48,13 +48,13 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
   /** EH **/
   const mapStateToFormData = (state: BlogType): FormData => {
     const formData = new FormData()
-    formData.append('id', state.id)
     formData.set('title', state.title)
     formData.set('subtitle', state.subtitle)
-    formData.set('mainImage', state.mainImage)
+    if (state.mainImage) formData.set('mainImage', state.mainImage)
     formData.set('content', JSON.stringify(state.content))
     formData.set('updatedDate', state.createdDate.toJSON())
     formData.set('tags', JSON.stringify(Array.from(state.tags)))
+    if (state.blogImagePaths && state.blogImagePaths.length !== 0) formData.set('blogImagePaths', JSON.stringify(state.blogImagePaths))
     state.blogImages.forEach((image: File) => {
       formData.append('blogImages[]', image)
     })

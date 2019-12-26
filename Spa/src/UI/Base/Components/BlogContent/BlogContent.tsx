@@ -10,7 +10,7 @@ import { Editor } from 'slate'
 import { CustomElementProps, CustomElement } from 'src/slate-react/components/custom';
 import { AiOutlinePicLeft, AiOutlinePicRight, AiOutlinePicCenter, AiOutlineFullscreen } from 'react-icons/ai';
 import { FaBold, FaCode, FaItalic, FaImage } from 'react-icons/fa';
-import { generateBlogContentPublicImageUrl } from 'src/utils';
+import { generateBlogContentPublicImageUrl, generateBlogContentPublicImagePath } from 'src/utils';
 import { FloatProperty } from 'csstype';
 var debug = require('debug')('ui:BlogContent')
 
@@ -263,14 +263,16 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
         debug(editor.selection)
         console.log(value)
         // extract files and put those into different state
-        const imageList = value.reduce<File[]>((cur: File[], node: Element) => {
+        const imageList: File[] = []
+        const imagePathList: string[] = []
+        value.forEach((node: Element) => {
           if (node.type === 'image') {
-            cur.push(node.imageFile)
+            imageList.push(node.imageFile)
+            imagePathList.push(generateBlogContentPublicImagePath(props.userId, node.imageFile.name))
           }
-          return cur
-        }, [])
+        })
         // Save the value to Local Storage.
-        props.onChange(value, imageList)
+        props.onChange(value, imageList, imagePathList)
         const content = JSON.stringify(value)
         localStorage.setItem('content', content)
         // need to save request every time user change content

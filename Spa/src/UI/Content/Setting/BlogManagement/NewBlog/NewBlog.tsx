@@ -23,6 +23,7 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
   const subtitleInputRef: React.MutableRefObject<HTMLInputElement> = { current: null }
 
   const [currentBlog, setBlog] = React.useState<BlogType>(initialBlogState)
+  const [currentIsDeleteImage, setIsDeleteImage] = React.useState<boolean>(false)
   const { currentValidationError, touch, validate } = useBlogValidation({ domain: currentBlog })
   const { currentRequestStatus: currentNewBlogStatus, setRequestStatus: setNewBlogStatus, sendRequest: saveRequest } = useRequest({})
   const { blogId } = useParams();
@@ -36,10 +37,12 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
     const formData = new FormData()
     formData.set('title', state.title)
     formData.set('subtitle', state.subtitle)
-    if (state.mainImage ) formData.set('mainImage', state.mainImage)
+    if (state.mainImage) formData.set('mainImage', state.mainImage)
+    if (currentIsDeleteImage) formData.set('isDeleteImage', '1') // true
     formData.set('content', JSON.stringify(state.content))
     formData.set('createdDate', state.createdDate.toJSON())
     formData.set('tags', JSON.stringify(Array.from(state.tags)))
+    if (state.blogImagePaths.length !== 0) formData.set('blogImagePaths', JSON.stringify(state.blogImagePaths))
     state.blogImages.forEach((image: File) => {
       formData.append('blogImages[]', image)
     })
@@ -97,6 +100,7 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
   const handleImageUploadChange: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
     const imgFile: File = e.currentTarget.files[0]
     const imgSrc: string = window.URL.createObjectURL(imgFile);
+    setIsDeleteImage(false)
     setBlog({
       ...currentBlog,
       mainImage: imgFile,
@@ -105,6 +109,7 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const handleImageRemoveClick: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
+    setIsDeleteImage(true)
     setBlog({
       ...currentBlog,
       mainImage: null,
@@ -116,12 +121,13 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
     window.URL.revokeObjectURL(currentBlog.mainImageUrl);
   }
 
-  const handleContentChangeEvent = (content: Node[], imageFiles: File[]): void => {
+  const handleContentChangeEvent = (content: Node[], imageFiles: File[], imagePaths: string[]): void => {
     setBlog((prev: BlogType) => {
       return {
         ...prev,
         content: content,
-        blogImages: imageFiles
+        blogImages: imageFiles,
+        blogImagePaths: imagePaths
       }
     })
     /**

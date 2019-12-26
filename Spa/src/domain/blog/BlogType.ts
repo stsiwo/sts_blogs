@@ -13,6 +13,7 @@ export declare type BlogType = {
   author?: AuthorType,
   tags?: Set<string>,
   blogImages?: File[],
+  blogImagePaths?: string[],
 }
 
 export const initialBlogState: BlogType = {
