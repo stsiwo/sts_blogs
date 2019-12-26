@@ -65,7 +65,7 @@ class UserBlogs(Resource):
                 tags=tags,
                 blogImagePaths=blogImagePaths,
                 mainImage=request.files.get('mainImage', None),
-                blogImages=request.files.getlist('blogImages[]', [])
+                blogImages=request.files.getlist('blogImages[]')
                 )
 
         blogSchema = self._blogSchema.dump(newBlog)

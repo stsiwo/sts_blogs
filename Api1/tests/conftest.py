@@ -566,13 +566,34 @@ def testBlogData():
 
 
 @pytest.fixture
+def testNewBlogData():
+    yield {
+            'title': "test-title",
+            'subtitle': "test-subtitle",
+            'content': "test-content",
+            'createdDate': parseStrToDate('1999-01-01T00:00:00.000Z'),
+            }
+
+
+@pytest.fixture
 def testBlogDataWithMainImage(testImageFile):
     yield {
             'title': "test-title",
             'subtitle': "test-subtitle",
             'content': "test-content",
-            'mainImageFile': testImageFile,
+            'mainImage': testImageFile,
             'updatedDate': parseStrToDate('1999-01-01T00:00:00.000Z'),
+            }
+
+
+@pytest.fixture
+def testNewBlogDataWithMainImage(testFileStorage):
+    yield {
+            'title': "test-title",
+            'subtitle': "test-subtitle",
+            'content': "test-content",
+            'mainImage': testFileStorage,
+            'createdDate': parseStrToDate('1999-01-01T00:00:00.000Z'),
             }
 
 

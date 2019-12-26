@@ -35,6 +35,7 @@ class UserBlogService(object):
 
         # TODO; if user id does not exist, should return 404 code
         # https://app.clickup.com/t/3m574q
+        # really? why?
         result: Dict = self._blogRepository.getAll(queryString, userId)
 
         result['blogs']: List[Dict] = [self._blogSchema.dump(blog) for blog in result['blogs']]
@@ -54,7 +55,10 @@ class UserBlogService(object):
         blogImageModelList: Dict[BlogImage] = []
 
         for blogImagePath in blogImagePaths:
-            blogImageModelList.append(BlogImage(url=blogImagePath))
+            blogImageModelList.append(BlogImage(path=blogImagePath))
+
+        for blogImage in blogImages:
+            self._fileService.saveImageFileToDir(blogImage, user_id)
 
         tagModelList: List[Tag] = [self._tagRepository.createIfNotExist(name=tag) for tag in tags]
 
