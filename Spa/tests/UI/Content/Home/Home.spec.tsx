@@ -157,6 +157,9 @@ describe('bl-c1: Home Component testing', () => {
     })
   })
 
+  /**
+   * comment out since this make testing stuck
+   **/
   test('a8. (EH) should start fetch when user click "popular" btn for popular blogs', async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
