@@ -20,7 +20,7 @@ jobs:
           # add '-w 1' to prevent 'no enough memory' error
           command: |
             npx jest -w 1 tests/
-  build:
+  build-api:
     docker:
       - image: circleci/python:3.6.8-stretch-browsers
     steps:
