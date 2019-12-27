@@ -115,6 +115,7 @@ describe('r-1: request module testing', () => {
             })
 
           expect(result).toStrictEqual({
+            needLogout: true,
             type: Error401ResponseDataTypeEnum.NEITHER_ACCESS_TOKEN_AND_REFRESH_TOKEN_EXIST,
             status: ResponseResultStatusEnum.FAILURE,
             errorMsg: 'no access and refresh token are provided'
