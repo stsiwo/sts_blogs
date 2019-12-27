@@ -1,6 +1,7 @@
 #!/bin/sh
 set -e
 
+. venv/bin/activate
 export FLASK_ENV=testing
 export FLASK_APP=./run.py
 export PYTHONDONTWRITEBYTECODE=1
