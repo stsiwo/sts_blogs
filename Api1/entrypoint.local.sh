@@ -13,4 +13,4 @@ flask seed roles
 flask seed tags
 flask seed test-users
 flask seed test-blogs
-python3 ./run.py
+sudo python3 ./run.py
