@@ -60,7 +60,8 @@ jobs:
           working_directory: ./Api1
           command: |
             . venv/bin/activate
-            sh entrypoint.local.sh
+            python3 ./run.py
+            # sh entrypoint.local.sh
             # workflows:
             #   version: 2
             #   build_and_test:
