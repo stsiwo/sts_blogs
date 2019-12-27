@@ -52,7 +52,6 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             pip install -r requirements.txt
-            python3 -m /run.py
       - restore_cache:
           keys:
             - dep1-{{ checksum "./Api1/requirements.txt" }}
@@ -61,6 +60,7 @@ jobs:
           working_directory: ./Api1
           command: |
             . venv/bin/activate
+            ls -al
             sh entrypoint.local.sh
             # workflows:
             #   version: 2
