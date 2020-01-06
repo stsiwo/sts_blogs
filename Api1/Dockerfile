@@ -7,23 +7,17 @@ FROM stsiwo/python.3.8-pck:0.1 as dep-install
 #    - solution:
 #      - append '. env/bin/activate' fore every RUN command where need venv
 #      - or don't use venv at all
-
 WORKDIR /app
-
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
-
 # remove .build-deps (all pcks installed at base image)
 RUN apk del .build-deps
-
 
 FROM stsiwo/python.3.8-pck:0.1 as testing
 
 WORKDIR /app
 COPY --from=dep-install /app ./ 
 COPY --from=dep-install /usr /usr
-
-
 COPY entrypoint.testing.sh ./
 RUN ["chmod", "+x", "./entrypoint.testing.sh"]
 ENTRYPOINT ["./entrypoint.testing.sh"]
@@ -32,18 +26,22 @@ ENTRYPOINT ["./entrypoint.testing.sh"]
 FROM python:3.8-alpine as development
 
 WORKDIR /app
-
 COPY --from=dep-install /app ./ 
 COPY --from=dep-install /usr /usr
-
 COPY entrypoint.development.sh ./
 RUN ["chmod", "+x", "./entrypoint.development.sh"]
 ENTRYPOINT ["./entrypoint.development.sh"]
 
+FROM stsiwo/python.3.8-pck:0.1 as staging
 
-FROM ... as staging
-
-
+WORKDIR /app
+COPY --from=dep-install /app ./ 
+COPY --from=dep-install /usr /usr
+# need to eclude ./env ./tests. do this at docker-compose
+COPY ./ /app 
+COPY entrypoint.staging.sh ./
+RUN ["chmod", "+x", "./entrypoint.staging.sh"]
+ENTRYPOINT ["./entrypoint.staging.sh"]
 
 FROM ... as production
 
