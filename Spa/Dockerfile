@@ -12,6 +12,14 @@ COPY --from=dev-install /app .
 RUN source ./env.dev.sh 
 CMD ["npm", "run", "start-docker"]
 
+FROM node:8.16.2-alpine as testing 
+
+WORKDIR /app
+COPY --from=dev-install /app . 
+RUN source ./env.dev.sh 
+# CMD is executed when cotnainer is created
+ENTRYPOINT ["npx", "jest"]
+
 FROM node:8.16.2-alpine as build 
 
 WORKDIR /app
@@ -23,11 +31,13 @@ RUN ["npm", "run", "build"]
 FROM nginx:1.17.6-alpine as staging
 
 WORKDIR /var/www
+COPY ./src ./
 COPY --from=build /app/dist . 
 # CMD tail -f /dev/null
 
 FROM nginx:1.17.6-alpine as production
 
 WORKDIR /var/www
+COPY ./src ./
 COPY --from=build /app/dist . 
 
