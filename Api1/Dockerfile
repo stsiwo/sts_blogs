@@ -17,6 +17,7 @@ FROM stsiwo/python.3.8-pck:0.1 as testing
 
 WORKDIR /app
 COPY --from=dep-install /app ./ 
+# add this since global pip dependencies are installed in /usr
 COPY --from=dep-install /usr /usr
 COPY entrypoint.testing.sh ./
 RUN ["chmod", "+x", "./entrypoint.testing.sh"]

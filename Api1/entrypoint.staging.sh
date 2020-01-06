@@ -1,9 +1,9 @@
 #!/bin/sh
 set -e
 
-export FLASK_ENV=development
+export FLASK_ENV=staging
 export FLASK_APP=./run.py
-rm -r ./migrations
+rm -r -f ./migrations
 flask db init
 
 

@@ -1,6 +1,6 @@
 
 
-base_url = 'http://stsiwo.info'
+base_url = 'http://stsiwo.com'
 
 signup_url = '{}/signup'.format(base_url)
 

@@ -1,10 +1,10 @@
 server {
     listen       80;
-    server_name  api.stsiwo.info;
+    server_name  api.stsiwo.com;
 
     #charset koi8-r;
-    access_log  /var/log/nginx/api.stsiwo.info.access.log  main;
-    error_log /var/log/nginx/api.stsiwo.info.error.log info;
+    access_log  /var/log/nginx/api.stsiwo.com.access.log  main;
+    error_log /var/log/nginx/api.stsiwo.com.error.log info;
 
     location / {
       add_header Set-Cookie cip=$remote_addr;

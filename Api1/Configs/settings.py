@@ -31,6 +31,8 @@ FLASK_APP = './run.py'
 
 HOST_NAME = os.getenv('HOST_NAME', '')
 
+DEBUG = bool(os.getenv('DEBUG', True))
+
 APP_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # jwt config
@@ -94,7 +96,6 @@ FORGOT_PASSWORD_TOKEN_EXPIRY = 1800
 
 # client spa url
 CLIENT_SPA_URL = os.getenv('CLIENT_SPA_URL', '')
-DEV_CLIENT_SPA_URL = os.getenv('DEV_CLIENT_SPA_URL', '')
 
 TESTING = bool(os.getenv('TESTING', False))
 
