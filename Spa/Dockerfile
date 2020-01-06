@@ -31,13 +31,10 @@ RUN ["npm", "run", "build"]
 FROM nginx:1.17.6-alpine as staging
 
 WORKDIR /var/www
-COPY ./src ./
 COPY --from=build /app/dist . 
-# CMD tail -f /dev/null
 
 FROM nginx:1.17.6-alpine as production
 
 WORKDIR /var/www
-COPY ./src ./
 COPY --from=build /app/dist . 
 
