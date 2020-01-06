@@ -1,45 +1,44 @@
-FROM python:3.8-alpine as testing
+FROM stsiwo/python.3.8-pck:0.1 as dep-install
+
+### python venv with dockerfile
+# caveats:
+#  1. can't use 'RUN . env/bin/activate -> RUN (something with pip)'
+#    - this is because each RUN use separate process. so there is no effect in second RUN with activate
+#    - solution:
+#      - append '. env/bin/activate' fore every RUN command where need venv
+#      - or don't use venv at all
 
 WORKDIR /app
-# dbus: still does not work
-# RUN apk add --no-cache --virtual .build-deps gcc musl-dev openssl-dev libffi-dev zlib-dev jpeg-dev dbus-glib-dev 
-RUN apk add --no-cache --virtual .build-deps gcc musl-dev openssl-dev libffi-dev zlib-dev jpeg-dev 
 
 COPY requirements.txt ./
-# need to isntall dbus-python to make keyring to work but seems need install more dependencies...
-# RUN pip install dbus-python
 RUN pip install --no-cache-dir -r requirements.txt
+
+# remove .build-deps (all pcks installed at base image)
 RUN apk del .build-deps
-# need this one beside 'jpeg-dev' above and need to separate from it 
-# because of this PIL error : libjpeg no such file or directory
-# https://stackoverflow.com/questions/56407216/django-does-not-find-pillow-though-installed
-RUN apk add libjpeg 
+
+
+FROM stsiwo/python.3.8-pck:0.1 as testing
+
+WORKDIR /app
+COPY --from=dep-install /app ./ 
+COPY --from=dep-install /usr /usr
+
 
 COPY entrypoint.testing.sh ./
 RUN ["chmod", "+x", "./entrypoint.testing.sh"]
 ENTRYPOINT ["./entrypoint.testing.sh"]
-CMD []
-
+#CMD tail -f /dev/null 
 
 FROM python:3.8-alpine as development
 
 WORKDIR /app
-# dbus: still does not work
-# RUN apk add --no-cache --virtual .build-deps gcc musl-dev openssl-dev libffi-dev zlib-dev jpeg-dev dbus-glib-dev 
-RUN apk add --no-cache --virtual .build-deps gcc musl-dev openssl-dev libffi-dev zlib-dev jpeg-dev 
 
-COPY requirements.txt ./
-# need to isntall dbus-python to make keyring to work but seems need install more dependencies...
-# RUN pip install dbus-python
-RUN pip install --no-cache-dir -r requirements.txt
-RUN apk del .build-deps
+COPY --from=dep-install /app ./ 
+COPY --from=dep-install /usr /usr
 
 COPY entrypoint.development.sh ./
-RUN chmod +x ./entrypoint.development.sh
-CMD /bin/sh ./entrypoint.development.sh
-
-
-
+RUN ["chmod", "+x", "./entrypoint.development.sh"]
+ENTRYPOINT ["./entrypoint.development.sh"]
 
 
 FROM ... as staging

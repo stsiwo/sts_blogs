@@ -3,20 +3,14 @@ set -e
 
 export FLASK_ENV=development
 export FLASK_APP=./run.py
-rm -r ./migrations
+export PYTHONDONTWRITEBYTECODE=1
+rm -r -f ./migrations
+rm -f /tmp/api1.db
 flask db init
-
-
-until flask db migrate; do
-  >&2 echo "MySQL is unavailable - sleeping"
-  sleep 1
-done
-
->&2 echo "MySQL is ready... start initial tables & data for flask app"
-
+flask db migrate
 flask db upgrade
 flask seed roles
 flask seed tags
 flask seed test-users
-flask seed test-blogs 
-gunicorn -c python:wsgi_config run:main
+flask seed test-blogs
+python3 ./run.py
