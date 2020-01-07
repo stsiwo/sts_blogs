@@ -31,3 +31,6 @@ env.*
 
 # compiled production dir
 dist/
+
+# docker secrets
+docker-compose.secrets.yml

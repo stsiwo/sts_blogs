@@ -6,11 +6,6 @@ services:
     # workaround: https://github.com/docker-library/mysql/issues/303
     # - use older version
     image: mysql:5.7.28
-    environment: 
-      MYSQL_DATABASE: sts_blogs_dev
-      MYSQL_USER: sts
-      MYSQL_PASSWORD: sts1551@IWO
-      MYSQL_ROOT_PASSWORD: sts1551@IWO
     volumes:
      - '$PWD/Db/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/'
   webserver:
