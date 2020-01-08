@@ -14,6 +14,17 @@ jobs:
     machine: true
     steps:
       - checkout
+      - run: 
+          name: Setup Env File
+          command: |
+            echo DEBUG='*' > .env.dev
+            echo API1_URL=http://api.stsiwo.com:5000 >> .env.dev
+            echo PUBLIC_IMAGE_PATH=/images/ >> .env.dev
+
+            echo DEBUG='*' > .env.prod
+            echo API1_URL=http://api.stsiwo.com >> .env.prod
+            echo PUBLIC_IMAGE_PATH=/images/ >> .env.prod
+
       - run:
           name: Build Image & Push Docker Hub 
           command: |
