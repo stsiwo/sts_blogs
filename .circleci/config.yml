@@ -1,4 +1,11 @@
 version: 2.1
+
+executors:
+  my-executor:
+    docker:
+      - image: stsiwo/circleci-base:1.04 
+    working_directory: /app
+
 jobs:
   build:
     machine: true
@@ -32,15 +39,27 @@ jobs:
             docker tag sts-blog-api stsiwo/sts-blog-api
             docker push stsiwo/sts-blog-api
 
-            # workflows:
-            #   version: 2.1
-            #   build-deploy:
-            #     jobs:
-            #       - build
-            #       - push:
-            #           requires:
-            #             - build 
+  deploy:
+    executor: my-executor
+    steps:
+      - checkout
+      - run:
+          name: Create GCloud Service Key File
+          command: |
+            echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
+            gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+            gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
+            gcloud info
+            gcloud compute scp --quiet ./docker-compose.staging.yml ./docker-compose.staging.remote.yml ./docker-compose.staging.yml $GOOGLE_COMPUTE_NAME:/home/app --zone $GOOGLE_COMPUTE_ZONE
 
+workflows:
+  version: 2.1
+  build-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build 
 
 
   ### TESTING
