@@ -9,14 +9,16 @@ FROM node:8.16.2-alpine as development
 
 WORKDIR /app
 COPY --from=dev-install /app . 
-RUN source ./env.dev.sh 
+# temp disable for testing push image in circleci
+# RUN source ./env.dev.sh 
 CMD ["npm", "run", "start-docker"]
 
 FROM node:8.16.2-alpine as testing 
 
 WORKDIR /app
 COPY --from=dev-install /app . 
-RUN source ./env.dev.sh 
+# temp disable for testing push image in circleci
+# RUN source ./env.dev.sh 
 # CMD is executed when cotnainer is created
 ENTRYPOINT ["npx", "jest"]
 
@@ -24,7 +26,8 @@ FROM node:8.16.2-alpine as build
 
 WORKDIR /app
 COPY --from=development /app . 
-RUN source ./env.prod.sh 
+# temp disable for testing push image in circleci
+# RUN source ./env.prod.sh 
 # CMD is executed when cotnainer is created
 RUN ["npm", "run", "build"]
 
