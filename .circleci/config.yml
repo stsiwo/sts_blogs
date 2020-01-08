@@ -17,6 +17,8 @@ jobs:
       - run:
           name: Build Image & Push Docker Hub 
           command: |
+            source ./Spa/env.dev.sh
+            source ./Spa/env.prod.sh
             source ./set-app-version-env.sh
             echo $APP_VERSION
             docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
