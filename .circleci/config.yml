@@ -50,7 +50,8 @@ jobs:
             gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
             gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
             gcloud info
-            gcloud compute scp --quiet ./docker-compose.staging.remote.yml ./docker-compose.staging.yml $GOOGLE_COMPUTE_NAME:/home/app --zone $GOOGLE_COMPUTE_ZONE
+            # gcloud compute scp --quiet ./docker-compose.staging.remote.yml ./docker-compose.staging.yml $GOOGLE_COMPUTE_NAME:/home/app --zone $GOOGLE_COMPUTE_ZONE
+            gcloud compute scp --quiet ./docker-compose.staging.remote.yml ./docker-compose.staging.yml my-10th-startup-test:/home/app --zone us-central1-a 
             # workflows:
             #   version: 2.1
             #   build-deploy:
