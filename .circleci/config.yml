@@ -1,16 +1,6 @@
 version: 2.1
 jobs:
   build:
-    docker:
-      - image: alpine:3.7
-    steps:
-      - checkout
-      - run:
-          name: Temp Test 
-          command: |
-            ls -al 
-            echo 'Temp Test'
-  push:
     machine: true
     steps:
       - checkout
@@ -38,14 +28,14 @@ jobs:
             docker tag sts-blog-spa stsiwo/sts-blog-spa
             docker push stsiwo/sts-blog-spa
 
-workflows:
-  version: 2.1
-  build-deploy:
-    jobs:
-      - build
-      - push:
-          requires:
-            - build 
+            # workflows:
+            #   version: 2.1
+            #   build-deploy:
+            #     jobs:
+            #       - build
+            #       - push:
+            #           requires:
+            #             - build 
 
 
 
