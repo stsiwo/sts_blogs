@@ -1,0 +1,5 @@
+version: '3.4'
+services:
+  webserver:
+    volumes:
+      - "$PWD/WebServer/sample.txt:/etc/sample.txt"

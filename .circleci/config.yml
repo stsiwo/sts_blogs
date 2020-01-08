@@ -1,5 +1,16 @@
 version: 2
 jobs:
+  build:
+    docker:
+      - image: alpine:3.7
+    steps:
+      - checkout
+      - run:
+          name: Deploy to Staging (release and master and if acceptance testing has passed)
+          command: |
+            ls -al 
+            echo 'Deploy to Staging (release only and if acceptance testing has passed)'
+  ### TESTING
   #  build:
   #    docker:
   #      - image: circleci/node:10.16.3    
@@ -20,51 +31,51 @@ jobs:
   #          # add '-w 1' to prevent 'no enough memory' error
   #          command: |
   #            npx jest -w 1 tests/
-  build:
-    docker:
-      - image: circleci/python:3.6.8-stretch-browsers
-    steps:
-      - checkout 
-      - run: 
-          name: create env file 
-          working_directory: ./Api1
-          command: |
-            echo CLIENT_SPA_URL=$CLIENT_SPA_URL > .env.testing
-            echo DEV_CLIENT_SPA_URL=$DEV_CLIENT_SPA_URL >> .env.testing
-            echo HOST_NAME=$HOST_NAME >> .env.testing
-            echo JWT_ACCESS_TOKEN_EXPIRES=$JWT_ACCESS_TOKEN_EXPIRES >> .env.testing
-            echo JWT_COOKIE_DOMAIN=$JWT_COOKIE_DOMAIN >> .env.testing
-            echo JWT_REFRESH_TOKEN_EXPIRES=$JWT_REFRESH_TOKEN_EXPIRES >> .env.testing
-            echo JWT_COOKIE_SECURE=$JWT_COOKIE_SECURE >> .env.testing
-            echo JWT_SECRET_KEY=$JWT_SECRET_KEY >> .env.testing
-            echo SECRET_KEY=$SECRET_KEY >> .env.testing
-            echo SIGNER_SECRET_KEY=$SIGNER_SECRET_KEY >> .env.testing
-            echo SQLALCHEMY_DATABASE_URI=$SQLALCHEMY_DATABASE_URI >> .env.testing
-            echo SQLALCHEMY_ECHO=$SQLALCHEMY_ECHO >> .env.testing
-            echo TESTING=$TESTING >> .env.testing
-            echo UPLOAD_FOLDER=$UPLOAD_FOLDER >> .env.testing
-            head ./.env.testing
-      - run: 
-          name: Install Dependencies 
-          working_directory: ./Api1
-          command: |
-            ls -al 
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install -r requirements.txt
-      - restore_cache:
-          keys:
-            - dep1-{{ checksum "./Api1/requirements.txt" }}
-      - run:
-          name: Setup and Run Test 
-          working_directory: ./Api1
-          command: |
-            . venv/bin/activate
-            ls -al ./venv/
-            sh entrypoint.local.sh
-            # workflows:
-            #   version: 2
-            #   build_and_test:
-            #     jobs:
-            #       - build 
-            #       - test-api
+  # build:
+  #   docker:
+  #     - image: circleci/python:3.6.8-stretch-browsers
+  #   steps:
+  #     - checkout 
+  #     - run: 
+  #         name: create env file 
+  #         working_directory: ./Api1
+  #         command: |
+  #           echo CLIENT_SPA_URL=$CLIENT_SPA_URL > .env.testing
+  #           echo DEV_CLIENT_SPA_URL=$DEV_CLIENT_SPA_URL >> .env.testing
+  #           echo HOST_NAME=$HOST_NAME >> .env.testing
+  #           echo JWT_ACCESS_TOKEN_EXPIRES=$JWT_ACCESS_TOKEN_EXPIRES >> .env.testing
+  #           echo JWT_COOKIE_DOMAIN=$JWT_COOKIE_DOMAIN >> .env.testing
+  #           echo JWT_REFRESH_TOKEN_EXPIRES=$JWT_REFRESH_TOKEN_EXPIRES >> .env.testing
+  #           echo JWT_COOKIE_SECURE=$JWT_COOKIE_SECURE >> .env.testing
+  #           echo JWT_SECRET_KEY=$JWT_SECRET_KEY >> .env.testing
+  #           echo SECRET_KEY=$SECRET_KEY >> .env.testing
+  #           echo SIGNER_SECRET_KEY=$SIGNER_SECRET_KEY >> .env.testing
+  #           echo SQLALCHEMY_DATABASE_URI=$SQLALCHEMY_DATABASE_URI >> .env.testing
+  #           echo SQLALCHEMY_ECHO=$SQLALCHEMY_ECHO >> .env.testing
+  #           echo TESTING=$TESTING >> .env.testing
+  #           echo UPLOAD_FOLDER=$UPLOAD_FOLDER >> .env.testing
+  #           head ./.env.testing
+  #     - run: 
+  #         name: Install Dependencies 
+  #         working_directory: ./Api1
+  #         command: |
+  #           ls -al 
+  #           python3 -m venv venv
+  #           . venv/bin/activate
+  #           pip install -r requirements.txt
+  #     - restore_cache:
+  #         keys:
+  #           - dep1-{{ checksum "./Api1/requirements.txt" }}
+  #     - run:
+  #         name: Setup and Run Test 
+  #         working_directory: ./Api1
+  #         command: |
+  #           . venv/bin/activate
+  #           ls -al ./venv/
+  #           sh entrypoint.local.sh
+  #           # workflows:
+  #           #   version: 2
+  #           #   build_and_test:
+  #           #     jobs:
+  #           #       - build 
+  #           #       - test-api
