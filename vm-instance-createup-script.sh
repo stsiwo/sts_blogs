@@ -4,7 +4,7 @@
 circleci=sa_111943818492963297857
 appdir=/home/app
 appgroup=app
-icrontargetfile=docker-compose.staging.yml
+triggerfile=trigger.txt
 
 sudo apt-get update
 
@@ -46,8 +46,13 @@ sudo mkdir $appdir
 sudo chown root:$appgroup $appdir
 sudo chmod 775 $appdir
 
+### prepare trigger file
+sudo touch $appdir/$triggerfile
+sudo chown root:$appgroup $appdir
+sudo chmod 775 $appdir/$triggerfile 
+
 ### incron
 sudo apt-get update
 sudo apt-get install incron
 echo 'root' | sudo tee -a /etc/incron.allow
-(sudo incrontab -l ; echo "$appdir/$icrontargetfile IN_CLOSE_WRITE /bin/bash /opt/script/update-docker-compose.sh") | sort - | uniq - | sudo incrontab -
+(sudo incrontab -l ; echo "$appdir/$triggerfile IN_CLOSE_WRITE /bin/bash /opt/script/update-docker-compose.sh") | sort - | uniq - | sudo incrontab -
