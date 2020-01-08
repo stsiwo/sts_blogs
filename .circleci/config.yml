@@ -26,6 +26,7 @@ jobs:
             docker tag sts-blog-spa:$APP_VERSION stsiwo/sts-blog-spa:$APP_VERSION
             docker tag sts-blog-spa stsiwo/sts-blog-spa
             docker push stsiwo/sts-blog-spa
+
 workflows:
   version: 2.1
   build-deploy:
