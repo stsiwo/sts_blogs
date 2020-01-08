@@ -25,21 +25,21 @@ jobs:
       - run:
           name: Build Image & Push Docker Hub 
           command: |
-            source ./set-app-version-env.sh
-            echo $APP_VERSION
-            docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
+            # source ./set-app-version-env.sh
+            # echo $APP_VERSION
+            # docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
 
-            docker build --tag=sts-blog-spa:$APP_VERSION --tag=sts-blog-spa --target=staging ./Spa
-            docker tag sts-blog-spa:$APP_VERSION stsiwo/sts-blog-spa:$APP_VERSION
-            docker tag sts-blog-spa stsiwo/sts-blog-spa
-            docker push stsiwo/sts-blog-spa
+            # docker build --tag=sts-blog-spa:$APP_VERSION --tag=sts-blog-spa --target=staging ./Spa
+            # docker tag sts-blog-spa:$APP_VERSION stsiwo/sts-blog-spa:$APP_VERSION
+            # docker tag sts-blog-spa stsiwo/sts-blog-spa
+            # docker push stsiwo/sts-blog-spa
 
-            docker build --tag=sts-blog-api:$APP_VERSION --tag=sts-blog-api --target=staging ./Api1
-            docker tag sts-blog-api:$APP_VERSION stsiwo/sts-blog-api:$APP_VERSION
-            docker tag sts-blog-api stsiwo/sts-blog-api
-            docker push stsiwo/sts-blog-api
+            # docker build --tag=sts-blog-api:$APP_VERSION --tag=sts-blog-api --target=staging ./Api1
+            # docker tag sts-blog-api:$APP_VERSION stsiwo/sts-blog-api:$APP_VERSION
+            # docker tag sts-blog-api stsiwo/sts-blog-api
+            # docker push stsiwo/sts-blog-api
 
-  deploy:
+  gcp-staging-deploy:
     executor: my-executor
     steps:
       - checkout
@@ -51,13 +51,12 @@ jobs:
             gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
             gcloud info
             gcloud compute scp --quiet ./docker-compose.staging.yml ./docker-compose.staging.remote.yml ./docker-compose.staging.yml $GOOGLE_COMPUTE_NAME:/home/app --zone $GOOGLE_COMPUTE_ZONE
-
 workflows:
   version: 2.1
   build-deploy:
     jobs:
       - build
-      - deploy:
+      - gcp-staging-deploy:
           requires:
             - build 
 
