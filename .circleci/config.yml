@@ -44,7 +44,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Create GCloud Service Key Filess
+          name: Create GCloud Service Key Files
           command: |
             echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
             gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
