@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 
 executors:
   my-executor:
@@ -53,7 +53,7 @@ jobs:
             gcloud compute scp --quiet ./docker-compose.staging.yml ./docker-compose.staging.remote.yml ./docker-compose.staging.yml $GOOGLE_COMPUTE_NAME:/home/app --zone $GOOGLE_COMPUTE_ZONE
 
 workflows:
-  version: 2
+  version: 2.1
   build-deploy:
     jobs:
       - build
