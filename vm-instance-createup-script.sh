@@ -20,7 +20,7 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 sudo curl -L "https://github.com/docker/compose/releases/download/1.25.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 
-### docker-compose update script after circileci deployment
+### docker-compose update script after circileci deployment by incron
 mkdir /opt/script
 cat <<EOF >> /opt/script/update-docker-compose.sh
 #!/bin/bash 
@@ -28,6 +28,16 @@ cat <<EOF >> /opt/script/update-docker-compose.sh
 exec 1> >(logger -s -t \$(basename \$0)) 2>&1
 echo "successfully run update-docker-compose script"
 EOF
+
+### clean up docker resources (unused imges, containers ...) by cron
+cat <<EOF >> /opt/script/docker-system-prune.sh
+#!/bin/bash
+# write any stdout and stderr to syslog
+exec 1> >(logger -s -t \$(basename \$0)) 2>&1
+echo "running cleanup (docker system prune) for docker resources (daily work)"
+docker system prune -f
+EOF
+
 
 ### create group (app) and let circleci user join the group for deployment
 sudo groupadd $appgroup 
@@ -48,3 +58,6 @@ sudo apt-get update
 sudo apt-get install incron
 echo 'root' | sudo tee -a /etc/incron.allow
 (sudo incrontab -l ; echo "$appdir/$triggerfile IN_CLOSE_WRITE /bin/bash /opt/script/update-docker-compose.sh") | sort - | uniq - | sudo incrontab -
+
+### cron
+(sudo crontab -l ; echo "00 00 * * * /bin/bash /opt/script/docker-system-prune.sh") | sort - | uniq - | sudo crontab -
