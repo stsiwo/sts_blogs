@@ -33,11 +33,11 @@ export const buildQueryString = (queryStringObject: QueryStringType = {}): strin
 }
 
 export const generateBlogContentPublicImageUrl = (userId: string, imageName: string): URL => {
-  return new URL(process.env.PUBLIC_IMAGE_PATH + userId + '/' + imageName, process.env.API1_URL)
+  return new URL(PUBLIC_IMAGE_PATH + userId + '/' + imageName, API1_URL)
 }
 
 export const generateBlogContentPublicImagePath = (userId: string, imageName: string): string => {
-  return process.env.PUBLIC_IMAGE_PATH + userId + '/' + imageName;
+  return PUBLIC_IMAGE_PATH + userId + '/' + imageName;
 }
 
 export function getCookie(name: string): string {

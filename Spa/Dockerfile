@@ -17,8 +17,6 @@ FROM node:8.16.2-alpine as testing
 
 WORKDIR /app
 COPY --from=dev-install /app . 
-# temp disable for testing push image in circleci
-# RUN source ./env.dev.sh 
 # CMD is executed when cotnainer is created
 ENTRYPOINT ["npx", "jest"]
 
@@ -26,8 +24,6 @@ FROM node:8.16.2-alpine as build
 
 WORKDIR /app
 COPY --from=development /app . 
-# temp disable for testing push image in circleci
-# RUN source ./env.prod.sh 
 # CMD is executed when cotnainer is created
 RUN ["npm", "run", "build"]
 
@@ -35,9 +31,13 @@ FROM nginx:1.17.6-alpine as staging
 
 WORKDIR /var/www
 COPY --from=build /app/dist . 
+COPY ./webserver/dev.stsiwo.com /etc/nginx/conf.d/default.conf
+COPY ./webserver/api.stsiwo.com /etc/nginx/conf.d/api.stsiwo.com
 
 FROM nginx:1.17.6-alpine as production
 
 WORKDIR /var/www
 COPY --from=build /app/dist . 
+COPY ./webserver/stsiwo.com /etc/nginx/conf.d/default.conf
+COPY ./webserver/api.stsiwo.com /etc/nginx/conf.d/api.stsiwo.com
 

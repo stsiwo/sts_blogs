@@ -1,0 +1,21 @@
+version: '3.4'
+services:
+  db:
+    build:
+      context: './Db'
+  webserver:
+    build: 
+      context: './Spa'
+      target: staging
+  api1:
+    build: 
+      context: './Api1'
+      target: staging 
+    environment:
+      - FLASK_ENV=staging
+      - FLASK_APP=./run.py
+    env_file:
+      - "./Api1/.env.staging"
+    volumes:
+      - "/app/env"
+      - "/app/tests"

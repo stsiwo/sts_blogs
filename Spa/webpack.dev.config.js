@@ -2,7 +2,6 @@ const path = require('path');
 const merge = require('webpack-merge');
 const common = require('./webpack.common.config.js');
 const webpack = require('webpack');
-const Dotenv = require('dotenv-webpack');
 
 module.exports = merge(common, {
   mode: 'development',
@@ -21,8 +20,10 @@ module.exports = merge(common, {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new Dotenv({
-      path: './.env.dev'
+    new webpack.DefinePlugin({
+      DEBUG: JSON.stringify("*"),
+      API1_URL: JSON.stringify("http://api.stsiwo.com"),
+      PUBLIC_IMAGE_PATH: JSON.stringify("/images/"),
     })
   ]
 }); 

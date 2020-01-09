@@ -13,8 +13,10 @@ module.exports = merge(common, {
   },
   plugins: [
     new webpack.HashedModuleIdsPlugin(),
-    new Dotenv({
-      path: './.env.prod'
+    new webpack.DefinePlugin({
+      DEBUG: JSON.stringify("*"),
+      API1_URL: JSON.stringify("http://api.stsiwo.com"),
+      PUBLIC_IMAGE_PATH: JSON.stringify("/images/"),
     })
   ],
   optimization: {

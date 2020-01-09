@@ -2,7 +2,7 @@ import { AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
 import { ErrorResponseDataType } from "requests/types";
 
 export const apiConfig: AxiosRequestConfig = {
-  baseURL: process.env.API1_URL,
+  baseURL: API1_URL,
   timeout: 5000,
   // work like middleware between client and backend about response
   // can transform response data (json) 

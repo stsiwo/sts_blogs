@@ -13,15 +13,13 @@ import { getUserTestData } from '../tests/data/UserFaker';
 import Footer from 'ui/Footer/Footer';
 
 // import css for debug (only development)
-if (process.env.NODE_ENV === 'development') require('ui/Base/Css/Debug.scss');
+if (NODE_ENV === 'development') require('ui/Base/Css/Debug.scss');
 
 
 // enable debug
-process.env.DEBUG
+DEBUG
 console.log('env vars:')
-console.log(process.env.DEBUG)
-
-
+console.log(DEBUG)
 
 var debug = require('debug')('ui:App')
 const App = (props: any) => {
