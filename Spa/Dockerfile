@@ -32,7 +32,7 @@ FROM nginx:1.17.6-alpine as staging
 WORKDIR /var/www
 COPY --from=build /app/dist . 
 COPY ./webserver/dev.stsiwo.com /etc/nginx/conf.d/default.conf
-COPY ./webserver/api.stsiwo.com /etc/nginx/conf.d/api.stsiwo.com
+COPY ./webserver/dev.api.stsiwo.com /etc/nginx/conf.d/dev.api.stsiwo.com
 
 FROM nginx:1.17.6-alpine as production
 

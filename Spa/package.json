@@ -9,6 +9,7 @@
     "start-docker": "webpack-dev-server --open --host 0.0.0.0 --config webpack.dev.config.js",
     "start-local": "webpack-dev-server --open --host stsiwo.com --config webpack.dev.config.js",
     "build": "webpack --config webpack.prod.config.js",
+    "build-staging": "webpack --config webpack.staging.config.js",
     "jtest": "jest"
   },
   "keywords": [],

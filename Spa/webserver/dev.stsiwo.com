@@ -12,5 +12,5 @@ server {
     }
 }
 
-include /etc/nginx/conf.d/api.stsiwo.com;
+include /etc/nginx/conf.d/dev.api.stsiwo.com;
 
