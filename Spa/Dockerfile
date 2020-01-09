@@ -20,6 +20,13 @@ COPY --from=dev-install /app .
 # CMD is executed when cotnainer is created
 ENTRYPOINT ["npx", "jest"]
 
+FROM node:8.16.2-alpine as build-staging 
+
+WORKDIR /app
+COPY --from=development /app . 
+# CMD is executed when cotnainer is created
+RUN ["npm", "run", "build-staging"]
+
 FROM node:8.16.2-alpine as build 
 
 WORKDIR /app
@@ -30,7 +37,7 @@ RUN ["npm", "run", "build"]
 FROM nginx:1.17.6-alpine as staging
 
 WORKDIR /var/www
-COPY --from=build /app/dist . 
+COPY --from=build-staging /app/dist . 
 COPY ./webserver/dev.stsiwo.com /etc/nginx/conf.d/default.conf
 COPY ./webserver/dev.api.stsiwo.com /etc/nginx/conf.d/dev.api.stsiwo.com
 
