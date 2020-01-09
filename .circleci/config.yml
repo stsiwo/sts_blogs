@@ -7,27 +7,28 @@ executors:
     working_directory: /app
 
 jobs:
-  # build:
-  #   machine: true
-  #   steps:
-  #     - run:
-  #         name: Build Image & Push Docker Hub 
-  #         command: |
-  #           # source ./set-app-version-env.sh
-  #           # echo $APP_VERSION
-  #           # docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
-
-  #           # docker build --tag=sts-blog-spa:$APP_VERSION --tag=sts-blog-spa --target=staging ./Spa
-  #           # docker tag sts-blog-spa:$APP_VERSION stsiwo/sts-blog-spa:$APP_VERSION
-  #           # docker tag sts-blog-spa stsiwo/sts-blog-spa
-  #           # docker push stsiwo/sts-blog-spa
-
-  #           # docker build --tag=sts-blog-api:$APP_VERSION --tag=sts-blog-api --target=staging ./Api1
-  #           # docker tag sts-blog-api:$APP_VERSION stsiwo/sts-blog-api:$APP_VERSION
-  #           # docker tag sts-blog-api stsiwo/sts-blog-api
-  #           # docker push stsiwo/sts-blog-api
-
   build:
+    machine: true
+    steps:
+      - run:
+          name: Build Image & Push Docker Hub 
+          command: |
+            ./bump-version.sh
+            source ./set-app-version-env.sh
+            echo $APP_VERSION
+            docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
+
+            docker build --tag=sts-blog-spa:$APP_VERSION --tag=sts-blog-spa --target=staging ./Spa
+            docker tag sts-blog-spa:$APP_VERSION stsiwo/sts-blog-spa:$APP_VERSION
+            docker tag sts-blog-spa stsiwo/sts-blog-spa
+            docker push stsiwo/sts-blog-spa
+
+            docker build --tag=sts-blog-api:$APP_VERSION --tag=sts-blog-api --target=staging ./Api1
+            docker tag sts-blog-api:$APP_VERSION stsiwo/sts-blog-api:$APP_VERSION
+            docker tag sts-blog-api stsiwo/sts-blog-api
+            docker push stsiwo/sts-blog-api
+
+  deploy:
     executor: my-executor
     steps:
       - checkout
@@ -42,14 +43,14 @@ jobs:
             # create trigger.txt which is watched by incrontab
             echo "trigger" > trigger.txt
             gcloud compute scp --quiet ./docker-compose.staging.yml ./trigger.txt my-15th-startup-test:/home/app --zone us-central1-a 
-            # workflows:
-            #   version: 2.1
-            #   build-deploy:
-            #     jobs:
-            #       - build
-            #       - gcp-staging-deploy:
-            #           requires:
-            #             - build 
+workflows:
+  version: 2.1
+  build-deploy:
+    jobs:
+      - build
+      - deploy: 
+          requires:
+            - build 
 
 
   ### TESTING
