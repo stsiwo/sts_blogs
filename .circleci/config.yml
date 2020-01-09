@@ -29,7 +29,7 @@ jobs:
             # docker tag sts-blog-api stsiwo/sts-blog-api
             # docker push stsiwo/sts-blog-api
 
-            docker build --tag=sts-blog-db:$APP_VERSION --tag=sts-blog-db --target=staging ./Db
+            docker build --tag=sts-blog-db:$APP_VERSION --tag=sts-blog-db ./Db
             docker tag sts-blog-db:$APP_VERSION stsiwo/sts-blog-db:$APP_VERSION
             docker tag sts-blog-db stsiwo/sts-blog-db
             docker push stsiwo/sts-blog-db
