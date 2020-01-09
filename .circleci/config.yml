@@ -10,6 +10,7 @@ jobs:
   build:
     machine: true
     steps:
+      - checkout
       - run:
           name: Build Image & Push Docker Hub 
           command: |
