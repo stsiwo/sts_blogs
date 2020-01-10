@@ -15,6 +15,8 @@ app_cli = AppGroup('app')
 
 @seed_cli.command('roles')
 def add_roles():
+    print("*** db config ***")
+    print(db.engine)
     db.session.add(Role(name='admin'))
     db.session.add(Role(name='member'))
     db.session.commit()

@@ -14,23 +14,23 @@ jobs:
       - run:
           name: Build Image & Push Docker Hub 
           command: |
-            # source ./set-app-version-env.sh
-            # docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
+            source ./set-app-version-env.sh
+            docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
 
-            # docker build --tag=sts-blog-spa:$APP_VERSION --tag=sts-blog-spa --target=staging ./Spa
-            # docker tag sts-blog-spa:$APP_VERSION stsiwo/sts-blog-spa:$APP_VERSION
-            # docker tag sts-blog-spa stsiwo/sts-blog-spa
-            # docker push stsiwo/sts-blog-spa
+            docker build --tag=sts-blog-spa:$APP_VERSION --tag=sts-blog-spa --target=staging ./Spa
+            docker tag sts-blog-spa:$APP_VERSION stsiwo/sts-blog-spa:$APP_VERSION
+            docker tag sts-blog-spa stsiwo/sts-blog-spa
+            docker push stsiwo/sts-blog-spa
 
-            # docker build --tag=sts-blog-api:$APP_VERSION --tag=sts-blog-api --target=staging ./Api1
-            # docker tag sts-blog-api:$APP_VERSION stsiwo/sts-blog-api:$APP_VERSION
-            # docker tag sts-blog-api stsiwo/sts-blog-api
-            # docker push stsiwo/sts-blog-api
+            docker build --tag=sts-blog-api:$APP_VERSION --tag=sts-blog-api --target=staging ./Api1
+            docker tag sts-blog-api:$APP_VERSION stsiwo/sts-blog-api:$APP_VERSION
+            docker tag sts-blog-api stsiwo/sts-blog-api
+            docker push stsiwo/sts-blog-api
 
-            # docker build --tag=sts-blog-db:$APP_VERSION --tag=sts-blog-db ./Db
-            # docker tag sts-blog-db:$APP_VERSION stsiwo/sts-blog-db:$APP_VERSION
-            # docker tag sts-blog-db stsiwo/sts-blog-db
-            # docker push stsiwo/sts-blog-db
+            docker build --tag=sts-blog-db:$APP_VERSION --tag=sts-blog-db ./Db
+            docker tag sts-blog-db:$APP_VERSION stsiwo/sts-blog-db:$APP_VERSION
+            docker tag sts-blog-db stsiwo/sts-blog-db
+            docker push stsiwo/sts-blog-db
 
   deploy:
     executor: my-executor
@@ -46,6 +46,9 @@ jobs:
             # gcloud compute scp --quiet ./docker-compose.staging.remote.yml ./docker-compose.staging.yml $GOOGLE_COMPUTE_NAME:/home/app --zone $GOOGLE_COMPUTE_ZONE
             # create trigger.txt which is watched by incrontab
             echo "trigger" > trigger.txt
+            # ERROR: (gcloud.compute.scp) INVALID_ARGUMENT: Login profile size exceeds 32 KiB. Delete profile values to make additional space.
+            # SOLUTION: add below command (reference: https://github.com/kyma-project/test-infra/issues/93)
+            # REASON: may be public key is cached and exceed the limit so need to clear?? (reference: https://cloud.google.com/sdk/gcloud/reference/beta/compute/os-login/ssh-keys/remove)
             for i in $(gcloud compute os-login ssh-keys list | grep -v FINGERPRINT); do echo $i; gcloud compute os-login ssh-keys remove --key $i; done
             gcloud compute scp --quiet ./docker-compose.staging.yml ./trigger.txt my-15th-startup-test:/home/app --zone us-central1-a 
 workflows:

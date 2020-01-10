@@ -3,9 +3,6 @@ set -e
 
 export FLASK_ENV=staging
 export FLASK_APP=./run.py
-rm -r -f ./migrations
-flask db init
-
 
 until flask db migrate; do
   >&2 echo "MySQL is unavailable - sleeping"
