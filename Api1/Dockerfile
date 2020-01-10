@@ -20,6 +20,7 @@ COPY --from=dep-install /app ./
 # add this since global pip dependencies are installed in /usr
 COPY --from=dep-install /usr /usr
 COPY entrypoint.testing.sh ./
+COPY api1-testing.db ./
 RUN ["chmod", "+x", "./entrypoint.testing.sh"]
 ENTRYPOINT ["./entrypoint.testing.sh"]
 #CMD tail -f /dev/null 
@@ -30,6 +31,7 @@ WORKDIR /app
 COPY --from=dep-install /app ./ 
 COPY --from=dep-install /usr /usr
 COPY entrypoint.development.sh ./
+COPY api1-development.db ./
 RUN ["chmod", "+x", "./entrypoint.development.sh"]
 ENTRYPOINT ["./entrypoint.development.sh"]
 
