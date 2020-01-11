@@ -7,3 +7,4 @@ FROM mysql:5.7.28
 WORKDIR /
 
 COPY ./docker-entrypoint-initdb.d ./docker-entrypoint-initdb.d
+COPY ./my.cnf /etc/mysql/my.cnf

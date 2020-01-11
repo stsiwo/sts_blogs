@@ -2,6 +2,9 @@ version: '3.4'
 services:
   db:
     image: stsiwo/sts-blog-db 
+    volumes:
+      - db-staging-storage:/var/lib/mysql 
+      - db-logging-storage:/var/log/mysql
   webserver:
     image: stsiwo/sts-blog-spa
     ports: 
@@ -10,7 +13,13 @@ services:
       - api1
   api1:
     image: stsiwo/sts-blog-api
+    volumes:
+      - api-migration-storage:/migrations/
     ports: 
       - "5000:5000"
     depends_on:
       - db
+volumes:
+  db-staging-storage:
+  db-logging-storage:
+  api-migration-storage:
