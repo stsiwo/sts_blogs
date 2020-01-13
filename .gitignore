@@ -15,9 +15,6 @@ __pycache__/
 Api1/uploads/
 Api1/temp/
 
-# db-migrations
-Api1/migrations/
-
 ### SPA ###
 
 # npm node module
