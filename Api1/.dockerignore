@@ -4,6 +4,3 @@ env/
 *.swo
 
 .env*
-
-# db-migrations (temply)
-migrations/

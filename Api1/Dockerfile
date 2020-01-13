@@ -38,11 +38,12 @@ ENTRYPOINT ["./entrypoint.development.sh"]
 FROM stsiwo/python.3.8-pck:0.1 as staging
 
 WORKDIR /app
-COPY --from=dep-install /app ./ 
 COPY --from=dep-install /usr /usr
-# need to eclude ./env ./tests. do this at docker-compose
-COPY ./ /app 
-COPY entrypoint.staging.sh ./
+# cp source code and put it in image
+# should remove unncessary folders such as env, tests
+# or should even organize src code more precisely
+# like src, tests, env at top level
+COPY ./ ./ 
 RUN ["chmod", "+x", "./entrypoint.staging.sh"]
 ENTRYPOINT ["./entrypoint.staging.sh"]
 
