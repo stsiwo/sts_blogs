@@ -47,6 +47,7 @@ WORKDIR /var/www
 COPY --from=build-staging-local /app/dist . 
 COPY ./webserver/dev.stsiwo.com /etc/nginx/conf.d/default.conf
 COPY ./webserver/dev.api.stsiwo.com /etc/nginx/conf.d/dev.api.stsiwo.com
+CMD ["nginx-debug", "-g", "daemon off;"]
 
 FROM nginx:1.17.6-alpine as staging
 
@@ -54,6 +55,7 @@ WORKDIR /var/www
 COPY --from=build-staging /app/dist . 
 COPY ./webserver/dev.stsiwo.com /etc/nginx/conf.d/default.conf
 COPY ./webserver/dev.api.stsiwo.com /etc/nginx/conf.d/dev.api.stsiwo.com
+CMD ["nginx-debug", "-g", "daemon off;"]
 
 FROM nginx:1.17.6-alpine as production
 
