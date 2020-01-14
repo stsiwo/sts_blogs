@@ -10,6 +10,7 @@
     "start-local": "webpack-dev-server --open --host stsiwo.com --config webpack.dev.config.js",
     "build": "webpack --config webpack.prod.config.js",
     "build-staging": "webpack --config webpack.staging.config.js",
+    "build-staging-local": "webpack --config webpack.staging-local.config.js",
     "jtest": "jest"
   },
   "keywords": [],

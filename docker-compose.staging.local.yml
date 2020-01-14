@@ -6,11 +6,11 @@ services:
   webserver:
     build: 
       context: './Spa'
-      target: staging
+      target: staging-local
   api1:
     build: 
       context: './Api1'
-      target: staging 
+      target: staging
     env_file:
       - "./Api1/.env.staging"
     volumes:
