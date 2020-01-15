@@ -35,6 +35,9 @@
       - docker container prune -f && docker run --name=spa-development -v ${PWD}:/app -v /app/node_modules -p 8080:8080 spa:development <additional command for 'npx jest'>
         // ex) docker run .... spa;development tests/specific_test.spec.ts
         // run it
+  - staging-local
+     command)
+      docker-compose -f docker-compose.staging.secrets.yml -f docker-compose.staging.yml -f docker-compose.staging.local.yml up -d --build
   - staging
      - docker-compose.yml
   - production
