@@ -9,7 +9,6 @@ import { CssGlobalContextDefaultState } from 'Contexts/CssGlobalContext/CssGloba
 import 'ui/Base/Css/Common.scss';
 import Content from 'ui/Content/Content';
 import Header from 'ui/Header/Header';
-import { getUserTestData } from '../tests/data/UserFaker';
 import Footer from 'ui/Footer/Footer';
 
 // import css for debug (only development)
@@ -23,14 +22,8 @@ console.log(DEBUG)
 
 var debug = require('debug')('ui:App')
 const App = (props: any) => {
-  debug('Component start')
-  //const [auth, authDispatch] = useUpdateAuthContextReducer({
-  //  authed: true,
-  //  user: getUserTestData(1)[0]
-  //})
-
   debug('get initial auth and dispatch from context')
-const [auth, authDispatch] = useUpdateAuthContextReducer()
+  const [auth, authDispatch] = useUpdateAuthContextReducer()
 
   return (
     <div className="app-wrapper">
