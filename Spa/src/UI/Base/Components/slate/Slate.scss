@@ -1,0 +1,26 @@
+@import '../../../Base/Css/GlobalVariables';
+@import '../../../Base/Css/Mixins';
+
+.slate-toolbar-wrapper {
+  position: sticky; 
+  top: $headerHeight; 
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+// default is Active css style
+.slate-toolbar-btn {
+  font-size: 25px;
+  opacity: 1;
+}
+
+.slate-toolbar-btn-non-active {
+  opacity: 0.3; 
+}
+
+.slate-toolbar-btn-disable {
+  pointer-events: none;
+  opacity: 0.3; 
+}

@@ -12,7 +12,7 @@ import ImageInput from 'Components/Input/ImageInput';
 import Input from 'Components/Input/Input';
 import TagInput from 'Components/Input/TagInput';
 import BlogContent from 'Components/BlogContent/BlogContent';
-import { Node } from 'slate'
+import { Node } from 'Components/fork/slate'
 import { replaceTmpSrcWithPublicSrc } from 'Components/BlogContent/helpers';
 import cloneDeep = require('lodash/cloneDeep');
 import { generateFileWithUuidv4 } from 'src/utils';

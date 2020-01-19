@@ -12,7 +12,7 @@ import './UpdateBlog.scss';
 import Input from 'Components/Input/Input';
 import TagInput from 'Components/Input/TagInput';
 import BlogContent from 'Components/BlogContent/BlogContent';
-import { Node } from 'slate'
+import { Node } from 'Components/fork/slate'
 import { replaceTmpSrcWithPublicSrc } from 'Components/BlogContent/helpers';
 import { generateFileWithUuidv4 } from 'src/utils';
 var debug = require('debug')('ui:UpdateBlog')
