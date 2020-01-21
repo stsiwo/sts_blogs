@@ -1,5 +1,5 @@
 from flask_restful import reqparse
-from Resources.validators.base.arguments.emailArg import addEmailArg
+from Resources.validators.base.arguments.user.emailArg import addEmailArg
 
 
 def forgotPasswordValidator():

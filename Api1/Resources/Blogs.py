@@ -3,7 +3,8 @@ from typing import Dict, List
 from flask import jsonify, request
 from application.BlogService import BlogService
 from Configs.app import app
-from Resources.validators.userUpdateBlogValidator import userUpdateBlogValidator
+from Resources.validators.createOrUpdateBlogValidator import createOrUpdateBlogValidator
+from Resources.validators.publishBlogValidator import publishBlogValidator
 from Resources.validators.validatorDecorator import validate_request_with
 from Infrastructure.DataModels.BlogModel import Blog
 from Resources.viewModels.BlogSchema import BlogSchema
@@ -54,16 +55,17 @@ class Blogs(Resource):
     # payload must be whole blogs (all properties of blog)
     @jwt_required
     @requires_jwt_role_claim({'admin', 'member'})
-    @validate_request_with(userUpdateBlogValidator)
+    @validate_request_with(createOrUpdateBlogValidator)
     def put(self, blog_id: str):
-        app.logger.info("start processing post request at /blogs")
-        print("start processing post request at /blogs")
+        app.logger.info("start processing put request at /blogs")
+        print("start processing put request at /blogs")
 
         tags = ast.literal_eval(request.form.get('tags')) if request.form.get('tags') is not None else []
         blogImagePaths = ast.literal_eval(request.form.get('blogImagePaths')) if request.form.get('blogImagePaths') is not None else []
 
-        updatedBlog: Blog = self._blogService.updateBlogService(
+        updatedBlog: Blog = self._blogService.createOrUpdateBlogService(
                 blog_id,
+                request.form.get('userId'),
                 request.form.get('title'),
                 request.form.get('subtitle'),
                 request.form.get('content'),
@@ -85,10 +87,18 @@ class Blogs(Resource):
 
     # patial update exisitng blogs
     # payload must be only properties to be updated (not include unchanged properties)
-    # def patch(self):
-    #     response = jsonify({})
-    #     response.status_code = 204
-    #     return response
+    @jwt_required
+    @requires_jwt_role_claim({'admin', 'member'})
+    @validate_request_with(publishBlogValidator)
+    def patch(self, blog_id: str):
+        app.logger.info("start processing patch request at /blogs")
+        print("start processing patch request at /blogs")
+
+        self._blogService.togglePublishBlogService(blog_id, request.form.get('public'))
+
+        response = jsonify({'publish': 'success'})
+        response.status_code = 200
+        return response
 
     # TODO: implement this
     # https://app.clickup.com/t/3m5a5b

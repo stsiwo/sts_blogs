@@ -73,7 +73,7 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
             value.forEach((node: Element) => {
               if (node.type === 'image') {
                 imageList.push(node.imageFile)
-                imagePathList.push(generateBlogContentPublicImagePath(props.userId, node.imageFile.name))
+                imagePathList.push(node.publicSrc)
               }
             })
             // Save the value to Local Storage.

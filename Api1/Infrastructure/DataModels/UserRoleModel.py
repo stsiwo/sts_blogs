@@ -11,11 +11,11 @@ roles = db.Table(
         db.Column(
             'user_id',
             db.Integer,
-            db.ForeignKey('users.id', ondelete='CASCADE'),
+            db.ForeignKey('users.id', name="FK_users_roles__users", ondelete='CASCADE', onupdate='CASCADE')
         ),
         db.Column(
             'role_id',
             db.Integer,
-            db.ForeignKey('roles.id', ondelete='CASCADE'),
+            db.ForeignKey('roles.id', name="FK_users_roles__roles", ondelete='CASCADE', onupdate='CASCADE'),
             ),
 )

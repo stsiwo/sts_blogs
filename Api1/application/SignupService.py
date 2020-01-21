@@ -4,6 +4,7 @@ from Infrastructure.transactionDecorator import db_transaction
 from Infrastructure.repositories.RoleRepository import RoleRepository
 from Infrastructure.repositories.UserRepository import UserRepository
 from Resources.viewModels.UserSchema import UserSchema
+import uuid
 
 
 class SignupService(object):
@@ -29,6 +30,7 @@ class SignupService(object):
 
         # create new User
         newUser = User(
+                id=str(uuid.uuid4()),
                 name=name,
                 email=email,
                 password=password,

@@ -5,7 +5,7 @@ import { FloatProperty, PointerEventsProperty } from 'csstype';
 import cloneDeep from 'lodash/cloneDeep'
 import { ToolBarBtnType } from './types';
 import { FaImage } from 'react-icons/fa';
-import { generateBlogContentPublicImageUrl } from 'src/utils';
+import { generateBlogContentPublicImageUrl, generateFileWithUuidv4 } from 'src/utils';
 
 declare type ImagePluginEditor = {
   insertImage: () => void
@@ -33,7 +33,7 @@ export const withImages = (editor: ReactEditor) => {
     tempInput.type = 'file'
     tempInput.onchange = (e) => {
       let tempFile: File = (e.target as HTMLInputElement).files[0]
-      //tempFile = generateFileWithUuidv4(tempFile)
+      tempFile = generateFileWithUuidv4(tempFile)
       const imgSrc: string = window.URL.createObjectURL(tempFile);
       const text: Text = { text: '' }
       const image = {

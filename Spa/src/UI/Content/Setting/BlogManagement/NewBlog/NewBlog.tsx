@@ -15,7 +15,7 @@ import BlogContent from 'Components/BlogContent/BlogContent';
 import { Node } from 'Components/fork/slate'
 import { replaceTmpSrcWithPublicSrc } from 'Components/BlogContent/helpers';
 import cloneDeep = require('lodash/cloneDeep');
-import { generateFileWithUuidv4 } from 'src/utils';
+import { generateFileWithUuidv4, getUuidv4 } from 'src/utils';
 var debug = require('debug')('ui:NewBlog')
 
 const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
@@ -27,15 +27,14 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
   const [currentIsDeleteImage, setIsDeleteImage] = React.useState<boolean>(false)
   const { currentValidationError, touch, validate } = useBlogValidation({ domain: currentBlog })
   const { currentRequestStatus: currentNewBlogStatus, setRequestStatus: setNewBlogStatus, sendRequest: saveRequest } = useRequest({})
-  const { blogId } = useParams();
+  const { currentRequestStatus: currentPublishStatus, setRequestStatus: setPublishStatus, sendRequest: publishRequest } = useRequest({})
+  const blogId = getUuidv4() 
   const { auth } = useAuthContext()
-  /** anything else **/
-  const path: string = '/users/' + auth.user.id + '/blogs'
-  const method: RequestMethodEnum = RequestMethodEnum.POST
 
   /** EH **/
   const mapStateToFormData = (state: BlogType): FormData => {
     const formData = new FormData()
+    formData.set('userId', auth.user.id)
     formData.set('title', state.title)
     formData.set('subtitle', state.subtitle)
     if (state.mainImage) formData.set('mainImage', state.mainImage)
@@ -43,38 +42,57 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
     formData.set('content', JSON.stringify(state.content))
     formData.set('createdDate', state.createdDate.toJSON())
     formData.set('tags', JSON.stringify(Array.from(state.tags)))
-    if (state.blogImagePaths.length !== 0) formData.set('blogImagePaths', JSON.stringify(state.blogImagePaths))
-    state.blogImages.forEach((image: File) => {
-      formData.append('blogImages[]', image)
-    })
+    if (state.blogImagePaths && state.blogImagePaths.length !== 0) formData.set('blogImagePaths', JSON.stringify(state.blogImagePaths))
+    if (state.blogImagePaths) {
+      state.blogImages.forEach((image: File) => {
+        formData.append('blogImages[]', image)
+      })
+    }
     return formData
   }
 
-  const handleSaveBlogClickEvent: React.EventHandler<React.MouseEvent<HTMLInputElement>> = async (e) => {
-    debug('start handling save button click')
+
+  const handlePublishBlogClickEvent: React.EventHandler<React.MouseEvent<HTMLInputElement>> = async (e) => {
+    debug('start handling publish button click')
     validate()
       .then(() => {
-        debug('validation passed at save button event handler')
-
-        debug('replace temp src image with publicSrc before submit')
-        const blogDataForSubmit: BlogType = cloneDeep(currentBlog)
-        blogDataForSubmit.content = replaceTmpSrcWithPublicSrc(blogDataForSubmit.content)
-        debug(blogDataForSubmit)
-
-        debug('start update request')
-        saveRequest({
-          path: path,
-          method: method,
-          headers: { 'content-type': 'multipart/form-data' },
-          data: mapStateToFormData(blogDataForSubmit),
+        publishRequest({
+          path: "/blogs/" + blogId,
+          method: RequestMethodEnum.PATCH,
+          headers: { 'content-type': 'application/json' },
+          data: JSON.stringify({ publish: 1 }), 
         })
           .then((result: ResponseResultType<BlogResponseDataType>) => {
             // do something 
           })
       }, () => {
-        debug('validation failed at save button event handler')
+        debug('validation failed at publish button event handler')
       })
   }
+
+  React.useEffect(() => {
+    function autoSave() {
+      debug('validation passed at save button event handler')
+
+      debug('replace temp src image with publicSrc before submit')
+      const blogDataForSubmit: BlogType = cloneDeep(currentBlog)
+      blogDataForSubmit.content = replaceTmpSrcWithPublicSrc(blogDataForSubmit.content)
+      debug(blogDataForSubmit)
+
+      debug('start update request')
+      saveRequest({
+        path: 'blogs/' + blogId,
+        method: RequestMethodEnum.PUT,
+        headers: { 'content-type': 'multipart/form-data' },
+        data: mapStateToFormData(blogDataForSubmit),
+      })
+        .then((result: ResponseResultType<BlogResponseDataType>) => {
+          // do something 
+        })
+    }
+    autoSave()
+  }, [currentBlog])
+
 
   const changeInputWidthDynamically = (inputRef: React.MutableRefObject<HTMLInputElement>, currentChLength: number): void => {
     console.log(inputRef)
@@ -152,13 +170,13 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
     <div className="context-wrapper">
       <div className="main-wrapper">
         <h2 className="profile-title">New Blog</h2>
-        <FetchStatus
+    {/**<FetchStatus
           currentFetchStatus={currentNewBlogStatus}
           setFetchStatus={setNewBlogStatus}
           fetchingMsg={'saving...'}
           successMsg={'ok'}
           failureMsg={'failed'}
-        />
+        />**/}
         <ImageInput
           handleImageUploadChange={handleImageUploadChange}
           handleImageRemoveClick={handleImageRemoveClick}
@@ -215,19 +233,19 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
           currentBlog={currentBlog}
           setBlog={setBlog}
         />
-        <BlogContent 
+        <BlogContent
           userId={auth.user.id}
           name="content"
           id="content"
-          value={currentBlog.content} 
+          value={currentBlog.content}
           placeholder="enter blog content..."
-          onChange={handleContentChangeEvent} 
-          onFocus={handleInitialFocusEvent} 
+          onChange={handleContentChangeEvent}
+          onFocus={handleInitialFocusEvent}
           errorMsg={currentValidationError.content}
         />
         <input type="hidden" name='creationDate' value={currentBlog.createdDate.toJSON()} />
         <div className="blog-detail-input-wrapper">
-          <input type="button" className="btn" value="Save" name='submit' onClick={handleSaveBlogClickEvent} onFocus={handleInitialFocusEvent} role="save-btn"/>
+          <input type="button" className="btn" value="Publish" name='submit' onClick={handlePublishBlogClickEvent} onFocus={handleInitialFocusEvent} role="publish-btn" />
           {(currentValidationError.submit && <div className="input-error">{currentValidationError.submit}</div>)}
         </div>
       </div>

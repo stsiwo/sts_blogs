@@ -57,5 +57,7 @@ class PasswordResetService(object):
         except BadSignature as e:
             raise BadSignatureException
         else:
+            print("*** user password of userId ***")
+            print(userId)
             user = db.session.query(User).get(userId)
             user.password = newPassword

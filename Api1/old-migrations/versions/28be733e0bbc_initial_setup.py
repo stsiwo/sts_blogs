@@ -1,4 +1,4 @@
-"""empty message
+""" initial script
 
 Revision ID: 28be733e0bbc
 Revises: 

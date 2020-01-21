@@ -20,7 +20,7 @@ def test_t01_should_return_401_with_access_token_expired_type(authedClientForTok
             )
 
     assert response.status_code == 401
-    assert response.data == b'{"msg":"The access token has expired","status":401,"type":0}\n'
+    assert response.data == b'{\n  "msg": "The access token has expired", \n  "status": 401, \n  "type": 0\n}\n'
 
     client.teardown()
 

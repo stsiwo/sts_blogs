@@ -27,7 +27,6 @@ flask db migrate
 export FLASK_ENV=development 
 flask db upgrade
 
-
 ## testing
 export FLASK_ENV=testing
 flask db upgrade

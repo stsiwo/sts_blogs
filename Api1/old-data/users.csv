@@ -1,0 +1,8 @@
+created_date,updated_date,deleted,id,name,email,password,avatarUrl
+2020-01-13 08:02:30,2020-01-13 08:02:30,0,1,test member,test@member.com,$2b$12$wQibEWOkCFe3X/QXv585kOjv7ZDl22CQ.AQQ81itk1tikwRJKjEnG,
+2020-01-13 08:02:30,2020-01-13 08:02:30,0,2,test admin,test@admin.com,$2b$12$6a3a24A7FHUZEekimY9XiOuHxV5Yn/rBep49mlqGHLK91ibO8cUm2,
+2020-01-13 08:02:30,2020-01-13 08:02:30,0,3,test member1,test@member1.com,$2b$12$4NM5cbNaHwkwEVzPOpGwouLmM81qmOzfKwo8eLmCqvJ/yRn5bXUr2,
+2020-01-13 08:02:30,2020-01-13 08:02:30,0,4,test member2,test@member2.com,$2b$12$qQiAF7bcFsqKJY0JxfJa9eROj/G0K5We8tzHxsTAdPSl2kn/R/u.y,
+2020-01-13 08:02:30,2020-01-13 08:02:30,0,5,test member3,test@member3.com,$2b$12$QKly9EOb6kpNioEibSdqiOOOzj0BJ4Vl4a0UOWGP.ea74PXLvvqYO,
+2020-01-13 08:02:30,2020-01-13 08:02:30,0,6,test member4,test@member4.com,$2b$12$awDpI7PmCGXwFfnZWk.8b.mMGxrsBIMS0IIk5bCTvFyhxZfdPgvU.,
+2020-01-13 08:02:30,2020-01-13 08:02:30,0,7,test member5,test@member5.com,$2b$12$aX6/YKpHNfMiPPFV1zIif.ApWBY307siGfedo/mBxR8ML686NiF2u,
