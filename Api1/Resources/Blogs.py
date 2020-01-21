@@ -94,9 +94,9 @@ class Blogs(Resource):
         app.logger.info("start processing patch request at /blogs")
         print("start processing patch request at /blogs")
 
-        self._blogService.togglePublishBlogService(blog_id, request.form.get('public'))
+        newPublic = self._blogService.togglePublishBlogService(blog_id, request.json.get('public'))
 
-        response = jsonify({'publish': 'success'})
+        response = jsonify({'public': newPublic})
         response.status_code = 200
         return response
 

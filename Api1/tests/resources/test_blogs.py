@@ -749,42 +749,117 @@ def test_b14_blogs_put_endpoint_should_create_blog_with_main_image_and_multiple_
 
 
 @pytest.mark.blogs_src
-@pytest.mark.blogs_src_put
-@pytest.mark.blogs_src_put_create
-def test_b14_blogs_put_endpoint_should_create_blog_with_multiple_blog_images_but_not_main_image(authedClientWithBlogSeeded, database, application, multipartHttpHeaders, setupTempUploadDirWithImageFile, usersSeededFixture, testFileStorage3, testFileStorage2):
+@pytest.mark.blogs_src_patch
+def test_b14_blogs_put_endpoint_should_create_blog_with_multiple_blog_images_but_not_main_image(authedClientWithBlogSeeded, exSession, application, httpHeaders, setupTempUploadDirWithImageFile, usersSeededFixture, testFileStorage3, testFileStorage2):
 
-    newBlogId = str(uuid.uuid4())
-    user = usersSeededFixture
-    userId = user.id  # separate due to "sqlalchemy.orm.exc.DetachedInstanceError: Instance <User at 0x7f033cc5c460> is not bound to a Session; attribute refresh operation cannot proceed (Background on this error at: http://sqlalche.me/e/bhk3)"
+    existingBlog = exSession.query(Blog).first()
+
+    # csrf_token = [cookie.value for cookie in authedClientWithBlogSeeded.cookie_jar if cookie.name == 'csrf_access_token'][0]
+    # httpHeaders['X-CSRF-TOKEN'] = csrf_token
+
+    response = authedClientWithBlogSeeded.patch(
+            '/blogs/{}'.format(existingBlog.id),
+            json={
+                "public": "1"
+                },
+            headers=httpHeaders
+            )
+
+    assert 401 == response.status_code
+
+
+@pytest.mark.blogs_src
+@pytest.mark.blogs_src_patch
+def test_b14_blogs_put_endpoint_should_return_400_for_invalid_input_in_request(authedClientWithBlogSeeded, application, exSession, httpHeaders, setupTempUploadDirWithImageFile, usersSeededFixture, testFileStorage3, testFileStorage2):
+
+    existingBlog = exSession.query(Blog).first()
 
     csrf_token = [cookie.value for cookie in authedClientWithBlogSeeded.cookie_jar if cookie.name == 'csrf_access_token'][0]
-    multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
+    httpHeaders['X-CSRF-TOKEN'] = csrf_token
 
-    blogImagePaths: [str] = []
-    blogImagePaths.append(os.path.join(application.config.get('PUBLIC_FILE_FOLDER'), str(userId), testFileStorage3.filename))
-    blogImagePaths.append(os.path.join(application.config.get('PUBLIC_FILE_FOLDER'), str(userId), testFileStorage2.filename))
-
-    response = authedClientWithBlogSeeded.put(
-            '/blogs/{}'.format(newBlogId),
-            data={
-                'userId': str(userId),
-                'title': 'updated_title',
-                'subtitle': 'updated_subtitle',
-                'content': 'updated_content',  # content should match with blog content images
-                'updatedDate': parseStrToDate('1999-01-01T00:00:00.000Z'),
-                'blogImagePaths': json.dumps(blogImagePaths, separators=(',', ':')),
-                'blogImages[]': [testFileStorage3.stream, testFileStorage2.stream]
+    response = authedClientWithBlogSeeded.patch(
+            '/blogs/{}'.format(existingBlog.id),
+            json={
+                "some-wrong-key": "1"
                 },
-            headers=multipartHttpHeaders
+            headers=httpHeaders
+            )
+
+    assert 400 == response.status_code
+
+
+@pytest.mark.blogs_src
+@pytest.mark.blogs_src_patch
+def test_b14_blogs_put_endpoint_should_return_200_when_successfully_update_public_column_to_True(authedClientWithBlogSeeded, application, exSession, httpHeaders, setupTempUploadDirWithImageFile, usersSeededFixture, testFileStorage3, testFileStorage2):
+
+    existingBlog = exSession.query(Blog).first()
+
+    csrf_token = [cookie.value for cookie in authedClientWithBlogSeeded.cookie_jar if cookie.name == 'csrf_access_token'][0]
+    httpHeaders['X-CSRF-TOKEN'] = csrf_token
+
+    response = authedClientWithBlogSeeded.patch(
+            '/blogs/{}'.format(existingBlog.id),
+            json={
+                "public": "1",
+                "userId": existingBlog.user.id,
+                "title": existingBlog.title,
+                "subtitle": existingBlog.subtitle
+                },
+            headers=httpHeaders
             )
 
     data = decodeResponseByteJsonToDictionary(response.data)
 
     assert 200 == response.status_code
-    assert 'updated_title' == data['blog']['title']
-    assert 'updated_subtitle' == data['blog']['subtitle']
-    assert 'updated_content' == data['blog']['content']
+    assert True is data.get("public")
 
-    # assert blog images is stored at server correctly
-    assert os.path.exists(os.path.join(application.config.get('APP_ROOT'), application.config.get('UPLOAD_FOLDER'), str(userId), testFileStorage2.filename))
-    assert os.path.exists(os.path.join(application.config.get('APP_ROOT'), application.config.get('UPLOAD_FOLDER'), str(userId), testFileStorage3.filename))
+
+@pytest.mark.blogs_src
+@pytest.mark.blogs_src_patch
+def test_b14_blogs_put_endpoint_should_return_200_when_successfully_update_public_column_to_False(authedClientWithBlogSeeded, application, exSession, httpHeaders, setupTempUploadDirWithImageFile, usersSeededFixture, testFileStorage3, testFileStorage2):
+
+    existingBlog = exSession.query(Blog).first()
+
+    csrf_token = [cookie.value for cookie in authedClientWithBlogSeeded.cookie_jar if cookie.name == 'csrf_access_token'][0]
+    httpHeaders['X-CSRF-TOKEN'] = csrf_token
+
+    response = authedClientWithBlogSeeded.patch(
+            '/blogs/{}'.format(existingBlog.id),
+            json={
+                "public": "0",
+                "userId": existingBlog.user.id,
+                "title": existingBlog.title,
+                "subtitle": existingBlog.subtitle
+                },
+            headers=httpHeaders
+            )
+
+    data = decodeResponseByteJsonToDictionary(response.data)
+
+    assert 200 == response.status_code
+    assert False is data.get("public")
+
+
+@pytest.mark.blogs_src
+@pytest.mark.blogs_src_patch
+def test_b14_blogs_put_endpoint_should_return_404_when_there_is_no_blog_exists(authedClientWithBlogSeeded, application, exSession, httpHeaders, setupTempUploadDirWithImageFile, usersSeededFixture, testFileStorage3, testFileStorage2):
+
+    noExistingBlogId = str(uuid.uuid4())
+
+    csrf_token = [cookie.value for cookie in authedClientWithBlogSeeded.cookie_jar if cookie.name == 'csrf_access_token'][0]
+    httpHeaders['X-CSRF-TOKEN'] = csrf_token
+
+    response = authedClientWithBlogSeeded.patch(
+            '/blogs/{}'.format(noExistingBlogId),
+            json={
+                "public": "0",
+                "userId": usersSeededFixture.id,
+                "title": "does not exist title",
+                "subtitle": "does not exist subtitle"
+                },
+            headers=httpHeaders
+            )
+
+    data = decodeResponseByteJsonToDictionary(response.data)
+
+    assert 404 == response.status_code

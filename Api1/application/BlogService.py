@@ -75,7 +75,9 @@ class BlogService(object):
         if targetBlog is None:
             raise BlogNotFoundException
 
-        targetBlog.public = public
+        targetBlog.public = bool(int(public))
+
+        return targetBlog.public
 
     @db_transaction()
     def createOrUpdateBlogService(self, blog_id: str, userId: str, title: str, subtitle: str, content: str, tags: List[str] = None, mainImage: FileStorage = None,  blogImages: List[FileStorage] = [], isDeleteMainImage: bool = False, blogImagePaths: List[str] = []) -> Dict:
