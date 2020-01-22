@@ -28,7 +28,7 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
   const { currentValidationError, touch, validate } = useBlogValidation({ domain: currentBlog })
   const { currentRequestStatus: currentNewBlogStatus, setRequestStatus: setNewBlogStatus, sendRequest: saveRequest } = useRequest({})
   const { currentRequestStatus: currentPublishStatus, setRequestStatus: setPublishStatus, sendRequest: publishRequest } = useRequest({})
-  const blogId = getUuidv4() 
+  const blogId = getUuidv4()
   const { auth } = useAuthContext()
 
   /** EH **/
@@ -60,7 +60,7 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
           path: "/blogs/" + blogId,
           method: RequestMethodEnum.PATCH,
           headers: { 'content-type': 'application/json' },
-          data: JSON.stringify({ publish: 1 }), 
+          data: JSON.stringify({ publish: 1 }),
         })
           .then((result: ResponseResultType<BlogResponseDataType>) => {
             // do something 
@@ -170,13 +170,13 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
     <div className="context-wrapper">
       <div className="main-wrapper">
         <h2 className="profile-title">New Blog</h2>
-    {/**<FetchStatus
+        <FetchStatus
           currentFetchStatus={currentNewBlogStatus}
           setFetchStatus={setNewBlogStatus}
           fetchingMsg={'saving...'}
           successMsg={'ok'}
           failureMsg={'failed'}
-        />**/}
+        />
         <ImageInput
           handleImageUploadChange={handleImageUploadChange}
           handleImageRemoveClick={handleImageRemoveClick}
@@ -246,7 +246,7 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
         <input type="hidden" name='creationDate' value={currentBlog.createdDate.toJSON()} />
         <div className="blog-detail-input-wrapper">
           <input type="button" className="btn" value="Publish" name='submit' onClick={handlePublishBlogClickEvent} onFocus={handleInitialFocusEvent} role="publish-btn" />
-          {(currentValidationError.submit && <div className="input-error">{currentValidationError.submit}</div>)}
+          {(currentValidationError.submit && <div className="input-error" role="summary-input-error">{currentValidationError.submit}</div>)}
         </div>
       </div>
       <div className="aside-wrapper">

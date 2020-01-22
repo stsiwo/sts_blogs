@@ -2,16 +2,29 @@
  * Types.
  */
 
+/**
+ * encounter: ReferenceError: is not defined when testing with jest
+ * remove ' (2019/12/06) and change 'import' to 'declare type' if this cause in production, fix this again
+ **/
+// original one
+//import DOMNode = Node
+//import DOMComment = Comment
+//import DOMElement = Element
+//import DOMText = Text
+//import DOMRange = Range
+//import DOMSelection = Selection
+//import DOMStaticRange = StaticRange
+
 // COMPAT: This is required to prevent TypeScript aliases from doing some very
 // weird things for Slate's types with the same name as globals. (2019/11/27)
 // https://github.com/microsoft/TypeScript/issues/35002
-import DOMNode = globalThis.Node
-import DOMComment = globalThis.Comment
-import DOMElement = globalThis.Element
-import DOMText = globalThis.Text
-import DOMRange = globalThis.Range
-import DOMSelection = globalThis.Selection
-import DOMStaticRange = globalThis.StaticRange
+declare type DOMNode = Node
+declare type DOMComment = Comment
+declare type DOMElement = Element
+declare type DOMText = Text
+declare type DOMRange = Range
+declare type DOMSelection = Selection
+declare type DOMStaticRange = StaticRange
 export {
   DOMNode,
   DOMComment,
