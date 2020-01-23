@@ -180,7 +180,6 @@ describe('ub-c1: NewBlog Component testing', () => {
   
   })
 
-  // ?? does not show error message
   test('a8. (validation) should display summary error msg when there is at least one of validation error and click "publish" btn', async () => {
     await act(async () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
