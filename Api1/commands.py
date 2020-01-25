@@ -7,6 +7,7 @@ from Infrastructure.DataModels.UserModel import User
 from Infrastructure.DataModels.BlogModel import Blog
 from click import ClickException
 from tests.data.generators.BlogGenerator import generateBlogModelV2
+import uuid
 
 
 seed_cli = AppGroup('seed')
@@ -68,6 +69,7 @@ def add_test_users():
 
         db.session.add(
                 User(
+                    id=str(uuid.uuid4()),
                     name="test member",
                     email="test@member.com",
                     password="test_member",
@@ -78,6 +80,7 @@ def add_test_users():
         # admin
         db.session.add(
                 User(
+                    id=str(uuid.uuid4()),
                     name="test admin",
                     email="test@admin.com",
                     password="test_admin",
@@ -87,6 +90,7 @@ def add_test_users():
 
         db.session.add(
                 User(
+                    id=str(uuid.uuid4()),
                     name="test member1",
                     email="test@member1.com",
                     password="test_member1",
@@ -95,6 +99,7 @@ def add_test_users():
                 )
         db.session.add(
                 User(
+                    id=str(uuid.uuid4()),
                     name="test member2",
                     email="test@member2.com",
                     password="test_member2",
@@ -103,6 +108,7 @@ def add_test_users():
                 )
         db.session.add(
                 User(
+                    id=str(uuid.uuid4()),
                     name="test member3",
                     email="test@member3.com",
                     password="test_member3",
@@ -111,6 +117,7 @@ def add_test_users():
                 )
         db.session.add(
                 User(
+                    id=str(uuid.uuid4()),
                     name="test member4",
                     email="test@member4.com",
                     password="test_member4",
@@ -120,6 +127,7 @@ def add_test_users():
 
         db.session.add(
                 User(
+                    id=str(uuid.uuid4()),
                     name="test member5",
                     email="test@member5.com",
                     password="test_member5",

@@ -14,7 +14,7 @@ module.exports = merge(common, {
   plugins: [
     new webpack.HashedModuleIdsPlugin(),
     new webpack.DefinePlugin({
-      NODE_ENV: JSON.stringify("development"),
+      NODE_ENV: JSON.stringify("staging"),
       DEBUG: JSON.stringify("*"),
       API1_URL: JSON.stringify("http://dev.api.stsiwo.com"),
       PUBLIC_IMAGE_PATH: JSON.stringify("/images/"),

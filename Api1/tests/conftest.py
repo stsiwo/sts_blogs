@@ -260,12 +260,13 @@ def usersSeededFixture(application, exSession, testExistingFileStorage):
     print("setup usersSeededFixture fixture")
 
     memberRole = exSession.query(Role).filter_by(name='member').first()
+    userId = str(uuid.uuid4())
     memberUser = generateUserModel(
-            id=2,
+            id=userId,
             name='test',
             email='test@test.com',
             password='test',
-            avatarUrl=os.path.join(application.config['PUBLIC_FILE_FOLDER'], str(2), testExistingFileStorage.filename),
+            avatarUrl=os.path.join(application.config['PUBLIC_FILE_FOLDER'], userId, testExistingFileStorage.filename),
             roles=[memberRole]
             )
 
@@ -288,12 +289,12 @@ def blogsSeededFixture(exSession, usersSeededFixture):
     reactTag = exSession.query(Tag).filter(Tag.name == 'react').first()
 
     blogs = [
-            generateBlogModel(id=1, userId=memberUser.id, user=memberUser, tags=[jsTag], content="sample", createdDate=parseStrToDate('1999-01-01T00:00:00.000Z')),
-            generateBlogModel(id=2, userId=memberUser.id, user=memberUser, tags=[jsTag, webpackTag], subtitle="sample", createdDate=parseStrToDate('2000-01-01T00:00:00.000Z')),
-            generateBlogModel(id=3, userId=memberUser.id, user=memberUser, tags=[jsTag, reactTag], createdDate=parseStrToDate('2001-01-01T00:00:00.000Z')),
-            generateBlogModel(id=4, userId=memberUser.id, user=memberUser, tags=[jsTag], title="sample", createdDate=parseStrToDate('2002-01-01T00:00:00.000Z')),
-            generateBlogModel(id=5, userId=memberUser.id, user=memberUser, tags=[jsTag, webpackTag], createdDate=parseStrToDate('2003-01-01T00:00:00.000Z')),
-            generateBlogModel(id=6, userId=memberUser.id, user=memberUser, tags=[jsTag, reactTag], createdDate=parseStrToDate('2004-01-01T00:00:00.000Z'))
+            generateBlogModel(userId=memberUser.id, user=memberUser, tags=[jsTag], content="sample", createdDate=parseStrToDate('1999-01-01T00:00:00.000Z')),
+            generateBlogModel(userId=memberUser.id, user=memberUser, tags=[jsTag, webpackTag], subtitle="sample", createdDate=parseStrToDate('2000-01-01T00:00:00.000Z')),
+            generateBlogModel(userId=memberUser.id, user=memberUser, tags=[jsTag, reactTag], createdDate=parseStrToDate('2001-01-01T00:00:00.000Z')),
+            generateBlogModel(userId=memberUser.id, user=memberUser, tags=[jsTag], title="sample", createdDate=parseStrToDate('2002-01-01T00:00:00.000Z')),
+            generateBlogModel(userId=memberUser.id, user=memberUser, tags=[jsTag, webpackTag], createdDate=parseStrToDate('2003-01-01T00:00:00.000Z')),
+            generateBlogModel(userId=memberUser.id, user=memberUser, tags=[jsTag, reactTag], createdDate=parseStrToDate('2004-01-01T00:00:00.000Z'))
             ]
 
     for blog in blogs:
@@ -371,8 +372,8 @@ def authedClient(client, usersSeededFixture):
         'Accept': mimetype
     }
     rv = client.post('/login', 'http://localhost', json={
-        'email': 'test@test.com',
-        'password': 'test'
+        'email': usersSeededFixture.email,
+        'password': 'test'  # can't use usersSeededFixture._password or password
         }, headers=headers)
 
     tokenDict = {}
@@ -409,8 +410,8 @@ def authedClientForTokenTest(application, client, usersSeededFixture):
             'Accept': mimetype
         }
         rv = client.post('/login', 'http://localhost', json={
-            'email': 'test@test.com',
-            'password': 'test'
+            'email': usersSeededFixture.email,
+            'password': 'test'  # can't use usersSeededFixture._password or password
             }, headers=headers)
 
         tokenDict = {}
@@ -487,12 +488,11 @@ def authedAdminClient(client, adminUserSeededFixture):
 
 
 @pytest.fixture
-def authedClientWithBlogSeeded(exSession, authedClient, testExistingFileStorage, testExistingFileStorage1, testExistingFileStorage2):
+def authedClientWithBlogSeeded(exSession, authedClient, testExistingFileStorage, testExistingFileStorage1, testExistingFileStorage2, usersSeededFixture):
     print("setup seedBlogsOfAuthedClient fixture")
 
-    authedUser = exSession.query(User).filter_by(email='test@test.com').first()
+    authedUser = usersSeededFixture
     exSession.add(generateBlogModel(
-        id=1,
         user=authedUser,
         userId=authedUser.id,
         mainImageUrl='/images/' + str(authedUser.id) + '/' + testExistingFileStorage.filename,
@@ -501,8 +501,8 @@ def authedClientWithBlogSeeded(exSession, authedClient, testExistingFileStorage,
             BlogImage(path='/images/' + str(authedUser.id) + '/' + testExistingFileStorage2.filename),
             ]
         ))
-    exSession.add(generateBlogModel(id=2, user=authedUser, userId=authedUser.id))
-    exSession.add(generateBlogModel(id=3, user=authedUser, userId=authedUser.id))
+    exSession.add(generateBlogModel(user=authedUser, userId=authedUser.id))
+    exSession.add(generateBlogModel(user=authedUser, userId=authedUser.id))
     exSession.commit()
 
     yield authedClient
@@ -553,48 +553,6 @@ def expiredTokenGenerator():
     yield generateToken
 
     app.config['FORGOT_PASSWORD_TOKEN_EXPIRY'] = FORGOT_PASSWORD_TOKEN_EXPIRY
-
-
-@pytest.fixture
-def testBlogData():
-    yield {
-            'title': "test-title",
-            'subtitle': "test-subtitle",
-            'content': "test-content",
-            'updatedDate': parseStrToDate('1999-01-01T00:00:00.000Z'),
-            }
-
-
-@pytest.fixture
-def testNewBlogData():
-    yield {
-            'title': "test-title",
-            'subtitle': "test-subtitle",
-            'content': "test-content",
-            'createdDate': parseStrToDate('1999-01-01T00:00:00.000Z'),
-            }
-
-
-@pytest.fixture
-def testBlogDataWithMainImage(testImageFile):
-    yield {
-            'title': "test-title",
-            'subtitle': "test-subtitle",
-            'content': "test-content",
-            'mainImage': testImageFile,
-            'updatedDate': parseStrToDate('1999-01-01T00:00:00.000Z'),
-            }
-
-
-@pytest.fixture
-def testNewBlogDataWithMainImage(testFileStorage):
-    yield {
-            'title': "test-title",
-            'subtitle': "test-subtitle",
-            'content': "test-content",
-            'mainImage': testFileStorage,
-            'createdDate': parseStrToDate('1999-01-01T00:00:00.000Z'),
-            }
 
 
 @pytest.fixture

@@ -20,11 +20,15 @@ const TagInput: React.FunctionComponent<TagInputPropType> = (props: TagInputProp
   }
 
   const handleTagInputEnterOrTabKeyClickEvent: React.EventHandler<React.KeyboardEvent<HTMLInputElement>> = (e) => {
+    console.log("tag keyboard event occurred!!!")
 
-    if (e.currentTarget.value === "") return false
+    // remove any space around tag value
+    const targetValue: string = e.currentTarget.value.replace(/\s/g, '');
+
+    if (targetValue === "") return false
 
     if (e.key == 'Enter' || e.key == 'Tab' || e.key == ' ') {
-      props.currentBlog.tags.add(e.currentTarget.value)
+      props.currentBlog.tags.add(targetValue)
       props.setBlog({
         ...props.currentBlog,
       })

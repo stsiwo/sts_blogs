@@ -47,7 +47,7 @@ def test_pr_post03_password_reset_post_endpoint_should_return_400_code_since_tok
 
 def test_pr_post04_password_reset_post_endpoint_should_return_400_code_since_token_is_expired(client, httpHeaders, expiredTokenGenerator, usersSeededFixture):
 
-    token = expiredTokenGenerator(2)
+    token = expiredTokenGenerator(usersSeededFixture.id)
 
     response = client.post(
             '/password-reset?token={}'.format(token),
@@ -66,7 +66,7 @@ def test_pr_post04_password_reset_post_endpoint_should_return_400_code_since_tok
 
 def test_pr_post05_password_reset_post_endpoint_should_return_204_code_for_successfully_update_password(client, httpHeaders, usersSeededFixture):
 
-    token = generateForgotPasswordToken(2)
+    token = generateForgotPasswordToken(usersSeededFixture.id)
 
     response = client.post(
             '/password-reset?token={}'.format(token),
@@ -80,7 +80,8 @@ def test_pr_post05_password_reset_post_endpoint_should_return_204_code_for_succe
 
 def test_pr_post06_password_reset_post_endpoint_should_update_password_in_db_when_sucessfully_updated(client, httpHeaders, usersSeededFixture, exSession):
 
-    token = generateForgotPasswordToken(2)
+    userId = usersSeededFixture.id
+    token = generateForgotPasswordToken(userId)
 
     response = client.post(
             '/password-reset?token={}'.format(token),
@@ -89,6 +90,6 @@ def test_pr_post06_password_reset_post_endpoint_should_update_password_in_db_whe
                 },
             headers=httpHeaders)
 
-    updatedUser = exSession.query(User).get(2)
+    updatedUser = exSession.query(User).get(userId)
 
     assert updatedUser.verifyPassword('new-test-password')

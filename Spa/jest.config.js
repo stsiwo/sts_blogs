@@ -23,5 +23,10 @@ module.exports = {
   "transform": {
     "^.+\\.tsx?$": "ts-jest"
   },
-  "setupFilesAfterEnv": ["<rootDir>/tests/jest-dom.config.ts"]
+  "setupFilesAfterEnv": ["<rootDir>/tests/jest-dom.config.ts"],
+  "globals": {
+       "NODE_ENV": 'development',
+       "API1_URL": 'http://api.stsiwo.com',
+       "PUBLIC_IMAGE_PATH": '/images/',
+     },
 }

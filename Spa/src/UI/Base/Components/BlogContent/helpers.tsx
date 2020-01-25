@@ -1,4 +1,4 @@
-import { Node } from 'slate'
+import { Node } from 'Components/fork/slate'
 import { ImageCustomElementProps } from './types';
 var debug = require('debug')('ui:BlogConent-helpers')
 
