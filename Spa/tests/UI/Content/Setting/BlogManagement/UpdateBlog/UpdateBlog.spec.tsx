@@ -8,7 +8,13 @@ import { blogGET200NonEmptyResponse, blogGET200EmptyResponse, noDateGET200Respon
 import UpdateBlog from 'ui/Content/Setting/BlogManagement/UpdateBlog/UpdateBlog'
 import { ContextWrapperComponent } from '../../../../fixtures';
 import { CssGlobalContextDefaultState } from 'Contexts/CssGlobalContext/CssGlobalContextDefaultState';
-
+import '../../../../../data/mocks/localStorageMock'
+jest.mock('react-router', () => ({
+  ...jest.requireActual('react-router'), // use actual for all non-hook parts
+  useParams: () => ({
+    blogId: '1',
+  }),
+}));
 
 describe('ub-c1: UpdateBlog Component testing', () => {
 
@@ -27,19 +33,20 @@ describe('ub-c1: UpdateBlog Component testing', () => {
    * a2. (DOM) should display blog data in each input field after initial api request 
    * a3. (api fetch) should display "no blog available" when initial fetch failed because of network error 
    * a4. (api fetch) should display "no blog available" when initial fetch failed because of 4xx or 5xx 
-   * a5. (api fetch) should not start api request when this component is updated
-   * a6. (validation) should display error msg when blog title is null/empty 
-   * a7. (validation) should not allow to update when blog title is null/empty 
-   * a8. (validation) should display error msg when subtitle is null/empty  
-   * a9.  (validation) should not allow to update when subtitle is null/empty 
-   * a10. (validation) should display error msg when content is null/empty  
-   * a11. (validation) should not allow to update when content is null/empty 
-   * a12. (EH) should start save request when "save" is clicked 
+   * a5. (validation) should display error msg when blog title is null/empty and click 'publish' btn
+   * a6. (validation) should not allow to publish when blog title is null/empty and click 'publish' btn
+   * a7. (validation) should display error msg when subtitle is null/empty and click 'publish' btn 
+   * a8. (validation) should not allow to publish when subtitle is null/empty and click 'publish' btn
+   * a9. (DOM) should not allow to enter any duplicated tag  
+   * a10. (validation) should display summary error msg when there is at least one of validation error and click 'publish' btn 
+   * a11. (validation) should not allow to publish when there is at least one of validation error 
+   * a12. (EH) should start publish request when "publish" is clicked 
    * a13. (DOM) should show "save success" message when save completed 
    * a14. (DOM) should show "save failure" message when save failed because of network issue 
    * a15. (DOM) should show "save failure" message when save failed because of 4xx or 5xx error
    *
    **/
+
 
   beforeAll(() => {
     console.log('ub-c1: beforeAll ')
@@ -56,6 +63,7 @@ describe('ub-c1: UpdateBlog Component testing', () => {
 
   beforeEach(() => {
     console.log('ub-c1: beforeEach ')
+    //localStorage.clear()
   })
 
   /** test for use case which does not matter screen size  here**/
@@ -79,6 +87,7 @@ describe('ub-c1: UpdateBlog Component testing', () => {
       )
 
       await wait(() => {
+        debug()
         expect(getByLabelText('Title').getAttribute('value')).toBeTruthy()
         expect(getByLabelText('Subtitle').getAttribute('value')).toBeTruthy()
         // temply remove
@@ -115,29 +124,10 @@ describe('ub-c1: UpdateBlog Component testing', () => {
     })
   })
 
-  test('a5. (api fetch) should not start api request when this component is updated', async () => {
+  /** test for use case which does not matter screen size  here**/
+  test('a5. (validation) should display error msg when blog title is null/empty and click "publish" btn', async () => {
 
-    api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
-    await act(async () => {
-      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
-        <ContextWrapperComponent component={UpdateBlog} isAuth />
-      )
-      const titleInput = await waitForElement(() => getByLabelText('Title'))
-      fireEvent.change(titleInput,
-        {
-          target: {
-            value: 'test'
-          }
-        })
-      await wait(() => {
-        expect(api.request).toHaveBeenCalledTimes(1)
-      })
-    })
-  })
-
-  test('a6. (validation) should display error msg when blog title is null/empty', async () => {
-
-    api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
+    api.request = jest.fn().mockResolvedValueOnce(singleBlogGET200NonEmptyResponse)
     await act(async () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={UpdateBlog} isAuth />
@@ -150,9 +140,9 @@ describe('ub-c1: UpdateBlog Component testing', () => {
     })
   })
 
-  test('a7. (validation) should not allow to update when blog title is null/empty', async () => {
+  test('a6. (validation) should not allow to publish when blog title is null/empty and click "publish" btn', async () => {
 
-    api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
+    api.request = jest.fn().mockResolvedValueOnce(singleBlogGET200NonEmptyResponse)
     await act(async () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={UpdateBlog} isAuth />
@@ -161,16 +151,17 @@ describe('ub-c1: UpdateBlog Component testing', () => {
       fireEvent.focus(titleInput) // need to focus to enable to display validation error on dom
       fireEvent.change(titleInput, { target: { value: '' } })
       const titleErrorNode = await waitForElement(() => getByText('title is a required field'))
-      fireEvent.click(getByRole('save-btn'))
-      await waitForElement(() => getByText('please fix validation errors before submit'))
-      expect(api.request).toHaveBeenCalledTimes(1)
-
+      fireEvent.focus(getByRole('publish-btn')) // don't foreget focus first 
+      fireEvent.click(getByRole('publish-btn'))
+      await wait(() => {
+        expect(getByText('please fix validation errors before submit')).toBeInTheDocument()
+      })
     })
   })
 
-  test('a8. (validation) should display error msg when subtitle is null/empty ', async () => {
+  test('a7. (validation) should display error msg when subtitle is null/empty and click "publish" btn', async () => {
 
-    api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
+    api.request = jest.fn().mockResolvedValueOnce(singleBlogGET200NonEmptyResponse)
     await act(async () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={UpdateBlog} isAuth />
@@ -183,9 +174,9 @@ describe('ub-c1: UpdateBlog Component testing', () => {
     })
   })
 
-  test('a9.  (validation) should not allow to update when subtitle is null/empty', async () => {
+  test('a8. (validation) should not allow to publish when subtitle is null/empty and click "publish" btn', async () => {
 
-    api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
+    api.request = jest.fn().mockResolvedValueOnce(singleBlogGET200NonEmptyResponse)
     await act(async () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={UpdateBlog} isAuth />
@@ -194,115 +185,207 @@ describe('ub-c1: UpdateBlog Component testing', () => {
       fireEvent.focus(subtitleInput) // need to focus to enable to display validation error on dom
       fireEvent.change(subtitleInput, { target: { value: '' } })
       const subtitleErrorNode = await waitForElement(() => getByText('subtitle is a required field'))
-      fireEvent.click(getByRole('save-btn'))
-      await waitForElement(() => getByText('please fix validation errors before submit'))
-      expect(api.request).toHaveBeenCalledTimes(1)
+      fireEvent.focus(getByRole('publish-btn')) // need to focus to enable to display validation error on dom
+      fireEvent.click(getByRole('publish-btn'))
+      await wait(() => {
+        expect(getByText('please fix validation errors before submit')).toBeInTheDocument()
+      })
     })
   })
 
-//  test('a10. (validation) should display error msg when content is null/empty ', async () => {
-//
-//    api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
-//    await act(async () => {
-//      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
-//        <ContextWrapperComponent component={UpdateBlog} isAuth />
-//      )
-//      const contentInput = await waitForElement(() => getByRole('blog-content-editable'))
-//      fireEvent.focus(contentInput) // need to focus to enable to display validation error on dom
-//      fireEvent.change(contentInput, { target: { value: '' } })
-//      const contentErrorNode = await waitForElement(() => getByText('content is a required field'))
-//      expect(contentErrorNode).toBeInTheDocument()
-//    })
-//  })
-//
-//  test('a11. (validation) should not allow to update when content is null/empty', async () => {
-//
-//    api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
-//    await act(async () => {
-//      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
-//        <ContextWrapperComponent component={UpdateBlog} isAuth />
-//      )
-//      const contentInput = await waitForElement(() => getByRole('blog-content-editable'))
-//      fireEvent.focus(contentInput) // need to focus to enable to display validation error on dom
-//      fireEvent.change(contentInput, { target: { value: '' } })
-//      const contentErrorNode = await waitForElement(() => getByText('content is a required field'))
-//      fireEvent.click(getByRole('save-btn'))
-//      await waitForElement(() => getByText('please fix validation errors before submit'))
-//      expect(api.request).toHaveBeenCalledTimes(1)
-//    })
-//  })
-//
-//  test('a12. (EH) should start save request when "save" is clicked', async () => {
-//
-//    api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
-//    await act(async () => {
-//      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
-//        <ContextWrapperComponent component={UpdateBlog} isAuth />
-//      )
-//
-//      // must wait until fetch is completed
-//      const saveBtn = await waitForElement(() => getByRole('save-btn'))
-//      fireEvent.click(saveBtn)
-//      // wait until below expectation is met otherwise, timeout
-//      await wait(() => {
-//        expect(api.request).toHaveBeenCalledTimes(2)
-//      })
-//    })
-//  })
-//
-//  test('a13. (DOM) should show "save success" message when save completed', async () => {
-//
-//    api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
-//    await act(async () => {
-//      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
-//        <ContextWrapperComponent component={UpdateBlog} isAuth />
-//      )
-//      // must wait until fetch is completed
-//      const saveBtn = await waitForElement(() => getByRole('save-btn'))
-//      // mock response of save request
-//      api.request = jest.fn().mockReturnValue(Promise.resolve(noDateGET200Response))
-//      fireEvent.click(saveBtn)
-//      await wait(() => {
-//        expect(getByText('updating blog success')).toBeInTheDocument()
-//      })
-//    })
-//  })
-//
-//  test('a14. (DOM) should show "save failure" message when save failed because of network issue', async () => {
-//
-//    api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
-//    await act(async () => {
-//      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
-//        <ContextWrapperComponent component={UpdateBlog} isAuth />
-//      )
-//      // must wait until fetch is completed
-//      const saveBtn = await waitForElement(() => getByRole('save-btn'))
-//      // mock response of save request
-//      api.request = jest.fn().mockReturnValue(Promise.reject(networkError))
-//      fireEvent.click(saveBtn)
-//      await wait(() => {
-//        expect(getByText('updating blog failed')).toBeInTheDocument()
-//      })
-//    })
-//  })
-//
-//  test('a15. (DOM) should show "save failure" message when save failed because of 4xx or 5xx error', async () => {
-//
-//    api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
-//    await act(async () => {
-//      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
-//        <ContextWrapperComponent component={UpdateBlog} isAuth />
-//      )
-//      // must wait until fetch is completed
-//      const saveBtn = await waitForElement(() => getByRole('save-btn'))
-//      // mock response of save request
-//      api.request = jest.fn().mockReturnValue(Promise.reject(internalServerError500Response))
-//      fireEvent.click(saveBtn)
-//      await wait(() => {
-//        expect(getByText('updating blog failed')).toBeInTheDocument()
-//      })
-//    })
-//  })
+  // the order of values must match node array
+  const seedInputTestValues = (targetNodes: HTMLElement[], values: string[]): void => {
+    targetNodes.forEach((node: HTMLElement, index: number) => {
+      fireEvent.focus(node)
+      fireEvent.change(node, { target: { value: values[index] } })
+    })
+  }
+
+  test('a9. (DOM) should not allow to enter any duplicated tag', async () => {
+    api.request = jest.fn().mockResolvedValueOnce(singleBlogGET200NonEmptyResponse)
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText, queryAllByRole, getAllByText } = render(
+        <ContextWrapperComponent component={UpdateBlog} isAuth />
+      )
+      const tagsInput = await waitForElement(() => getByLabelText('Tags'))
+      // try to input depulicated tag
+      // first attempt
+      fireEvent.focus(tagsInput) // need to focus to enable to display validation error on dom
+      fireEvent.change(tagsInput, { target: { value: 'sample' } })
+      /**
+       * keyPress does not work even if i tried to add 'charCode'
+       * https://github.com/testing-library/react-testing-library/issues/269
+       *  - but when change to 'keyDown' it works
+       **/
+      fireEvent.keyDown(tagsInput, { key: 'Enter', code: 13, charCode: 13 })
+      // second attempt
+      fireEvent.focus(tagsInput) // need to focus to enable to display validation error on dom
+      fireEvent.change(tagsInput, { target: { value: 'sample' } })
+      fireEvent.keyDown(tagsInput, { key: 'Enter', code: 13, charCode: 13 })
+      const tagIcons = await waitForElement(() => getAllByText('#sample'))
+      expect(tagIcons.length).toBe(1) 
+    })
+  
+  })
+
+  test('a10. (validation) should display summary error msg when there is at least one of validation error and click "publish" btn', async () => {
+    api.request = jest.fn().mockResolvedValueOnce(singleBlogGET200NonEmptyResponse)
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={UpdateBlog} isAuth />
+      )
+      const titleInput = await waitForElement(() => getByLabelText('Title'))
+      fireEvent.focus(titleInput) // don't foreget focus first 
+      fireEvent.change(titleInput, { target: { value: '' } })
+
+      // must wait until fetch is completed
+      const publishBtn = await waitForElement(() => getByRole('publish-btn'))
+      fireEvent.focus(publishBtn) // don't foreget focus first 
+      fireEvent.click(publishBtn)
+      // wait until below expectation is met otherwise, timeout
+      await wait(() => {
+        expect(getByRole('summary-input-error')).toBeInTheDocument()
+      })
+    })
+  })
+
+  test('a11. (validation) should not allow to publish when there is at least one of validation error', async () => {
+    api.request = jest.fn().mockResolvedValueOnce(singleBlogGET200NonEmptyResponse)
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={UpdateBlog} isAuth />
+      )
+      const titleInput = await waitForElement(() => getByLabelText('Title'))
+      fireEvent.focus(titleInput) // don't foreget focus first 
+      fireEvent.change(titleInput, { target: { value: '' } })
+
+
+      // must wait until fetch is completed
+      const publishBtn = await waitForElement(() => getByRole('publish-btn'))
+      fireEvent.focus(publishBtn) // don't foreget focus first 
+      fireEvent.click(publishBtn)
+      const currentCallsNum = (api.request as any).mock.calls.length
+      // wait until below expectation is met otherwise, timeout
+      await wait(() => {
+        expect(api.request).toHaveBeenCalledTimes(currentCallsNum) // 1: initial fetch so count it
+      })
+    })
+  
+  })
+
+  test('a12. (EH) should start publish request when "publish" is clicked', async () => {
+    api.request = jest.fn().mockResolvedValueOnce(singleBlogGET200NonEmptyResponse)
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={UpdateBlog} isAuth />
+      )
+
+      const inputs = await waitForElement(() => [
+        getByLabelText('Title'),
+        getByLabelText('Subtitle'),
+      ])
+
+      seedInputTestValues(inputs, [
+        'test-title',
+        'test-subtitle',
+      ])
+      // must wait until fetch is completed
+      const publishBtn = await waitForElement(() => getByRole('publish-btn'))
+      api.request = jest.fn().mockResolvedValue(noDateGET200Response)
+      const currentCallsNum = (api.request as any).mock.calls.length
+      fireEvent.focus(publishBtn) // don't foreget focus first 
+      fireEvent.click(publishBtn)
+      // wait until below expectation is met otherwise, timeout
+      await wait(() => {
+        expect(api.request).toHaveBeenCalledTimes(currentCallsNum + 1)
+      })
+    })
+  })
+
+  test('a13. (DOM) should show "save success" message when save completed', async () => {
+
+    api.request = jest.fn().mockResolvedValueOnce(singleBlogGET200NonEmptyResponse)
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={UpdateBlog} isAuth />
+      )
+      const inputs = await waitForElement(() => [
+        getByLabelText('Title'),
+        getByLabelText('Subtitle'),
+      ])
+
+      seedInputTestValues(inputs, [
+        'test-title',
+        'test-subtitle',
+      ])
+      // must wait until fetch is completed
+      const publishBtn = await waitForElement(() => getByRole('publish-btn'))
+      // mock response of save request
+      api.request = jest.fn().mockResolvedValue(noDateGET200Response)
+      fireEvent.focus(publishBtn) // don't foreget focus first 
+      fireEvent.click(publishBtn)
+      await wait(() => {
+        debug()
+        expect(getByText('ok')).toBeInTheDocument()
+      })
+    })
+  })
+
+  test('a14. (DOM) should show "save failure" message when save failed because of network issue', async () => {
+
+    api.request = jest.fn().mockResolvedValueOnce(singleBlogGET200NonEmptyResponse)
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={UpdateBlog} isAuth />
+      )
+      const inputs = await waitForElement(() => [
+        getByLabelText('Title'),
+        getByLabelText('Subtitle'),
+      ])
+
+      seedInputTestValues(inputs, [
+        'test-title',
+        'test-subtitle',
+      ])
+      // must wait until fetch is completed
+      const publishBtn = await waitForElement(() => getByRole('publish-btn'))
+      // mock response of save request
+      api.request = jest.fn().mockRejectedValue(networkError)
+      fireEvent.focus(publishBtn) // don't foreget focus first 
+      fireEvent.click(publishBtn)
+      await wait(() => {
+        expect(getByText('failed')).toBeInTheDocument()
+      })
+    })
+  })
+
+  test('a15. (DOM) should show "save failure" message when save failed because of 4xx or 5xx error', async () => {
+
+    api.request = jest.fn().mockResolvedValueOnce(singleBlogGET200NonEmptyResponse)
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={UpdateBlog} isAuth />
+      )
+      const inputs = await waitForElement(() => [
+        getByLabelText('Title'),
+        getByLabelText('Subtitle'),
+      ])
+
+      seedInputTestValues(inputs, [
+        'test-title',
+        'test-subtitle',
+      ])
+      // must wait until fetch is completed
+      const publishBtn = await waitForElement(() => getByRole('publish-btn'))
+      // mock response of save request
+      api.request = jest.fn().mockRejectedValue(internalServerError500Response)
+      fireEvent.focus(publishBtn) // don't foreget focus first 
+      fireEvent.click(publishBtn)
+      await wait(() => {
+        expect(getByText('failed')).toBeInTheDocument()
+      })
+    })
+  })
 
   afterEach(() => {
     console.log('ub-c1: afterEach ')

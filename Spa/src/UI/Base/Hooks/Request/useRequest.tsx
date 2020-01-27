@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { UseRequestStatusInputType, UseRequestStatusOutputType, RequestStatusType, FetchDataArgType, CacheData } from "./types";
 import { AxiosError, CancelTokenSource } from 'axios';
-import { ResponseResultStatusEnum, ResponseResultType } from 'requests/types';
+import { ResponseResultStatusEnum, ResponseResultType, RequestMethodEnum } from 'requests/types';
 import { request, getCancelTokenSource } from 'requests/request';
 import { buildQueryString, getTimeOneHourAfter } from '../../../../utils';
 import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
@@ -32,16 +32,18 @@ export const useRequest = (input: UseRequestStatusInputType): UseRequestStatusOu
     const cancelTokenSource = getCancelTokenSource()
     setCancelSource(cancelTokenSource)
 
-    // return cached and not send request if useCache and cache is available 
-    if (args.useCache) {
+    // return cached and not send request if useCache and cache is available and only GET method
+    if (args.useCache && args.method === RequestMethodEnum.GET) {
       debug(" useCache is enabled ")
       const cachedData = getCachedData(args.path + buildQueryString(args.queryString))
       if (cachedData) {
         debug(" cachedData is available ")
-        return Promise.resolve({
+        const responseCacheResult: ResponseResultType = {
           data: cachedData,
           status: ResponseResultStatusEnum.SUCCESS
-        } as ResponseResultType)
+        }
+        setRequestStatus(responseCacheResult)
+        return Promise.resolve(responseCacheResult)
       }
     }
 
