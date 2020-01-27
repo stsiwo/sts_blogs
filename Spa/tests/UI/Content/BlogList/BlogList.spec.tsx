@@ -9,6 +9,9 @@ import BlogList from "ui/Content/BlogList/BlogList";
 import { blogGET200EmptyResponse, blogGET200NonEmptyResponse } from "../../../requests/fixtures";
 import { ContextWrapperComponent } from "../../fixtures";
 import Content from 'ui/Content/Content';
+// setup mocked localstorage 
+import '../../../data/mocks/localStorageMock.ts'
+
 
 
 describe('bl-c1: BlogList Component testing', () => {
@@ -45,6 +48,8 @@ describe('bl-c1: BlogList Component testing', () => {
    * a19. (Route) should route user to specified blog detail page when one of blog is clicked
    * a20. (EH) should start api request when new page number is click and url must contain the number
    * a21. (EH) should start api request when last page number is click and url must contain the number
+   * a22. (cache) should cache response data in localStorage after request 
+   * a23. (cache) should use cached data when request to the same endpoint (with queryString) 
    *
    * ** <= tablet **
    *
@@ -67,6 +72,7 @@ describe('bl-c1: BlogList Component testing', () => {
   })
 
   beforeEach(() => {
+    localStorage.clear()
     console.log('bl-c1: beforeEach ')
   })
 
@@ -101,7 +107,10 @@ describe('bl-c1: BlogList Component testing', () => {
       await waitForElement(() => getAllByRole('blog-item'))
 
     })
-    expect(api.request).toHaveBeenCalledTimes(2)
+    /**
+     * since cache is available, the number of request call is only once
+     **/
+    expect(api.request).toHaveBeenCalledTimes(1)
 
   })
 
@@ -182,7 +191,7 @@ describe('bl-c1: BlogList Component testing', () => {
 
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
-        <ContextWrapperComponent component={Content} isAuth initialRoute="/blogs"/>
+        <ContextWrapperComponent component={Content} isAuth initialRoute="/blogs" />
       )
       expect(document.getElementsByClassName('aside-new-blog-link')[0].getAttribute('href')).toBe('/setting/blogs/new')
     })
@@ -364,6 +373,31 @@ describe('bl-c1: BlogList Component testing', () => {
     })
     expect(api.request).toHaveBeenCalledTimes(2)
     expect((api.request as any).mock.calls[1][0].url).toContain('page=500&limit=20')
+  })
+
+  test("a22. (cache) should cache response data in localStorage after request", async () => {
+    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
+    await act(async () => {
+      const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
+        <ContextWrapperComponent component={BlogList} />
+      )
+      await waitForElement(() => getAllByRole('blog-item'))
+    })
+    const path = (api.request as any).mock.calls[0][0].url
+    expect(localStorage.getItem(path)).not.toBeNull()
+  })
+
+  test("a23. (cache) should use cached data when request to the same endpoint (with queryString)", async () => {
+    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
+    await act(async () => {
+      const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
+        <ContextWrapperComponent component={BlogList} />
+      )
+      await waitForElement(() => getAllByRole('blog-item'))
+      fireEvent.click(getByRole('refresh-icon'))
+    })
+    const path = (api.request as any).mock.calls[0][0].url
+    expect(api.request).toHaveBeenCalledTimes(1)
   })
 
   describe('bl-c1: <= tablet screen size', () => {

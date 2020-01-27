@@ -54,3 +54,9 @@ export function generateFileWithUuidv4(targetFile: File) {
 export function getUuidv4() {
   return uuidv4()
 }
+
+export function getTimeOneHourAfter() {
+  var dt = new Date();
+  dt.setHours( dt.getHours() + 1 )
+  return dt.getTime()
+}
