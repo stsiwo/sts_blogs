@@ -6,6 +6,7 @@ import { request, getCancelTokenSource } from 'requests/request';
 import { buildQueryString, getTimeOneHourAfter } from '../../../../utils';
 import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
 import { getCachedData } from './caches'
+import serialize from 'serialize-javascript';
 var debug = require('debug')('ui:FetchStatus')
 
 
@@ -65,11 +66,11 @@ export const useRequest = (input: UseRequestStatusInputType): UseRequestStatusOu
            *  - set expire at current time + 1 hour
            **/
           debug("start caching response data")
-          localStorage.setItem(args.path + buildQueryString(args.queryString), JSON.stringify({
+          localStorage.setItem(args.path + buildQueryString(args.queryString), serialize(({
             // set expireAt: + 1 hours when recive response
             expireAt: getTimeOneHourAfter(),
             data: responseResult.data
-          } as CacheData))
+          } as CacheData)))
         }
 
         /**
