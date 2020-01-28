@@ -1,4 +1,5 @@
 from Configs.extensions import db
+from sqlalchemy.types import CHAR
 
 
 roles = db.Table(
@@ -10,7 +11,7 @@ roles = db.Table(
         ),
         db.Column(
             'user_id',
-            db.Integer,
+            CHAR(36),
             db.ForeignKey('users.id', name="FK_users_roles__users", ondelete='CASCADE', onupdate='CASCADE')
         ),
         db.Column(

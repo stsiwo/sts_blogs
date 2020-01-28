@@ -11,8 +11,8 @@ class Comment(BaseModel):
     title = db.Column(db.VARCHAR(1000), nullable=False)
     content = db.Column(db.Text, nullable=False)
 
-    blogId = db.Column(CHAR(32), db.ForeignKey('blogs.id', name="FK_comments__blogs", ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
-    authorId = db.Column(CHAR(32), db.ForeignKey('users.id', name="FK_comments__users", ondelete='CASCADE', onupdate='CASCADE'), nullable=True)
+    blogId = db.Column(CHAR(36), db.ForeignKey('blogs.id', name="FK_comments__blogs", ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
+    authorId = db.Column(CHAR(36), db.ForeignKey('users.id', name="FK_comments__users", ondelete='CASCADE', onupdate='CASCADE'), nullable=True)
 
     # TODO: author relationship
     # https://app.clickup.com/t/3m558t
