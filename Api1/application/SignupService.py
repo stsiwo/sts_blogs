@@ -4,6 +4,7 @@ from Infrastructure.transactionDecorator import db_transaction
 from Infrastructure.repositories.RoleRepository import RoleRepository
 from Infrastructure.repositories.UserRepository import UserRepository
 from Resources.viewModels.UserSchema import UserSchema
+from exceptions.UserAlreadyExistException import UserAlreadyExistException
 import uuid
 
 
@@ -24,6 +25,12 @@ class SignupService(object):
     def registerUserService(self, name: str, email: str, password: str):
         app.logger.info("start register user service")
         print("start register user service")
+
+        # check newUser already exists in db
+        isExist = self._userRepository.getByEmail(email)
+
+        if isExist is not None:
+            raise UserAlreadyExistException
 
         # get 'member' role from db
         memberRole = self._roleRepository.get('member')
