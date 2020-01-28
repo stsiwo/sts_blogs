@@ -3,18 +3,18 @@
 ### API1
   - testing
      - use testing docker container
-     command)
-      - docker build --tag=api1:testing --target=testing . 
-        // at root directory of api1 project
-      - docker run --name=api1-testing -v ${PWD}:/app -e ${PWD}/.env.testing api1:testing <additional_pytest_command>
-        // ex) docker run .... api1:testing -m blog_src_get (run only test whose marks include 'blog_src_get')
-        // run it
+      - command)
+        - docker build --tag=api1:testing --target=testing . 
+          // at root directory of api1 project
+        - docker run --name=api1-testing -v ${PWD}:/app -e ${PWD}/.env.testing api1:testing <additional_pytest_command>
+          // ex) docker run .... api1:testing -m blog_src_get (run only test whose marks include 'blog_src_get')
+          // run it
   - development
-     command)
-      - docker build --tag=api1:development --target=development . 
-        // at root directory of api1 project
-      - docker run --name=api1-development -v ${PWD}:/app -e ${PWD}/.env.development -p 5000:5000 api1:development  
-        // run it
+     - command)
+        - docker build --tag=api1:development --target=development . 
+          // at root directory of api1 project
+        - docker run --name=api1-development -v ${PWD}:/app -e ${PWD}/.env.development -p 5000:5000 api1:development  
+          // run it
   - staging
      - docker-compose.yml
   - production
@@ -23,28 +23,35 @@
 ### SPA
   - testing
      - use testing docker container
-     command)
-      - docker build --tag=spa:testing --target=testing . 
-        // at root directory of api1 project
-      - docker container prune -f && docker run --name=spa-testing -v ${PWD}:/app -v /app/node_modules spa:testing 
-        // run it
+      - command)
+        - docker build --tag=spa:testing --target=testing . 
+          // at root directory of api1 project
+        - docker container prune -f && docker run --name=spa-testing -v ${PWD}:/app -v /app/node_modules spa:testing 
+          // run it
   - development
-     command)
-      - docker build --tag=spa:development --target=development . 
-        // at root directory of api1 project
-      - docker container prune -f && docker run --name=spa-development -v ${PWD}:/app -v /app/node_modules -p 8080:8080 spa:development <additional command for 'npx jest'>
-        // ex) docker run .... spa;development tests/specific_test.spec.ts
-        // run it
+     - command)
+        - docker build --tag=spa:development --target=development . 
+          // at root directory of api1 project
+        - docker container prune -f && docker run --name=spa-development -v ${PWD}:/app -v /app/node_modules -p 8080:8080 spa:development <additional command for 'npx jest'>
+          // ex) docker run .... spa;development tests/specific_test.spec.ts
+          // run it
   - staging-local
-     command)
-      docker-compose -f docker-compose.staging.secrets.yml -f docker-compose.staging.yml -f docker-compose.staging.local.yml up -d --build
+     - command)
+        - docker-compose -f docker-compose.staging.secrets.yml -f docker-compose.staging.yml -f docker-compose.staging.local.yml up -d --build
   - staging
      - docker-compose.yml
   - production
      - docker-compose.yml
      
 ### Docker Compose
-  
+
+### Integration Testing
+  - staging (local)
+    1. activate venv at Integration directory
+    2. run selenuim server
+        - command) java -jar selenium-server-standalone-3.141.59.jar
+    3. run testing 
+        - command) python -m pytest [option]
      
 
 ### Errors
