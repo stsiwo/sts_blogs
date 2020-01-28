@@ -147,6 +147,7 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   return (
     <div className="context-wrapper">
       <div className="main-wrapper">
+        <h2 className="profile-title">Blog List</h2>
         <BlogListController
           currentFetchStatus={currentInitialBlogsFetchStatus}
           setFetchStatus={setInitialBlogsFetchStatus}
