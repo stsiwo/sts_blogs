@@ -78,7 +78,7 @@ describe('p-c1: Profile Component testing', () => {
 
   test('a3. (api fetch) should not start api request when this component is updated', async () => {
 
-    api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
+    api.request = jest.fn().mockResolvedValue(userGET200Response)
     await act(async () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Profile} isAuth />

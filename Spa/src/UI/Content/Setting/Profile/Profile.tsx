@@ -46,6 +46,8 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
     fetchUser({
       path: path,
       method: RequestMethodEnum.GET,
+      useCache: false,
+      allowCache: false
     })
       // call from previous 'catch' and 'then' of 'fetchUser'
       // since resolve promise in the 'catch'

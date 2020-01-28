@@ -9,6 +9,7 @@ import { ContextWrapperComponent } from '../../../fixtures';
 import BlogManagement from 'ui/Content/Setting/BlogManagement/BlogManagement';
 import { CssGlobalContextDefaultState } from 'Contexts/CssGlobalContext/CssGlobalContextDefaultState';
 import Content from 'ui/Content/Content';
+import '../../../../data/mocks/localStorageMock'
 
 
 describe('bm-c1: BlogManagement Component testing', () => {
@@ -68,6 +69,7 @@ describe('bm-c1: BlogManagement Component testing', () => {
 
   beforeEach(() => {
     console.log('bm-c1: beforeEach ')
+    localStorage.clear()
   })
 
   /** test for use case which does not matter screen size  here**/
@@ -100,7 +102,10 @@ describe('bm-c1: BlogManagement Component testing', () => {
       await waitForElement(() => getAllByRole('blog-item'))
 
     })
-    expect(api.request).toHaveBeenCalledTimes(2)
+    /**
+     * since use cached data when second request, so total is just once when refersh
+     **/
+    expect(api.request).toHaveBeenCalledTimes(1)
 
   })
 

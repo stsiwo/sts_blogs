@@ -12,7 +12,7 @@ export const useBlogValidation = (input: UseBlogValidationStatusInputType): UseB
     id: yup.string(),
     title: yup.string().required(),
     subtitle: yup.string().required(),
-    content: yup.array<Node>().required(),
+    content: yup.array<Node>(),
     createdDate: yup.date().required(),
   });
 

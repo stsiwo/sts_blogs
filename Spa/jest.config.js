@@ -25,7 +25,7 @@ module.exports = {
   },
   "setupFilesAfterEnv": ["<rootDir>/tests/jest-dom.config.ts"],
   "globals": {
-       "NODE_ENV": 'development',
+       "NODE_ENV": 'testing',
        "API1_URL": 'http://api.stsiwo.com',
        "PUBLIC_IMAGE_PATH": '/images/',
      },

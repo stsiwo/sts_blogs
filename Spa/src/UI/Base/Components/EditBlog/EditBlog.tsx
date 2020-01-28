@@ -20,6 +20,7 @@ import { RequestStatusType } from 'Hooks/Request/types';
 var debug = require('debug')('ui:EditBlog')
 
 declare type EditBlogPropsType = {
+  context: string
   blogId: string
   currentBlog: BlogType
   setBlog: React.Dispatch<React.SetStateAction<BlogType>>
@@ -27,7 +28,12 @@ declare type EditBlogPropsType = {
   setBlogFetchStatus?: React.Dispatch<React.SetStateAction<RequestStatusType>>
 }
 
-const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ blogId, currentBlog, setBlog }) => {
+enum FetchContextEnum {
+  SAVE,
+  PUBLISH
+}
+
+const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId, currentBlog, setBlog }) => {
 
   const titleInputRef: React.MutableRefObject<HTMLInputElement> = { current: null }
   const subtitleInputRef: React.MutableRefObject<HTMLInputElement> = { current: null }
@@ -36,6 +42,7 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ blogId, currentB
   const { currentValidationError, touch, validate } = useBlogValidation({ domain: currentBlog })
   const { currentRequestStatus: currentBlogStatus, setRequestStatus: setBlogStatus, sendRequest: saveRequest } = useRequest({})
   const { currentRequestStatus: currentPublishStatus, setRequestStatus: setPublishStatus, sendRequest: publishRequest } = useRequest({})
+  const [curFetchContext, setFetchContext] = React.useState<FetchContextEnum>(FetchContextEnum.PUBLISH)
   const { auth } = useAuthContext()
 
   /** EH **/
@@ -62,6 +69,7 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ blogId, currentB
     debug('start handling publish button click')
     validate()
       .then(() => {
+        setFetchContext(FetchContextEnum.PUBLISH)
         publishRequest({
           path: "/blogs/" + blogId,
           method: RequestMethodEnum.PATCH,
@@ -97,6 +105,7 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ blogId, currentB
         })
     }
     autoSave()
+    setFetchContext(FetchContextEnum.SAVE)
   }, [currentBlog])
 
 
@@ -174,7 +183,8 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ blogId, currentB
   return (
     <div className="context-wrapper">
       <div className="main-wrapper">
-        <h2 className="profile-title">New Blog</h2>
+        <h2 className="profile-title">{context} Blog</h2>
+        {(curFetchContext === FetchContextEnum.SAVE &&
         <FetchStatus
           currentFetchStatus={currentBlogStatus}
           setFetchStatus={setBlogStatus}
@@ -182,6 +192,16 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ blogId, currentB
           successMsg={'ok'}
           failureMsg={'failed'}
         />
+        )}
+        {(curFetchContext === FetchContextEnum.PUBLISH &&
+        <FetchStatus
+          currentFetchStatus={currentPublishStatus}
+          setFetchStatus={setPublishStatus}
+          fetchingMsg={'publishing...'}
+          successMsg={'ok'}
+          failureMsg={'failed'}
+        />
+        )}
         <ImageInput
           handleImageUploadChange={handleImageUploadChange}
           handleImageRemoveClick={handleImageRemoveClick}

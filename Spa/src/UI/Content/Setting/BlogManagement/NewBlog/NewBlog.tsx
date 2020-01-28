@@ -12,6 +12,7 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
 
   return (
     <EditBlog
+      context={"New"}
       blogId={blogId} 
       currentBlog={currentBlog}
       setBlog={setBlog}

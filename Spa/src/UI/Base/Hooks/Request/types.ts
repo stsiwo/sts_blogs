@@ -19,6 +19,8 @@ export declare type FetchDataArgType = {
   headers?: any
   data?: any
   queryString?: QueryStringType
+  useCache?: boolean
+  allowCache?: boolean
 }
 
 export declare type UseRequestStatusInputType<T = any> = {
@@ -31,4 +33,7 @@ export declare type UseRequestStatusOutputType = {
   currentCancelSource: CancelTokenSource
 }
 
-
+export declare type CacheData = {
+  expireAt: number
+  data: any
+}

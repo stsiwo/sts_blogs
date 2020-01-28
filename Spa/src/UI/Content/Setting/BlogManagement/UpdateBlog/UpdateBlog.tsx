@@ -28,7 +28,9 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
     debug('initial fetch at useEffect')
     fetchBlog({
       path: '/blogs/' + blogId,
-      method: RequestMethodEnum.GET
+      method: RequestMethodEnum.GET,
+      useCache: false,
+      allowCache: false
     })
       // call from previous 'catch' and 'then' of 'fetchBlog'
       // since resolve promise in the 'catch'
@@ -46,6 +48,7 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
 
   return (currentBlogFetchStatus.status === ResponseResultStatusEnum.SUCCESS &&
     <EditBlog
+      context={"Update"}
       blogId={blogId}
       currentBlog={currentBlog}
       setBlog={setBlog}

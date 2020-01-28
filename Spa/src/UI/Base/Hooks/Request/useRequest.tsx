@@ -1,10 +1,12 @@
 import * as React from 'react'
-import { UseRequestStatusInputType, UseRequestStatusOutputType, RequestStatusType, FetchDataArgType } from "./types";
+import { UseRequestStatusInputType, UseRequestStatusOutputType, RequestStatusType, FetchDataArgType, CacheData } from "./types";
 import { AxiosError, CancelTokenSource } from 'axios';
-import { ResponseResultStatusEnum, ResponseResultType } from 'requests/types';
+import { ResponseResultStatusEnum, ResponseResultType, RequestMethodEnum } from 'requests/types';
 import { request, getCancelTokenSource } from 'requests/request';
-import { buildQueryString } from '../../../../utils';
+import { buildQueryString, getTimeOneHourAfter } from '../../../../utils';
 import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
+import { getCachedData } from './caches'
+import serialize from 'serialize-javascript';
 var debug = require('debug')('ui:FetchStatus')
 
 
@@ -21,11 +23,30 @@ export const useRequest = (input: UseRequestStatusInputType): UseRequestStatusOu
   async function sendRequest(args: FetchDataArgType) {
     debug('start handling fetch data function')
     debug(args)
+    // set default value
+    args.useCache = (args.useCache === undefined) ? true : false
+    args.allowCache = (args.allowCache === undefined) ? true : false
+
     setRequestStatus({
       status: ResponseResultStatusEnum.FETCHING,
     })
     const cancelTokenSource = getCancelTokenSource()
     setCancelSource(cancelTokenSource)
+
+    // return cached and not send request if useCache and cache is available and only GET method
+    if (args.useCache && args.method === RequestMethodEnum.GET) {
+      debug(" useCache is enabled ")
+      const cachedData = getCachedData(args.path + buildQueryString(args.queryString))
+      if (cachedData) {
+        debug(" cachedData is available ")
+        const responseCacheResult: ResponseResultType = {
+          data: cachedData,
+          status: ResponseResultStatusEnum.SUCCESS
+        }
+        setRequestStatus(responseCacheResult)
+        return Promise.resolve(responseCacheResult)
+      }
+    }
 
     return await request({
       url: args.path + buildQueryString(args.queryString),
@@ -38,6 +59,20 @@ export const useRequest = (input: UseRequestStatusInputType): UseRequestStatusOu
         debug('fetch data function receive response successfully')
         debug(responseResult)
         setRequestStatus(responseResult)
+
+        if (args.allowCache) {
+          /**
+           * cache response 
+           *  - set expire at current time + 1 hour
+           **/
+          debug("start caching response data")
+          localStorage.setItem(args.path + buildQueryString(args.queryString), serialize(({
+            // set expireAt: + 1 hours when recive response
+            expireAt: getTimeOneHourAfter(),
+            data: responseResult.data
+          } as CacheData)))
+        }
+
         /**
          * return promise with responseResult
          *  - avoid using 'callback'

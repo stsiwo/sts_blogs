@@ -237,9 +237,10 @@ describe('ub-c1: NewBlog Component testing', () => {
       const publishBtn = await waitForElement(() => getByRole('publish-btn'))
       fireEvent.focus(publishBtn) // don't foreget focus first 
       fireEvent.click(publishBtn)
+      const currentCallsNum = (api.request as any).mock.calls.length
       // wait until below expectation is met otherwise, timeout
       await wait(() => {
-        expect(api.request).toHaveBeenCalledTimes(1)
+        expect(api.request).toHaveBeenCalledTimes(2) // 1 (initial) + 1 (publish)
       })
     })
   })
