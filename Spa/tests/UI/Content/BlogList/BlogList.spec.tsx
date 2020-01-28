@@ -155,9 +155,11 @@ describe('bl-c1: BlogList Component testing', () => {
           value: '40'
         }
       })
+      await wait(() => {
+        expect(api.request).toHaveBeenCalledTimes(2)
+        expect((api.request as any).mock.calls[1][0].url).toContain('limit=40')
+      })
     })
-    expect(api.request).toHaveBeenCalledTimes(2)
-    expect((api.request as any).mock.calls[1][0].url).toContain('limit=40')
   })
 
   test("a7. (responsive) should display a list of blog after successful api request when blog exists", async () => {

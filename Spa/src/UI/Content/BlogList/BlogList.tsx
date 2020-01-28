@@ -139,6 +139,9 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
     return tagList.map((tag: TagType) => <div className="blog-list-filter-tags-tag" key={tag.name}>{tag.name}</div>)
   }
 
+  debug("current blog original or cache")
+  debug(currentBlogs)
+
   // maybe can reuse frame (structure of element) of Home.tsx
   // #REFACTOR
   return (

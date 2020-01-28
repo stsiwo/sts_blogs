@@ -8,6 +8,7 @@ import { CssGlobalContextDefaultState } from "Contexts/CssGlobalContext/CssGloba
 import Home from "ui/Content/Home/Home";
 import { blogGET200EmptyResponse, blogGET200NonEmptyResponse, singleBlogGET200NonEmptyResponse, networkError, internalServerError500Response } from "../../../requests/fixtures";
 import { ContextWrapperComponent } from "../../fixtures";
+import '../../../data/mocks/localStorageMock'
 
 
 describe('bl-c1: Home Component testing', () => {
@@ -43,6 +44,7 @@ describe('bl-c1: Home Component testing', () => {
 
   beforeEach(() => {
     console.log('bl-c1: beforeEach ')
+    localStorage.clear()
   })
 
   test('a1. (EH) should display search input when click search icon', async () => {
