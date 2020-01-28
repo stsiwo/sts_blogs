@@ -15,10 +15,6 @@
           // at root directory of api1 project
         - docker run --name=api1-development -v ${PWD}:/app -e ${PWD}/.env.development -p 5000:5000 api1:development  
           // run it
-  - staging
-     - docker-compose.yml
-  - production
-     - docker-compose.yml
 
 ### SPA
   - testing
@@ -35,22 +31,25 @@
         - docker container prune -f && docker run --name=spa-development -v ${PWD}:/app -v /app/node_modules -p 8080:8080 spa:development <additional command for 'npx jest'>
           // ex) docker run .... spa;development tests/specific_test.spec.ts
           // run it
-  - staging-local
-     - command)
-        - docker-compose -f docker-compose.staging.secrets.yml -f docker-compose.staging.yml -f docker-compose.staging.local.yml up -d --build
-  - staging
-     - docker-compose.yml
-  - production
-     - docker-compose.yml
+  
      
 ### Docker Compose
+  - staging-local
+     - command)
+        - docker volume remove docker_project_template_db-data-staging-storage && docker volume remove docker_project_template_db-logging-staging-storage // remove any volume
+        - docker-compose -f docker-compose.staging.secrets.yml -f docker-compose.staging.yml -f docker-compose.staging.local.yml up -d --build
+    - staging
+       - docker-compose.yml
+    - production
+       - docker-compose.yml
 
 ### Integration Testing
   - staging (local)
-    1. activate venv at Integration directory
-    2. run selenuim server
+    1. [run docker-compose (staging-local)](# Docker Compose)
+    2. activate venv at Integration directory
+    3. run selenuim server
         - command) java -jar selenium-server-standalone-3.141.59.jar
-    3. run testing 
+    4. run testing 
         - command) python -m pytest [option]
      
 
