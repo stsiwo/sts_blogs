@@ -1,5 +1,6 @@
 from tests.Pages.HomePage import HomePage
 from tests.Pages.SignupPage import SignupPage
+from tests.Pages.BlogListPage import BlogListPage
 import pytest
 import marks
 pytestmark = [pytest.mark.home]
@@ -13,12 +14,13 @@ def test_should_route_search_result_page_when_search_in_home(responsive_target):
 
     # open search input
     home_page.click_element('search_btn')
-    # enter text in the input
+    # enter text in the input and press 'enter'
     home_page.enter_text_in_search_input('test')
-    # assert search result page is properly display
-    # #TODO: BlogList component causes bugs so need to fix
+    # page moves to Blog List page
+    blog_list_page = BlogListPage(responsive_target['driver'])
 
-    assert 0
+    # assert signup page is correctly loaded
+    assert blog_list_page.does_have_text_in_page('Blog List')
 
 
 @marks.all_ssize

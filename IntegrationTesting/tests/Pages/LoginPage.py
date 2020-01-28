@@ -23,6 +23,7 @@ class LoginPage(HeaderPage, FooterPage):
             'summary_error': LoginPageLocators.SUMMARY_ERROR,
             'submit_btn': LoginPageLocators.SUBMIT_BUTTON,
             'signup_link': LoginPageLocators.SIGNUP_LINK,
+            'fetch_err_msg': LoginPageLocators.FETCH_ERR_MSG
             }
 
     def __init__(self, driver, independent: bool = True):
@@ -63,3 +64,11 @@ class LoginPage(HeaderPage, FooterPage):
         except NoSuchElementException:
             return False
         return True
+
+    def wait_for_element(self, locator: str = None):
+        if locator is None:
+            print("wait for no element. you may want to specify locator as argument to wait")
+        if locator not in self.element_locators:
+            raise Exception('locator you provide is not available. available locators: %s' % self.element_locators)
+        if locator is not None:
+            self._wait_for_element(self.element_locators[locator])

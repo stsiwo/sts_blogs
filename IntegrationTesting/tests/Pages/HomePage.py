@@ -19,6 +19,7 @@ class HomePage(HeaderPage, FooterPage):
             'join_btn': HomePageLocators.JOIN_BUTTON,
             'blog_item_title': HomePageLocators.BLOG_ITEM_TITLE,
             'popular_btn': HomePageLocators.POPULAR_BUTTON,
+            'slogan': HomePageLocators.SLOGAN,
             }
 
     def __init__(self, driver, independent: bool = True):
@@ -76,3 +77,11 @@ class HomePage(HeaderPage, FooterPage):
         search_input_element.send_keys(text)
         # trigger move to search result page
         search_input_element.send_keys(Keys.RETURN)
+
+    def wait_for_element(self, locator: str = None):
+        if locator is None:
+            print("wait for no element. you may want to specify locator as argument to wait")
+        if locator not in self.element_locators:
+            raise Exception('locator you provide is not available. available locators: %s' % self.element_locators)
+        if locator is not None:
+            self._wait_for_element(self.element_locators[locator])

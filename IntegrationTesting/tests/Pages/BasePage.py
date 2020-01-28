@@ -1,5 +1,7 @@
 from datetime import datetime
 from selenium.webdriver.common.by import By
+from tests.Locators.BaseLocator import BaseLocator
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 class BasePage(object):
@@ -31,3 +33,8 @@ class BasePage(object):
         is_scrollable_y = self.driver.execute_script("return (document.getElementById('root').scrollWidth - document.getElementById('root').clientWidth) > 16")
 
         return is_scrollable_y
+
+    def _wait_for_element(self, locator: BaseLocator):
+        WebDriverWait(self.driver, 1000).until(
+                lambda driver: driver.find_elements(*locator)
+                )

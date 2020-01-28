@@ -102,4 +102,41 @@ def test_singup_page_should_route_home_page_when_successfully_login(responsive_t
 
     home_page = HomePage(responsive_target['driver'], independent=False)
 
+    # if fetch and move pages, you need to wait for fetch done and next page is loaded like below otherwise, selenium can assert before target element is loaded
+    home_page.wait_for_element('slogan')
+
     assert home_page.does_have_text_in_page('Share Your Knowledge and Expand What You Can Do')
+
+
+@marks.all_ssize
+@pytest.mark.submit
+def test_singup_page_should_display_fetch_error_message_when_provided_email_does_not_registered(responsive_target):
+
+    login_page = LoginPage(responsive_target['driver'])
+
+    login_page.type_text_in_input(locator='email_input', text="email@doesnot.exist")
+    login_page.type_text_in_input(locator='password_input', text=cfg.test_user_password)
+    login_page.type_text_in_input(locator='confirm_input', text=cfg.test_user_password)
+
+    login_page.click_element('submit_btn')
+
+    login_page.wait_for_element('fetch_err_msg')
+
+    assert login_page.does_have_text_in_page("provided email is not found")
+
+
+@marks.all_ssize
+@pytest.mark.submit
+def test_singup_page_should_display_fetch_error_message_when_provided_password_is_invalid(responsive_target):
+
+    login_page = LoginPage(responsive_target['driver'])
+
+    login_page.type_text_in_input(locator='email_input', text=cfg.test_user_email)
+    login_page.type_text_in_input(locator='password_input', text="invalid_password")
+    login_page.type_text_in_input(locator='confirm_input', text="invalid_password")
+
+    login_page.click_element('submit_btn')
+
+    login_page.wait_for_element('fetch_err_msg')
+
+    assert login_page.does_have_text_in_page("entered password is invalid.")
