@@ -5,40 +5,29 @@ COPY . .
 RUN ["npm", "install"]
 # CMD is executed when cotnainer is created
 
-FROM node:8.16.2-alpine as development
+FROM dev-install as development
 
 WORKDIR /app
-COPY --from=dev-install /app . 
-# temp disable for testing push image in circleci
-# RUN source ./env.dev.sh 
 CMD ["npm", "run", "start-docker"]
 
-FROM node:8.16.2-alpine as testing 
+FROM dev-install as testing 
 
 WORKDIR /app
-COPY --from=dev-install /app . 
-# CMD is executed when cotnainer is created
 ENTRYPOINT ["npx", "jest"]
 
-FROM node:8.16.2-alpine as build-staging-local 
+FROM development as build-staging-local 
 
 WORKDIR /app
-COPY --from=development /app . 
-# CMD is executed when cotnainer is created
 RUN ["npm", "run", "build-staging-local"]
 
-FROM node:8.16.2-alpine as build-staging 
+FROM development as build-staging 
 
 WORKDIR /app
-COPY --from=development /app . 
-# CMD is executed when cotnainer is created
 RUN ["npm", "run", "build-staging"]
 
-FROM node:8.16.2-alpine as build 
+FROM development as build 
 
 WORKDIR /app
-COPY --from=development /app . 
-# CMD is executed when cotnainer is created
 RUN ["npm", "run", "build"]
 
 FROM nginx:1.17.6-alpine as staging-local
