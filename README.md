@@ -45,7 +45,7 @@
 
 ### Integration Testing
   - staging (local)
-    1. [run docker-compose (staging-local)](# Docker Compose)
+    1. [run docker-compose at staging-local](#docker-compose)
     2. activate venv at Integration directory
     3. run selenuim server
         - command) java -jar selenium-server-standalone-3.141.59.jar
