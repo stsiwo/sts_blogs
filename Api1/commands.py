@@ -8,6 +8,7 @@ from Infrastructure.DataModels.BlogModel import Blog
 from click import ClickException
 from tests.data.generators.BlogGenerator import generateBlogModelV2
 import uuid
+import datetime
 
 
 seed_cli = AppGroup('seed')
@@ -16,6 +17,10 @@ app_cli = AppGroup('app')
 
 def check_if_exists(model, **kwargs):
     return db.session.query(model).filter_by(**kwargs).first()
+
+
+def check_if_exists_by_count(model):
+    return db.session.query(model).count()
 
 
 @seed_cli.command('roles')
@@ -140,7 +145,7 @@ def add_test_users():
 
 @seed_cli.command('test-blogs')
 def add_test_blogs():
-    if check_if_exists(Blog, id="1") is None:
+    if check_if_exists_by_count(Blog) is 0:
         memberUser = db.session.query(User).filter(User.name == 'test member').first()
         adminUser = db.session.query(User).filter(User.name == 'test admin').first()
         memberUser1 = db.session.query(User).filter(User.name == 'test member1').first()
@@ -153,6 +158,45 @@ def add_test_blogs():
 
         for i in range(3):
             db.session.add(generateBlogModelV2(user=memberUser1))
+
+        # sort & filter dedicated blogs
+        # keyword (title and subtitle)
+        db.session.add(generateBlogModelV2(
+            title="keyword",
+            user=memberUser1
+            ))
+
+        # start date (createdDate)
+        db.session.add(generateBlogModelV2(
+            createdDate=datetime.datetime(1550, 5, 1, 0, 0, 0, 0),
+            user=memberUser1
+            ))
+
+        # end date (createdDate)
+        db.session.add(generateBlogModelV2(
+            createdDate=datetime.datetime(2050, 6, 1, 0, 0, 0, 0),
+            user=memberUser1
+            ))
+
+        # sort title (asc)
+        db.session.add(generateBlogModelV2(
+            title="aaaaa",
+            user=memberUser1
+            ))
+
+        # sort title (desc)
+        db.session.add(generateBlogModelV2(
+            title="zzzz",
+            user=memberUser1
+            ))
+
+        # sort clap (max = 1000)
+        db.session.add(generateBlogModelV2(
+            clap=1000,
+            user=memberUser1
+            ))
+
+        # sort clap (min = 0) use existing default blog
 
         db.session.commit()
 
