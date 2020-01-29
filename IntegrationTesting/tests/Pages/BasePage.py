@@ -38,3 +38,19 @@ class BasePage(object):
         WebDriverWait(self.driver, 1000).until(
                 lambda driver: driver.find_elements(*locator)
                 )
+
+    def wait_for_text(self, text: str = ''):
+        if text is None:
+            print("wait for no element. you may want to specify text as argument to wait")
+        if text is not None:
+            WebDriverWait(self.driver, 1000).until(
+                lambda driver: text in self.driver.page_source
+                )
+
+    def wait_for_text_disappear(self, text: str = ''):
+        if text is None:
+            print("wait for no element to be disappeared. you may want to specify text as argument to wait")
+        if text is not None:
+            WebDriverWait(self.driver, 1000).until_not(
+                lambda driver: text in self.driver.page_source
+                )

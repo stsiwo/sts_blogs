@@ -3,7 +3,7 @@ from tests.Pages.SignupPage import SignupPage
 from tests.Pages.BlogListPage import BlogListPage
 import pytest
 import marks
-pytestmark = [pytest.mark.home]
+pytestmark = [marks.home_page, pytest.mark.home]
 
 
 # HOME

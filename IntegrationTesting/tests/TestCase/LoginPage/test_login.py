@@ -4,7 +4,7 @@ from tests.Pages.HomePage import HomePage
 import tests.config as cfg
 import pytest
 import marks
-pytestmark = [pytest.mark.login]
+pytestmark = [marks.login_page, pytest.mark.login]
 
 
 # LOGIN

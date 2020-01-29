@@ -4,6 +4,7 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from tests.Pages.HomePage import HomePage
 from tests.Pages.SignupPage import SignupPage
 from tests.Pages.LoginPage import LoginPage
+from tests.Pages.BlogListPage import BlogListPage
 import tests.config as cfg
 
 
@@ -79,6 +80,8 @@ def TargetPage(request):
         return SignupPage
     if 'login' == request.param:
         return LoginPage
+    if 'blog_list' == request.param:
+        return BlogListPage
 
 
 @pytest.fixture(autouse=True)
@@ -102,11 +105,17 @@ def selective_marks(request, responsive_target, TargetPage):
     available_page_command_options = [*cfg.available_page_options, 'all']
 
     if page_option not in available_page_command_options:
-        raise Exception('provided page option ({}) is not supoorted. available options are {}'.format(page_option, available_ssize_command_options))
+        raise Exception('provided page option ({}) is not supoorted. available options are {}'.format(page_option, available_page_command_options))
 
     if request.node.get_closest_marker('page'):
+        print(TargetPage.name)
+        print(request.node.get_closest_marker('page').kwargs['page'])
         if TargetPage.name not in request.node.get_closest_marker('page').kwargs['page']:
+            print(TargetPage.name)
+            print(request.node.get_closest_marker('page').kwargs['page'])
             pytest.skip('skipped on this size because of not selected marks: {}'.format(TargetPage.name))
 
         if page_option != 'all' and page_option != TargetPage.name:
+            print(page_option)
+            print(TargetPage.name)
             pytest.skip('skipped on this page because of command line option: {} is not {}'.format(page_option, TargetPage.name))

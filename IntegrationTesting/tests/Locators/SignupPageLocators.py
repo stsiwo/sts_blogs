@@ -25,3 +25,5 @@ class SignupPageLocators(object):
     SUBMIT_BUTTON = (By.CSS_SELECTOR, 'input[role="signup-btn"]')
 
     LOGIN_LINK = (By.LINK_TEXT, 'Login Page')
+
+    FETCH_ERR_MSG = (By.CSS_SELECTOR, 'p.fetch-status-err-msg')

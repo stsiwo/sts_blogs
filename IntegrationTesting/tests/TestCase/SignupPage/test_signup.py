@@ -4,7 +4,8 @@ from tests.Pages.HomePage import HomePage
 import pytest
 import marks
 import tests.config as cfg
-pytestmark = [pytest.mark.signup]
+from tests.data.faker import fake
+pytestmark = [marks.signup_page, pytest.mark.signup]
 
 
 # SIGNUP
@@ -110,7 +111,8 @@ def test_singup_page_should_route_home_page_when_successfully_signup(responsive_
     signup_page = SignupPage(responsive_target['driver'])
 
     signup_page.type_text_in_input(locator='name_input', text='dummy user')
-    signup_page.type_text_in_input(locator='email_input', text='dummy@dummy.com')
+    # use fake email address to avoid duplication of existing email
+    signup_page.type_text_in_input(locator='email_input', text=fake.email())
     signup_page.type_text_in_input(locator='password_input', text='dummy')
     signup_page.type_text_in_input(locator='confirm_input', text='dummy')
 
@@ -118,4 +120,25 @@ def test_singup_page_should_route_home_page_when_successfully_signup(responsive_
 
     home_page = HomePage(responsive_target['driver'], independent=False)
 
+    # if fetch and move pages, you need to wait for fetch done and next page is loaded like below otherwise, selenium can assert before target element is loaded
+    home_page.wait_for_element('slogan')
+
     assert home_page.does_have_text_in_page('Share Your Knowledge and Expand What You Can Do')
+
+
+@marks.all_ssize
+@pytest.mark.submit
+def test_singup_page_should_display_user_already_exist_message_when_email_already_exist(responsive_target):
+
+    signup_page = SignupPage(responsive_target['driver'])
+
+    signup_page.type_text_in_input(locator='name_input', text='dummy user')
+    signup_page.type_text_in_input(locator='email_input', text=cfg.test_user_email)
+    signup_page.type_text_in_input(locator='password_input', text='dummy')
+    signup_page.type_text_in_input(locator='confirm_input', text='dummy')
+
+    signup_page.click_element('submit_btn')
+
+    signup_page.wait_for_element('fetch_err_msg')
+
+    assert signup_page.does_have_text_in_page("provided email already exists.")
