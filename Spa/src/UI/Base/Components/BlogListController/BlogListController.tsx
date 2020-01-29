@@ -37,7 +37,7 @@ const BlogListController: React.FunctionComponent<BlogListControllerPropType> = 
       </div>
       {(currentScreenSize.isLTETablet &&
         <div className="icon-wrapper-row">
-          <div className="icon-wrapper" onClick={props.handleFilterSortNavClickEvent}>
+          <div className="icon-wrapper" onClick={props.handleFilterSortNavClickEvent} role="setting-icon">
             <MdSettings className="icon" />
           </div>
         </div>
