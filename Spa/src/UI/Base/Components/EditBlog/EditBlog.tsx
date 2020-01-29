@@ -183,7 +183,7 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId,
   return (
     <div className="context-wrapper">
       <div className="main-wrapper">
-        <h2 className="profile-title">{context} Blog</h2>
+        <h2 className="page-title">{context} Blog</h2>
         {(curFetchContext === FetchContextEnum.SAVE &&
         <FetchStatus
           currentFetchStatus={currentBlogStatus}

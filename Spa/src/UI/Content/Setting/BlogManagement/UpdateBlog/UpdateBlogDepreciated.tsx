@@ -163,7 +163,7 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
   return (currentBlogFetchStatus.status === ResponseResultStatusEnum.SUCCESS &&
     <div className="context-wrapper">
       <div className="main-wrapper">
-        <h2 className="profile-title">Update Blog</h2>
+        <h2 className="page-title">Update Blog</h2>
         <FetchStatus
           currentFetchStatus={currentBlogUpdateStatus}
           setFetchStatus={setBlogUpdateStatus}

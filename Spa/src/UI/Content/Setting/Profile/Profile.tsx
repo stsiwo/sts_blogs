@@ -143,7 +143,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
   return (currentUserFetchStatus.status === ResponseResultStatusEnum.SUCCESS &&
     <div className="context-wrapper">
       <div className="main-wrapper">
-        <h2 className="profile-title">Profile Management</h2>
+        <h2 className="page-title">Profile Management</h2>
         <FetchStatus
           currentFetchStatus={currentUpdateRequestStatus}
           setFetchStatus={setUpdateRequestStatus}
