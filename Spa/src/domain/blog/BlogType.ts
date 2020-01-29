@@ -14,6 +14,7 @@ export declare type BlogType = {
   tags?: Set<string>,
   blogImages?: File[],
   blogImagePaths?: string[],
+  clap?: number
 }
 
 export const initialBlogState: BlogType = {

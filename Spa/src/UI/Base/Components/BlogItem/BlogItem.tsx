@@ -109,10 +109,12 @@ const BlogItem: React.FunctionComponent<BlogItemPropType> = (props: BlogItemProp
         <div className="blog-list-item-desc">
           <h2 className="blog-list-item-desc-title">{props.blog.title}</h2>
           {(!currentScreenSize.isMobileL &&
-            <h3 className="blog-list-item-desc-subtitle">{props.blog.subtitle}</h3>)}
+            <h3 className="blog-list-item-desc-subtitle">{props.blog.subtitle}</h3>
+          )}
           <div className="blog-list-item-desc-detail">
-            {renderTags(props.blog.tags)}
+            {/**renderTags(props.blog.tags)**/}
             <p className="blog-list-item-desc-detail-date">{props.blog.createdDate.toLocaleDateString("en-US", dateFormatOption)}</p>
+            <p className="blog-list-item-desc-detail-clap">{props.blog.clap} claps</p>
           </div>
           <div className="blog-list-item-desc-author">
             <img src={props.blog.author.avatarUrl} alt="avatar image" className="blog-list-item-desc-author-img" />
