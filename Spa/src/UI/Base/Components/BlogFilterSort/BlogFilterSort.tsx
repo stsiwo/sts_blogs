@@ -37,7 +37,7 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
 
     if (e.currentTarget.value === "") return false
 
-    if (e.key == 'Enter' || e.key == 'Tab') {
+    if (e.key == 'Enter' || e.key == 'Tab' || e.key == ' ') {
       debug("updating tag filters")
       props.currentFilters.tags.push({ name: e.currentTarget.value })
       props.setFilters({
