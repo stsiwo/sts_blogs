@@ -8,6 +8,7 @@ import json
 from typing import List
 from utils.util import parseStrToDate
 import uuid
+from utils.util import ppDict
 
 
 @pytest.mark.blogs_src
@@ -112,6 +113,19 @@ def test_blogs_id_get_endpoint_should_return_200_when_specified_blog_exist(clien
 
     response = client.get('/blogs/' + targetBlog.id)
     assert 200 == response.status_code
+
+
+@pytest.mark.blogs_src
+@pytest.mark.blogs_src_get_filter
+def test_blogs_get_endpoint_should_return_blog_list_when_filter_tag(client, blogsSeededFixture):
+
+    response = client.get('/blogs?page=1&liimit=20&tag=js')
+    assert 200 == response.status_code
+
+    data = decodeResponseByteJsonToDictionary(response.data)
+    ppDict(data)
+
+    assert 0
 
 
 @pytest.mark.blogs_src

@@ -149,6 +149,8 @@ def add_test_blogs():
         memberUser = db.session.query(User).filter(User.name == 'test member').first()
         adminUser = db.session.query(User).filter(User.name == 'test admin').first()
         memberUser1 = db.session.query(User).filter(User.name == 'test member1').first()
+        jsTag = db.session.query(Tag).filter(Tag.name == 'js').first()
+        reactTag = db.session.query(Tag).filter(Tag.name == 'react').first()
 
         for i in range(100):
             db.session.add(generateBlogModelV2(user=memberUser))
@@ -197,6 +199,12 @@ def add_test_blogs():
             ))
 
         # sort clap (min = 0) use existing default blog
+
+        # filter tag
+        db.session.add(generateBlogModelV2(
+            tags=[jsTag, reactTag],
+            user=memberUser1
+            ))
 
         db.session.commit()
 
