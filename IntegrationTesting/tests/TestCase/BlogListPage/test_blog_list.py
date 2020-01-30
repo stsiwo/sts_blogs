@@ -225,16 +225,79 @@ def test_blog_list_page_should_display_blog_list_sorted_by_Clap_Desc(responsive_
 
 
 @marks.gte_laptop_ssize
-@pytest.mark.ppp
 def test_blog_list_page_should_display_blog_list_after_keyword_filter_change(responsive_target):
 
     blog_list_page = BlogListPage(responsive_target['driver'])
 
-    blog_list_page.click_element('sort_clap_desc_icon', waiting_element_locator='blog_item')
+    blog_list_page.enter_text_in_element_and_click('keyword', 'filter_keyword_input')
 
-    clap_list = blog_list_page.get_list_of_element('blog_item_clap')
+    blog_list_page.wait_for_element('blog_item')
 
-    text_list = [int(s) for element in clap_list for s in element.text.split() if s.isdigit()]
+    filtered_elements = blog_list_page.get_list_of_element('blog_item_title')
 
-    for i in range(len(text_list) - 1):
-        assert text_list[i] >= text_list[i+1]
+    text_list = [element.text for element in filtered_elements]
+
+    for text in text_list:
+        assert cfg.test_blog_item_keyword in text
+
+
+@marks.gte_laptop_ssize
+def test_blog_list_page_should_display_blog_list_after_start_date_filter_change(responsive_target):
+
+    test_date_string = '01/01/2049'
+    test_datetime = datetime.strptime(test_date_string, '%m/%d/%Y')
+
+    blog_list_page = BlogListPage(responsive_target['driver'])
+
+    blog_list_page.enter_text_in_element_and_click(test_date_string, 'filter_start_date_input')
+
+    blog_list_page.wait_for_element('blog_item')
+
+    filtered_elements = blog_list_page.get_list_of_element('blog_item_created_date')
+
+    text_list = [datetime.strptime(element.text, '%A, %B %d, %Y') for element in filtered_elements]
+
+    for date in text_list:
+        assert test_datetime < date
+
+
+@marks.gte_laptop_ssize
+def test_blog_list_page_should_display_blog_list_after_end_date_filter_change(responsive_target):
+
+    test_date_string = '01/01/1951'
+    test_datetime = datetime.strptime(test_date_string, '%m/%d/%Y')
+
+    blog_list_page = BlogListPage(responsive_target['driver'])
+
+    blog_list_page.enter_text_in_element_and_click(test_date_string, 'filter_end_date_input')
+
+    blog_list_page.wait_for_element('blog_item')
+
+    filtered_elements = blog_list_page.get_list_of_element('blog_item_created_date')
+
+    text_list = [datetime.strptime(element.text, '%A, %B %d, %Y') for element in filtered_elements]
+
+    for date in text_list:
+        assert test_datetime > date
+
+
+@marks.gte_laptop_ssize
+def test_blog_list_page_should_display_blog_list_after_tag_filter_change(responsive_target):
+
+    blog_list_page = BlogListPage(responsive_target['driver'])
+
+    # input tag 'js' to tag input in filter
+    blog_list_page.enter_text_in_element_and_click(cfg.test_blog_item_tag, 'filter_tag_input')
+
+    # wait for blog list is displayed after fetch
+    blog_list_page.wait_for_element('blog_item')
+
+    # get list of tag element in blog item
+    filtered_elements = blog_list_page.get_list_of_element('blog_item_tag')
+
+    # extract text from the element into array
+    text_list = [element.text for element in filtered_elements]
+
+    # check dummy tag exists in each of the list
+    for tag_text in text_list:
+        assert cfg.test_blog_item_tag in tag_text

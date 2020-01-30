@@ -97,7 +97,7 @@ const BlogItem: React.FunctionComponent<BlogItemPropType> = (props: BlogItemProp
   }
 
   const renderTags = (tagSet: Set<string>): React.ReactNode => {
-    return Array.from(tagSet).map((tag: string) => <div className="blog-list-filter-tags-tag" key={tag}>{tag}</div>)
+    return Array.from(tagSet).map((tag: string) => <span className="blog-list-filter-tags-tag" key={tag}>{`${tag} `}</span>)
   }
 
   const isOverlay: boolean = props.isEditDeleteOverlay ? props.isEditDeleteOverlay : false
@@ -112,7 +112,9 @@ const BlogItem: React.FunctionComponent<BlogItemPropType> = (props: BlogItemProp
             <h3 className="blog-list-item-desc-subtitle">{props.blog.subtitle}</h3>
           )}
           <div className="blog-list-item-desc-detail">
-            {/**renderTags(props.blog.tags)**/}
+            <p className="blog-list-item-desc-detail-tag">
+              {renderTags(props.blog.tags)}
+            </p>
             <p className="blog-list-item-desc-detail-date">{props.blog.createdDate.toLocaleDateString("en-US", dateFormatOption)}</p>
             <p className="blog-list-item-desc-detail-clap">{props.blog.clap} claps</p>
           </div>

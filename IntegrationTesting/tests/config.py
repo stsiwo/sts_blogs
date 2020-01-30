@@ -28,8 +28,18 @@ available_page_options = ['home', 'signup', 'login', 'blog_list']
 
 available_ssize_options = ['mobile', 'tablet', 'laptop', 'desktop']
 
+# config relating test data
+
 test_user_name = 'test member'
 
 test_user_email = 'test@member.com'
 
 test_user_password = 'test_member'
+
+test_blog_item_keyword = 'keyword'
+
+test_blog_item_start_date = '01/01/2050'
+
+test_blog_item_end_date = '01/01/1950'
+
+test_blog_item_tag = 'js'

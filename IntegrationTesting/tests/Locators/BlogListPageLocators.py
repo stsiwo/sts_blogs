@@ -35,6 +35,8 @@ class BlogListPageLocators(BaseLocator):
 
     BLOG_ITEM_CLAP = (By.CSS_SELECTOR, "p.blog-list-item-desc-detail-clap")
 
+    BLOG_ITEM_TAG = (By.CSS_SELECTOR, "p.blog-list-item-desc-detail-tag")
+
     JOIN_BUTTON = (By.XPATH, "//*[contains(text(), 'Join')]")
 
     SORT_DATE_ASC_ICON = (By.CSS_SELECTOR, "label[for='sort-0']")
@@ -49,8 +51,10 @@ class BlogListPageLocators(BaseLocator):
 
     SORT_CLAP_DESC_ICON = (By.CSS_SELECTOR, "label[for='sort-5']")
 
-    FILTER_KEYWORD_ICON = (By.CSS_SELECTOR, "label[for='keyword']")
+    FILTER_KEYWORD_INPUT = (By.CSS_SELECTOR, "input[id='keyword']")
 
-    FILTER_START_DATE_ICON = (By.CSS_SELECTOR, "label[for='start-date-input']")
+    FILTER_START_DATE_INPUT = (By.CSS_SELECTOR, "input[id='start-date-input']")
 
-    FILTER_TAG_ICON = (By.CSS_SELECTOR, "label[for='tag']")
+    FILTER_END_DATE_INPUT = (By.CSS_SELECTOR, "input[id='end-date-input']")
+
+    FILTER_TAG_INPUT = (By.CSS_SELECTOR, "input[id='tag']")

@@ -31,13 +31,18 @@ class BlogListPage(HeaderPage, FooterPage):
             'blog_item_title': BlogListPageLocators.BLOG_ITEM_TITLE,
             'blog_item_created_date': BlogListPageLocators.BLOG_ITEM_CREATED_DATE,
             'blog_item_clap': BlogListPageLocators.BLOG_ITEM_CLAP,
+            'blog_item_tag': BlogListPageLocators.BLOG_ITEM_TAG,
             'join_button': BlogListPageLocators.JOIN_BUTTON,
             'sort_date_asc_icon': BlogListPageLocators.SORT_DATE_ASC_ICON,
             'sort_date_desc_icon': BlogListPageLocators.SORT_DATE_DESC_ICON,
             'sort_title_asc_icon': BlogListPageLocators.SORT_TITLE_ASC_ICON,
             'sort_title_desc_icon': BlogListPageLocators.SORT_TITLE_DESC_ICON,
             'sort_clap_asc_icon': BlogListPageLocators.SORT_CLAP_ASC_ICON,
-            'sort_clap_desc_icon': BlogListPageLocators.SORT_CLAP_DESC_ICON
+            'sort_clap_desc_icon': BlogListPageLocators.SORT_CLAP_DESC_ICON,
+            'filter_keyword_input': BlogListPageLocators.FILTER_KEYWORD_INPUT,
+            'filter_start_date_input': BlogListPageLocators.FILTER_START_DATE_INPUT,
+            'filter_end_date_input': BlogListPageLocators.FILTER_END_DATE_INPUT,
+            'filter_tag_input': BlogListPageLocators.FILTER_TAG_INPUT
             }
 
     def __init__(self, driver, independent: bool = True):
@@ -102,14 +107,3 @@ class BlogListPage(HeaderPage, FooterPage):
         blog_title_element_list = self.driver.find_elements(*BlogListPageLocators.BLOG_ITEM)
 
         return len(blog_title_element_list)
-
-    def get_text_of_element(self, locator: str = None):
-        return self.driver.find_element(*self.element_locators[locator]).text
-
-    def get_list_of_element(self, locator: str = None):
-        # need to wait for initial fetching
-        WebDriverWait(self.driver, 500).until(
-                lambda driver: driver.find_elements(*self.element_locators[locator])
-                )
-        elements = self.driver.find_elements(*self.element_locators[locator])
-        return elements 
