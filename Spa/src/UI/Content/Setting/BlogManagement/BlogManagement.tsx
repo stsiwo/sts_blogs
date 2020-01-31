@@ -70,7 +70,12 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
       queryString: queryString,
     })
       .then((result: ResponseResultType<BlogListResponseDataType>) => {
-        if (result.status === ResponseResultStatusEnum.SUCCESS) {
+
+        if (NODE_ENV === 'development') {
+          console.log("development env so inject blog test data")
+          setBlogs(getBlogTestData())
+        }
+        else if (result.status === ResponseResultStatusEnum.SUCCESS) {
           console.log("fetch success and receive data")
           console.log(result.data)
           setBlogs(result.data.blogs)
@@ -155,8 +160,9 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
           failureMsg={'failed'}
         />
         <div className="blog-management-items-wrapper">
+          {(NODE_ENV === 'development' && currentBlogs.length !== 0 && renderBlogs(currentBlogs))}
           {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FETCHING && <p role="fetching">fetching ... </p>)}
-          {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FAILURE  && <p>sorry.. blogs are not currently available...</p>)}
+          {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FAILURE && <p>sorry.. blogs are not currently available...</p>)}
           {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.SUCCESS && currentBlogs.length === 0 && <p>there is no blog based on the your sort & filter</p>)}
           {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.SUCCESS && currentBlogs.length !== 0 && renderBlogs(currentBlogs))}
         </div>

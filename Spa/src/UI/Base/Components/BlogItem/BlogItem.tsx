@@ -96,6 +96,17 @@ const BlogItem: React.FunctionComponent<BlogItemPropType> = (props: BlogItemProp
     })
   }
 
+  const handleBlogItemTouchStartEvent: React.EventHandler<React.TouchEvent<HTMLDivElement>> = (e) => {
+    console.log('enter eh is called')
+    console.log('componentShow to true')
+    console.log('isMouseEnter to true')
+    setOverlayState({
+      ...currentOverlayState,
+      componentShow: true,
+      isMouseEnter: true
+    })
+  }
+
   const renderTags = (tagSet: Set<string>): React.ReactNode => {
     return Array.from(tagSet).map((tag: string) => <span className="blog-list-filter-tags-tag" key={tag}>{`${tag} `}</span>)
   }
@@ -104,7 +115,7 @@ const BlogItem: React.FunctionComponent<BlogItemPropType> = (props: BlogItemProp
   
   const renderBlogItem: () => React.ReactNode = () => {
     return (
-      <div className="blog-list-item-wrapper" onMouseEnter={handleBlogItemMouseEnterEvent} onMouseLeave={handleBlogItemMouseLeaveEvent} role="blog-item">
+      <div className="blog-list-item-wrapper" onMouseEnter={handleBlogItemMouseEnterEvent} onMouseLeave={handleBlogItemMouseLeaveEvent} onTouchStart={handleBlogItemTouchStartEvent} role="blog-item">
         <img className="blog-list-item-img" src={props.blog.mainImageUrl} alt="blog item" width="150px" height="100px" />
         <div className="blog-list-item-desc">
           <h2 className="blog-list-item-desc-title">{props.blog.title}</h2>
