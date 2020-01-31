@@ -3,7 +3,6 @@ from tests.Pages.SignupPage import SignupPage
 import pytest
 import marks
 import tests.config as cfg
-from tests.data.faker import fake
 import itertools
 from datetime import datetime
 pytestmark = [marks.blog_list_page, pytest.mark.blog_list]
@@ -59,9 +58,6 @@ def test_blog_list_page_should_display_blog_list_after_click_limit_change_select
 
     blog_list_page.click_element('limit_40_option', 'blog_item')
 
-    # blog_list_page.wait_for_text("fetching ...")
-    # blog_list_page.wait_for_text("success")
-
     # check page title does exist
     assert 40 == blog_list_page.get_number_of_blog_item_displayed()
 
@@ -79,14 +75,17 @@ def test_blog_list_page_should_display_blog_list_after_change_different_page(res
 
     blog_list_page = BlogListPage(responsive_target['driver'])
 
+    initialBlogTitle: str = blog_list_page.get_text_of_element('blog_item_title')
     # when use waiting_element_locator_disappear, it stuck. so use waiting_text_disappear
     # click and wait for success message to be disappear; start fetching
-    blog_list_page.click_element('page_4_btn', waiting_text_disappear="success")
+    blog_list_page.click_element('page_4_btn')
 
     # wait for new blog list is mounted
     blog_list_page.wait_for_element('blog_item')
 
-    assert 20 == blog_list_page.get_number_of_blog_item_displayed()
+    lastBlogTitle: str = blog_list_page.get_text_of_element('blog_item_title')
+
+    assert initialBlogTitle != lastBlogTitle 
 
 
 @marks.all_ssize
@@ -94,14 +93,23 @@ def test_blog_list_page_should_display_blog_list_after_click_the_last_page_btn(r
 
     blog_list_page = BlogListPage(responsive_target['driver'])
 
-    # when use waiting_element_locator_disappear, it stuck. so use waiting_text_disappear
-    blog_list_page.click_element('page_last_btn', waiting_text_disappear="success")
+    initialBlogTitle: str = blog_list_page.get_text_of_element('blog_item_title')
+
+    blog_list_page.click_element('page_last_btn')
 
     blog_list_page.wait_for_element('blog_item')
 
-    assert 0 < blog_list_page.get_number_of_blog_item_displayed()
+    lastBlogTitle: str = blog_list_page.get_text_of_element('blog_item_title')
+
+    assert initialBlogTitle != lastBlogTitle
 
 
+# current best way to check whether fetch has done successfully is to depends on displayed text on blog item 
+# since old blog item (before fetch) and new blog item (after fetch) must have different text 
+#  - if depends on fetch status message, it ends up trouble (e.g., front end caching prevent from fetching)
+#    - requesting data which is previsouly done does not happen because of cache
+#  - if depends on blog item element appear/disappear, it also ends up trouble (e.g., react reconciliation might update/unmount/mount element based on its rules)
+#    - react might only update element; this never cause element disappeared
 @marks.all_ssize
 def test_blog_list_page_should_display_blog_list_after_click_the_first_page_btn(responsive_target):
 

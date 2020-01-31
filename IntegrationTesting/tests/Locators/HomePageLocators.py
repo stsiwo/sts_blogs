@@ -10,6 +10,8 @@ class HomePageLocators(BaseLocator):
 
     JOIN_BUTTON = (By.XPATH, "//*[contains(text(), 'Join')]")
 
+    TO_MANAGE_BUTTON = (By.XPATH, "//*[contains(text(), 'To Manage')]")
+
     BLOG_ITEM_TITLE = (By.CSS_SELECTOR, "h2.blog-list-item-desc-title")
 
     POPULAR_BUTTON = (By.XPATH, "//*[contains(text(), 'Popular')]")

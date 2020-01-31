@@ -8,11 +8,11 @@ export const useProfileValidation = (input: UseProfileValidationStatusInputType)
 
   // define validation schema
   let schema = yup.object().shape<UserType>({
-    id: yup.string(),
+    id: yup.string().required(),
     name: yup.string().required(),
     email: yup.string().email().required(),
-    password: yup.string().required(),
-    confirm: yup.string().required().oneOf([yup.ref('password'), null], 'passwords must match')
+    password: yup.string(),
+    confirm: yup.string().oneOf([yup.ref('password'), null], 'passwords must match')
   });
 
   const { currentValidationError, touch, validate } = useValidation<UserType>({

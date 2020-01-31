@@ -87,14 +87,6 @@ class BlogListPage(HeaderPage, FooterPage):
         if waiting_text_disappear is not '':
             self.wait_for_text_disappear(waiting_text_disappear)
 
-    def wait_for_element(self, locator: str = None):
-        if locator is None:
-            print("wait for no element. you may want to specify locator as argument to wait")
-        if locator not in self.element_locators:
-            raise Exception('locator you provide is not available. available locators: %s' % self.element_locators)
-        if locator is not None:
-            self._wait_for_element(self.element_locators[locator])
-
     def get_number_of_blog_item_displayed(self):
         """those blogs are fetched at initial loading (filter: 'recent')
             - the element to be found is blog title element not wrapper. this is

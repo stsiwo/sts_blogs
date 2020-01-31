@@ -15,6 +15,8 @@ class HeaderPage(BasePage):
             'blogs_menu_link': HeaderComponentLocators.BLOGS_NAV_ITEM,
             'signup_menu_link': HeaderComponentLocators.SIGNUP_NAV_ITEM,
             'login_menu_link': HeaderComponentLocators.LOGIN_NAV_ITEM,
+            'account_menu_link': HeaderComponentLocators.ACCOUNT_NAV_ITEM,
+            'logout_menu_link': HeaderComponentLocators.LOGOUT_NAV_ITEM,
             }
 
     def __init__(self, driver):

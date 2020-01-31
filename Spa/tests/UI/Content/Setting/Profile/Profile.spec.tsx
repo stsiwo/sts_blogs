@@ -42,6 +42,13 @@ describe('p-c1: Profile Component testing', () => {
    *
    **/
 
+  /**
+   * remaining tasks:
+   *  - please delete task once you are done and update 'click' project management tool
+   *  
+   *  - re-implement update profile logic (https://app.clickup.com/t/4ab5pa)
+   **/
+
   beforeAll(() => {
     console.log('p-c1: beforeAll ')
   })

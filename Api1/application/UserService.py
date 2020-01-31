@@ -47,13 +47,22 @@ class UserService(object):
         if targetUser is None:
             raise UserNotFoundException
 
-        if avatarImage is not None:
-            self._fileService.deleteImageFile(targetUser.id, targetUser.avatarUrl)
-            targetUser.avatarUrl = self._fileService.saveImageFileToDir(avatarImage, targetUser.id)
+        if targetUser.avatarUrl is not None:
+            if avatarImage is not None:
+                self._fileService.deleteImageFile(targetUser.id, targetUser.avatarUrl)
+                targetUser.avatarUrl = self._fileService.saveImageFileToDir(avatarImage, targetUser.id)
+            else:
+                if input.get("avatarDeleteFlag") is not None:
+                    self._fileService.deleteImageFile(targetUser.id, targetUser.avatarUrl)
+                    targetUser.avatarUrl = None
+        else:
+            if avatarImage is not None:
+                targetUser.avatarUrl = self._fileService.saveImageFileToDir(avatarImage, targetUser.id)
 
         targetUser.name = input.get('name')
         targetUser.email = input.get('email')
-        targetUser.password = input.get('password')
+        if input.get('password', None) is not None and input.get('password'):
+            targetUser.password = input.get('password')
 
         targetUser = self._userSchema.dump(targetUser)
 

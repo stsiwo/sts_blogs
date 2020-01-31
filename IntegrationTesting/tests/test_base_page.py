@@ -1,4 +1,5 @@
 import pytest
+import marks
 
 
 # @pytest.mark.parametrize('test', ['test1', 'test2'], indirect=True)
@@ -9,8 +10,21 @@ import pytest
 #     assert 0
 
 
-# def test_targets(app):
-#     print(app)
+# @marks.home_page
+# @marks.mobile_ssize
+# def test_targets():
+#     print()
+#     assert 0
+# 
+# 
+# @marks.desktop_ssize
+# def test_targets1():
+#     print()
+#     assert 0
+# 
+# 
+# def test_targets2():
+#     print()
 #     assert 0
 # 
 # 

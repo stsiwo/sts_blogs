@@ -5,6 +5,8 @@ from tests.Pages.HomePage import HomePage
 from tests.Pages.SignupPage import SignupPage
 from tests.Pages.LoginPage import LoginPage
 from tests.Pages.BlogListPage import BlogListPage
+from tests.Pages.ProfilePage import ProfilePage
+from tests.Pages.BlogManagementPage import BlogManagementPage
 import tests.config as cfg
 
 
@@ -50,6 +52,26 @@ def target_driver(request):
     return target_driver
 
 
+@pytest.fixture(scope="module")
+def login_for_profile(target_driver):
+
+    login_page = LoginPage(target_driver)
+
+    login_page.type_text_in_input(locator='email_input', text=cfg.test_user_email_for_profile)
+    login_page.type_text_in_input(locator='password_input', text=cfg.test_user_password_for_profile)
+    login_page.type_text_in_input(locator='confirm_input', text=cfg.test_user_password_for_profile)
+    login_page.click_element('submit_btn')
+
+    home_page = HomePage(target_driver, independent=False)
+
+    home_page.wait_for_element('slogan')
+
+    # be careful screen size (default size), so need to open toggle nav bar
+    # click menu toggle icon
+    home_page.click_element_in_header('menu_toggle_icon', waiting_element_locator=None, animation_duration_sc=cfg.animation_duration_sc)
+    home_page.click_element_in_header('account_menu_link')
+
+
 @pytest.fixture(params=cfg.available_ssize_options)
 def responsive_target(target_driver, request):
     target_driver.set_window_position(0, 0)
@@ -72,8 +94,11 @@ def responsive_target(target_driver, request):
             }
 
 
+# params cause to run multiple times as the same number of its value (usually array)
 @pytest.fixture(params=cfg.available_page_options)
 def TargetPage(request):
+    print("TargetPage debug")
+    print(request.param)
     if 'home' == request.param:
         return HomePage
     if 'signup' == request.param:
@@ -82,12 +107,19 @@ def TargetPage(request):
         return LoginPage
     if 'blog_list' == request.param:
         return BlogListPage
+    if 'profile' == request.param:
+        return ProfilePage
+    if 'blog_management' == request.param:
+        return BlogManagementPage
 
 
 @pytest.fixture(autouse=True)
 def selective_marks(request, responsive_target, TargetPage):
     ssize_option = request.config.getoption('--ssize')
     available_ssize_command_options = [*cfg.available_ssize_options, 'all']
+
+    print("*** debugging ***")
+    print("command line options: ssize: {0}, page: {1}, driver: {2} ".format(request.config.getoption('--ssize'), request.config.getoption('--page'), request.config.getoption('--driver')))
 
     if ssize_option not in available_ssize_command_options:
         raise Exception('provided ssize option ({}) is not supoorted. available options are {}'.format(ssize_option, available_ssize_command_options))
