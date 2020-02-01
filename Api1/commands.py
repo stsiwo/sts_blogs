@@ -158,7 +158,7 @@ def add_test_blogs():
         for i in range(100):
             db.session.add(generateBlogModelV2(user=adminUser))
 
-        for i in range(3):
+        for i in range(100):
             db.session.add(generateBlogModelV2(user=memberUser1))
 
         # sort & filter dedicated blogs
