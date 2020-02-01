@@ -102,13 +102,16 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const handleDeleteBlogClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = (e) => {
-    sendDeleteRequest({
-      path: '/users/' + userId + '/blogs',
-      method: RequestMethodEnum.DELETE,
-    })
-      .then((data: BlogListResponseDataType) => {
-        // operation after successful delete request
+    const result: boolean = window.confirm("Are you sure to delete this blog?")
+    if (result) {
+      sendDeleteRequest({
+        path: '/users/' + userId + '/blogs',
+        method: RequestMethodEnum.DELETE,
       })
+        .then((data: BlogListResponseDataType) => {
+          // operation after successful delete request
+        })
+    }
   }
 
   const handleRefreshClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = async (e) => {
