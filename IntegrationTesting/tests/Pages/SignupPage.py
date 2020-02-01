@@ -1,6 +1,6 @@
 from selenium.webdriver.support.ui import WebDriverWait
-from tests.Pages.HeaderPage import HeaderPage
-from tests.Pages.FooterPage import FooterPage
+from tests.Pages.Components.HeaderComponent import HeaderComponent
+from tests.Pages.Components.FooterComponent import FooterComponent
 from tests.Locators.SignupPageLocators import SignupPageLocators
 from tests.config import signup_url
 from selenium.webdriver.common.by import By
@@ -8,7 +8,7 @@ from utils import wait_for_element
 from selenium.common.exceptions import NoSuchElementException
 
 
-class SignupPage(HeaderPage, FooterPage):
+class SignupPage(HeaderComponent, FooterComponent):
     """Signup page action methods come here."""
 
     name = 'signup'
@@ -33,6 +33,13 @@ class SignupPage(HeaderPage, FooterPage):
             independent param: whether driver directory load this page independently (true) or load from another page (e.g., Home Page) as dependency
         """
         super().__init__(driver)
+        # merge all parent element locators with this element locators
+        # ends up self.element_locators include all parent element locators
+        self.element_locators = {
+                **self.element_locators,
+                **HeaderComponent.element_locators,
+                **FooterComponent.element_locators,
+                }
 
         if independent:
             self.driver.get(signup_url)

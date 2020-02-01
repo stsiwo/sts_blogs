@@ -4,10 +4,10 @@ from tests.Locators.HeaderComponentLocators import HeaderComponentLocators
 import time
 
 
-class HeaderPage(BasePage):
+class HeaderComponent(BasePage):
     """Home page action methods come here. I.e. Python.org"""
 
-    header_element_locators = {
+    element_locators = {
             'logo_title': HeaderComponentLocators.LOGO_TITLE,
             'menu': HeaderComponentLocators.MENU,
             'menu_toggle_icon': HeaderComponentLocators.MENU_TOGGLE_ICON,
@@ -23,17 +23,17 @@ class HeaderPage(BasePage):
         super().__init__(driver)
 
     def get_text_of_element_in_header(self, locator: str):
-        if locator not in self.header_element_locators:
-            raise Exception('locator you provide is not available. available locators: %s' % self.header_element_locators)
+        if locator not in self.element_locators:
+            raise Exception('locator you provide is not available. available locators: %s' % self.element_locators)
 
-        target_element = self.driver.find_element(*self.header_element_locators[locator])
+        target_element = self.driver.find_element(*self.element_locators[locator])
         return target_element.text
 
     def click_element_in_header(self, locator: str, waiting_element_locator: str = None, animation_duration_sc: int = None):
-        if locator not in self.header_element_locators:
-            raise Exception('locator you provide is not available. available locators: %s' % self.header_element_locators)
+        if locator not in self.element_locators:
+            raise Exception('locator you provide is not available. available locators: %s' % self.element_locators)
 
-        target_element = self.driver.find_element(*self.header_element_locators[locator])
+        target_element = self.driver.find_element(*self.element_locators[locator])
         target_element.click()
         if animation_duration_sc is not None:
             time.sleep(animation_duration_sc)  # works!! use this for wait animation done
@@ -44,14 +44,14 @@ class HeaderPage(BasePage):
 
     def get_size_of_element_in_header(self, locator: str):
         """ use when want to check an element is on the document but hidden because of its size is 0 """
-        if locator not in self.header_element_locators:
-            raise Exception('locator you provide is not available. available locators: %s' % self.header_element_locators)
+        if locator not in self.element_locators:
+            raise Exception('locator you provide is not available. available locators: %s' % self.element_locators)
 
-        target_element = self.driver.find_element(*self.header_element_locators[locator])
+        target_element = self.driver.find_element(*self.element_locators[locator])
         return target_element.size
 
     def check_visibility_of_element_in_header(self, locator: str):
-        if locator not in self.header_element_locators:
-            raise Exception('locator you provide is not available. available locators: %s' % self.header_element_locators)
-        target_element = self.driver.find_element(*self.header_element_locators[locator])
+        if locator not in self.element_locators:
+            raise Exception('locator you provide is not available. available locators: %s' % self.element_locators)
+        target_element = self.driver.find_element(*self.element_locators[locator])
         return target_element.is_displayed()

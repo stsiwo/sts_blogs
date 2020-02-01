@@ -1,16 +1,13 @@
-from selenium.webdriver.support.ui import WebDriverWait
-from tests.Pages.HeaderPage import HeaderPage
-from tests.Pages.FooterPage import FooterPage
+from tests.Pages.Components.HeaderComponent import HeaderComponent
+from tests.Pages.Components.FooterComponent import FooterComponent
+from tests.Pages.Components.AsideFilterSortComponent import AsideFilterSortComponent
 from tests.config import blog_management_url
 from selenium.webdriver.common.by import By
 from utils import wait_for_element
 from tests.Locators.BlogManagementPageLocators import BlogManagementPageLocators
-from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.support import expected_conditions as EC
-from datetime import datetime
 
 
-class BlogManagementPage(HeaderPage, FooterPage):
+class BlogManagementPage(HeaderComponent, FooterComponent, AsideFilterSortComponent):
     """BlogManagement page action methods come here. I.e. Python.org"""
 
     name = 'blog_management'
@@ -25,6 +22,14 @@ class BlogManagementPage(HeaderPage, FooterPage):
             independent param: whether driver directory load this page independently (true) or load from another page (e.g., Home Page) as dependency
         """
         super().__init__(driver)
+        # merge all parent element locators with this element locators
+        # ends up self.element_locators include all parent element locators
+        self.element_locators = {
+                **self.element_locators,
+                **HeaderComponent.element_locators,
+                **FooterComponent.element_locators,
+                **AsideFilterSortComponent.element_locators
+                }
 
         if independent:
             self.driver.get(blog_management_url)

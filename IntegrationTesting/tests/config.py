@@ -32,6 +32,8 @@ available_page_options = ['home', 'signup', 'login', 'blog_list', 'profile', 'bl
 
 available_ssize_options = ['mobile', 'tablet', 'laptop', 'desktop']
 
+member_only_pages = ['profile', 'blog_management']
+
 # config relating test data
 
 test_user_name = 'test member'

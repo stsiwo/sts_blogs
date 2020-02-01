@@ -24,6 +24,7 @@ def pytest_addoption(parser):
 
 @pytest.fixture(params=cfg.available_driver_options, scope='session')
 def target_driver(request):
+    print("*** target_driver setup ***")
     driver_option = request.config.getoption('--driver')
     print(driver_option)
 
@@ -52,28 +53,9 @@ def target_driver(request):
     return target_driver
 
 
-@pytest.fixture(scope="module")
-def login_for_profile(target_driver):
-
-    login_page = LoginPage(target_driver)
-
-    login_page.type_text_in_input(locator='email_input', text=cfg.test_user_email_for_profile)
-    login_page.type_text_in_input(locator='password_input', text=cfg.test_user_password_for_profile)
-    login_page.type_text_in_input(locator='confirm_input', text=cfg.test_user_password_for_profile)
-    login_page.click_element('submit_btn')
-
-    home_page = HomePage(target_driver, independent=False)
-
-    home_page.wait_for_element('slogan')
-
-    # be careful screen size (default size), so need to open toggle nav bar
-    # click menu toggle icon
-    home_page.click_element_in_header('menu_toggle_icon', waiting_element_locator=None, animation_duration_sc=cfg.animation_duration_sc)
-    home_page.click_element_in_header('account_menu_link')
-
-
 @pytest.fixture(params=cfg.available_ssize_options)
 def responsive_target(target_driver, request):
+    print("*** responsive_target setup ***")
     target_driver.set_window_position(0, 0)
     if 'mobile' == request.param:
         model_size = {'width': cfg.ssize_width_mobile, 'height': cfg.ssize_height}
@@ -97,7 +79,7 @@ def responsive_target(target_driver, request):
 # params cause to run multiple times as the same number of its value (usually array)
 @pytest.fixture(params=cfg.available_page_options)
 def TargetPage(request):
-    print("TargetPage debug")
+    print("*** TargetPage setup ***")
     print(request.param)
     if 'home' == request.param:
         return HomePage
@@ -113,8 +95,40 @@ def TargetPage(request):
         return BlogManagementPage
 
 
+@pytest.fixture()
+def login_if_necessary_for_component(TargetPage, responsive_target):
+    print("*** login_if_necessary_for_component setup ***")
+    print("target page: {0} and target ssize: {1} and".format(TargetPage.name, responsive_target['size_type']))
+
+    if TargetPage.name in cfg.member_only_pages:
+        print("*** login required at {}".format(TargetPage.name))
+        login_page = LoginPage(responsive_target['driver'])
+
+        login_page.type_text_in_input(locator='email_input', text=cfg.test_user_email_for_profile)
+        login_page.type_text_in_input(locator='password_input', text=cfg.test_user_password_for_profile)
+        login_page.type_text_in_input(locator='confirm_input', text=cfg.test_user_password_for_profile)
+        login_page.click_element('submit_btn')
+
+        home_page = HomePage(responsive_target['driver'], independent=False)
+
+        home_page.wait_for_element('slogan')
+
+    yield None
+
+    if TargetPage.name in cfg.member_only_pages:
+        print("*** logout required at {}".format(TargetPage.name))
+        home_page = HomePage(responsive_target['driver'], independent=False)
+        # home_page.wait_for_element('slogan')
+
+        if responsive_target['size_type'] != 'desktop':
+            print("*** desktop size requires open nav menu***")
+            home_page.click_element_in_header('menu_toggle_icon', waiting_element_locator=None, animation_duration_sc=cfg.animation_duration_sc)
+        home_page.click_element_in_header('logout_menu_link')
+
+
 @pytest.fixture(autouse=True)
 def selective_marks(request, responsive_target, TargetPage):
+    print("*** selective_marks setup ***")
     ssize_option = request.config.getoption('--ssize')
     available_ssize_command_options = [*cfg.available_ssize_options, 'all']
 
@@ -124,6 +138,7 @@ def selective_marks(request, responsive_target, TargetPage):
     if ssize_option not in available_ssize_command_options:
         raise Exception('provided ssize option ({}) is not supoorted. available options are {}'.format(ssize_option, available_ssize_command_options))
 
+    # skip test if ssize does not match with target test's mark or does not spcecify with command line option
     if request.node.get_closest_marker('responsive'):
         # if test function does hot have responsive mark with its ssize, skip
         if responsive_target.get('size_type') not in request.node.get_closest_marker('responsive').kwargs['size']:
@@ -139,6 +154,7 @@ def selective_marks(request, responsive_target, TargetPage):
     if page_option not in available_page_command_options:
         raise Exception('provided page option ({}) is not supoorted. available options are {}'.format(page_option, available_page_command_options))
 
+    # skip test if size does not match with target test's mark or does not spcecify with command line option
     if request.node.get_closest_marker('page'):
         print(TargetPage.name)
         print(request.node.get_closest_marker('page').kwargs['page'])

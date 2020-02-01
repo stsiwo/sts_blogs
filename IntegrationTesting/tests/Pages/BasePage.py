@@ -4,6 +4,7 @@ from tests.Locators.BaseLocator import BaseLocator
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import NoSuchElementException
 
 
 class BasePage(object):
@@ -123,4 +124,12 @@ class BasePage(object):
         if waiting_text_disappear is not '':
             self.wait_for_text_disappear(waiting_text_disappear)
 
-
+    def does_element_exist(self, locator: str):
+        if locator not in self.element_locators:
+            raise Exception('locator you provide is not available. available locators: %s' % self.element_locators)
+        try:
+            print(*self.element_locators[locator])
+            self.driver.find_element(*self.element_locators[locator])
+        except NoSuchElementException:
+            return False
+        return True

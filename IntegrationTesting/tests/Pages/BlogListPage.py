@@ -1,16 +1,14 @@
 from selenium.webdriver.support.ui import WebDriverWait
-from tests.Pages.HeaderPage import HeaderPage
-from tests.Pages.FooterPage import FooterPage
+from tests.Pages.Components.HeaderComponent import HeaderComponent
+from tests.Pages.Components.FooterComponent import FooterComponent
+from tests.Pages.Components.AsideFilterSortComponent import AsideFilterSortComponent
 from tests.config import blog_list_url
 from selenium.webdriver.common.by import By
 from utils import wait_for_element
 from tests.Locators.BlogListPageLocators import BlogListPageLocators
-from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.support import expected_conditions as EC
-from datetime import datetime
 
 
-class BlogListPage(HeaderPage, FooterPage):
+class BlogListPage(HeaderComponent, FooterComponent, AsideFilterSortComponent):
     """BlogList page action methods come here. I.e. Python.org"""
 
     name = 'blog_list'
@@ -18,7 +16,6 @@ class BlogListPage(HeaderPage, FooterPage):
     element_locators = {
             'page_title': BlogListPageLocators.PAGE_TITLE,
             'setting_icon': BlogListPageLocators.SETTING_ICON,
-            'filter_sort_aside': BlogListPageLocators.FILTER_SORT_ASIDE,
             'refresh_icon': BlogListPageLocators.REFRESH_ICON,
             'blog_item': BlogListPageLocators.BLOG_ITEM,
             'limit_select': BlogListPageLocators.LIMIT_SELECT,
@@ -33,16 +30,6 @@ class BlogListPage(HeaderPage, FooterPage):
             'blog_item_clap': BlogListPageLocators.BLOG_ITEM_CLAP,
             'blog_item_tag': BlogListPageLocators.BLOG_ITEM_TAG,
             'join_button': BlogListPageLocators.JOIN_BUTTON,
-            'sort_date_asc_icon': BlogListPageLocators.SORT_DATE_ASC_ICON,
-            'sort_date_desc_icon': BlogListPageLocators.SORT_DATE_DESC_ICON,
-            'sort_title_asc_icon': BlogListPageLocators.SORT_TITLE_ASC_ICON,
-            'sort_title_desc_icon': BlogListPageLocators.SORT_TITLE_DESC_ICON,
-            'sort_clap_asc_icon': BlogListPageLocators.SORT_CLAP_ASC_ICON,
-            'sort_clap_desc_icon': BlogListPageLocators.SORT_CLAP_DESC_ICON,
-            'filter_keyword_input': BlogListPageLocators.FILTER_KEYWORD_INPUT,
-            'filter_start_date_input': BlogListPageLocators.FILTER_START_DATE_INPUT,
-            'filter_end_date_input': BlogListPageLocators.FILTER_END_DATE_INPUT,
-            'filter_tag_input': BlogListPageLocators.FILTER_TAG_INPUT
             }
 
     def __init__(self, driver, independent: bool = True):
@@ -50,6 +37,14 @@ class BlogListPage(HeaderPage, FooterPage):
             independent param: whether driver directory load this page independently (true) or load from another page (e.g., Home Page) as dependency
         """
         super().__init__(driver)
+        # merge all parent element locators with this element locators
+        # ends up self.element_locators include all parent element locators
+        self.element_locators = {
+                **self.element_locators,
+                **HeaderComponent.element_locators,
+                **FooterComponent.element_locators,
+                **AsideFilterSortComponent.element_locators
+                }
 
         if independent:
             self.driver.get(blog_list_url)
@@ -57,35 +52,6 @@ class BlogListPage(HeaderPage, FooterPage):
             # - esp for when find element by link test
             # reference: https://stackoverflow.com/questions/6936149/how-to-use-find-element-by-link-text-properly-to-not-raise-nosuchelementexcept
         wait_for_element(self.driver, By.ID, 'root')
-
-    def does_element_exist(self, locator: str):
-        if locator not in self.element_locators:
-            raise Exception('locator you provide is not available. available locators: %s' % self.element_locators)
-        try:
-            print(*self.element_locators[locator])
-            self.driver.find_element(*self.element_locators[locator])
-        except NoSuchElementException:
-            return False
-        return True
-
-    def click_element(self, locator: str, waiting_element_locator: str = None, waiting_text: str = '', waiting_element_locator_disappear: str = None, waiting_text_disappear: str = ''):
-        if locator not in self.element_locators:
-            raise Exception('locator you provide is not available. available locators: %s' % self.element_locators)
-
-        target_element = self.driver.find_element(*self.element_locators[locator])
-        target_element.click()
-        if waiting_element_locator is not None:
-            WebDriverWait(self.driver, 500).until(
-                    lambda driver: driver.find_elements(*self.element_locators[waiting_element_locator])
-                    )
-        if waiting_text is not '':
-            self.wait_for_text(waiting_text)
-        if waiting_element_locator_disappear is not None:
-            WebDriverWait(self.driver, 500).until_not(
-                    lambda driver: EC.presence_of_element_located(self.element_locators[waiting_element_locator_disappear])
-                    )
-        if waiting_text_disappear is not '':
-            self.wait_for_text_disappear(waiting_text_disappear)
 
     def get_number_of_blog_item_displayed(self):
         """those blogs are fetched at initial loading (filter: 'recent')
