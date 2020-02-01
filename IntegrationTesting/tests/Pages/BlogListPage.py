@@ -15,21 +15,8 @@ class BlogListPage(HeaderComponent, FooterComponent, AsideFilterSortComponent):
 
     element_locators = {
             'page_title': BlogListPageLocators.PAGE_TITLE,
-            'setting_icon': BlogListPageLocators.SETTING_ICON,
-            'refresh_icon': BlogListPageLocators.REFRESH_ICON,
-            'blog_item': BlogListPageLocators.BLOG_ITEM,
-            'limit_select': BlogListPageLocators.LIMIT_SELECT,
-            'limit_40_option': BlogListPageLocators.LIMIT_40_OPTION,
-            'fetch_status_title': BlogListPageLocators.FETCH_STATUS_TITLE,
-            'page_4_btn': BlogListPageLocators.PAGE_4_BTN,
-            'page_first_btn': BlogListPageLocators.PAGE_FIRST_BTN,
-            'page_last_btn': BlogListPageLocators.PAGE_LAST_BTN,
-            'blog_list_fetching': BlogListPageLocators.BLOG_LIST_FETCHING,
-            'blog_item_title': BlogListPageLocators.BLOG_ITEM_TITLE,
-            'blog_item_created_date': BlogListPageLocators.BLOG_ITEM_CREATED_DATE,
-            'blog_item_clap': BlogListPageLocators.BLOG_ITEM_CLAP,
-            'blog_item_tag': BlogListPageLocators.BLOG_ITEM_TAG,
             'join_button': BlogListPageLocators.JOIN_BUTTON,
+            'blog_item': BlogListPageLocators.JOIN_BUTTON
             }
 
     def __init__(self, driver, independent: bool = True):
@@ -60,8 +47,8 @@ class BlogListPage(HeaderComponent, FooterComponent, AsideFilterSortComponent):
         """
         # need to wait for initial fetching
         WebDriverWait(self.driver, 500).until(
-                lambda driver: driver.find_elements(*BlogListPageLocators.BLOG_ITEM)
+                lambda driver: driver.find_elements(*self.element_locators['blog_item'])
                 )
-        blog_title_element_list = self.driver.find_elements(*BlogListPageLocators.BLOG_ITEM)
+        blog_title_element_list = self.driver.find_elements(*self.element_locators['blog_item'])
 
         return len(blog_title_element_list)

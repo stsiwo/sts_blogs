@@ -1,3 +1,4 @@
+from selenium.webdriver.support.ui import WebDriverWait
 from tests.Pages.Components.HeaderComponent import HeaderComponent
 from tests.Pages.Components.FooterComponent import FooterComponent
 from tests.Pages.Components.AsideFilterSortComponent import AsideFilterSortComponent
@@ -14,7 +15,8 @@ class BlogManagementPage(HeaderComponent, FooterComponent, AsideFilterSortCompon
 
     element_locators = {
             'page_title': BlogManagementPageLocators.PAGE_TITLE,
-            'profile_link': BlogManagementPageLocators.PROFILE_LINK
+            'profile_link': BlogManagementPageLocators.PROFILE_LINK,
+            'blog_item': BlogManagementPageLocators.BLOG_ITEM
             }
 
     def __init__(self, driver, independent: bool = True):
@@ -37,3 +39,16 @@ class BlogManagementPage(HeaderComponent, FooterComponent, AsideFilterSortCompon
             # - esp for when find element by link test
             # reference: https://stackoverflow.com/questions/6936149/how-to-use-find-element-by-link-text-properly-to-not-raise-nosuchelementexcept
         wait_for_element(self.driver, By.ID, 'root')
+
+    def get_number_of_blog_item_displayed(self):
+        """those blogs are fetched at initial loading (filter: 'recent')
+            - the element to be found is blog title element not wrapper. this is
+            to make sure all details of blog are loaded correctly
+        """
+        # need to wait for initial fetching
+        WebDriverWait(self.driver, 500).until(
+                lambda driver: driver.find_elements(*self.element_locators['blog_item'])
+                )
+        blog_title_element_list = self.driver.find_elements(*self.element_locators['blog_item'])
+
+        return len(blog_title_element_list)
