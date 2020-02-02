@@ -48,6 +48,7 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   const { currentRequestStatus: currentInitialBlogsFetchStatus, setRequestStatus: setInitialBlogsFetchStatus, sendRequest: sendBlogsFetchRequest, currentCancelSource: currentFetchCancelSource } = useRequest({})
   const { currentRequestStatus: currentDeleteRequestStatus, setRequestStatus: setDeleteRequestStatus, sendRequest: sendDeleteRequest, currentCancelSource: currentDeleteCancelSource } = useRequest({})
   const [currentRefreshCount, setRefreshCount] = React.useState<number>(null)
+  const [isRefresh, setIsRefresh] = React.useState<boolean>(false)
 
   const queryString = {
     page: currentPaginationStatus.page,
@@ -62,12 +63,16 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   React.useEffect(() => {
     debug("start useEffect")
     // might can move to inside eh of refresh click
+    
+    console.log("*** isRefresh value ***")
+    console.log(isRefresh)
 
     debug("start send blog fetch request")
     sendBlogsFetchRequest({
       path: '/users/' + userId + '/blogs',
       method: RequestMethodEnum.GET,
       queryString: queryString,
+      ...(isRefresh && { useCache: false }),
     })
       .then((result: ResponseResultType<BlogListResponseDataType>) => {
 
@@ -86,6 +91,7 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
             totalCount: result.data.totalCount
           })
         }
+        setIsRefresh(false)
       })
   }, [
       JSON.stringify(queryString),
@@ -102,20 +108,28 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const handleDeleteBlogClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = (e) => {
+    console.log("start handling delete blog click event")
     const result: boolean = window.confirm("Are you sure to delete this blog?")
     if (result) {
+      const blogId = e.currentTarget.getAttribute('data-blog-id')
       sendDeleteRequest({
-        path: '/users/' + userId + '/blogs',
+        path: '/blogs/' + blogId,
         method: RequestMethodEnum.DELETE,
+        useCache: false,
+        allowCache: false
       })
         .then((data: BlogListResponseDataType) => {
-          // operation after successful delete request
+          console.log("'then' after delete request")
+          setIsRefresh(true)
+          const nextRefreshCount = currentRefreshCount + 1
+          setRefreshCount(nextRefreshCount)
         })
     }
   }
 
   const handleRefreshClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = async (e) => {
     debug("start handling refresh click")
+    setIsRefresh(true)
     const nextRefreshCount = currentRefreshCount + 1
     setRefreshCount(nextRefreshCount)
   }
