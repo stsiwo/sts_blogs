@@ -48,6 +48,7 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   const { currentRequestStatus: currentInitialBlogsFetchStatus, setRequestStatus: setInitialBlogsFetchStatus, sendRequest: sendBlogsFetchRequest, currentCancelSource: currentFetchCancelSource } = useRequest({})
   const { currentRequestStatus: currentDeleteRequestStatus, setRequestStatus: setDeleteRequestStatus, sendRequest: sendDeleteRequest, currentCancelSource: currentDeleteCancelSource } = useRequest({})
   const [currentRefreshCount, setRefreshCount] = React.useState<number>(null)
+  // diable cache when refersh request
   const [isRefresh, setIsRefresh] = React.useState<boolean>(false)
 
   const queryString = {
@@ -64,9 +65,6 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
     debug("start useEffect")
     // might can move to inside eh of refresh click
     
-    console.log("*** isRefresh value ***")
-    console.log(isRefresh)
-
     debug("start send blog fetch request")
     sendBlogsFetchRequest({
       path: '/users/' + userId + '/blogs',

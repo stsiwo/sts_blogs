@@ -64,6 +64,8 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   })
   const { currentRequestStatus: currentInitialBlogsFetchStatus, setRequestStatus: setInitialBlogsFetchStatus, sendRequest: sendBlogsFetchRequest, currentCancelSource } = useRequest({})
   const [currentRefreshCount, setRefreshCount] = React.useState<number>(null)
+  // diable cache when refersh request
+  const [isRefresh, setIsRefresh] = React.useState<boolean>(false)
   const { auth } = useAuthContext()
 
   const queryString = {
@@ -86,7 +88,8 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
     sendBlogsFetchRequest({
       path: path,
       method: RequestMethodEnum.GET,
-      queryString: queryString
+      queryString: queryString,
+      ...(isRefresh && { useCache: false }),
     })
       .then((result: ResponseResultType<BlogListResponseDataType>) => {
         if (result.status === ResponseResultStatusEnum.SUCCESS) {
@@ -99,6 +102,7 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
             totalCount: result.data.totalCount
           })
         }
+        setIsRefresh(false)
       })
   }, [
       JSON.stringify(queryString),
@@ -116,6 +120,7 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
 
   const handleRefreshClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = async (e) => {
     debug("start handling refresh click")
+    setIsRefresh(true)
     const nextRefreshCount = currentRefreshCount + 1
     setRefreshCount(nextRefreshCount)
   }
