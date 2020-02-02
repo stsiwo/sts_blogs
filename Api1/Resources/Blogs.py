@@ -100,11 +100,11 @@ class Blogs(Resource):
         response.status_code = 200
         return response
 
-    # TODO: implement this
-    # https://app.clickup.com/t/3m5a5b
-
-    # delete whole blogs
-    # def delete(self):
-    #     response = jsonify({})
-    #     response.status_code = 205
-    #     return response
+    # delete a single blog
+    def delete(self, blog_id: str):
+        app.logger.info("start processing delete request at /blogs")
+        print("start processing delete request at /blogs")
+        self._blogService.deleteBlogService(blog_id)
+        response = jsonify({'delete': 'ok'})
+        response.status_code = 200
+        return response

@@ -160,3 +160,16 @@ class BlogService(object):
         # create newly added images
         for blogImage in blogImages:
             self._fileService.saveImageFileToDir(blogImage, targetBlog.userId)
+
+    # delete is idempotent (N requests have the same result)
+    @db_transaction()
+    def deleteBlogService(self, blog_id: str) -> None:
+        app.logger.info("start delete blog service")
+        print("start delete blog service")
+
+        targetBlog: Blog = self._blogRepository.get(blog_id)
+
+        if targetBlog is not None:
+            self._blogRepository.delete(blog_id)
+
+        return None
