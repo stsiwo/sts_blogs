@@ -16,7 +16,10 @@ class BlogManagementPage(HeaderComponent, FooterComponent, AsideFilterSortCompon
     element_locators = {
             'page_title': BlogManagementPageLocators.PAGE_TITLE,
             'profile_link': BlogManagementPageLocators.PROFILE_LINK,
-            'blog_item': BlogManagementPageLocators.BLOG_ITEM
+            'blog_item': BlogManagementPageLocators.BLOG_ITEM,
+            'new_blog_icon': BlogManagementPageLocators.NEW_BLOG_ICON,
+            'edit_blog_icon': BlogManagementPageLocators.EDIT_BLOG_ICON,
+            'delete_blog_icon': BlogManagementPageLocators.DELETE_BLOG_ICON
             }
 
     def __init__(self, driver, independent: bool = True):
@@ -52,3 +55,8 @@ class BlogManagementPage(HeaderComponent, FooterComponent, AsideFilterSortCompon
         blog_title_element_list = self.driver.find_elements(*self.element_locators['blog_item'])
 
         return len(blog_title_element_list)
+
+    def get_one_of_blog_items(self):
+        elements = self.get_list_of_element('blog_item')
+        target_blog_item = elements[3]
+        return target_blog_item

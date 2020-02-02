@@ -1,5 +1,5 @@
 
-
+# add url when create new page
 base_url = 'http://dev.stsiwo.com'
 
 signup_url = '{}/signup'.format(base_url)
@@ -11,6 +11,10 @@ blog_list_url = '{}/blogs'.format(base_url)
 profile_url = '{}/setting/profile'.format(base_url)
 
 blog_management_url = '{}/setting/blogs'.format(base_url)
+
+new_blog_url = '{}/setting/blogs/new'.format(base_url)
+
+update_blog_url = '{}/setting/blogs/update'.format(base_url)
 
 seleniumServerUrl = 'http://127.0.0.1:4444/wd/hub'
 
@@ -28,11 +32,13 @@ ssize_width_desktop = 1440
 
 available_driver_options = ['chrome', 'firefox']
 
-available_page_options = ['home', 'signup', 'login', 'blog_list', 'profile', 'blog_management']
+# add when new page added
+available_page_options = ['home', 'signup', 'login', 'blog_list', 'profile', 'blog_management', 'new_blog', 'update_blog']
 
 available_ssize_options = ['mobile', 'tablet', 'laptop', 'desktop']
 
-member_only_pages = ['profile', 'blog_management']
+# add when new page is member only
+member_only_pages = ['profile', 'blog_management', 'new_blog', 'update_blog']
 
 # config relating test data
 

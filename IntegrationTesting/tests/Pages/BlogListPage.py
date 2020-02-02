@@ -16,7 +16,7 @@ class BlogListPage(HeaderComponent, FooterComponent, AsideFilterSortComponent):
     element_locators = {
             'page_title': BlogListPageLocators.PAGE_TITLE,
             'join_button': BlogListPageLocators.JOIN_BUTTON,
-            'blog_item': BlogListPageLocators.JOIN_BUTTON
+            'blog_item': BlogListPageLocators.BLOG_ITEM
             }
 
     def __init__(self, driver, independent: bool = True):

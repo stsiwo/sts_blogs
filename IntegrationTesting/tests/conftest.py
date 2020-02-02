@@ -7,6 +7,8 @@ from tests.Pages.LoginPage import LoginPage
 from tests.Pages.BlogListPage import BlogListPage
 from tests.Pages.ProfilePage import ProfilePage
 from tests.Pages.BlogManagementPage import BlogManagementPage
+from tests.Pages.NewBlogPage import NewBlogPage
+from tests.Pages.UpdateBlogPage import UpdateBlogPage
 import tests.config as cfg
 
 
@@ -77,6 +79,7 @@ def responsive_target(target_driver, request):
 
 
 # params cause to run multiple times as the same number of its value (usually array)
+# add when new page added
 @pytest.fixture(params=cfg.available_page_options)
 def TargetPage(request):
     print("*** TargetPage setup ***")
@@ -93,6 +96,10 @@ def TargetPage(request):
         return ProfilePage
     if 'blog_management' == request.param:
         return BlogManagementPage
+    if 'new_blog' == request.param:
+        return NewBlogPage
+    if 'update_blog' == request.param:
+        return UpdateBlogPage 
 
 
 @pytest.fixture()

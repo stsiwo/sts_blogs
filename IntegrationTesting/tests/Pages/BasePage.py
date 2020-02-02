@@ -5,6 +5,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
+import tests.config as cfg
+import time
 
 
 class BasePage(object):
@@ -36,6 +38,15 @@ class BasePage(object):
         is_scrollable_y = self.driver.execute_script("return (document.getElementById('root').scrollWidth - document.getElementById('root').clientWidth) > 16")
 
         return is_scrollable_y
+
+    def scroll_to_top(self):
+        self.driver.find_element_by_tag_name('body').send_keys(Keys.HOME)
+
+    def switch_to_confirm_dialog(self):
+        return self.driver.switch_to.alert
+
+    def wait_for_animation_finish(self):
+        time.sleep(cfg.animation_duration_sc)  # works!! use this for wait animation done
 
     def wait_for_element(self, locator: str = None):
         if locator is None:

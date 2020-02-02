@@ -11,3 +11,9 @@ class BlogManagementPageLocators(BaseLocator):
 
     # be careful this is different from BLOG_ITEM from BlogList
     BLOG_ITEM = (By.CSS_SELECTOR, "div[role='blog-item']")
+
+    NEW_BLOG_ICON = (By.CSS_SELECTOR, "a[role='new-blog-link']")
+
+    EDIT_BLOG_ICON = (By.CSS_SELECTOR, "a[role='blog-edit-link']")
+
+    DELETE_BLOG_ICON = (By.CSS_SELECTOR, "div[role='blog-delete-icon']")

@@ -29,6 +29,8 @@ def test_target_page_should_display_sort_and_filter_overlay_setting_when_click_s
 
     target_page = TargetPage(responsive_target['driver'])
 
+    target_page.wait_for_animation_finish()
+
     target_page.click_element('setting_icon', 'filter_sort_aside')
 
     # check page title does exist
@@ -40,6 +42,8 @@ def test_target_page_should_display_blog_list_after_click_referesh_btn(responsiv
 
     target_page = TargetPage(responsive_target['driver'])
 
+    target_page.wait_for_animation_finish()
+
     target_page.click_element('refresh_icon', 'blog_item')
 
     # check page title does exist
@@ -47,9 +51,12 @@ def test_target_page_should_display_blog_list_after_click_referesh_btn(responsiv
 
 
 @marks.all_ssize
+@pytest.mark.ppp
 def test_target_page_should_display_blog_list_after_click_limit_change_select_element(responsive_target, TargetPage, login_if_necessary_for_component):
 
     target_page = TargetPage(responsive_target['driver'])
+
+    target_page.wait_for_animation_finish()
 
     target_page.click_element('limit_select', 'limit_40_option')
 
@@ -73,6 +80,8 @@ def test_target_page_should_display_blog_list_after_change_different_page(respon
     target_page = TargetPage(responsive_target['driver'])
 
     initialBlogTitle: str = target_page.get_text_of_element('blog_item_title')
+
+    target_page.wait_for_animation_finish()
     # when use waiting_element_locator_disappear, it stuck. so use waiting_text_disappear
     # click and wait for success message to be disappear; start fetching
     target_page.click_element('page_4_btn')
@@ -91,6 +100,8 @@ def test_target_page_should_display_blog_list_after_click_the_last_page_btn(resp
     target_page = TargetPage(responsive_target['driver'])
 
     initialBlogTitle: str = target_page.get_text_of_element('blog_item_title')
+
+    target_page.wait_for_animation_finish()
 
     target_page.click_element('page_last_btn')
 
@@ -113,6 +124,8 @@ def test_target_page_should_display_blog_list_after_click_the_first_page_btn(res
     target_page = TargetPage(responsive_target['driver'])
 
     initialBlogTitle: str = target_page.get_text_of_element('blog_item_title')
+
+    target_page.wait_for_animation_finish()
 
     target_page.click_element('page_last_btn', waiting_element_locator="blog_item")
 
@@ -235,7 +248,7 @@ def test_target_page_should_display_blog_list_after_keyword_filter_change(respon
 @marks.gte_laptop_ssize
 def test_target_page_should_display_blog_list_after_start_date_filter_change(responsive_target, TargetPage, login_if_necessary_for_component):
 
-    test_date_string = '01/01/2049'
+    test_date_string = '01/01/2010'
     test_datetime = datetime.strptime(test_date_string, '%m/%d/%Y')
 
     target_page = TargetPage(responsive_target['driver'])
@@ -255,7 +268,7 @@ def test_target_page_should_display_blog_list_after_start_date_filter_change(res
 @marks.gte_laptop_ssize
 def test_target_page_should_display_blog_list_after_end_date_filter_change(responsive_target, TargetPage, login_if_necessary_for_component):
 
-    test_date_string = '01/01/1951'
+    test_date_string = '01/01/2010'
     test_datetime = datetime.strptime(test_date_string, '%m/%d/%Y')
 
     target_page = TargetPage(responsive_target['driver'])
