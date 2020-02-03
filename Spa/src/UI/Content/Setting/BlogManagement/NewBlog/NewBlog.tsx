@@ -7,13 +7,19 @@ var debug = require('debug')('ui:NewBlog')
 
 const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
 
-  const blogId = getUuidv4()
   const [currentBlog, setBlog] = React.useState<BlogType>(initialBlogState)
+
+  if (!currentBlog.id) {
+    setBlog((prev: BlogType) => ({
+      ...prev,
+      id: getUuidv4()
+    }))
+  }
 
   return (
     <EditBlog
       context={"New"}
-      blogId={blogId} 
+      blogId={currentBlog.id} 
       currentBlog={currentBlog}
       setBlog={setBlog}
     />
