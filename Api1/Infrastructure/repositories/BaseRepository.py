@@ -30,3 +30,6 @@ class BaseRepository(ABC, Generic[T]):
 
     def flush(self) -> None:
         self._session.flush()
+
+    def merge(self, model: T) -> None:
+        self._session.merge(model)

@@ -84,6 +84,9 @@ class BlogService(object):
         app.logger.info("start create or update blog service")
         print("start create or update blog service")
 
+        # create tags model if not exist
+        tagModelList: List[BlogImage] = [self._tagRepository.createIfNotExist(name=name) for name in tags]
+
         # need to implement 'optimistic locking' later
         # to avoid any confict concurrency request
         targetBlog: Blog = self._blogRepository.get(blog_id)
@@ -102,9 +105,6 @@ class BlogService(object):
         # create BlogImage model if not exist
         blogImageModelList: List[BlogImage] = [BlogImage(path=path) for path in blogImagePaths]
 
-        # create tags model if not exist
-        tagModelList: List[BlogImage] = [self._tagRepository.createIfNotExist(name=name) for name in tags]
-
         targetBlog.title = title
         targetBlog.subtitle = subtitle
         targetBlog.content = content
@@ -112,12 +112,7 @@ class BlogService(object):
         targetBlog.blogImages = blogImageModelList
         targetBlog.tags = tagModelList
 
-        print("*** target blog newly***")
-        print(vars(targetBlog))
-
         targetBlog = self._blogSchema.dump(targetBlog)
-
-        print(targetBlog)
 
         return targetBlog
 
