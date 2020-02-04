@@ -192,6 +192,7 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
           currentSort={currentSort}
           setFilters={setFilters}
           setSort={setSort}
+          setPaginationStatus={setPaginationStatus}
         />
       </div>
     </div>
