@@ -9,9 +9,12 @@ export const replaceTmpSrcWithPublicSrc = (content: Node[]): Node[] => {
   if (content) {
     content.forEach((node: Node) => {
       if (node.type === 'image') {
-        (node as ImageCustomElementProps).src = (node as ImageCustomElementProps).publicSrc.toJSON()
-        delete node.imageFile
-        delete node.publicSrc
+        if ((node as ImageCustomElementProps).publicSrc) {
+          (node as ImageCustomElementProps).src = (node as ImageCustomElementProps).publicSrc.toJSON();
+          (node as ImageCustomElementProps).isNew = false
+          delete node.imageFile
+          delete node.publicSrc
+        }
       }
     })
   }

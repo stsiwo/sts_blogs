@@ -23,9 +23,10 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
   const { blogId } = useParams()
   const [currentBlog, setBlog] = React.useState<BlogType>(initialBlogState)
   const { currentRequestStatus: currentBlogFetchStatus, setRequestStatus: setBlogFetchStatus, sendRequest: fetchBlog } = useRequest({})
+  const [isInitialGetFetchDone, setIsInitialGetFetchDone] = React.useState<boolean>(false)
 
   React.useEffect(() => {
-    debug('initial fetch at useEffect')
+    debug('initial fetch at useEffect at UpdateBlog')
     fetchBlog({
       path: '/blogs/' + blogId,
       method: RequestMethodEnum.GET,
@@ -38,6 +39,7 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
         debug('then func of fetchBlog func')
         if (result.status === ResponseResultStatusEnum.SUCCESS) {
           setBlog(result.data.blog)
+          setIsInitialGetFetchDone(true)
         }
       })
   }, []);
@@ -54,6 +56,7 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
       setBlog={setBlog}
       currentBlogFetchStatus={currentBlogFetchStatus}
       setBlogFetchStatus={setBlogFetchStatus}
+      isInitialGetFetchDone={isInitialGetFetchDone}
     />
   );
 

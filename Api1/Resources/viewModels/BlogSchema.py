@@ -9,7 +9,7 @@ import urllib.parse
 class BlogSchema(ma.ModelSchema):
     class Meta:
         model = Blog
-        exclude = ['user']
+        exclude = ['user', 'blogImages']
 
     # use this because i don't know how to rename 'user' -> 'author' using Nested function
     author = fields.Function(lambda blog: {
@@ -19,4 +19,11 @@ class BlogSchema(ma.ModelSchema):
         })
 
     mainImageUrl = fields.Function(lambda obj: urllib.parse.urljoin(app.config['HOST_NAME'], obj.mainImageUrl) if obj.mainImageUrl is not None else None)
+    # blogImagePaths = fields.Method('translate_to_blog_image_paths')
     tags = fields.Pluck(TagSchema, 'name', many=True)
+
+    # def translate_to_blog_image_paths(self, obj):
+    #     if obj.blogImages is not None:
+    #         return [blogImage.path for blogImage in obj.blogImages]
+    #     else:
+    #         return None

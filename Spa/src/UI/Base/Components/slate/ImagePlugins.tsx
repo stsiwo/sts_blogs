@@ -12,7 +12,7 @@ declare type ImagePluginEditor = {
   searchImage: () => void
 } & ReactEditor
 
-declare type ImageRenderElementProps = RenderElementProps & {
+export declare type ImageRenderElementProps = RenderElementProps & {
   src: string
   publicSrc: URL
   imageFile?: Blob // extract this when saving. need to remove.
@@ -36,9 +36,12 @@ export const withImages = (editor: ReactEditor) => {
       tempFile = generateFileWithUuidv4(tempFile)
       const imgSrc: string = window.URL.createObjectURL(tempFile);
       const text: Text = { text: '' }
+
+      console.log("*** userId at insertImage: " + userId)
       const image = {
         type: 'image',
         src: imgSrc,
+        isNew: true,
         children: [text],
         publicSrc: generateBlogContentPublicImageUrl(userId, tempFile.name),
         imageFile: tempFile, // need to remove when saving. extract file into formdata separately
@@ -161,7 +164,8 @@ export const ImageToolBarBtn: React.FunctionComponent<ToolBarBtnType> = (props) 
         // if user try to image before focus editor, not allow to do that.
         // make user to focus first
         if (editor.selection) {
-          editor.insertImage()
+          console.log("userId at ImageToolBarBtn: " + props.userId)
+          editor.insertImage(props.userId)
         }
       }}
     >

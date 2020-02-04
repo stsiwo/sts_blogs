@@ -3,6 +3,7 @@ import './TagInput.scss';
 import { TagInputPropType } from './types';
 import Tag from 'Components/Tag/Tag';
 import BaseInput from './BaseInput';
+import cloneDeep = require('lodash/cloneDeep');
 
 const TagInput: React.FunctionComponent<TagInputPropType> = (props: TagInputPropType) => {
 
@@ -13,9 +14,10 @@ const TagInput: React.FunctionComponent<TagInputPropType> = (props: TagInputProp
 
     const targetTag = e.currentTarget.getAttribute('data-tag')
 
-    props.currentBlog.tags.delete(targetTag)
+    const nextBlog = cloneDeep(props.currentBlog)
+    nextBlog.tags.delete(targetTag)
     props.setBlog({
-      ...props.currentBlog
+      ...nextBlog
     })
   }
 
@@ -28,9 +30,10 @@ const TagInput: React.FunctionComponent<TagInputPropType> = (props: TagInputProp
     if (targetValue === "") return false
 
     if (e.key == 'Enter' || e.key == 'Tab' || e.key == ' ') {
-      props.currentBlog.tags.add(targetValue)
+      const nextBlog = cloneDeep(props.currentBlog)
+      nextBlog.tags.add(targetValue)
       props.setBlog({
-        ...props.currentBlog,
+        ...nextBlog
       })
       e.currentTarget.value = ""
       tagInputRef.current.focus()
@@ -59,26 +62,26 @@ const TagInput: React.FunctionComponent<TagInputPropType> = (props: TagInputProp
       wrapperStyle={props.wrapperStyle}
     >
       {(!isTagsLimit &&
-        <input 
-          type="text" 
-          id={props.id} 
-          name='tag-entry' 
+        <input
+          type="text"
+          id={props.id}
+          name='tag-entry'
           className={props.inputStyle}
-          onKeyDown={handleTagInputEnterOrTabKeyClickEvent} 
-          ref={tagInputRef} 
-          placeholder="enter #tags here ..." 
+          onKeyDown={handleTagInputEnterOrTabKeyClickEvent}
+          ref={tagInputRef}
+          placeholder="enter #tags here ..."
         />
       )}
       {(isTagsLimit &&
-        <input 
-          type="text" 
-          id='tag-entry' 
-          name='tag-entry' 
-          className="black-input grid-input blog-detail-input" 
-          onKeyDown={handleTagInputEnterOrTabKeyClickEvent} 
-          ref={tagInputRef} 
-          placeholder="opps you reached max tags limit ..." 
-          readOnly 
+        <input
+          type="text"
+          id='tag-entry'
+          name='tag-entry'
+          className="black-input grid-input blog-detail-input"
+          onKeyDown={handleTagInputEnterOrTabKeyClickEvent}
+          ref={tagInputRef}
+          placeholder="opps you reached max tags limit ..."
+          readOnly
         />
       )}
       <div className="aside-filter-tags-list-selected">

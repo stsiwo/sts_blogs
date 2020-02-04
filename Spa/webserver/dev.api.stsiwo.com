@@ -8,7 +8,7 @@ server {
     location / {
       # to prevent 413 http error
       # but should not disable this value such as 0 for security issue
-      client_max_body_size 1M;
+      client_max_body_size 10M;
       add_header Set-Cookie cip=$remote_addr;
       add_header Set-Cookie chost=$Host;
       proxy_set_header Host api1:5000; 

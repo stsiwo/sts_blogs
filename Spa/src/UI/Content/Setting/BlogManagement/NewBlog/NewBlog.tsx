@@ -22,6 +22,7 @@ const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
       blogId={currentBlog.id} 
       currentBlog={currentBlog}
       setBlog={setBlog}
+      isInitialGetFetchDone={true}
     />
   );
 }

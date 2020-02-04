@@ -12,7 +12,7 @@ import ImageInput from 'Components/Input/ImageInput';
 import Input from 'Components/Input/Input';
 import TagInput from 'Components/Input/TagInput';
 import BlogContent from 'Components/BlogContent/BlogContent';
-import { Node } from 'Components/fork/slate'
+import { Node, Element } from 'Components/fork/slate'
 import { replaceTmpSrcWithPublicSrc } from 'Components/BlogContent/helpers';
 import cloneDeep = require('lodash/cloneDeep');
 import { generateFileWithUuidv4, getUuidv4 } from 'src/utils';
@@ -26,6 +26,9 @@ declare type EditBlogPropsType = {
   setBlog: React.Dispatch<React.SetStateAction<BlogType>>
   currentBlogFetchStatus?: RequestStatusType
   setBlogFetchStatus?: React.Dispatch<React.SetStateAction<RequestStatusType>>
+  // to prevent autosave with empty blog with useEffect
+  // useEffect is called multiple time at initial mount. I don't know why but at least 3 times
+  isInitialGetFetchDone?: boolean
 }
 
 enum FetchContextEnum {
@@ -33,7 +36,7 @@ enum FetchContextEnum {
   PUBLISH
 }
 
-const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId, currentBlog, setBlog }) => {
+const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId, currentBlog, setBlog, isInitialGetFetchDone }) => {
 
   const titleInputRef: React.MutableRefObject<HTMLInputElement> = { current: null }
   const subtitleInputRef: React.MutableRefObject<HTMLInputElement> = { current: null }
@@ -88,9 +91,25 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId,
     function autoSave() {
       debug('validation passed at save button event handler')
 
-      debug('replace temp src image with publicSrc before submit')
       const blogDataForSubmit: BlogType = cloneDeep(currentBlog)
+      debug('setup blogImages and blogImagePaths')
+      const imageList: File[] = []
+      const imagePathList: string[] = []
+      currentBlog.content.forEach((node: Element) => {
+        if (node.type === 'image') {
+          if (node.isNew) {
+            imageList.push(node.imageFile)
+            imagePathList.push(node.publicSrc)
+          } else {
+            imagePathList.push(node.src)
+          }
+        }
+      })
+
+      debug('replace temp src image with publicSrc before submit')
       blogDataForSubmit.content = replaceTmpSrcWithPublicSrc(blogDataForSubmit.content)
+      blogDataForSubmit.blogImages = imageList
+      blogDataForSubmit.blogImagePaths = imagePathList
       debug(blogDataForSubmit)
 
       debug('start update request')
@@ -104,10 +123,19 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId,
           // do something 
         })
     }
-    autoSave()
-    setFetchContext(FetchContextEnum.SAVE)
-  }, [currentBlog])
-
+    // give condition to make this allow to request only if initial blog data is seeded from server
+    if (isInitialGetFetchDone) {
+      console.log("start autoSave useEffect at EditBlog")
+      autoSave()
+      setFetchContext(FetchContextEnum.SAVE)
+    }
+  }, [
+      currentBlog.mainImageUrl,
+      currentBlog.title,
+      currentBlog.subtitle,
+      JSON.stringify(Array.from(currentBlog.tags)),
+      JSON.stringify(currentBlog.content),
+    ])
 
   const changeInputWidthDynamically = (inputRef: React.MutableRefObject<HTMLInputElement>, currentChLength: number): void => {
     console.log(inputRef)
@@ -156,13 +184,11 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId,
     window.URL.revokeObjectURL(currentBlog.mainImageUrl);
   }
 
-  const handleContentChangeEvent = (content: Node[], imageFiles: File[], imagePaths: string[]): void => {
+  const handleContentChangeEvent = (content: Node[]): void => {
     setBlog((prev: BlogType) => {
       return {
         ...prev,
         content: content,
-        blogImages: imageFiles,
-        blogImagePaths: imagePaths
       }
     })
     /**
@@ -185,22 +211,22 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId,
       <div className="main-wrapper">
         <h2 className="page-title">{context} Blog</h2>
         {(curFetchContext === FetchContextEnum.SAVE &&
-        <FetchStatus
-          currentFetchStatus={currentBlogStatus}
-          setFetchStatus={setBlogStatus}
-          fetchingMsg={'saving...'}
-          successMsg={'ok'}
-          failureMsg={'failed'}
-        />
+          <FetchStatus
+            currentFetchStatus={currentBlogStatus}
+            setFetchStatus={setBlogStatus}
+            fetchingMsg={'saving...'}
+            successMsg={'ok'}
+            failureMsg={'failed'}
+          />
         )}
         {(curFetchContext === FetchContextEnum.PUBLISH &&
-        <FetchStatus
-          currentFetchStatus={currentPublishStatus}
-          setFetchStatus={setPublishStatus}
-          fetchingMsg={'publishing...'}
-          successMsg={'ok'}
-          failureMsg={'failed'}
-        />
+          <FetchStatus
+            currentFetchStatus={currentPublishStatus}
+            setFetchStatus={setPublishStatus}
+            fetchingMsg={'publishing...'}
+            successMsg={'ok'}
+            failureMsg={'failed'}
+          />
         )}
         <ImageInput
           handleImageUploadChange={handleImageUploadChange}

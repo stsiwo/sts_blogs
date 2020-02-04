@@ -99,8 +99,14 @@ class BlogService(object):
         # handle main image logic (create or update)
         mainImageUrl: str = self._handleBlogMainImage(targetBlog, isDeleteMainImage, mainImage)
 
+        print("*** userId at /blogs/id PUT ****")
+        print(targetBlog.userId)
+
         # handle blog images change logic
         self._handleBlogContentImages(targetBlog, blogImagePaths, blogImages)
+
+        print("*** blogImagePaths  at /blogs/id PUT ****")
+        print(blogImagePaths)
 
         # create BlogImage model if not exist
         blogImageModelList: List[BlogImage] = [BlogImage(path=path) for path in blogImagePaths]
@@ -149,7 +155,7 @@ class BlogService(object):
         print(detectedPaths)
 
         # delete old images
-        for oldPath in detectedPaths:
+        for detectedPath in detectedPaths:
             self._fileService.deleteImageFile(targetBlog.userId, oldPath)
 
         # create newly added images

@@ -20,6 +20,7 @@ var debug = require('debug')('ui:BlogContent')
 
 const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogContentPropType) => {
   // Create a Slate editor object that won't change across renders.
+  // can't extract to another file otherwise get errors
   const editor = React.useMemo(() => withEmbeds(withImages(withLinks(withReact(withHistory(createEditor()))))), [])
 
   const defaultValue: Element[] = props.value.length !== 0 ? props.value as Element[] : [
@@ -29,11 +30,8 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
     },
   ]
 
-  // Keep track of state for the value of the editor.
-  const [value, setValue] = React.useState<Node[]>(defaultValue)
-
+  // can't extract to another file otherwise get errors
   const renderElement = React.useCallback(props => {
-    console.log("inside renderElement:" + JSON.stringify(props.element))
     switch (props.element.type) {
       case 'image':
         return <ImageElement {...props} />
@@ -65,25 +63,13 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
       <div className="slate-wrapper">
         <Slate
           editor={editor}
-          value={value}
+          value={defaultValue}
           onChange={value => {
-            setValue(value)
-            const imageList: File[] = []
-            const imagePathList: string[] = []
-            value.forEach((node: Element) => {
-              if (node.type === 'image') {
-                imageList.push(node.imageFile)
-                imagePathList.push(node.publicSrc)
-              }
-            })
-            // Save the value to Local Storage.
-            props.onChange(value, imageList, imagePathList)
-            const content = JSON.stringify(value)
-            localStorage.setItem('content', content)
+            props.onChange(value)
             // need to save request every time user change content
             // better to use rxjs to controll how to request
           }}>
-          <ToolBar userId={props.userId}/>
+          <ToolBar userId={props.userId} />
           <Editable
             role="blog-content-editable"
             className="slate-editor clear-fix"
