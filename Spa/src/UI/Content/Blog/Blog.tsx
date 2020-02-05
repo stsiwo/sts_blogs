@@ -34,7 +34,9 @@ const Blog: React.FunctionComponent<{}> = (props: {}) => {
   React.useEffect(() => {
     fetchBlog({
       path: '/blogs/' + blogId,
-      method: RequestMethodEnum.GET
+      method: RequestMethodEnum.GET,
+      useCache: false,
+      allowCache: false,
     })
       // call from previous 'catch' and 'then' of 'fetchBlog'
       // since resolve promise in the 'catch'
