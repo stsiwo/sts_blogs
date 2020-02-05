@@ -36,11 +36,23 @@ class UserBlogService(object):
         # TODO; if user id does not exist, should return 404 code
         # https://app.clickup.com/t/3m574q
         # really? why?
-        result: Dict = self._blogRepository.getAll(queryString, userId)
+        result: Dict = self._blogRepository.getAll(queryString, userId, onlyPublic=False)
 
         result['blogs']: List[Dict] = [self._blogSchema.dump(blog) for blog in result['blogs']]
 
         return result
+
+    def getSpecificUserBlogService(self, userId: str = None, blogId: str = None) -> Dict:
+        app.logger.info("start userblog user service")
+        print("start userblog user service")
+
+        result: Blog = self._blogRepository.findOnlyOne(id=blogId, userId=userId)
+
+        if result is None:
+            raise BlogNotFoundException()
+        schema = self._blogSchema.dump(result)
+
+        return schema
 
     @db_transaction()
     def createNewBlogService(self, user_id: str, title: str, subtitle: str, content: str, tags: List[str] = [], mainImage: FileStorage = None, blogImages: List[FileStorage] = [], blogImagePaths: List[str] = []) -> Blog:

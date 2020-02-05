@@ -25,23 +25,34 @@ class UserBlogs(Resource):
         self._blogSchema = BlogSchema()
         self._parser = QueryStringParser()
 
-    # get all blogs
+    # get all non-public or public blogs / specific blog
     # IMPORTANT NOTE ==================================
     # requires_jwt_role_claim must be after jwt_required
     # otherwise, you cannot access claim of jwt
     # ================================================
     @jwt_required
     @requires_jwt_role_claim({'admin', 'member'})
-    def get(self, user_id: str):
-        app.logger.info("start processing get request at /blogs")
-        print("start processing get request at /blogs")
-        queryString: Dict = self._parser.parse(request.args)
+    def get(self, user_id: str, blog_id: str = None):
+        if blog_id is None:
+            app.logger.info("start processing get request at /users/{user_id}/blogs")
+            print("start processing get request at /users/{user_id}/blogs")
+            queryString: Dict = self._parser.parse(request.args)
 
-        result: List[Dict] = self._userBlogService.getAllUserBlogService(queryString, userId=user_id)
+            result: List[Dict] = self._userBlogService.getAllUserBlogService(queryString, userId=user_id)
 
-        response = jsonify(result)
-        response.status_code = 200
-        return response
+            response = jsonify(result)
+            response.status_code = 200
+            return response
+        else:
+            app.logger.info("start processing get request at /users/{user_id}/blogs/{blog_id}")
+            print("start processing get request at /users/{user_id}/blogs/{blog_id}")
+            queryString: Dict = self._parser.parse(request.args)
+
+            result: List[Dict] = self._userBlogService.getSpecificUserBlogService(userId=user_id, blogId=blog_id)
+
+            response = jsonify({'blog': result})
+            response.status_code = 200
+            return response
 
     # create new blog
     @jwt_required

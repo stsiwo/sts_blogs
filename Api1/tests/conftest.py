@@ -12,6 +12,7 @@ from Infrastructure.DataModels.TagModel import Tag
 from Infrastructure.DataModels.UserModel import User
 from Infrastructure.DataModels.BlogImageModel import BlogImage
 from tests.data.generators.UserGenerator import generateUserModel
+from tests.data.generators.BlogGenerator import generateBlogModelV2
 from tests.data.generators.BlogGenerator import generateBlogModel
 from tests.data.generators.CommentGenerator import generateCommentModel
 from io import BytesIO
@@ -289,12 +290,15 @@ def blogsSeededFixture(exSession, usersSeededFixture):
     reactTag = exSession.query(Tag).filter(Tag.name == 'react').first()
 
     blogs = [
-            generateBlogModel(userId=memberUser.id, user=memberUser, tags=[jsTag], content="sample", createdDate=parseStrToDate('1999-01-01T00:00:00.000Z')),
-            generateBlogModel(userId=memberUser.id, user=memberUser, tags=[jsTag, webpackTag], subtitle="sample", createdDate=parseStrToDate('2000-01-01T00:00:00.000Z')),
-            generateBlogModel(userId=memberUser.id, user=memberUser, tags=[jsTag, reactTag], createdDate=parseStrToDate('2001-01-01T00:00:00.000Z')),
-            generateBlogModel(userId=memberUser.id, user=memberUser, tags=[jsTag], title="sample", createdDate=parseStrToDate('2002-01-01T00:00:00.000Z')),
-            generateBlogModel(userId=memberUser.id, user=memberUser, tags=[jsTag, webpackTag], createdDate=parseStrToDate('2003-01-01T00:00:00.000Z')),
-            generateBlogModel(userId=memberUser.id, user=memberUser, tags=[jsTag, reactTag], createdDate=parseStrToDate('2004-01-01T00:00:00.000Z'))
+            generateBlogModelV2(user=memberUser, tags=[jsTag], content="sample", createdDate=parseStrToDate('1999-01-01T00:00:00.000Z'), public=True),
+            generateBlogModelV2(user=memberUser, tags=[jsTag, webpackTag], subtitle="sample", createdDate=parseStrToDate('2000-01-01T00:00:00.000Z'), public=True),
+            generateBlogModelV2(user=memberUser, tags=[jsTag, reactTag], createdDate=parseStrToDate('2001-01-01T00:00:00.000Z'), public=True),
+            generateBlogModelV2(user=memberUser, tags=[jsTag], title="sample", createdDate=parseStrToDate('2002-01-01T00:00:00.000Z'), public=True),
+            generateBlogModelV2(user=memberUser, tags=[jsTag, webpackTag], createdDate=parseStrToDate('2003-01-01T00:00:00.000Z'), public=True),
+            generateBlogModelV2(user=memberUser, tags=[], createdDate=parseStrToDate('2005-01-01T00:00:00.000Z'), public=False),
+            generateBlogModelV2(user=memberUser, tags=[], createdDate=parseStrToDate('2006-01-01T00:00:00.000Z'), public=False),
+            generateBlogModelV2(user=memberUser, tags=[], createdDate=parseStrToDate('2007-01-01T00:00:00.000Z'), public=False),
+            generateBlogModelV2(user=memberUser, tags=[], createdDate=parseStrToDate('2008-01-01T00:00:00.000Z'), public=False),
             ]
 
     for blog in blogs:

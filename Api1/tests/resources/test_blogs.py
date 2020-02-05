@@ -106,13 +106,17 @@ def test_b041_blogs_get_endpoint_should_return_specified_view_model(client, blog
 
 
 @pytest.mark.blogs_src
-@pytest.mark.blogs_src_get_id
-def test_blogs_id_get_endpoint_should_return_200_when_specified_blog_exist(client, blogsSeededFixture):
-
-    targetBlog = blogsSeededFixture[0]
-
-    response = client.get('/blogs/' + targetBlog.id)
+@pytest.mark.blogs_src_get
+def test_b042_blogs_get_endpoint_should_return_only_public_blogs(client, blogsSeededFixture):
+    response = client.get('/blogs')
     assert 200 == response.status_code
+
+    data = decodeResponseByteJsonToDictionary(response.data)
+
+    assert data is not None
+
+    for blog in data['blogs']:
+        assert blog['public'] is True
 
 
 @pytest.mark.blogs_src
@@ -120,12 +124,31 @@ def test_blogs_id_get_endpoint_should_return_200_when_specified_blog_exist(clien
 def test_blogs_get_endpoint_should_return_blog_list_when_filter_tag(client, blogsSeededFixture):
 
     response = client.get('/blogs?page=1&liimit=20&tag=js')
+    data = decodeResponseByteJsonToDictionary(response.data)
     assert 200 == response.status_code
 
-    data = decodeResponseByteJsonToDictionary(response.data)
-    ppDict(data)
 
-    assert 0
+@pytest.mark.blogs_src
+@pytest.mark.blogs_src_get_id
+def test_blogs_id_get_endpoint_should_return_200_when_specified_blog_exist_and_public(client, blogsSeededFixture):
+
+    targetBlog = blogsSeededFixture[0]
+
+    response = client.get('/blogs/' + targetBlog.id)
+    data = decodeResponseByteJsonToDictionary(response.data)
+    assert 200 == response.status_code
+    assert data['blog']['public'] is True
+
+
+@pytest.mark.blogs_src
+@pytest.mark.blogs_src_get_id
+def test_blogs_id_get_endpoint_should_return_404_when_specified_blog_does_not_exist_or_non_public(client, blogsSeededFixture):
+
+    targetBlogs = [blog for blog in blogsSeededFixture if blog.public is False]
+    targetBlog = targetBlogs[0]
+
+    response = client.get('/blogs/' + targetBlog.id)
+    assert 404 == response.status_code
 
 
 @pytest.mark.blogs_src

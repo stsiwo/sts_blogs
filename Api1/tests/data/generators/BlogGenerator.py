@@ -43,7 +43,8 @@ def generateBlogModelV2(
         clap=None,
         tags=[],
         mainImageUrl=None,
-        createdDate=None
+        createdDate=None,
+        public=False,
         ):
 
     title = fake.sentence() if title is None else title
@@ -64,7 +65,8 @@ def generateBlogModelV2(
             content=content,
             tags=tags,
             mainImageUrl=mainImageUrl,
-            createdDate=createdDate
+            createdDate=createdDate,
+            public=public
             )
 
     blog.user = user

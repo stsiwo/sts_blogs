@@ -55,13 +55,13 @@ class BlogService(object):
         app.logger.info("start getBlogService service")
         print("start getBlogService service")
 
-        blog: Blog = self._blogRepository.get(id=blog_id)
+        blog: Blog = self._blogRepository.getIfPublic(id=blog_id)
 
         # transform data model to view model of blog
         if blog is not None:
             blogViewModel: Dict = self._blogSchema.dump(blog)
         else:
-            raise BlogNotFoundException
+            raise BlogNotFoundException(message="specified blog is not exist or publicly unavailable.")
 
         return blogViewModel
 

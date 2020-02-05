@@ -37,7 +37,7 @@ def test_br1_get_all_should_return_no_orOp_filtered_pagination_object(blogsSeede
     dummyQS: Dict = {
             'orOp': False,
             'tags': {
-                'value': ['react'],
+                'value': ['js'],
                 'orOp': False
                 },
             'startDate': {
@@ -52,7 +52,7 @@ def test_br1_get_all_should_return_no_orOp_filtered_pagination_object(blogsSeede
 
     assert len(result['blogs']) != 0
     for blog in result['blogs']:
-        assert any(tag.name == 'react' for tag in blog.tags)
+        assert any(tag.name == 'js' for tag in blog.tags)
 
 
 @pytest.mark.blog_repo

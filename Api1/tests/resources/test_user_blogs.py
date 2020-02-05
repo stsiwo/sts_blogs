@@ -70,6 +70,71 @@ def test_ub05_blogs_get_endpoint_should_return_200_with_its_own_blogs(authedClie
 
 
 @pytest.mark.user_blog_src
+@pytest.mark.user_blog_src_get_id
+def test_ub051_blogs_get_endpoint_should_return_404_when_specified_blog_does_not_exist(authedClient, database, application, blogsSeededFixture):
+
+    userId = None
+
+    with application.app_context():
+        user = database.session.query(User).first()
+        userId = user.id
+
+    csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
+    response = authedClient.get('/users/' + str(userId) + '/blogs/' + 'blog-does-not_exit', headers={'X-CSRF-TOKEN': csrf_token})
+    assert 404 == response.status_code
+
+
+@pytest.mark.user_blog_src
+@pytest.mark.user_blog_src_get_id
+def test_ub051_blogs_get_endpoint_should_return_200_when_specified_blog_exist_and_include_non_public(authedClient, database, application, blogsSeededFixture):
+
+    userId = None
+
+    with application.app_context():
+        user = database.session.query(User).first()
+        userId = user.id
+        targetBlogs = [blog for blog in blogsSeededFixture if blog.public is False]
+
+    targetBlog = targetBlogs[0]
+
+    csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
+    response = authedClient.get('/users/' + str(userId) + '/blogs/' + targetBlog.id, headers={'X-CSRF-TOKEN': csrf_token})
+    assert 200 == response.status_code
+
+    data = decodeResponseByteJsonToDictionary(response.data)
+
+    assert data is not None
+    assert data['blog']['id'] == targetBlog.id
+    assert data['blog']['public'] is False
+    assert data['blog']['author']['id'] == userId
+
+
+@pytest.mark.user_blog_src
+@pytest.mark.user_blog_src_get_id
+def test_ub051_blogs_get_endpoint_should_return_200_when_specified_blog_exist_and_include_public(authedClient, database, application, blogsSeededFixture):
+
+    userId = None
+
+    with application.app_context():
+        user = database.session.query(User).first()
+        userId = user.id
+        targetBlogs = [blog for blog in blogsSeededFixture if blog.public is True]
+
+    targetBlog = targetBlogs[0]
+
+    csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
+    response = authedClient.get('/users/' + str(userId) + '/blogs/' + targetBlog.id, headers={'X-CSRF-TOKEN': csrf_token})
+    assert 200 == response.status_code
+
+    data = decodeResponseByteJsonToDictionary(response.data)
+
+    assert data is not None
+    assert data['blog']['id'] == targetBlog.id
+    assert data['blog']['public'] is True
+    assert data['blog']['author']['id'] == userId
+
+
+@pytest.mark.user_blog_src
 @pytest.mark.user_blog_src_delete
 def test_ub15_blogs_delete_endpoint_should_return_401_code_since_unauthorized_access(client, database, application, httpHeaders):
 
