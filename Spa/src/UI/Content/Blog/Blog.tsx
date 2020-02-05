@@ -84,17 +84,9 @@ const Blog: React.FunctionComponent<{}> = (props: {}) => {
             <p className="blog-date">{currentBlog.createdDate.toLocaleDateString("en-US", dateFormatOption)}</p>
           </div>
           <div className="blog-content-wrapper" role='blog-content'>
-            <ReadOnlyBlogContent 
+            <ReadOnlyBlogContent
               value={currentBlog.content}
             />
-          </div>
-          <div className="clap-bookmark-wrapper">
-            <div className="icon-wrapper">
-              <FaBookmark className="icon" />
-            </div>
-            <div className="icon-wrapper">
-              <FaThumbsUp className="icon" />
-            </div>
           </div>
           <div className="related-blog-list">
           </div>
@@ -107,6 +99,14 @@ const Blog: React.FunctionComponent<{}> = (props: {}) => {
         {(auth.authed &&
           <ManageYourBlogs />
         )}
+        <div className="clap-bookmark-wrapper">
+          <div className="icon-wrapper">
+            <FaBookmark className="icon" />
+          </div>
+          <div className="icon-wrapper">
+            <FaThumbsUp className="icon" />
+          </div>
+        </div>
       </div>
     </div>
   );

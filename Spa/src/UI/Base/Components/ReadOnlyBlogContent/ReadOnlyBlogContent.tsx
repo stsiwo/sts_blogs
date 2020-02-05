@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Leaf, BlockQuoteElement, BulletedListElement, HeadingOneElement, HeadingTwoElement, ListItemElement, NumberedListElement } from 'Components/slate/RichText';
 import { Slate, Editable, withReact } from 'Components/fork/slate-react';
-import { Node, createEditor } from 'Components/fork/slate'
+import { Node, Element, createEditor } from 'Components/fork/slate'
 import { withEmbeds, EmbedsElement } from 'Components/slate/EmbedPlugins';
 import { withImages, ImageElement } from 'Components/slate/ImagePlugins';
 import { withLinks, LinkElement } from 'Components/slate/LinkPlugins';
@@ -15,6 +15,13 @@ const ReadOnlyBlogContent: React.FunctionComponent<ReadOnlyBlogContentPropsType>
 
   // can't extract to another file otherwise get errors
   const editor = React.useMemo(() => withEmbeds(withImages(withLinks(withReact(withHistory(createEditor()))))), [])
+
+  const defaultValue: Element[] = (value && value.length !== 0) ? value as Element[] : [
+    {
+      type: 'paragraph',
+      children: [{ text: "" }],
+    },
+  ]
 
   // can't extract to another file otherwise get errors
   const renderElement = React.useCallback(props => {
