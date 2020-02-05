@@ -88,6 +88,7 @@ export const LinkToolBarBtn: React.FunctionComponent<ToolBarBtnType> = (props) =
   const currentClassName = (!isLinkActive(editor)) ? nonActiveClassName : activeClassName
   return (
     <span
+      role="links-toolbar-icon"
       className={currentClassName}
       onMouseDown={(e: React.MouseEvent<HTMLElement>) => {
         console.log("you clicked insert iamge btn")

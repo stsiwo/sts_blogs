@@ -122,6 +122,7 @@ export const BlockButton: React.FunctionComponent<RichTextbuttonType> = ({ forma
   const currentClassName = (!isBlockActive(editor, format)) ? nonActiveClassName : activeClassName
   return (
     <span
+      role={`${format}-toolbar-icon`}
       className={currentClassName}
       onMouseDown={event => {
         event.preventDefault()
@@ -143,6 +144,7 @@ export const MarkButton: React.FunctionComponent<RichTextbuttonType> = ({ format
   const currentClassName = (!isBlockActive(editor, format)) ? nonActiveClassName : activeClassName
   return (
     <span
+      role={`${format}-toolbar-icon`}
       className={currentClassName}
       onMouseDown={event => {
         event.preventDefault()

@@ -123,6 +123,7 @@ export const EmbedsToolBarBtn: React.FunctionComponent<ToolBarBtnType> = (props)
   const currentClassName = (isEmbedsAvailable(editor)) ?  activeClassName : disableClassName
   return (
     <span
+      role="embeds-toolbar-icon"
       className={currentClassName}
       onMouseDown={(e: React.MouseEvent<HTMLElement>) => {
         console.log("you clicked insert iamge btn")

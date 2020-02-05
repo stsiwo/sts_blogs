@@ -156,6 +156,7 @@ export const ImageToolBarBtn: React.FunctionComponent<ToolBarBtnType> = (props) 
   const currentClassName = (isImageAvailable(editor)) ?  activeClassName : disableClassName
   return (
     <span
+      role="image-toolbar-icon"
       className={currentClassName}
       onMouseDown={(e: React.MouseEvent<HTMLElement>) => {
         console.log("you clicked insert iamge btn")
