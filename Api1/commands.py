@@ -152,50 +152,65 @@ def add_test_blogs():
         jsTag = db.session.query(Tag).filter(Tag.name == 'js').first()
         reactTag = db.session.query(Tag).filter(Tag.name == 'react').first()
 
-        for i in range(100):
+        for i in range(50):
             db.session.add(generateBlogModelV2(user=memberUser))
 
-        for i in range(100):
+        for i in range(50):
+            db.session.add(generateBlogModelV2(user=memberUser, public=True))
+
+        for i in range(50):
             db.session.add(generateBlogModelV2(user=adminUser))
 
-        for i in range(100):
+        for i in range(50):
+            db.session.add(generateBlogModelV2(user=adminUser, public=True))
+
+        for i in range(50):
             db.session.add(generateBlogModelV2(user=memberUser1))
+
+        for i in range(50):
+            db.session.add(generateBlogModelV2(user=memberUser1, public=True))
 
         # sort & filter dedicated blogs
         # keyword (title and subtitle)
         db.session.add(generateBlogModelV2(
             title="keyword",
-            user=memberUser1
+            user=memberUser1,
+            public=True
             ))
 
         # start date (createdDate)
         db.session.add(generateBlogModelV2(
             createdDate=datetime.datetime(1550, 5, 1, 0, 0, 0, 0),
-            user=memberUser1
+            user=memberUser1,
+            public=True
             ))
 
         # end date (createdDate)
         db.session.add(generateBlogModelV2(
             createdDate=datetime.datetime(2050, 6, 1, 0, 0, 0, 0),
-            user=memberUser1
+            user=memberUser1,
+            public=True
             ))
 
         # sort title (asc)
         db.session.add(generateBlogModelV2(
             title="aaaaa",
-            user=memberUser1
+            user=memberUser1,
+            public=True
             ))
 
         # sort title (desc)
         db.session.add(generateBlogModelV2(
             title="zzzz",
-            user=memberUser1
+            user=memberUser1,
+            public=True
             ))
 
         # sort clap (max = 1000)
         db.session.add(generateBlogModelV2(
             clap=1000,
-            user=memberUser1
+            user=memberUser1,
+            public=True
             ))
 
         # sort clap (min = 0) use existing default blog
@@ -203,7 +218,8 @@ def add_test_blogs():
         # filter tag
         db.session.add(generateBlogModelV2(
             tags=[jsTag, reactTag],
-            user=memberUser1
+            user=memberUser1,
+            public=True
             ))
 
         db.session.commit()
