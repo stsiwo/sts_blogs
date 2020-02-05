@@ -2,6 +2,7 @@ from Configs.extensions import db
 from sqlalchemy.types import CHAR
 from Infrastructure.DataModels.BlogTagModel import tags
 from Infrastructure.DataModels.BaseModel import BaseModel
+from sqlalchemy.sql.expression import text
 
 
 class Blog(BaseModel):
@@ -12,7 +13,7 @@ class Blog(BaseModel):
     title = db.Column(db.VARCHAR(1000), nullable=True)
     subtitle = db.Column(db.VARCHAR(1000), nullable=True)
     mainImageUrl = db.Column(db.VARCHAR(1000), nullable=True)
-    content = db.Column(db.Text, nullable=False)
+    content = db.Column(db.Text, nullable=True)
     clap = db.Column(db.Integer, server_default='0', nullable=False)
     public = db.Column(db.Boolean, default=False, nullable=False)
     userId = db.Column(CHAR(36), db.ForeignKey('users.id', name="FK_blogs__users"), nullable=False)
