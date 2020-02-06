@@ -41,7 +41,7 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId,
   const titleInputRef: React.MutableRefObject<HTMLInputElement> = { current: null }
   const subtitleInputRef: React.MutableRefObject<HTMLInputElement> = { current: null }
 
-  const [currentIsDeleteImage, setIsDeleteImage] = React.useState<boolean>(false)
+  const [currentIsDeleteMainImage, setIsDeleteMainImage] = React.useState<boolean>(false)
   const { currentValidationError, touch, validate } = useBlogValidation({ domain: currentBlog })
   const { currentRequestStatus: currentBlogStatus, setRequestStatus: setBlogStatus, sendRequest: saveRequest } = useRequest({})
   const { currentRequestStatus: currentPublishStatus, setRequestStatus: setPublishStatus, sendRequest: publishRequest } = useRequest({})
@@ -55,7 +55,7 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId,
     formData.set('title', state.title)
     formData.set('subtitle', state.subtitle)
     if (state.mainImage) formData.set('mainImage', state.mainImage)
-    if (currentIsDeleteImage) formData.set('isDeleteImage', '1') // true
+    if (currentIsDeleteMainImage) formData.set('isDeleteMainImage', '1') // true
     formData.set('content', JSON.stringify(state.content))
     formData.set('createdDate', state.createdDate.toJSON())
     formData.set('tags', JSON.stringify(Array.from(state.tags)))
@@ -163,7 +163,7 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId,
     let imgFile: File = e.currentTarget.files[0]
     imgFile = generateFileWithUuidv4(imgFile)
     const imgSrc: string = window.URL.createObjectURL(imgFile);
-    setIsDeleteImage(false)
+    setIsDeleteMainImage(false)
     setBlog({
       ...currentBlog,
       mainImage: imgFile,
@@ -172,7 +172,7 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId,
   }
 
   const handleImageRemoveClick: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
-    setIsDeleteImage(true)
+    setIsDeleteMainImage(true)
     setBlog({
       ...currentBlog,
       mainImage: null,
