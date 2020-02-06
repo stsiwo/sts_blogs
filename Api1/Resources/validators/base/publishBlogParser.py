@@ -7,8 +7,8 @@ from Resources.validators.base.arguments.blog.blogSubtitleArg import addBlogSubt
 
 def publishBlogParser():
     parser = reqparse.RequestParser(bundle_errors=True)
-    addUserIdArg(parser)
+    # addUserIdArg(parser)
     addBlogPublicArg(parser)
-    addBlogTitleArg(parser)
-    addBlogSubtitleArg(parser)
+    # addBlogTitleArg(parser)
+    # addBlogSubtitleArg(parser)
     return parser

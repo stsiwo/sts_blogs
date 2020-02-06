@@ -77,7 +77,7 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId,
           path: "/blogs/" + blogId,
           method: RequestMethodEnum.PATCH,
           headers: { 'content-type': 'application/json' },
-          data: JSON.stringify({ publish: 1 }),
+          data: JSON.stringify({ public: 1 }),
         })
           .then((result: ResponseResultType<BlogResponseDataType>) => {
             // do something 
