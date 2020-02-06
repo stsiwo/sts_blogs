@@ -108,9 +108,9 @@ describe('bl-c1: BlogList Component testing', () => {
 
     })
     /**
-     * since cache is available, the number of request call is only once
+     * since disable caching 
      **/
-    expect(api.request).toHaveBeenCalledTimes(1)
+    expect(api.request).toHaveBeenCalledTimes(2)
 
   })
 
@@ -391,15 +391,22 @@ describe('bl-c1: BlogList Component testing', () => {
 
   test("a23. (cache) should use cached data when request to the same endpoint (with queryString)", async () => {
     api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
-    await act(async () => {
-      const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
-        <ContextWrapperComponent component={BlogList} />
-      )
-      await waitForElement(() => getAllByRole('blog-item'))
-      fireEvent.click(getByRole('refresh-icon'))
+    const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
+      <ContextWrapperComponent component={BlogList} />
+    )
+    await waitForElement(() => getAllByRole('blog-item'))
+    const sortInput = getByLabelText('Title Desc')
+
+    /** 
+     * #BUG??: fireEvent.change does not trigger event on radio input
+     * -> workaround is to use 'Simulate.change()'
+     **/
+    Simulate.change(sortInput)
+    const nextSortInput = getByLabelText('Date Asc')
+    Simulate.change(nextSortInput)
+    await wait(() => {
+      expect(api.request).toHaveBeenCalledTimes(2)
     })
-    const path = (api.request as any).mock.calls[0][0].url
-    expect(api.request).toHaveBeenCalledTimes(1)
   })
 
   describe('bl-c1: <= tablet screen size', () => {

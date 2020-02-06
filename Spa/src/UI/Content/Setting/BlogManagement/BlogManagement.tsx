@@ -80,7 +80,6 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
         }
         else if (result.status === ResponseResultStatusEnum.SUCCESS) {
           console.log("fetch success and receive data")
-          console.log(result.data)
           setBlogs(result.data.blogs)
 
           // assign new total count of pagination
@@ -109,6 +108,7 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
     console.log("start handling delete blog click event")
     const result: boolean = window.confirm("Are you sure to delete this blog?")
     if (result) {
+      console.log("confirm is OK")
       const blogId = e.currentTarget.getAttribute('data-blog-id')
       sendDeleteRequest({
         path: '/blogs/' + blogId,

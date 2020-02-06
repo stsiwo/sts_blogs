@@ -103,9 +103,9 @@ describe('bm-c1: BlogManagement Component testing', () => {
 
     })
     /**
-     * since use cached data when second request, so total is just once when refersh
+     * since disable cache at refresh request 
      **/
-    expect(api.request).toHaveBeenCalledTimes(1)
+    expect(api.request).toHaveBeenCalledTimes(2)
 
   })
 
@@ -194,18 +194,21 @@ describe('bm-c1: BlogManagement Component testing', () => {
   })
 
   test("a10. (blog mangement) should should start api request for deleting when 'delete' is click at controller element", async () => {
-    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
+    api.request = jest.fn().mockResolvedValue(blogGET200NonEmptyResponse)
+    // mock confirm dialog and return always true (OK)
+    window.confirm = jest.fn(() => true)
     await act(async () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
         <ContextWrapperComponent component={BlogManagement} isAuth />
       )
       const blogListNodes = await waitForElement(() => getAllByRole('blog-item'))
       fireEvent.mouseEnter(blogListNodes[0])
-      const deleteBtns = await waitForElement(() => getAllByRole('blog-delete-icon'))
-      fireEvent.click(deleteBtns[0])
-
+      const deleteBtn = await waitForElement(() => getByRole('blog-delete-icon'))
+      fireEvent.click(deleteBtn)
       await wait(() => {
-        expect(api.request).toHaveBeenCalledTimes(2)
+        expect(window.confirm).toBeCalled()
+        // initial fetch + delete request + refresh request = 3
+        expect(api.request).toHaveBeenCalledTimes(3)
         expect((api.request as any).mock.calls[1][0].url).toContain('1')
         expect((api.request as any).mock.calls[1][0].method).toContain('delete')
       })

@@ -34,12 +34,21 @@ describe('bl-c1: Blog Component testing', () => {
    * a2. (DOM) should display blog data in each input field after initial api request 
    * a3. (api fetch) should display "no blog available" when initial fetch failed because of network error 
    * a4. (api fetch) should display "no blog available" when initial fetch failed because of 4xx or 5xx 
-   * a5. (cache) should cache specific blog in localStorage 
+   * //a5. (cache) should cache specific blog in localStorage 
    *
    **/
 
   beforeAll(() => {
     console.log('bl-c1: beforeAll ')
+    /**
+     *  Error: Uncaught [TypeError: window.getSelection is not a function]
+     *  : need to mock this
+     **/
+    window.getSelection = () => {
+      return {
+        removeAllRanges: () => { }
+      } as Selection
+    }
   })
 
   beforeEach(() => {
@@ -102,20 +111,20 @@ describe('bl-c1: Blog Component testing', () => {
     })
   })
 
-  test("a5. (cache) should cache specific blog in localStorage", async () => {
-    api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
-    await act(async () => {
-      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
-        <ContextWrapperComponent component={Blog} isAuth />
-      )
+  //test("a5. (cache) should cache specific blog in localStorage", async () => {
+  //  api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
+  //  await act(async () => {
+  //    const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+  //      <ContextWrapperComponent component={Blog} isAuth />
+  //    )
 
-      await wait(() => {
-        const path = (api.request as any).mock.calls[0][0].url
-        expect(localStorage.getItem(path)).not.toBeNull() 
-      })
-    })
+  //    await wait(() => {
+  //      const path = (api.request as any).mock.calls[0][0].url
+  //      expect(localStorage.getItem(path)).not.toBeNull() 
+  //    })
+  //  })
 
-  })
+  //})
 
   afterEach(() => {
     console.log('bl-c1: afterEach ')
