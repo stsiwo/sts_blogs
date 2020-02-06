@@ -24,11 +24,12 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
   const [currentBlog, setBlog] = React.useState<BlogType>(initialBlogState)
   const { currentRequestStatus: currentBlogFetchStatus, setRequestStatus: setBlogFetchStatus, sendRequest: fetchBlog } = useRequest({})
   const [isInitialGetFetchDone, setIsInitialGetFetchDone] = React.useState<boolean>(false)
+  const { auth } = useAuthContext()
 
   React.useEffect(() => {
     debug('initial fetch at useEffect at UpdateBlog')
     fetchBlog({
-      path: '/blogs/' + blogId,
+      path: 'users/' + auth.user.id + '/blogs/' + blogId,
       method: RequestMethodEnum.GET,
       useCache: false,
       allowCache: false
