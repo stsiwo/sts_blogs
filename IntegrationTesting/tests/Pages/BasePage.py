@@ -42,6 +42,9 @@ class BasePage(object):
     def scroll_to_top(self):
         self.driver.find_element_by_tag_name('body').send_keys(Keys.HOME)
 
+    def scroll_to_bottom(self):
+        self.driver.find_element_by_tag_name('body').send_keys(Keys.END)
+
     def switch_to_confirm_dialog(self):
         return self.driver.switch_to.alert
 

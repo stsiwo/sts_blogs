@@ -14,7 +14,18 @@ class NewBlogPage(HeaderComponent, FooterComponent):
     element_locators = {
             'page_title': NewBlogPageLocators.PAGE_TITLE,
             'profile_link': NewBlogPageLocators.PROFILE_LINK,
-            'blog_management_link': NewBlogPageLocators.BLOG_MANAGEMENT_LINK
+            'blog_management_link': NewBlogPageLocators.BLOG_MANAGEMENT_LINK,
+            'main_image_input': NewBlogPageLocators.MAIN_IMAGE_INPUT,
+            'image_delete_icon': NewBlogPageLocators.IMAGE_DELETE_ICON,
+            'blog_title_input': NewBlogPageLocators.BLOG_TITLE_INPUT,
+            'blog_subtitle_input': NewBlogPageLocators.BLOG_SUBTITLE_INPUT,
+            'blog_tag_input': NewBlogPageLocators.BLOG_TAG_INPUT,
+            'blog_tag_delete_icon': NewBlogPageLocators.BLOG_TAG_DELETE_ICON,
+            'blog_content_input': NewBlogPageLocators.BLOG_CONTENT_INPUT,
+            'image_toolbar_icon': NewBlogPageLocators.IMAGE_TOOLBAR_ICON,
+            'embeds_toolbar_icon': NewBlogPageLocators.EMBEDS_TOOLBAR_ICON,
+            'publish_button': NewBlogPageLocators.PUBLISH_BUTTON,
+            'fetch_status_title': NewBlogPageLocators.FETCH_STATUS_TITLE
             }
 
     def __init__(self, driver, independent: bool = True):

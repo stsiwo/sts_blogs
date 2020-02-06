@@ -46,3 +46,12 @@ def login_for_blog_management(login):
     home_page.click_element('to_manage_btn')
 
     # need to logout as clean up (after yeild): to prevent other test from being affected
+
+
+@pytest.fixture(scope="module")
+def login_for_new_blog(login):
+    print("*** login_for_blog_management setup ***")
+    home_page = login
+    home_page.driver.get(cfg.new_blog_url)
+
+    # need to logout as clean up (after yeild): to prevent other test from being affected
