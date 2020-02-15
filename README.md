@@ -51,6 +51,11 @@
         - command) java -jar selenium-server-standalone-3.141.59.jar
     4. run testing 
         - command) python -m pytest [option]
+        
+  * caveats:
+    - currently, I run integration testing on Linux platform. this is because docker selenium grid only support Linux platform.
+      - if use any commercial automate testing tools, it can increase more variety of platform.
+    - switch integration testing from python to Java since Java provide easier setting for parallel testing. can achieve the parallel testing using Python but need manually config for it, so move to Java.
      
 
 ### Errors
