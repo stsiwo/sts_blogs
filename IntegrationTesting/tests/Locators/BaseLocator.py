@@ -1,4 +1,0 @@
-
-
-class BaseLocator(object):
-    pass

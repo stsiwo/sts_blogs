@@ -1,0 +1,1397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="TestSuite" time="0.862" tests="434" errors="0" skipped="423" failures="11">
+  <properties>
+    <property name="sun.desktop" value="gnome"/>
+    <property name="awt.toolkit" value="sun.awt.X11.XToolkit"/>
+    <property name="java.specification.version" value="11"/>
+    <property name="sun.cpu.isalist" value=""/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.class.path" value="/home/sts/Documents/Workspace/Java/IntegrationTesting/target/test-classes:/home/sts/Documents/Workspace/Java/IntegrationTesting/target/classes:/home/sts/.m2/repository/junit/junit/4.11/junit-4.11.jar:/home/sts/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/home/sts/.m2/repository/org/seleniumhq/selenium/selenium-java/3.141.59/selenium-java-3.141.59.jar:/home/sts/.m2/repository/org/seleniumhq/selenium/selenium-api/3.141.59/selenium-api-3.141.59.jar:/home/sts/.m2/repository/org/seleniumhq/selenium/selenium-chrome-driver/3.141.59/selenium-chrome-driver-3.141.59.jar:/home/sts/.m2/repository/org/seleniumhq/selenium/selenium-edge-driver/3.141.59/selenium-edge-driver-3.141.59.jar:/home/sts/.m2/repository/org/seleniumhq/selenium/selenium-firefox-driver/3.141.59/selenium-firefox-driver-3.141.59.jar:/home/sts/.m2/repository/org/seleniumhq/selenium/selenium-ie-driver/3.141.59/selenium-ie-driver-3.141.59.jar:/home/sts/.m2/repository/org/seleniumhq/selenium/selenium-opera-driver/3.141.59/selenium-opera-driver-3.141.59.jar:/home/sts/.m2/repository/org/seleniumhq/selenium/selenium-remote-driver/3.141.59/selenium-remote-driver-3.141.59.jar:/home/sts/.m2/repository/org/seleniumhq/selenium/selenium-safari-driver/3.141.59/selenium-safari-driver-3.141.59.jar:/home/sts/.m2/repository/org/seleniumhq/selenium/selenium-support/3.141.59/selenium-support-3.141.59.jar:/home/sts/.m2/repository/net/bytebuddy/byte-buddy/1.8.15/byte-buddy-1.8.15.jar:/home/sts/.m2/repository/org/apache/commons/commons-exec/1.3/commons-exec-1.3.jar:/home/sts/.m2/repository/com/google/guava/guava/25.0-jre/guava-25.0-jre.jar:/home/sts/.m2/repository/com/google/code/findbugs/jsr305/1.3.9/jsr305-1.3.9.jar:/home/sts/.m2/repository/org/checkerframework/checker-compat-qual/2.0.0/checker-compat-qual-2.0.0.jar:/home/sts/.m2/repository/com/google/errorprone/error_prone_annotations/2.1.3/error_prone_annotations-2.1.3.jar:/home/sts/.m2/repository/com/google/j2objc/j2objc-annotations/1.1/j2objc-annotations-1.1.jar:/home/sts/.m2/repository/org/codehaus/mojo/animal-sniffer-annotations/1.14/animal-sniffer-annotations-1.14.jar:/home/sts/.m2/repository/com/squareup/okhttp3/okhttp/3.11.0/okhttp-3.11.0.jar:/home/sts/.m2/repository/com/squareup/okio/okio/1.14.0/okio-1.14.0.jar:/home/sts/.m2/repository/org/testng/testng/6.8/testng-6.8.jar:/home/sts/.m2/repository/org/beanshell/bsh/2.0b4/bsh-2.0b4.jar:/home/sts/.m2/repository/com/beust/jcommander/1.27/jcommander-1.27.jar:/home/sts/.m2/repository/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar:/home/sts/.m2/repository/com/github/javafaker/javafaker/1.0.1/javafaker-1.0.1.jar:/home/sts/.m2/repository/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5.jar:/home/sts/.m2/repository/org/yaml/snakeyaml/1.23/snakeyaml-1.23-android.jar:/home/sts/.m2/repository/com/github/mifmif/generex/1.0.2/generex-1.0.2.jar:/home/sts/.m2/repository/dk/brics/automaton/automaton/1.11-8/automaton-1.11-8.jar:/home/sts/.m2/repository/org/yaml/snakeyaml/1.21/snakeyaml-1.21.jar:"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.vendor.url" value="http://java.oracle.com/"/>
+    <property name="user.timezone" value=""/>
+    <property name="java.vm.specification.version" value="11"/>
+    <property name="os.name" value="Linux"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="user.country" value="CA"/>
+    <property name="sun.boot.library.path" value="/usr/lib/jvm/jdk-11.0.5/lib"/>
+    <property name="sun.java.command" value="/home/sts/Documents/Workspace/Java/IntegrationTesting/target/surefire/surefirebooter11959708349734292006.jar /home/sts/Documents/Workspace/Java/IntegrationTesting/target/surefire 2020-02-15T19-27-38_132-jvmRun1 surefire1640760722166492515tmp surefire_06062484538930520476tmp"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="/home/sts/Documents/Workspace/Java/IntegrationTesting/target/test-classes:/home/sts/Documents/Workspace/Java/IntegrationTesting/target/classes:/home/sts/.m2/repository/junit/junit/4.11/junit-4.11.jar:/home/sts/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/home/sts/.m2/repository/org/seleniumhq/selenium/selenium-java/3.141.59/selenium-java-3.141.59.jar:/home/sts/.m2/repository/org/seleniumhq/selenium/selenium-api/3.141.59/selenium-api-3.141.59.jar:/home/sts/.m2/repository/org/seleniumhq/selenium/selenium-chrome-driver/3.141.59/selenium-chrome-driver-3.141.59.jar:/home/sts/.m2/repository/org/seleniumhq/selenium/selenium-edge-driver/3.141.59/selenium-edge-driver-3.141.59.jar:/home/sts/.m2/repository/org/seleniumhq/selenium/selenium-firefox-driver/3.141.59/selenium-firefox-driver-3.141.59.jar:/home/sts/.m2/repository/org/seleniumhq/selenium/selenium-ie-driver/3.141.59/selenium-ie-driver-3.141.59.jar:/home/sts/.m2/repository/org/seleniumhq/selenium/selenium-opera-driver/3.141.59/selenium-opera-driver-3.141.59.jar:/home/sts/.m2/repository/org/seleniumhq/selenium/selenium-remote-driver/3.141.59/selenium-remote-driver-3.141.59.jar:/home/sts/.m2/repository/org/seleniumhq/selenium/selenium-safari-driver/3.141.59/selenium-safari-driver-3.141.59.jar:/home/sts/.m2/repository/org/seleniumhq/selenium/selenium-support/3.141.59/selenium-support-3.141.59.jar:/home/sts/.m2/repository/net/bytebuddy/byte-buddy/1.8.15/byte-buddy-1.8.15.jar:/home/sts/.m2/repository/org/apache/commons/commons-exec/1.3/commons-exec-1.3.jar:/home/sts/.m2/repository/com/google/guava/guava/25.0-jre/guava-25.0-jre.jar:/home/sts/.m2/repository/com/google/code/findbugs/jsr305/1.3.9/jsr305-1.3.9.jar:/home/sts/.m2/repository/org/checkerframework/checker-compat-qual/2.0.0/checker-compat-qual-2.0.0.jar:/home/sts/.m2/repository/com/google/errorprone/error_prone_annotations/2.1.3/error_prone_annotations-2.1.3.jar:/home/sts/.m2/repository/com/google/j2objc/j2objc-annotations/1.1/j2objc-annotations-1.1.jar:/home/sts/.m2/repository/org/codehaus/mojo/animal-sniffer-annotations/1.14/animal-sniffer-annotations-1.14.jar:/home/sts/.m2/repository/com/squareup/okhttp3/okhttp/3.11.0/okhttp-3.11.0.jar:/home/sts/.m2/repository/com/squareup/okio/okio/1.14.0/okio-1.14.0.jar:/home/sts/.m2/repository/org/testng/testng/6.8/testng-6.8.jar:/home/sts/.m2/repository/org/beanshell/bsh/2.0b4/bsh-2.0b4.jar:/home/sts/.m2/repository/com/beust/jcommander/1.27/jcommander-1.27.jar:/home/sts/.m2/repository/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar:/home/sts/.m2/repository/com/github/javafaker/javafaker/1.0.1/javafaker-1.0.1.jar:/home/sts/.m2/repository/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5.jar:/home/sts/.m2/repository/org/yaml/snakeyaml/1.23/snakeyaml-1.23-android.jar:/home/sts/.m2/repository/com/github/mifmif/generex/1.0.2/generex-1.0.2.jar:/home/sts/.m2/repository/dk/brics/automaton/automaton/1.11-8/automaton-1.11-8.jar:/home/sts/.m2/repository/org/yaml/snakeyaml/1.21/snakeyaml-1.21.jar:"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="/home/sts"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2019-10-15"/>
+    <property name="java.home" value="/usr/lib/jvm/jdk-11.0.5"/>
+    <property name="file.separator" value="/"/>
+    <property name="basedir" value="/home/sts/Documents/Workspace/Java/IntegrationTesting"/>
+    <property name="java.vm.compressedOopsMode" value="32-bit"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment"/>
+    <property name="surefire.real.class.path" value="/home/sts/Documents/Workspace/Java/IntegrationTesting/target/surefire/surefirebooter11959708349734292006.jar"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="11.0.5+10-LTS"/>
+    <property name="user.name" value="sts"/>
+    <property name="path.separator" value=":"/>
+    <property name="os.version" value="5.3.0-28-generic"/>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+    <property name="java.vendor.version" value="18.9"/>
+    <property name="localRepository" value="/home/sts/.m2/repository"/>
+    <property name="java.vendor.url.bug" value="http://bugreport.java.com/bugreport/"/>
+    <property name="java.io.tmpdir" value="/tmp"/>
+    <property name="java.version" value="11.0.5"/>
+    <property name="user.dir" value="/home/sts/Documents/Workspace/Java/IntegrationTesting"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="java.awt.printerjob" value="sun.print.PSPrinterJob"/>
+    <property name="sun.os.patch.level" value="unknown"/>
+    <property name="java.library.path" value="/usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="java.vm.version" value="11.0.5+10-LTS"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="java.class.version" value="55.0"/>
+  </properties>
+  <testcase name="beforeClass" classname="example.BlogManagementPageTest" time="0.307">
+    <failure message="&#10;Parameter &apos;os&apos; is required by @Configuration on method beforeClass but has not been marked @Optional or defined&#10;" type="org.testng.TestNGException">org.testng.TestNGException: 
+
+Parameter 'os' is required by @Configuration on method beforeClass but has not been marked @Optional or defined
+
+</failure>
+  </testcase>
+  <testcase name="shouldDeleteASpecificBlogItemWhenClickDeleteButtonOnTheBlogItem" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDeleteASpecificBlogItemWhenClickDeleteButtonOnTheBlogItem" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDeleteASpecificBlogItemWhenClickDeleteButtonOnTheBlogItem" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDeleteASpecificBlogItemWhenClickDeleteButtonOnTheBlogItem" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementAfterChangeDifferentPage" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementAfterChangeDifferentPage" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementAfterChangeDifferentPage" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementAfterChangeDifferentPage" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementAfterClickLimitChangeElement" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementAfterClickLimitChangeElement" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementAfterClickLimitChangeElement" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementAfterClickLimitChangeElement" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementAfterClickRefreshBtn" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementAfterClickRefreshBtn" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementAfterClickRefreshBtn" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementAfterClickRefreshBtn" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementAfterClickTheFirstPageBtn" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementAfterClickTheFirstPageBtn" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementAfterClickTheFirstPageBtn" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementAfterClickTheFirstPageBtn" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementAfterClickTheLastpageBtn" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementAfterClickTheLastpageBtn" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementAfterClickTheLastpageBtn" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementAfterClickTheLastpageBtn" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementAfterEndDateFilterChange" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementAfterInitialFetch" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementAfterInitialFetch" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementAfterInitialFetch" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementAfterInitialFetch" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementAfterKeywordFilterChange" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementAfterStartDateFilterChange" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementAfterTagFilterChange" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementPageHeading" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementPageHeading" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementPageHeading" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementPageHeading" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementSortedByClapAsc" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementSortedByClapDesc" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementSortedByDateAsc" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementSortedByDateDesc" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementSortedByTitleAsc" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogManagementSortedByTitleDesc" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayInitialFetchSuccessMessageSuccess" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayInitialFetchSuccessMessageSuccess" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayInitialFetchSuccessMessageSuccess" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayInitialFetchSuccessMessageSuccess" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplaySortAndFilterOverlaySettingWhenClickSettingBtn" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplaySortAndFilterOverlaySettingWhenClickSettingBtn" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteUserToUpdateBlogPageWhenClickEditBlogLinkOfSpecificBlogItem" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteUserToUpdateBlogPageWhenClickEditBlogLinkOfSpecificBlogItem" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteUserToUpdateBlogPageWhenClickEditBlogLinkOfSpecificBlogItem" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteUserToUpdateBlogPageWhenClickEditBlogLinkOfSpecificBlogItem" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldrouteUsertoNewBlogpageWhenClickNewBlogLink" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldrouteUsertoNewBlogpageWhenClickNewBlogLink" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldrouteUsertoNewBlogpageWhenClickNewBlogLink" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldrouteUsertoNewBlogpageWhenClickNewBlogLink" classname="example.BlogManagementPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="afterClass" classname="example.BlogManagementPageTest" time="0.002">
+    <failure type="java.lang.NullPointerException">java.lang.NullPointerException
+</failure>
+    <system-out><![CDATA[After Class
+]]></system-out>
+  </testcase>
+  <testcase name="beforeClass" classname="example.UpdateBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayPublishedBlogAtBlogListPage" classname="example.UpdateBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.UpdateBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.UpdateBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.UpdateBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.UpdateBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.UpdateBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.UpdateBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.UpdateBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.UpdateBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.UpdateBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.UpdateBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.UpdateBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.UpdateBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.UpdateBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.UpdateBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayUpdateBlogPageHeading" classname="example.UpdateBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayUpdateBlogPageHeading" classname="example.UpdateBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayUpdateBlogPageHeading" classname="example.UpdateBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayUpdateBlogPageHeading" classname="example.UpdateBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldNotDisplayNonPublishedBlogAtBlogListPage" classname="example.UpdateBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldPublishUpdateBlog" classname="example.UpdateBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldPublishUpdateBlog" classname="example.UpdateBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldPublishUpdateBlog" classname="example.UpdateBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldPublishUpdateBlog" classname="example.UpdateBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldSaveUpdateBlog" classname="example.UpdateBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldSaveUpdateBlog" classname="example.UpdateBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldSaveUpdateBlog" classname="example.UpdateBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldSaveUpdateBlog" classname="example.UpdateBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="afterClass" classname="example.UpdateBlogPageTest" time="0.002">
+    <failure type="java.lang.NullPointerException">java.lang.NullPointerException
+</failure>
+    <system-out><![CDATA[After Class
+]]></system-out>
+  </testcase>
+  <testcase name="beforeClass" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListAfterChangeDifferentPage" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListAfterChangeDifferentPage" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListAfterChangeDifferentPage" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListAfterChangeDifferentPage" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListAfterClickLimitChangeElement" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListAfterClickLimitChangeElement" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListAfterClickLimitChangeElement" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListAfterClickLimitChangeElement" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListAfterClickRefreshBtn" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListAfterClickRefreshBtn" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListAfterClickRefreshBtn" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListAfterClickRefreshBtn" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListAfterClickTheFirstPageBtn" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListAfterClickTheFirstPageBtn" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListAfterClickTheFirstPageBtn" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListAfterClickTheFirstPageBtn" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListAfterClickTheLastpageBtn" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListAfterClickTheLastpageBtn" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListAfterClickTheLastpageBtn" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListAfterClickTheLastpageBtn" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListAfterEndDateFilterChange" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListAfterInitialFetch" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListAfterInitialFetch" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListAfterInitialFetch" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListAfterInitialFetch" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListAfterKeywordFilterChange" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListAfterStartDateFilterChange" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListAfterTagFilterChange" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListPageHeading" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListPageHeading" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListPageHeading" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListPageHeading" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListSortedByClapAsc" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListSortedByClapDesc" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListSortedByDateAsc" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListSortedByDateDesc" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListSortedByTitleAsc" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogListSortedByTitleDesc" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayInitialFetchSuccessMessageSuccess" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayInitialFetchSuccessMessageSuccess" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayInitialFetchSuccessMessageSuccess" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayInitialFetchSuccessMessageSuccess" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplaySortAndFilterOverlaySettingWhenClickSettingBtn" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplaySortAndFilterOverlaySettingWhenClickSettingBtn" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldGuideUserToSignupPageAfterClickJoinBtn" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldGuideUserToSignupPageAfterClickJoinBtn" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldGuideUserToSignupPageAfterClickJoinBtnForSmallScreenSize" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldGuideUserToSignupPageAfterClickJoinBtnForSmallScreenSize" classname="example.BlogListPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="afterClass" classname="example.BlogListPageTest" time="0.001">
+    <failure type="java.lang.NullPointerException">java.lang.NullPointerException
+</failure>
+    <system-out><![CDATA[After Class
+]]></system-out>
+  </testcase>
+  <testcase name="beforeClass" classname="example.BlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogAtBlogPage" classname="example.BlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogAtBlogPage" classname="example.BlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogAtBlogPage" classname="example.BlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogAtBlogPage" classname="example.BlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="afterClass" classname="example.BlogPageTest" time="0">
+    <failure type="java.lang.NullPointerException">java.lang.NullPointerException
+</failure>
+    <system-out><![CDATA[After Class
+]]></system-out>
+  </testcase>
+  <testcase name="beforeClass" classname="example.HomePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplay5Blog_itemAtInitialLoad" classname="example.HomePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplay5Blog_itemAtInitialLoad" classname="example.HomePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplay5Blog_itemAtInitialLoad" classname="example.HomePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplay5Blog_itemAtInitialLoad" classname="example.HomePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldFetchPopularBlogWhenClickPopularBtn" classname="example.HomePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldFetchPopularBlogWhenClickPopularBtn" classname="example.HomePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldFetchPopularBlogWhenClickPopularBtn" classname="example.HomePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldFetchPopularBlogWhenClickPopularBtn" classname="example.HomePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteSearchResultPageWhenSearchInHome" classname="example.HomePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteSearchResultPageWhenSearchInHome" classname="example.HomePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteSearchResultPageWhenSearchInHome" classname="example.HomePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteSearchResultPageWhenSearchInHome" classname="example.HomePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteSignupPageWhenJoinBtnIsClicked" classname="example.HomePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteSignupPageWhenJoinBtnIsClicked" classname="example.HomePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteSignupPageWhenJoinBtnIsClicked" classname="example.HomePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteSignupPageWhenJoinBtnIsClicked" classname="example.HomePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="afterClass" classname="example.HomePageTest" time="0">
+    <failure type="java.lang.NullPointerException">java.lang.NullPointerException
+</failure>
+    <system-out><![CDATA[After Class
+]]></system-out>
+  </testcase>
+  <testcase name="beforeClass" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayConfirmInputEmptyValidationErrorWhenItIsFocused" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayConfirmInputEmptyValidationErrorWhenItIsFocused" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayConfirmInputEmptyValidationErrorWhenItIsFocused" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayConfirmInputEmptyValidationErrorWhenItIsFocused" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayEmailInputEmptyValidationErrorWhenItIsFocused" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayEmailInputEmptyValidationErrorWhenItIsFocused" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayEmailInputEmptyValidationErrorWhenItIsFocused" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayEmailInputEmptyValidationErrorWhenItIsFocused" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayFetchErrorMessageWhenProvidedEmailDoesNotRegistered" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayFetchErrorMessageWhenProvidedEmailDoesNotRegistered" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayFetchErrorMessageWhenProvidedEmailDoesNotRegistered" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayFetchErrorMessageWhenProvidedEmailDoesNotRegistered" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayFetchErrorMessageWhenProvidedPasswordIsInvalid" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayFetchErrorMessageWhenProvidedPasswordIsInvalid" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayFetchErrorMessageWhenProvidedPasswordIsInvalid" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayFetchErrorMessageWhenProvidedPasswordIsInvalid" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayPasswordInputEmptyValidationErrorWhenItIsFocused" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayPasswordInputEmptyValidationErrorWhenItIsFocused" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayPasswordInputEmptyValidationErrorWhenItIsFocused" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayPasswordInputEmptyValidationErrorWhenItIsFocused" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldNotAllowToSubmitWhenAtLeastOneError" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldNotAllowToSubmitWhenAtLeastOneError" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldNotAllowToSubmitWhenAtLeastOneError" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldNotAllowToSubmitWhenAtLeastOneError" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteHomePageWhenSuccessfullyLogin" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteHomePageWhenSuccessfullyLogin" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteHomePageWhenSuccessfullyLogin" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteHomePageWhenSuccessfullyLogin" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteSignupPageWhenClickTheLink" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteSignupPageWhenClickTheLink" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteSignupPageWhenClickTheLink" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteSignupPageWhenClickTheLink" classname="example.LoginPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="afterClass" classname="example.LoginPageTest" time="0">
+    <failure type="java.lang.NullPointerException">java.lang.NullPointerException
+</failure>
+    <system-out><![CDATA[After Class
+]]></system-out>
+  </testcase>
+  <testcase name="beforeClass" classname="example.HeaderComponentTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayBlogsNavMenuItemInHeader" classname="example.HeaderComponentTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayLoginNavMenuItemInHeader" classname="example.HeaderComponentTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayNavMenuToggleIconInHeader" classname="example.HeaderComponentTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayNavMenuToggleIconInHeader" classname="example.HeaderComponentTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayNavMenuToggleIconInHeader" classname="example.HeaderComponentTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplaySignupNavMenuItemInHeader" classname="example.HeaderComponentTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayTitleInHeader" classname="example.HeaderComponentTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayTitleInHeader" classname="example.HeaderComponentTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayTitleInHeader" classname="example.HeaderComponentTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayTitleInHeader" classname="example.HeaderComponentTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteToBlogListPageWhenClickBlogListLinkAfterOpenMenuBar" classname="example.HeaderComponentTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteToBlogListPageWhenClickBlogListLinkAfterOpenMenuBar" classname="example.HeaderComponentTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteToBlogListPageWhenClickBlogListLinkAfterOpenMenuBar" classname="example.HeaderComponentTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteToBlogListPageWhenClickBlogsLinkInHeader" classname="example.HeaderComponentTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteToLoginPageWhenClickLoginLinkAfterOpenMenuBar" classname="example.HeaderComponentTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteToLoginPageWhenClickLoginLinkAfterOpenMenuBar" classname="example.HeaderComponentTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteToLoginPageWhenClickLoginLinkAfterOpenMenuBar" classname="example.HeaderComponentTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteToLoginPageWhenClickLoginLinkInHeader" classname="example.HeaderComponentTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteToSignupPageWhenClickSignupLinkAfterOpenMenuBar" classname="example.HeaderComponentTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteToSignupPageWhenClickSignupLinkAfterOpenMenuBar" classname="example.HeaderComponentTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteToSignupPageWhenClickSignupLinkAfterOpenMenuBar" classname="example.HeaderComponentTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteToSignupPageWhenClickSignupLinkInHeader" classname="example.HeaderComponentTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="afterClass" classname="example.HeaderComponentTest" time="0">
+    <failure type="java.lang.NullPointerException">java.lang.NullPointerException
+</failure>
+    <system-out><![CDATA[After Class
+]]></system-out>
+  </testcase>
+  <testcase name="beforeClass" classname="example.NewBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayNewBlogPageHeading" classname="example.NewBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayNewBlogPageHeading" classname="example.NewBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayNewBlogPageHeading" classname="example.NewBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayNewBlogPageHeading" classname="example.NewBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.NewBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.NewBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.NewBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.NewBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.NewBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.NewBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.NewBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.NewBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.NewBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.NewBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.NewBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.NewBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.NewBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.NewBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayPublishedBlogAtBlogListPage" classname="example.NewBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldNotDisplayNonPublishedBlogAtBlogListPage" classname="example.NewBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldPublishNewBlog" classname="example.NewBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldPublishNewBlog" classname="example.NewBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldPublishNewBlog" classname="example.NewBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldPublishNewBlog" classname="example.NewBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldSaveNewBlog" classname="example.NewBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldSaveNewBlog" classname="example.NewBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldSaveNewBlog" classname="example.NewBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldSaveNewBlog" classname="example.NewBlogPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="afterClass" classname="example.NewBlogPageTest" time="0.001">
+    <failure type="java.lang.NullPointerException">java.lang.NullPointerException
+</failure>
+    <system-out><![CDATA[After Class
+]]></system-out>
+  </testcase>
+  <testcase name="beforeClass" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldCreateAvatarImage" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldCreateAvatarImage" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldCreateAvatarImage" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldCreateAvatarImage" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="logout" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDeleteExistingAvatarImage" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDeleteExistingAvatarImage" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDeleteExistingAvatarImage" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDeleteExistingAvatarImage" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayAllUPdateUserInfoAfterAllUserInfochnageRequestWithAvatarImage" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayAllUPdateUserInfoAfterAllUserInfochnageRequestWithAvatarImage" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayAllUPdateUserInfoAfterAllUserInfochnageRequestWithAvatarImage" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayAllUPdateUserInfoAfterAllUserInfochnageRequestWithAvatarImage" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayAllUpdatedUserInfoAfterAllUserinfoChangeRequest" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayAllUpdatedUserInfoAfterAllUserinfoChangeRequest" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayAllUpdatedUserInfoAfterAllUserinfoChangeRequest" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayAllUpdatedUserInfoAfterAllUserinfoChangeRequest" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayProfilePageHeading" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayProfilePageHeading" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayProfilePageHeading" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayProfilePageHeading" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayUpdatedEmailAfterOnlyEmailChangeRequest" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayUpdatedEmailAfterOnlyEmailChangeRequest" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayUpdatedEmailAfterOnlyEmailChangeRequest" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayUpdatedEmailAfterOnlyEmailChangeRequest" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayUpdatedNameAfterOnlyNameChangeRequest" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayUpdatedNameAfterOnlyNameChangeRequest" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayUpdatedNameAfterOnlyNameChangeRequest" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayUpdatedNameAfterOnlyNameChangeRequest" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayUpdatedPasswordAfterOnlyPasswordChangeRequest" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayUpdatedPasswordAfterOnlyPasswordChangeRequest" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayUpdatedPasswordAfterOnlyPasswordChangeRequest" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayUpdatedPasswordAfterOnlyPasswordChangeRequest" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteUserBlogManagementPageWhenClickTheLink" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteUserBlogManagementPageWhenClickTheLink" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteUserBlogManagementPageWhenClickTheLink" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteUserBlogManagementPageWhenClickTheLink" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldUnchangeExistingAvatarImage" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldUnchangeExistingAvatarImage" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldUnchangeExistingAvatarImage" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldUnchangeExistingAvatarImage" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldUpdateExistingAvatarImageWithNewOne" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldUpdateExistingAvatarImageWithNewOne" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldUpdateExistingAvatarImageWithNewOne" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldUpdateExistingAvatarImageWithNewOne" classname="example.ProfilePageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="afterClass" classname="example.ProfilePageTest" time="0.001">
+    <failure type="java.lang.NullPointerException">java.lang.NullPointerException
+</failure>
+    <system-out><![CDATA[After Class
+]]></system-out>
+  </testcase>
+  <testcase name="beforeClass" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayConfirmInputEmptyValidationErrorWhenItIsFocused" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayConfirmInputEmptyValidationErrorWhenItIsFocused" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayConfirmInputEmptyValidationErrorWhenItIsFocused" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayConfirmInputEmptyValidationErrorWhenItIsFocused" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayEmailInputEmptyValidationErrorWhenItIsFocused" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayEmailInputEmptyValidationErrorWhenItIsFocused" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayEmailInputEmptyValidationErrorWhenItIsFocused" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayEmailInputEmptyValidationErrorWhenItIsFocused" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayNameInputEmptyValidationErrorWhenItIsFocused" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayNameInputEmptyValidationErrorWhenItIsFocused" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayNameInputEmptyValidationErrorWhenItIsFocused" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayNameInputEmptyValidationErrorWhenItIsFocused" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayPasswordInputEmptyValidationErrorWhenItIsFocused" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayPasswordInputEmptyValidationErrorWhenItIsFocused" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayPasswordInputEmptyValidationErrorWhenItIsFocused" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayPasswordInputEmptyValidationErrorWhenItIsFocused" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayUserAlreadyExistMessageWhenEmailAlreadyExist" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayUserAlreadyExistMessageWhenEmailAlreadyExist" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayUserAlreadyExistMessageWhenEmailAlreadyExist" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldDisplayUserAlreadyExistMessageWhenEmailAlreadyExist" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldNotAllowToSubmitWhenAtLeastOneError" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldNotAllowToSubmitWhenAtLeastOneError" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldNotAllowToSubmitWhenAtLeastOneError" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldNotAllowToSubmitWhenAtLeastOneError" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldNotDisplayAnyValidationErrorMessageWhenInitialLoad" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldNotDisplayAnyValidationErrorMessageWhenInitialLoad" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldNotDisplayAnyValidationErrorMessageWhenInitialLoad" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldNotDisplayAnyValidationErrorMessageWhenInitialLoad" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteHomePageWhenSuccessfullySignup" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteHomePageWhenSuccessfullySignup" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteHomePageWhenSuccessfullySignup" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteHomePageWhenSuccessfullySignup" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteLoginPageWhenClickTheLink" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteLoginPageWhenClickTheLink" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteLoginPageWhenClickTheLink" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="shouldRouteLoginPageWhenClickTheLink" classname="example.SignupPageTest" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="afterClass" classname="example.SignupPageTest" time="0.001">
+    <failure type="java.lang.NullPointerException">java.lang.NullPointerException
+</failure>
+    <system-out><![CDATA[After Class
+]]></system-out>
+  </testcase>
+</testsuite>
