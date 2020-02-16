@@ -10,6 +10,7 @@ import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
 import { AiOutlineFileAdd } from 'react-icons/ai'
 import { Link } from 'react-router-dom';
 import { useRouteMatch } from 'react-router';
+import { FetchContextEnum } from 'ui/Content/Setting/BlogManagement/BlogManagement';
 
 const BlogListController: React.FunctionComponent<BlogListControllerPropType> = (props: BlogListControllerPropType) => {
 
@@ -17,12 +18,29 @@ const BlogListController: React.FunctionComponent<BlogListControllerPropType> = 
   const { auth } = useAuthContext()
   const { url, path } = useRouteMatch()
 
+  const hasFetchContext: boolean = (props.curFetchContext) ? true : false
+
   return (
     <div className="blog-list-controller-wrapper">
-      <FetchStatus
-        currentFetchStatus={props.currentFetchStatus}
-        setFetchStatus={props.setFetchStatus}
-      />
+      {(!hasFetchContext && 
+        <FetchStatus
+          currentFetchStatus={props.currentFetchStatus}
+          setFetchStatus={props.setFetchStatus}
+        />
+      )}
+      {(hasFetchContext && props.curFetchContext === FetchContextEnum.FETCH &&
+        <FetchStatus
+          currentFetchStatus={props.currentFetchStatus}
+          setFetchStatus={props.setFetchStatus}
+        />
+      )}
+      {(hasFetchContext && props.curFetchContext === FetchContextEnum.DELETE &&
+        <FetchStatus
+          currentFetchStatus={props.currentDeleteFetchStatus}
+          setFetchStatus={props.setDeleteFetchStatus}
+          fetchingMsg={"deleting"}
+        />
+      )}
       <div className="icon-wrapper-row blog-list-controller-refresh">
         {(props.currentFetchStatus.status !== ResponseResultStatusEnum.FETCHING &&
           <div className="icon-wrapper" onClick={props.handleRefreshClickEvent} role="refresh-icon">

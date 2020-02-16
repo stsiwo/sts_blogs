@@ -26,6 +26,11 @@ import BlogItem from 'Components/BlogItem/BlogItem';
 import { getBlogTestData } from '../../../../../tests/data/BlogFaker';
 var debug = require('debug')('ui:BlogManagement')
 
+export enum FetchContextEnum {
+  FETCH,
+  DELETE
+}
+
 const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
 
 
@@ -50,6 +55,7 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   const [currentRefreshCount, setRefreshCount] = React.useState<number>(null)
   // diable cache when refersh request
   const [isRefresh, setIsRefresh] = React.useState<boolean>(false)
+  const [curFetchContext, setFetchContext] = React.useState<FetchContextEnum>(FetchContextEnum.FETCH)
 
   const queryString = {
     page: currentPaginationStatus.page,
@@ -66,6 +72,7 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
     // might can move to inside eh of refresh click
     
     debug("start send blog fetch request")
+    setFetchContext(FetchContextEnum.FETCH)
     sendBlogsFetchRequest({
       path: '/users/' + userId + '/blogs',
       method: RequestMethodEnum.GET,
@@ -110,6 +117,7 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
     if (result) {
       console.log("confirm is OK")
       const blogId = e.currentTarget.getAttribute('data-blog-id')
+      setFetchContext(FetchContextEnum.DELETE)
       sendDeleteRequest({
         path: '/blogs/' + blogId,
         method: RequestMethodEnum.DELETE,
@@ -164,21 +172,15 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
           handleFilterSortNavClickEvent={handleFilterSortNavClickEvent}
           currentPaginationStatus={currentPaginationStatus}
           setPaginationStatus={setPaginationStatus}
-        />
-
-        {/** how to deal with another request rather than initial fetch **/}
-        <FetchStatus
-          currentFetchStatus={currentDeleteRequestStatus}
-          setFetchStatus={setDeleteRequestStatus}
-          fetchingMsg={'deleting...'}
-          successMsg={'ok'}
-          failureMsg={'failed'}
+          currentDeleteFetchStatus={currentDeleteRequestStatus}
+          setDeleteFetchStatus={setDeleteRequestStatus}
+          curFetchContext={curFetchContext}
         />
         <div className="blog-management-items-wrapper">
           {(NODE_ENV === 'development' && currentBlogs.length !== 0 && renderBlogs(currentBlogs))}
           {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FETCHING && <p role="fetching">fetching ... </p>)}
           {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FAILURE && <p>sorry.. blogs are not currently available...</p>)}
-          {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.SUCCESS && currentBlogs.length === 0 && <p>there is no blog based on the your sort & filter</p>)}
+          {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.SUCCESS && currentBlogs.length === 0 && <p role="no-search-result-title">there is no blog based on the your sort & filter</p>)}
           {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.SUCCESS && currentBlogs.length !== 0 && renderBlogs(currentBlogs))}
         </div>
         <Pagination

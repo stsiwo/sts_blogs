@@ -147,8 +147,14 @@ const BlogItem: React.FunctionComponent<BlogItemPropType> = (props: BlogItemProp
   }
 
   if (!isOverlay) {
+    /**
+     * a tag is not scrolled into view issue: selenium
+     *  - even if a tag is totally visible from window, selenium complains about this
+     *  - when i check devtool (chrome), a tag is not highlihgted as blue so this is the reason??
+     *  - as workaround, make a tag style inline-block
+     **/
     return (
-      <Link to={`/blogs/${props.blog.id}`} className="black-link" key={props.blog.id} role="blog-item">
+      <Link to={`/blogs/${props.blog.id}`} className="black-link blog-link" key={props.blog.id} role="blog-item">
         {renderBlogItem()}
       </Link >
     );

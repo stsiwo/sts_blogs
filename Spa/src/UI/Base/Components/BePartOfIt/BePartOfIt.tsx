@@ -10,7 +10,7 @@ const BePartOfIt: React.FunctionComponent<BePartOfItPropType> = (props: BePartOf
       <h2 className="be-part-of-it-title">Be Part of It</h2>
       <p className="be-part-of-it-desc">Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
       <Link to="/signup" className="link">
-        <button className="btn">Join</button>
+        <button className="btn" role="join-link">Join</button>
       </Link>
     </div>
   );

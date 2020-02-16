@@ -140,6 +140,26 @@ def add_test_users():
                     )
                 )
 
+        db.session.add(
+                User(
+                    id=str(uuid.uuid4()),
+                    name="test firefox",
+                    email="test@firefox.com",
+                    password="test_firefox",
+                    roles=memberRole
+                    )
+                )
+
+        db.session.add(
+                User(
+                    id=str(uuid.uuid4()),
+                    name="test chrome",
+                    email="test@chrome.com",
+                    password="test_chrome",
+                    roles=memberRole
+                    )
+                )
+
         db.session.commit()
 
 
@@ -149,6 +169,8 @@ def add_test_blogs():
         memberUser = db.session.query(User).filter(User.name == 'test member').first()
         adminUser = db.session.query(User).filter(User.name == 'test admin').first()
         memberUser1 = db.session.query(User).filter(User.name == 'test member1').first()
+        memberFirefox = db.session.query(User).filter(User.name == 'test firefox').first()
+        memberChrome = db.session.query(User).filter(User.name == 'test chrome').first()
         jsTag = db.session.query(Tag).filter(Tag.name == 'js').first()
         reactTag = db.session.query(Tag).filter(Tag.name == 'react').first()
 
@@ -159,7 +181,7 @@ def add_test_blogs():
             db.session.add(generateBlogModelV2(user=memberUser, public=True))
 
         for i in range(50):
-            db.session.add(generateBlogModelV2(user=adminUser))
+            db.session.add(generateBlogModelV2(user=adminUser, tags=[jsTag, reactTag]))
 
         for i in range(50):
             db.session.add(generateBlogModelV2(user=adminUser, public=True))
@@ -168,59 +190,75 @@ def add_test_blogs():
             db.session.add(generateBlogModelV2(user=memberUser1))
 
         for i in range(50):
-            db.session.add(generateBlogModelV2(user=memberUser1, public=True))
+            db.session.add(generateBlogModelV2(user=memberUser1, public=True, tags=[jsTag, reactTag]))
 
-        # sort & filter dedicated blogs
-        # keyword (title and subtitle)
-        db.session.add(generateBlogModelV2(
-            title="keyword",
-            user=memberUser1,
-            public=True
-            ))
+        for i in range(50):
+            db.session.add(generateBlogModelV2(user=memberFirefox))
 
-        # start date (createdDate)
-        db.session.add(generateBlogModelV2(
-            createdDate=datetime.datetime(1550, 5, 1, 0, 0, 0, 0),
-            user=memberUser1,
-            public=True
-            ))
+        for i in range(50):
+            db.session.add(generateBlogModelV2(user=memberFirefox, public=True))
 
-        # end date (createdDate)
-        db.session.add(generateBlogModelV2(
-            createdDate=datetime.datetime(2050, 6, 1, 0, 0, 0, 0),
-            user=memberUser1,
-            public=True
-            ))
+        for i in range(50):
+            db.session.add(generateBlogModelV2(user=memberChrome, tags=[jsTag, reactTag]))
 
-        # sort title (asc)
-        db.session.add(generateBlogModelV2(
-            title="aaaaa",
-            user=memberUser1,
-            public=True
-            ))
+        for i in range(50):
+            db.session.add(generateBlogModelV2(user=memberChrome, public=True, tags=[jsTag, reactTag]))
 
-        # sort title (desc)
-        db.session.add(generateBlogModelV2(
-            title="zzzz",
-            user=memberUser1,
-            public=True
-            ))
+        driverList: [User] = [memberFirefox, memberChrome]
 
-        # sort clap (max = 1000)
-        db.session.add(generateBlogModelV2(
-            clap=1000,
-            user=memberUser1,
-            public=True
-            ))
+        # you don't need to define test specific data for testing specific test case
+        for user in driverList:
+            # sort & filter dedicated blogs
+            # keyword (title and subtitle)
+            db.session.add(generateBlogModelV2(
+                title="keyword",
+                user=user,
+                public=True
+                ))
 
-        # sort clap (min = 0) use existing default blog
+            # start date (createdDate)
+            db.session.add(generateBlogModelV2(
+                createdDate=datetime.datetime(1550, 5, 1, 0, 0, 0, 0),
+                user=user,
+                public=True
+                ))
 
-        # filter tag
-        db.session.add(generateBlogModelV2(
-            tags=[jsTag, reactTag],
-            user=memberUser1,
-            public=True
-            ))
+            # end date (createdDate)
+            db.session.add(generateBlogModelV2(
+                createdDate=datetime.datetime(2050, 6, 1, 0, 0, 0, 0),
+                user=user,
+                public=True
+                ))
+
+            # sort title (asc)
+            db.session.add(generateBlogModelV2(
+                title="aaaaa",
+                user=user,
+                public=True
+                ))
+
+            # sort title (desc)
+            db.session.add(generateBlogModelV2(
+                title="zzzz",
+                user=user,
+                public=True
+                ))
+
+            # sort clap (max = 1000)
+            db.session.add(generateBlogModelV2(
+                clap=1000,
+                user=user,
+                public=True
+                ))
+
+            # sort clap (min = 0) use existing default blog
+
+            # filter tag
+            db.session.add(generateBlogModelV2(
+                tags=[jsTag, reactTag],
+                user=user,
+                public=True
+                ))
 
         db.session.commit()
 

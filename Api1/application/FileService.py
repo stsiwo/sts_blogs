@@ -18,11 +18,13 @@ class FileService(object):
     def saveImageFileToDir(self, file: FileStorage, userId: str) -> str:
         return self._saveOrUpdateImageToDir(file, userId)
 
-    def deleteImageFile(self, userId: str, originalFilePath: str) -> bool:
+    def deleteImageFile(self, userId: str, originalFilePath: str = None) -> bool:
         # extract file name from path
-        originalFileName = self._extractFileName(originalFilePath)
-        # remove existing image if isUpdate is True
-        os.remove(os.path.join(app.config['UPLOAD_FOLDER'], str(userId), originalFileName))
+        # add this condition because selenium testing sometimes cause delete image request before add image request completed
+        if originalFilePath is not None:
+            originalFileName = self._extractFileName(originalFilePath)
+            # remove existing image if isUpdate is True
+            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], str(userId), originalFileName))
 
     def _allowed_file(self, filename: str) -> bool:
         return '.' in filename and filename.rsplit('.', 1)[1].lower() in self._allowedExtension
