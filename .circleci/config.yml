@@ -88,7 +88,7 @@ jobs:
           name: Excute Acceptance Testing (release/* branch only)
           command: |
             echo 'Excute Acceptance Testing (release/* branch only)'
-            docker-compose --version
+            sudo apt-get install --only-upgrade docker-compose
             docker-compose -f docker-compose.seleniumgrid.yml up -d
             cd ./IntegrationTesting
             mvn test
