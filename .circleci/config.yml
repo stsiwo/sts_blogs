@@ -9,7 +9,6 @@ executors:
   jdk-executor:
     docker:
       - image: circleci/openjdk
-    working_directory: /app
 
 jobs:
   build:
