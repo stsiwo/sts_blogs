@@ -6,9 +6,9 @@ executors:
       - image: stsiwo/circleci-base:1.05
     working_directory: /app
   # use this since pre-built image from circleci installed old verison of docker-compose and can't upgrade with 'circleci' user
-  docker-executor:
+  jdk-executor:
     docker:
-      - image: ubuntu:16.04
+      - image: circleci/openjdk
     working_directory: /app
 
 jobs:
@@ -80,7 +80,7 @@ jobs:
             for i in $(gcloud compute os-login ssh-keys list | grep -v FINGERPRINT); do echo $i; gcloud compute os-login ssh-keys remove --key $i; done
             gcloud compute scp --quiet ./docker-compose.staging.yml ./trigger.txt my-15th-startup-test:/home/app --zone us-central1-a 
   acceptance-testing:
-    executor: docker-executor
+    executor: jdk-executor
     steps:
       - checkout
       - setup_remote_docker
