@@ -3,7 +3,7 @@ version: 2.1
 executors:
   my-executor:
     docker:
-      - image: stsiwo/circleci-base:1.04 
+      - image: stsiwo/circleci-base:1.05
     working_directory: /app
 
 jobs:
@@ -30,8 +30,8 @@ jobs:
           name: Run API service testing (feature/* branch only)
           command: |
             echo 'Run API service testing (feature/* branch only)'
-  staging-deployment:
-    executor: my-executor
+  build-push-src-image:
+    machine: true
     steps:
       - checkout
       - run:
@@ -54,6 +54,10 @@ jobs:
             docker tag sts-blog-db:$APP_VERSION stsiwo/sts-blog-db:$APP_VERSION
             docker tag sts-blog-db stsiwo/sts-blog-db
             docker push stsiwo/sts-blog-db
+  staging-deployment:
+    executor: my-executor
+    steps:
+      - checkout
       - run:
           name: Create GCloud Service Key Files
           command: |
@@ -108,7 +112,14 @@ workflows:
             branches:
               only:
                 - /feature\/.*/
+      - build-push-src-image:
+          filters:
+            branches:
+              only:
+                - /feature\/.*/
       - staging-deployment:
+          requires:
+            - build-push-src-image
           filters:
             branches:
               only:
