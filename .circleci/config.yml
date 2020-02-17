@@ -31,6 +31,7 @@ jobs:
           command: |
             echo 'Run API service testing (feature/* branch only)'
   build-push-src-image:
+    # this allow to use 'docker' in this job
     machine: true
     steps:
       - checkout
@@ -74,13 +75,28 @@ jobs:
             for i in $(gcloud compute os-login ssh-keys list | grep -v FINGERPRINT); do echo $i; gcloud compute os-login ssh-keys remove --key $i; done
             gcloud compute scp --quiet ./docker-compose.staging.yml ./trigger.txt my-15th-startup-test:/home/app --zone us-central1-a 
   acceptance-testing:
-    docker:
-      - image: alpine:3.7
+    # this allow to use 'docker' in this job
+    machine: true
     steps:
+      - checkout
+      - run: 
+          name: Install dockerize for waiting for Selenium Hub Container is up
+          command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+          environment:
+            DOCKERIZE_VERSION: v0.3.0
+      - run:
+          name: Wait for Selenium Hub & Starging Server Update
+          command: |
+            dockerize -wait http://localhost:4444 -timeout 1m
+            dockerize -wait https://dev.stsiwo.com -timeout 1m
       - run:
           name: Excute Acceptance Testing (release/* branch only)
           command: |
             echo 'Excute Acceptance Testing (release/* branch only)'
+            docker-compose -f docker-compose.seleniumgrid.yml up -d
+            cd ./IntegrationTesting
+            mvn test
+            
   production-deployment:
     docker:
       - image: alpine:3.7
@@ -112,21 +128,21 @@ workflows:
             branches:
               only:
                 - /feature\/.*/
-      - build-push-src-image:
-          filters:
-            branches:
-              only:
-                - /release\/.*/
-      - staging-deployment:
-          requires:
-            - build-push-src-image
-          filters:
-            branches:
-              only:
-                - /release\/.*/
+                  #       - build-push-src-image:
+                  #           filters:
+                  #             branches:
+                  #               only:
+                  #                 - /release\/.*/
+                  #       - staging-deployment:
+                  #           requires:
+                  #             - build-push-src-image
+                  #           filters:
+                  #             branches:
+                  #               only:
+                  #                 - /release\/.*/
       - acceptance-testing:
-          requires:
-            - staging-deployment
+        #           requires:
+        #             - staging-deployment
           filters:
             branches:
               only:

@@ -31,6 +31,13 @@ cat <<EOF >> /opt/script/update-docker-compose.sh
 #!/bin/bash 
 # write any stdout and stderr to syslog
 exec 1> >(logger -s -t \$(basename \$0)) 2>&1
+echo "recieve new deployment. start updating docker compose"
+echo "pull service images from docker hub"
+docker pull stsiwo/sts-blog-spa
+docker pull stsiwo/sts-blog-db
+docker pull stsiwo/sts-blog-api
+echo "update docker compose"
+docker-compose -f /home/app/docker-compose.staging.secrets.yml -f /home/app/docker-compose.staging.yml -f /home/app/docker-compose.staging.ssl.yml up -d
 echo "successfully run update-docker-compose script"
 EOF
 

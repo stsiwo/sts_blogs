@@ -8,9 +8,10 @@ services:
     ports:
       - "4444:4444"
     # this is for server_name at webserver (nginx) and cors at api to prevent cors error at node browser
-    links: 
-      - "webserver:dev.stsiwo.com"
-      - "webserver:dev.api.stsiwo.com"
+    # comment out for staging server (not running at local)
+    # links: 
+    #   - "webserver:dev.stsiwo.com"
+    #   - "webserver:dev.api.stsiwo.com"
   chrome:
     image: selenium/node-chrome:3.141.59-xenon
     volumes:
@@ -23,9 +24,10 @@ services:
       - HUB_HOST=selenium-hub
       - HUB_PORT=4444
     # this is for server_name at webserver (nginx) and cors at api to prevent cors error at node browser
-    links: 
-      - "webserver:dev.stsiwo.com"
-      - "webserver:dev.api.stsiwo.com"
+    # comment out for staging server (not running at local)
+    # links: 
+    #   - "webserver:dev.stsiwo.com"
+    #   - "webserver:dev.api.stsiwo.com"
   firefox:
     image: selenium/node-firefox:3.141.59-xenon
     volumes:
@@ -38,6 +40,7 @@ services:
       - HUB_HOST=selenium-hub
       - HUB_PORT=4444
     # this is for server_name at webserver (nginx) and cors at api to prevent cors error at node browser
-    links: 
-      - "webserver:dev.stsiwo.com"
-      - "webserver:dev.api.stsiwo.com"
+    # comment out for staging server (not running at local)
+    # links: 
+    #   - "webserver:dev.stsiwo.com"
+    #   - "webserver:dev.api.stsiwo.com"
