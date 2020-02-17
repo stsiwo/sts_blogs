@@ -86,12 +86,12 @@ jobs:
           name: Excute Acceptance Testing (release/* branch only)
           command: |
             echo 'Excute Acceptance Testing (release/* branch only)'
-            docker --version
-            sudo docker-compose -f docker-compose.seleniumgrid.yml up -d
+            eval $(docker-machine env dev)
+            docker-compose -f docker-compose.seleniumgrid.yml up -d
             cd ./IntegrationTesting
             mvn test
-            dockerize -wait http://localhost:4444 -timeout 1m
-            dockerize -wait https://dev.stsiwo.com -timeout 1m
+            # dockerize -wait http://localhost:4444 -timeout 1m
+            # dockerize -wait https://dev.stsiwo.com -timeout 1m
             
   production-deployment:
     docker:
