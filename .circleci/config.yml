@@ -1,18 +1,14 @@
 version: 2.1
 
 executors:
-  gcp-executor:
+  my-executor:
     docker:
       - image: stsiwo/circleci-base:1.05
-    working_directory: /app
-  docker-executor:
-    docker:
-      - image: stsiwo/circleci-base-v2:0.1
     working_directory: /app
 
 jobs:
   build:
-    executor: gcp-executor 
+    executor: my-executor
     steps:
       - run:
           name: Prepare Service Testings (feature/* branch only)
@@ -60,7 +56,7 @@ jobs:
             docker tag sts-blog-db stsiwo/sts-blog-db
             docker push stsiwo/sts-blog-db
   staging-deployment:
-    executor: gcp-executor 
+    executor: my-executor
     steps:
       - checkout
       - run:
@@ -79,19 +75,30 @@ jobs:
             for i in $(gcloud compute os-login ssh-keys list | grep -v FINGERPRINT); do echo $i; gcloud compute os-login ssh-keys remove --key $i; done
             gcloud compute scp --quiet ./docker-compose.staging.yml ./trigger.txt my-15th-startup-test:/home/app --zone us-central1-a 
   acceptance-testing:
-    executor: docker-executor
+    # this allow to use 'docker' in this job
+    machine: true
     steps:
       - checkout
+      - run: 
+          name: Install dockerize for waiting for Selenium Hub Container is up
+          command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+          environment:
+            DOCKERIZE_VERSION: v0.3.0
+      - run: 
+          name: Install docker-compose 
+          command: |
+            et -x
+            curl -L https://github.com/docker/compose/releases/download/1.25.3/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+            chmod +x /usr/local/bin/docker-compose
       - run:
           name: Excute Acceptance Testing (release/* branch only)
           command: |
             echo 'Excute Acceptance Testing (release/* branch only)'
-            export DOCKER_HOST=localhost
             docker-compose -f docker-compose.seleniumgrid.yml up -d
             cd ./IntegrationTesting
             mvn test
-            # dockerize -wait http://localhost:4444 -timeout 1m
-            # dockerize -wait https://dev.stsiwo.com -timeout 1m
+            dockerize -wait http://localhost:4444 -timeout 1m
+            dockerize -wait https://dev.stsiwo.com -timeout 1m
             
   production-deployment:
     docker:
