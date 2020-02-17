@@ -85,17 +85,14 @@ jobs:
           environment:
             DOCKERIZE_VERSION: v0.3.0
       - run:
-          name: Wait for Selenium Hub & Starging Server Update
-          command: |
-            dockerize -wait http://localhost:4444 -timeout 1m
-            dockerize -wait https://dev.stsiwo.com -timeout 1m
-      - run:
           name: Excute Acceptance Testing (release/* branch only)
           command: |
             echo 'Excute Acceptance Testing (release/* branch only)'
             docker-compose -f docker-compose.seleniumgrid.yml up -d
             cd ./IntegrationTesting
             mvn test
+            dockerize -wait http://localhost:4444 -timeout 1m
+            dockerize -wait https://dev.stsiwo.com -timeout 1m
             
   production-deployment:
     docker:
