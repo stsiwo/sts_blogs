@@ -86,6 +86,7 @@ workflows:
           filters:
             branches:
               only:
+                - develop
                 - /release\/.*/
                 - master
       - api-service-testing:
@@ -94,6 +95,7 @@ workflows:
           filters:
             branches:
               only:
+                - develop
                 - /release\/.*/
                 - master
       - acceptance-testing:
