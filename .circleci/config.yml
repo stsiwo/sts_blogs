@@ -86,7 +86,7 @@ jobs:
           name: Excute Acceptance Testing (release/* branch only)
           command: |
             echo 'Excute Acceptance Testing (release/* branch only)'
-            eval $(docker-machine env dev)
+            export DOCKER_HOST=localhost
             docker-compose -f docker-compose.seleniumgrid.yml up -d
             cd ./IntegrationTesting
             mvn test
