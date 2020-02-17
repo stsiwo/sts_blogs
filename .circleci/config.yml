@@ -1,14 +1,18 @@
 version: 2.1
 
 executors:
-  my-executor:
+  gcp-executor:
     docker:
       - image: stsiwo/circleci-base:1.05
+    working_directory: /app
+  # use this since pre-built image from circleci installed old verison of docker-compose and can't upgrade with 'circleci' user
+  docker-executor:
+      - image: ubuntu:16.04
     working_directory: /app
 
 jobs:
   build:
-    executor: my-executor
+    executor: gcp-executor
     steps:
       - run:
           name: Prepare Service Testings (feature/* branch only)
@@ -56,7 +60,7 @@ jobs:
             docker tag sts-blog-db stsiwo/sts-blog-db
             docker push stsiwo/sts-blog-db
   staging-deployment:
-    executor: my-executor
+    executor: gcp-executor
     steps:
       - checkout
       - run:
@@ -75,10 +79,16 @@ jobs:
             for i in $(gcloud compute os-login ssh-keys list | grep -v FINGERPRINT); do echo $i; gcloud compute os-login ssh-keys remove --key $i; done
             gcloud compute scp --quiet ./docker-compose.staging.yml ./trigger.txt my-15th-startup-test:/home/app --zone us-central1-a 
   acceptance-testing:
-    # this allow to use 'docker' in this job
-    machine: true
+    executor: docker-executor
     steps:
       - checkout
+      - setup_remote_docker
+      - run: 
+          name: Install Necessary Packages
+          command: |
+            set -x
+            curl -L https://github.com/docker/compose/releases/download/1.25.3/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+            chmod +x /usr/local/bin/docker-compose
       - run:
           name: Excute Acceptance Testing (release/* branch only)
           command: |
@@ -148,7 +158,7 @@ workflows:
                 - master 
       # jobs:
       #   build:
-      #     executor: my-executor
+      #     executor: gcp-executor
       #     steps:
       #       - run:
       #           name: Build
@@ -166,7 +176,7 @@ workflows:
       #           paths:
       #             - echo-output
       #   spa-service-testing:
-      #     executor: my-executor
+      #     executor: gcp-executor
       #     steps:
       #       - attach_workspace:
       #           # Must be absolute path or relative path from working_directory
@@ -216,7 +226,7 @@ workflows:
       #           command: |
       #             echo 'Deploy to Production (release only and if acceptance testing has passed)'
 # executors:
-#   my-executor:
+#   gcp-executor:
 #     docker:
 #       - image: stsiwo/circleci-base:1.04 
 #     working_directory: /app
@@ -248,7 +258,7 @@ workflows:
     #             docker push stsiwo/sts-blog-db
     # 
     #   deploy:
-    #     executor: my-executor
+    #     executor: gcp-executor
     #     steps:
     #       - checkout
     #       - run:
