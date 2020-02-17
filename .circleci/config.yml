@@ -7,6 +7,7 @@ executors:
     working_directory: /app
   # use this since pre-built image from circleci installed old verison of docker-compose and can't upgrade with 'circleci' user
   docker-executor:
+    docker:
       - image: ubuntu:16.04
     working_directory: /app
 
