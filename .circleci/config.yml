@@ -87,7 +87,7 @@ jobs:
           command: |
             echo 'Excute Acceptance Testing (release/* branch only)'
             docker --version
-            docker-compose -f docker-compose.seleniumgrid.yml up -d
+            sudo docker-compose -f docker-compose.seleniumgrid.yml up -d
             cd ./IntegrationTesting
             mvn test
             dockerize -wait http://localhost:4444 -timeout 1m
