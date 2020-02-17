@@ -3,122 +3,221 @@ version: 2.1
 executors:
   my-executor:
     docker:
-      - image: alpine:3.7
-    working_directory: /tmp
+      - image: stsiwo/circleci-base:1.04 
+    working_directory: /app
 
 jobs:
   build:
     executor: my-executor
     steps:
       - run:
-          name: Build
+          name: Prepare Service Testings (feature/* branch only)
           command: |
-            echo 'Build'
-      - run: mkdir -p workspace
-      - run: echo "Hello, world!" > workspace/echo-output
-
-      # Persist the specified paths (workspace/echo-output) into the workspace for use in downstream job.
-      - persist_to_workspace:
-          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
-          # taken to be the root directory of the workspace.
-          root: workspace
-          # Must be relative path from root
-          paths:
-            - echo-output
+            echo 'Prepare Service Testings (feature/* branch only)'
   spa-service-testing:
-    executor: my-executor
+    docker:
+      - image: alpine:3.7
     steps:
-      - attach_workspace:
-          # Must be absolute path or relative path from working_directory
-          at: /tmp/workspace
-
-      - run: |
-          head /tmp/workspace/echo-output
-          if [[ "cat /tmp/workspace/echo-output" == "Hello, world!" ]]; then
-            echo "It worked!";
-          else
-            echo "Nope!"; exit 1
-          fi
       - run:
-          name: Run Spa (dev and release and master)
+          name: Run SPA service testing (feature/* branch only)
           command: |
-            echo 'Running Spa Testing (dev only)'
+            echo 'Run SPA service testing (feature/* branch only)'
   api-service-testing:
     docker:
       - image: alpine:3.7
     steps:
       - run:
-          name: Run api (dev and release and master)
+          name: Run API service testing (feature/* branch only)
           command: |
-            echo 'Running api Testing (dev only)'
+            echo 'Run API service testing (feature/* branch only)'
+  staging-deployment:
+    docker:
+      - image: alpine:3.7
+    steps:
+      - run:
+          name: Deploy To Staging Server (release/* branch only) 
+          command: |
+            echo 'Deploy To Staging Server (release/* branch only)'
   acceptance-testing:
     docker:
       - image: alpine:3.7
     steps:
       - run:
-          name: Run Acceptance Testing (release and master)
+          name: Excute Acceptance Testing (release/* branch only)
           command: |
-            echo 'Running api Testing (dev only)'
-  deploy-staging:
-    docker: 
-      - image: alpine:3.7
-    steps:
-      - run:
-          name: Deploy to Staging (release and master and if acceptance testing has passed)
-          command: |
-            echo 'Deploy to Staging (release only and if acceptance testing has passed)'
-  deploy-production:
+            echo 'Excute Acceptance Testing (release/* branch only)'
+  bumpup-version:
     docker:
       - image: alpine:3.7
     steps:
       - run:
-          name: Deploy to Production (release and master and if acceptance testing has passed)
+          name: Bump Up Version (release/* branch only)
           command: |
-            echo 'Deploy to Production (release only and if acceptance testing has passed)'
+            echo 'Bump Up Version (release/* branch only)'
+  production-deployment:
+    docker:
+      - image: alpine:3.7
+    steps:
+      - run:
+          name: Deploy To Production Server (master branch only)
+          command: |
+            echo 'Deploy To Production Server (master branch only)'
 workflows:
   version: 2.1
-  build-deploy:
+  ci-cd:
     jobs:
-      - build
+      - build:
+          filters:
+            branches:
+              only:
+                - /feature\/.*/
       - spa-service-testing:
           requires:
             - build
           filters:
             branches:
               only:
-                - /release\/.*/
-                - master
+                - /feature\/.*/
       - api-service-testing:
           requires:
             - build
           filters:
             branches:
               only:
+                - /feature\/.*/
+      - staging-deployment:
+          filters:
+            branches:
+              only:
                 - /release\/.*/
-                - master
       - acceptance-testing:
           requires:
-            - spa-service-testing
-            - api-service-testing
+            - staging-deployment
           filters:
             branches:
               only:
                 - /release\/.*/
-                - master
-      - deploy-staging:
+      - bumpup-version:
           requires:
-            - acceptance-testing
+            - acceptance-testing 
           filters:
             branches:
               only:
                 - /release\/.*/
-      - deploy-production:
-          requires:
-            - acceptance-testing
+      - production-deployment:
           filters:
             branches:
               only:
-                - master
+                - master 
+      # jobs:
+      #   build:
+      #     executor: my-executor
+      #     steps:
+      #       - run:
+      #           name: Build
+      #           command: |
+      #             echo 'Build'
+      #       - run: mkdir -p workspace
+      #       - run: echo "Hello, world!" > workspace/echo-output
+      # 
+      #       # Persist the specified paths (workspace/echo-output) into the workspace for use in downstream job.
+      #       - persist_to_workspace:
+      #           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
+      #           # taken to be the root directory of the workspace.
+      #           root: workspace
+      #           # Must be relative path from root
+      #           paths:
+      #             - echo-output
+      #   spa-service-testing:
+      #     executor: my-executor
+      #     steps:
+      #       - attach_workspace:
+      #           # Must be absolute path or relative path from working_directory
+      #           at: /tmp/workspace
+      # 
+      #       - run: |
+      #           head /tmp/workspace/echo-output
+      #           if [[ "cat /tmp/workspace/echo-output" == "Hello, world!" ]]; then
+      #             echo "It worked!";
+      #           else
+      #             echo "Nope!"; exit 1
+      #           fi
+      #       - run:
+      #           name: Run Spa (dev and release and master)
+      #           command: |
+      #             echo 'Running Spa Testing (dev only)'
+      #   api-service-testing:
+      #     docker:
+      #       - image: alpine:3.7
+      #     steps:
+      #       - run:
+      #           name: Run api (dev and release and master)
+      #           command: |
+      #             echo 'Running api Testing (dev only)'
+      #   acceptance-testing:
+      #     docker:
+      #       - image: alpine:3.7
+      #     steps:
+      #       - run:
+      #           name: Run Acceptance Testing (release and master)
+      #           command: |
+      #             echo 'Running api Testing (dev only)'
+      #   deploy-staging:
+      #     docker: 
+      #       - image: alpine:3.7
+      #     steps:
+      #       - run:
+      #           name: Deploy to Staging (release and master and if acceptance testing has passed)
+      #           command: |
+      #             echo 'Deploy to Staging (release only and if acceptance testing has passed)'
+      #   deploy-production:
+      #     docker:
+      #       - image: alpine:3.7
+      #     steps:
+      #       - run:
+      #           name: Deploy to Production (release and master and if acceptance testing has passed)
+      #           command: |
+      #             echo 'Deploy to Production (release only and if acceptance testing has passed)'
+      # workflows:
+      #   version: 2.1
+      #   build-deploy:
+      #     jobs:
+      #       - build
+      #       - spa-service-testing:
+      #           requires:
+      #             - build
+      #           filters:
+      #             branches:
+      #               only:
+      #                 - /feature\/.*/
+      #       - api-service-testing:
+      #           requires:
+      #             - build
+      #           filters:
+      #             branches:
+      #               only:
+      #                 - /feature\/.*/
+      #       - acceptance-testing:
+      #           requires:
+      #             - build
+      #           filters:
+      #             branches:
+      #               only:
+      #                 - /release\/.*/
+      #       - deploy-staging:
+      #           requires:
+      #             - acceptance-testing
+      #           filters:
+      #             branches:
+      #               only:
+      #                 - /release\/.*/
+      #       - deploy-production:
+      #           requires:
+      #             - acceptance-testing
+      #           filters:
+      #             branches:
+      #               only:
+      #                 - master
 
 
 # executors:
