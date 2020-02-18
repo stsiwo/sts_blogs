@@ -33,12 +33,14 @@ cat <<EOF >> /opt/script/update-docker-compose.sh
 exec 1> >(logger -s -t \$(basename \$0)) 2>&1
 echo "recieve new deployment. start updating docker compose"
 echo "pull service images from docker hub"
-docker pull stsiwo/sts-blog-spa
-docker pull stsiwo/sts-blog-db
-docker pull stsiwo/sts-blog-api
+docker pull stsiwo/sts-blog-spa:latest
+docker pull stsiwo/sts-blog-db:latest
+docker pull stsiwo/sts-blog-api:latest
 echo "update docker compose"
 docker-compose -f /home/app/docker-compose.staging.secrets.yml -f /home/app/docker-compose.staging.yml -f /home/app/docker-compose.staging.ssl.yml up -d
 echo "successfully run update-docker-compose script"
+echo "remove old images"
+docker image prune -f
 EOF
 
 ### clean up docker resources (unused imges, containers ...) by cron

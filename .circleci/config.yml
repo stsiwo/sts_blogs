@@ -6,9 +6,9 @@ executors:
       - image: stsiwo/circleci-base:1.05
     working_directory: /app
   # use this since pre-built image from circleci installed old verison of docker-compose and can't upgrade with 'circleci' user
-  jdk-executor:
+  jdk-browsers-executor:
     docker:
-      - image: circleci/openjdk
+      - image: circleci/openjdk:latest-browsers
 
 jobs:
   build:
@@ -79,20 +79,23 @@ jobs:
             for i in $(gcloud compute os-login ssh-keys list | grep -v FINGERPRINT); do echo $i; gcloud compute os-login ssh-keys remove --key $i; done
             gcloud compute scp --quiet ./docker-compose.staging.yml ./trigger.txt my-15th-startup-test:/home/app --zone us-central1-a 
   acceptance-testing:
-    machine:
-      image: ubuntu-1604:201903-01
+    executor: jdk-browsers-executor
     steps:
       - checkout
+        - run: mkdir test-reports
+      - run:
+          name: Download Selenium
+          command: curl -O http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar
+      - run:
+          name: Start Selenium
+          command: java -jar selenium-server-standalone-3.5.3.jar -log test-reports/selenium.log
+          background: true
       - run:
           name: Excute Acceptance Testing (release/* branch only)
           command: |
             echo 'Excute Acceptance Testing (release/* branch only)'
-            docker-compose --version
-            docker-compose -f docker-compose.seleniumgrid.yml up -d
             cd ./IntegrationTesting
             mvn test
-            dockerize -wait http://localhost:4444 -timeout 1m
-            dockerize -wait https://dev.stsiwo.com -timeout 1m
             
   production-deployment:
     docker:
@@ -125,11 +128,11 @@ workflows:
             branches:
               only:
                 - /feature\/.*/
-      - build-push-src-image:
-          filters:
-            branches:
-              only:
-                - /release\/.*/
+                  # - build-push-src-image:
+                  # filters:
+                  # branches:
+                  # only:
+                  # - /release\/.*/
                   #       - staging-deployment:
                   #           requires:
                   #             - build-push-src-image
@@ -137,13 +140,13 @@ workflows:
                   #             branches:
                   #               only:
                   #                 - /release\/.*/
-                  # - acceptance-testing:
-        #           requires:
-        #             - staging-deployment
-        #  filters:
-        #    branches:
-        #      only:
-        #        - /release\/.*/
+      - acceptance-testing:
+        # requires:
+        #    - staging-deployment
+          filters:
+            branches:
+              only:
+                - /release\/.*/
       - production-deployment:
           filters:
             branches:
