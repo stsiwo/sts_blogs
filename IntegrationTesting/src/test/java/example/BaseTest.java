@@ -51,10 +51,6 @@ public class BaseTest {
 	}
   }
 
-  public String getTestResourcePath(String srcName) {
-    return this.getClass().getResource("/test/resources/" + srcName).toString();
-  }
-
   @BeforeClass(alwaysRun = true)
   @Parameters({"os", "browser", "url", "node", "testUserName", "testUserEmail", "testUserPassword"})
   public void beforeClass(String os, String browser, String url, String node, String testUserName, String testUserEmail, String testUserPassword) throws MalformedURLException {

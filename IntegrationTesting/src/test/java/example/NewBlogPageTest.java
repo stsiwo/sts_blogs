@@ -56,7 +56,7 @@ public class NewBlogPageTest extends BaseTest {
 	  NewBlogPage newBlogPage = new NewBlogPage(this.driver, true, this.testUser.email, this.testUser.password);
 	  newBlogPage.scrollToTop();
 
-	  File testImageFile = new File(this.getTestResourcePath("test_image.jpg"));
+	  File testImageFile = new File("src/test/resources/test_image.jpg");
 	  
 	  newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.MAIN_IMAGE_INPUT, testImageFile.getAbsolutePath(), false);
 	  newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.BLOG_TITLE_INPUT, "sample blog title", true);
@@ -77,7 +77,7 @@ public class NewBlogPageTest extends BaseTest {
 	  NewBlogPage newBlogPage = new NewBlogPage(this.driver, true, this.testUser.email, this.testUser.password);
 	  newBlogPage.scrollToTop();
 
-	  File testImageFile = new File(this.getTestResourcePath("test_image1.jpg"));
+	  File testImageFile = new File("src/test/resources/test_image.jpg");
 	  
 	  newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.MAIN_IMAGE_INPUT, testImageFile.getAbsolutePath(), false);
 	  newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.BLOG_TITLE_INPUT, "sample blog title", true);
@@ -108,7 +108,7 @@ public class NewBlogPageTest extends BaseTest {
 	  
 	  String targetBlogTitle = this.faker.lorem().sentence();
 
-	  File testImageFile = new File(this.getTestResourcePath("test_image.jpg"));
+	  File testImageFile = new File("src/test/resources/test_image.jpg");
 	  
 	  newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.MAIN_IMAGE_INPUT, testImageFile.getAbsolutePath(), false);
 	  newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.BLOG_TITLE_INPUT, targetBlogTitle, true);
@@ -136,7 +136,7 @@ public class NewBlogPageTest extends BaseTest {
 	  
 	  String targetBlogTitle = this.faker.lorem().sentence();
 
-	  File testImageFile = new File(this.getTestResourcePath("test_image.jpg"));
+	  File testImageFile = new File("src/test/resources/test_image.jpg");
 	  
 	  newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.MAIN_IMAGE_INPUT, testImageFile.getAbsolutePath(), false);
 	  newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.BLOG_TITLE_INPUT, targetBlogTitle, true);

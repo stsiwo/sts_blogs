@@ -91,7 +91,7 @@ public class ProfilePageTest extends BaseTest {
   public void shouldCreateAvatarImage(Dimension ssize) {
 	  this.driver.manage().window().setSize(ssize);
 	  
-	  File testImageFile = new File(this.getTestResourcePath("test_image.jpg"));
+	  File testImageFile = new File("src/test/resources/test_image.jpg");
 	  
 	  System.out.println(testImageFile.getAbsolutePath());
 	  
@@ -113,8 +113,8 @@ public class ProfilePageTest extends BaseTest {
   public void shouldUpdateExistingAvatarImageWithNewOne(Dimension ssize) {
 	  this.driver.manage().window().setSize(ssize);
 	  
-	  File testImageFile = new File(this.getTestResourcePath("test_image.jpg"));
-	  File testImageFile1 = new File(this.getTestResourcePath("test_image1.jpg"));
+	  File testImageFile = new File("src/test/resources/test_image.jpg");
+	  File testImageFile1 = new File("src/test/resources/test_image1.jpg");
 	  
 	  ProfilePage profilePage = new ProfilePage(this.driver, true, this.testUser.email, this.testUser.password);
 	  // must be false for 'clear' when deal with file input
@@ -139,8 +139,8 @@ public class ProfilePageTest extends BaseTest {
   public void shouldDeleteExistingAvatarImage(Dimension ssize) {
 	  this.driver.manage().window().setSize(ssize);
 	  
-	  File testImageFile = new File(this.getTestResourcePath("test_image.jpg"));
-	  File testImageFile1 = new File(this.getTestResourcePath("test_image1.jpg"));
+	  File testImageFile = new File("src/test/resources/test_image.jpg");
+	  File testImageFile1 = new File("src/test/resources/test_image1.jpg");
 	  
 	  ProfilePage profilePage = new ProfilePage(this.driver, true, this.testUser.email, this.testUser.password);
 	  // must be false for 'clear' when deal with file input
@@ -161,8 +161,8 @@ public class ProfilePageTest extends BaseTest {
   public void shouldUnchangeExistingAvatarImage(Dimension ssize) {
 	  this.driver.manage().window().setSize(ssize);
 	  
-	  File testImageFile = new File(this.getTestResourcePath("test_image.jpg"));
-	  File testImageFile1 = new File(this.getTestResourcePath("test_image1.jpg"));
+	  File testImageFile = new File("src/test/resources/test_image.jpg");
+	  File testImageFile1 = new File("src/test/resources/test_image1.jpg");
 	  
 	  ProfilePage profilePage = new ProfilePage(this.driver, true, this.testUser.email, this.testUser.password);
 	  // must be false for 'clear' when deal with file input
@@ -187,8 +187,8 @@ public class ProfilePageTest extends BaseTest {
   public void shouldDisplayAllUPdateUserInfoAfterAllUserInfochnageRequestWithAvatarImage(Dimension ssize) {
 	  this.driver.manage().window().setSize(ssize);
 	  
-	  File testImageFile = new File(this.getTestResourcePath("test_image.jpg"));
-	  File testImageFile1 = new File(this.getTestResourcePath("test_image1.jpg"));
+	  File testImageFile = new File("src/test/resources/test_image.jpg");
+	  File testImageFile1 = new File("src/test/resources/test_image1.jpg");
 	  
 	  ProfilePage profilePage = new ProfilePage(this.driver, true, this.testUser.email, this.testUser.password);
 	  // must be false for 'clear' when deal with file input
