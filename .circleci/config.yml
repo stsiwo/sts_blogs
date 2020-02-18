@@ -79,6 +79,8 @@ jobs:
             for i in $(gcloud compute os-login ssh-keys list | grep -v FINGERPRINT); do echo $i; gcloud compute os-login ssh-keys remove --key $i; done
             gcloud compute scp --quiet ./docker-compose.staging.yml ./trigger.txt my-15th-startup-test:/home/app --zone us-central1-a 
   acceptance-testing:
+    # can use 'windows os' and 'mac os' executor to do integration test for those platform
+    # but for now only do it at this Linux platform
     executor: jdk-browsers-executor
     steps:
       - checkout
