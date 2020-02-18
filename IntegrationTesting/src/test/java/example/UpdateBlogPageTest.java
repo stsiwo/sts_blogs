@@ -56,7 +56,7 @@ public class UpdateBlogPageTest extends BaseTest {
 	  UpdateBlogPage updateBlogPage = new UpdateBlogPage(this.driver, true, this.testUser.email, this.testUser.password);
 	  updateBlogPage.scrollToTop();
 
-	  File testImageFile = new File("/tmp/selenium-data/test_image.jpg");
+	  File testImageFile = new File(this.getTestResourcePath("test_image.jpg"));
 	  
 	  updateBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.MAIN_IMAGE_INPUT, testImageFile.getAbsolutePath(), false);
 	  updateBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.BLOG_TITLE_INPUT, "sample blog title", true);
@@ -77,7 +77,7 @@ public class UpdateBlogPageTest extends BaseTest {
 	  UpdateBlogPage updateBlogPage = new UpdateBlogPage(this.driver, true, this.testUser.email, this.testUser.password);
 	  updateBlogPage.scrollToTop();
 
-	  File testImageFile = new File("/tmp/selenium-data/test_image.jpg");
+	  File testImageFile = new File(this.getTestResourcePath("test_image.jpg"));
 	  
 	  updateBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.MAIN_IMAGE_INPUT, testImageFile.getAbsolutePath(), false);
 	  updateBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.BLOG_TITLE_INPUT, "sample blog title", true);
@@ -103,7 +103,7 @@ public class UpdateBlogPageTest extends BaseTest {
 	  
 	  String targetBlogTitle = this.faker.lorem().sentence();
 
-	  File testImageFile = new File("/tmp/selenium-data/test_image.jpg");
+	  File testImageFile = new File(this.getTestResourcePath("test_image.jpg"));
 	  
 	  updateBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.MAIN_IMAGE_INPUT, testImageFile.getAbsolutePath(), false);
 	  updateBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.BLOG_TITLE_INPUT, targetBlogTitle, true);
@@ -131,7 +131,7 @@ public class UpdateBlogPageTest extends BaseTest {
 	  
 	  String targetBlogTitle = this.faker.lorem().sentence();
 
-	  File testImageFile = new File("/tmp/selenium-data/test_image.jpg");
+	  File testImageFile = new File(this.getTestResourcePath("test_image1.jpg"));
 	  
 	  updateBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.MAIN_IMAGE_INPUT, testImageFile.getAbsolutePath(), false);
 	  updateBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.BLOG_TITLE_INPUT, targetBlogTitle, true);

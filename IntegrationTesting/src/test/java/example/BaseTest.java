@@ -1,6 +1,7 @@
 package test.java.example;
 
 import java.net.MalformedURLException;
+import java.lang.reflect.Method;
 
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
@@ -49,20 +50,29 @@ public class BaseTest {
 		this.password = password;
 	}
   }
-  
+
+  public String getTestResourcePath(String srcName) {
+    return this.getClass().getResource("/test/resources/" + srcName).toString();
+  }
+
   @BeforeClass(alwaysRun = true)
   @Parameters({"os", "browser", "url", "node", "testUserName", "testUserEmail", "testUserPassword"})
   public void beforeClass(String os, String browser, String url, String node, String testUserName, String testUserEmail, String testUserPassword) throws MalformedURLException {
-	  Reporter.log( "Before Class \n", true );
+	  System.out.printf("#### testing class: %s ##### \n", this.getClass().getName());
 	  System.out.printf("os: %s, browser %s, Thread.id: %s \n", os, browser, Thread.currentThread().getId());
 	  this.setup = new SetupTestDriver(os, browser, url, node);
 	  this.testUser = new TestUser(testUserName, testUserEmail, testUserPassword);
 	  System.out.printf("test user info: name=%s email=%s password=%s \n", testUser.name,  testUser.email, testUser.password);
-      this.driver = this.setup.getDriver();
-      // logout if logined already
-      this.driver.get(HomePage.url);
+    this.driver = this.setup.getDriver();
+    // logout if logined already
+    this.driver.get(HomePage.url);
 	  HomePage homePage = new HomePage(this.driver, false);
 	  homePage.headerComponent.logout();      
+  }
+
+  @BeforeMethod
+  public void loggingTestingInfo(Method method) {
+    System.out.printf("*** running test method %s ****\n", method.getName());
   }
   
   @DataProvider(name = "mobile")
