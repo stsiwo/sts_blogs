@@ -15,7 +15,6 @@
    <parameter name="testUserPassword" value="test_firefox"/>
    <classes>
      <class name="test.java.example.HomePageTest"/>   
-     <!--
      <class name="test.java.example.HeaderComponentTest"/> 
      <class name="test.java.example.LoginPageTest"/> 
      <class name="test.java.example.SignupPageTest"/> 
@@ -25,7 +24,6 @@
      <class name="test.java.example.UpdateBlogPageTest"/> 
      <class name="test.java.example.BlogManagementPageTest"/> 
      <class name="test.java.example.BlogPageTest"/>
-     -->
    </classes>
  </test>
  <test name="Tests on Chrome" >
@@ -35,7 +33,6 @@
    <parameter name="testUserPassword" value="test_chrome"/>
    <classes>
      <class name="test.java.example.HomePageTest"/>  
-     <!--
      <class name="test.java.example.HeaderComponentTest"/> 
      <class name="test.java.example.LoginPageTest"/> 
      <class name="test.java.example.SignupPageTest"/> 
@@ -45,7 +42,6 @@
      <class name="test.java.example.UpdateBlogPageTest"/> 
      <class name="test.java.example.BlogManagementPageTest"/> 
      <class name="test.java.example.BlogPageTest"/>
-     -->
    </classes>
  </test>
  </suite>
