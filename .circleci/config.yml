@@ -87,7 +87,6 @@ jobs:
           name: Excute Acceptance Testing (release/* branch only)
           command: |
             echo 'Excute Acceptance Testing (release/* branch only)'
-            docker --version
             docker-compose --version
             docker-compose -f docker-compose.seleniumgrid.yml up -d
             cd ./IntegrationTesting
