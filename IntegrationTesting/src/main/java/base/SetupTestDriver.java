@@ -31,14 +31,14 @@ public class SetupTestDriver {
         if(browser.equalsIgnoreCase("chrome")) {
 
             ChromeOptions chromeOptions = new ChromeOptions();
-            chromeOptions.addArguments("--headless"); // hide browser during test
+            //chromeOptions.addArguments("--headless"); // hide browser during test
             DesiredCapabilities capabilities = new DesiredCapabilities().chrome();
             capabilities.setCapability("platform", Platform.LINUX);
             capabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
             this.driver = new RemoteWebDriver(new URL(node + "/wd/hub"), capabilities);
         } else if (browser.equalsIgnoreCase("firefox")) {
             FirefoxOptions firefoxOptions = new FirefoxOptions();
-            firefoxOptions.addArguments("--headless"); // hide browser during test
+            //firefoxOptions.addArguments("--headless"); // hide browser during test
             DesiredCapabilities capabilities = new DesiredCapabilities().firefox();
             capabilities.setCapability("platform", Platform.LINUX);
             capabilities.setCapability(FirefoxOptions.FIREFOX_OPTIONS, firefoxOptions);

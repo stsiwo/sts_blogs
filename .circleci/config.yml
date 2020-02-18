@@ -45,19 +45,19 @@ jobs:
             source ./set-app-version-env.sh
             docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
     
-            docker build --tag=sts-blog-spa:$APP_VERSION --tag=sts-blog-spa --target=staging ./Spa
+            docker build --tag=sts-blog-spa:$APP_VERSION --tag=sts-blog-spa:latest --target=staging ./Spa
             docker tag sts-blog-spa:$APP_VERSION stsiwo/sts-blog-spa:$APP_VERSION
-            docker tag sts-blog-spa stsiwo/sts-blog-spa
+            docker tag sts-blog-spa:latest stsiwo/sts-blog-spa:latest
             docker push stsiwo/sts-blog-spa
     
-            docker build --tag=sts-blog-api:$APP_VERSION --tag=sts-blog-api --target=staging ./Api1
+            docker build --tag=sts-blog-api:$APP_VERSION --tag=sts-blog-api:latest --target=staging ./Api1
             docker tag sts-blog-api:$APP_VERSION stsiwo/sts-blog-api:$APP_VERSION
-            docker tag sts-blog-api stsiwo/sts-blog-api
+            docker tag sts-blog-api:latest stsiwo/sts-blog-api:latest
             docker push stsiwo/sts-blog-api
     
-            docker build --tag=sts-blog-db:$APP_VERSION --tag=sts-blog-db ./Db
+            docker build --tag=sts-blog-db:$APP_VERSION --tag=sts-blog-db:latest ./Db
             docker tag sts-blog-db:$APP_VERSION stsiwo/sts-blog-db:$APP_VERSION
-            docker tag sts-blog-db stsiwo/sts-blog-db
+            docker tag sts-blog-db:latest stsiwo/sts-blog-db:latest
             docker push stsiwo/sts-blog-db
   staging-deployment:
     executor: gcp-executor
@@ -125,11 +125,11 @@ workflows:
             branches:
               only:
                 - /feature\/.*/
-                  #       - build-push-src-image:
-                  #           filters:
-                  #             branches:
-                  #               only:
-                  #                 - /release\/.*/
+      - build-push-src-image:
+          filters:
+            branches:
+              only:
+                - /release\/.*/
                   #       - staging-deployment:
                   #           requires:
                   #             - build-push-src-image
@@ -137,13 +137,13 @@ workflows:
                   #             branches:
                   #               only:
                   #                 - /release\/.*/
-      - acceptance-testing:
+                  # - acceptance-testing:
         #           requires:
         #             - staging-deployment
-          filters:
-            branches:
-              only:
-                - /release\/.*/
+        #  filters:
+        #    branches:
+        #      only:
+        #        - /release\/.*/
       - production-deployment:
           filters:
             branches:

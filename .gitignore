@@ -28,3 +28,8 @@ dist/
 
 # docker secrets
 docker-compose.secrets.yml
+
+### Integration Testing ###
+
+# mvn target (compiled files)
+IntegrationTesting/target/
