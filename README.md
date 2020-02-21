@@ -56,7 +56,33 @@
     - currently, I run integration testing on Linux platform. this is because docker selenium grid only support Linux platform.
       - if use any commercial automate testing tools, it can increase more variety of platform.
     - switch integration testing from python to Java since Java provide easier setting for parallel testing. can achieve the parallel testing using Python but need manually config for it, so move to Java.
-    
+
+### Deployment (Setup Staging & Production Server)
+  - use GCP Compute Engine.
+  - use startup script to automate initial config at server as much as possible
+  - steps)
+    1. use 'instance template' to avoid config Compute Enging from scratch
+      * 1.1. you can set startup script, type of server, os type, and so on
+    2. after create the isntance, 
+      * 2.1. firewall & DNS setting
+        * 2.1.1. create 'network tag' at Edit of vm instance
+        * 2.1.2. setup firewall rules (open port 80, 443)
+        * 2.1.3. setup DNS (use network tag to specify the isntance)
+      * 2.2. SSL (letsEncrypt with Docker config)
+        * 2.2.1. necessary files
+          * 2.2.1.1. docker-compose.<env_name>.ssl.yml (dir: app)
+          * 2.2.1.2. nginx default.conf (dir: app/data/nginx)
+          * 2.2.1.3. initial-letsencrypt.sh (dir: app) - startup script for docker-letsencrypt stuff
+        * 2.2.2. steps
+          * 2.2.2.1 can use template file (from [reference](https://medium.com/@pentacent/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71)
+          * 2.2.2.2. replace 'example.org' with your domain and subdomain at 'initial-letsencrypt', 'default.conf', docker-compsoe.<env_name>.ssl.yml
+          * 2.2.2.3. run initial-letsencrypt script
+            * there are several ways to get certificate such as single certificate with multiple domain/subdomain or certificate for each domain/subdomain. check my [gist](https://gist.github.com/stsiwo/13a55cb8abab8517b2f8f78cf6167aae)
+          * 2.2.2.4 make sure your setup is correct at [ssl server test labs](https://www.ssllabs.com/ssltest/)
+      * 2.3. Setup App
+        * 2.3.1: project env vars
+          * 2.3.1.1 create 'docker-compose.<env_name>.secrets' to store and setup sensitive info
+
 ### NOTE
   - staging server/production server use different nginx config due to ssl config
     - make sure to match with local nginx config manually
