@@ -1,4 +1,5 @@
 from logging.config import dictConfig
+from datetime import datetime
 
 # log config
 # must before flask app is instanciate
@@ -14,10 +15,12 @@ dictConfig({
             'formatter': 'default'
         },
         'file': {
-                'class': 'logging.FileHandler',
-                'filename': 'api.log',
+                'class': 'logging.handlers.RotatingFileHandler',
+                'filename': '/var/log/sts-blogs-api/api.' + datetime.now().strftime("%m-%d-%Y") + ".log",
                 'mode': 'w',
-                'formatter': 'default'
+                'formatter': 'default',
+                'maxBytes': 10*1024*1024,
+                'backupCount': 100,
         },
     },
     'root': {
