@@ -6,14 +6,14 @@
       - command)
         - docker build --tag=api1:testing --target=testing . 
           // at root directory of api1 project
-        - docker run --name=api1-testing -v ${PWD}:/app -e ${PWD}/.env.testing api1:testing <additional_pytest_command>
+        - docker run --name=api1-testing -v ${PWD}:/app -v /var/log/sts-blogs-api:/var/log/sts-blogs-api -e ${PWD}/.env.testing api1:testing <additional_pytest_command>
           // ex) docker run .... api1:testing -m blog_src_get (run only test whose marks include 'blog_src_get')
           // run it
   - development
      - command)
         - docker build --tag=api1:development --target=development . 
           // at root directory of api1 project
-        - docker run --name=api1-development -v ${PWD}:/app -e ${PWD}/.env.development -p 5000:5000 api1:development  
+        - docker run --name=api1-development -v ${PWD}:/app -v /var/log/sts-blogs-api:/var/log/sts-blogs-api -e ${PWD}/.env.development -p 5000:5000 api1:development  
           // run it
 
 ### SPA
