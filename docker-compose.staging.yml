@@ -9,6 +9,8 @@ services:
     image: stsiwo/sts-blog-spa
     ports: 
       - "80:80"
+    volumes:
+      - webserver-logging-staging-storage:/var/log/nginx
     depends_on:
       - api1
   api1:
@@ -23,3 +25,4 @@ volumes:
   db-data-staging-storage:
   db-logging-staging-storage:
   api-logging-staging-storage:
+  webserver-logging-staging-storage:
