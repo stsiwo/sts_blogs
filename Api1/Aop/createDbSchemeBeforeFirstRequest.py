@@ -1,11 +1,11 @@
-import Configs.appConfig
+from Configs.app import app
 import Configs.dbConfig
 import sys
 
 
 # not working
 def createDbSchemeBeforeFirstRequest():
-    @Configs.appConfig.app.before_first_request
+    @app.before_first_request
     def createDbScheme():
-        print('setup db tables', file=sys.stdout)
+        app.logger.info('setup db tables', file=sys.stdout)
         Configs.dbConfig.db.create_all()

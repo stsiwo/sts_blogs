@@ -1,4 +1,3 @@
-from Configs.app import app
 from Infrastructure.DataModels.UserModel import User
 from Infrastructure.transactionDecorator import db_transaction
 from Infrastructure.repositories.RoleRepository import RoleRepository
@@ -6,6 +5,7 @@ from Infrastructure.repositories.UserRepository import UserRepository
 from Resources.viewModels.UserSchema import UserSchema
 from exceptions.UserAlreadyExistException import UserAlreadyExistException
 import uuid
+from Aop.loggingDecorator import loggingDecorator
 
 
 class SignupService(object):
@@ -22,9 +22,8 @@ class SignupService(object):
         self._userSchema = UserSchema(only=['id', 'name', 'avatarUrl', 'roles'])
 
     @db_transaction()
+    @loggingDecorator()
     def registerUserService(self, name: str, email: str, password: str):
-        app.logger.info("start register user service")
-        print("start register user service")
 
         # check newUser already exists in db
         isExist = self._userRepository.getByEmail(email)

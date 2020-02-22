@@ -11,6 +11,7 @@ from Infrastructure.repositories.BlogImageRepository import BlogImageRepository
 from exceptions.BlogNotFoundException import BlogNotFoundException
 from application.FileService import FileService
 from werkzeug import FileStorage
+from Aop.loggingDecorator import loggingDecorator
 
 
 class BlogService(object):
@@ -35,10 +36,8 @@ class BlogService(object):
         self._blogImageRepository = BlogImageRepository()
         self._fileService = FileService()
 
+    @loggingDecorator()
     def getAllBlogService(self, queryString: Dict) -> Dict:
-        """ for /blogs?query=string endpoint """
-        app.logger.info("start getAllBlogService service")
-        print("start getAllBlogService service")
 
         result: Dict = self._blogRepository.getAll(queryString)
 
@@ -50,10 +49,8 @@ class BlogService(object):
 
         return result
 
+    @loggingDecorator()
     def getBlogService(self, blog_id: str = None):
-        """ for /blogs/{blog_id} """
-        app.logger.info("start getBlogService service")
-        print("start getBlogService service")
 
         blog: Blog = self._blogRepository.getIfPublic(id=blog_id)
 
@@ -66,9 +63,8 @@ class BlogService(object):
         return blogViewModel
 
     @db_transaction()
+    @loggingDecorator()
     def togglePublishBlogService(self, blog_id: str, public: bool) -> None:
-        app.logger.info("start toggle publish blog service")
-        print("start toggle publish blog service")
 
         targetBlog: Blog = self._blogRepository.get(blog_id)
 
@@ -80,9 +76,8 @@ class BlogService(object):
         return targetBlog.public
 
     @db_transaction()
+    @loggingDecorator()
     def createOrUpdateBlogService(self, blog_id: str, userId: str, title: str, subtitle: str, content: str, tags: List[str] = None, mainImage: FileStorage = None,  blogImages: List[FileStorage] = [], isDeleteMainImage: bool = False, blogImagePaths: List[str] = []) -> Dict:
-        app.logger.info("start create or update blog service")
-        print("start create or update blog service")
 
         # create tags model if not exist
         tagModelList: List[BlogImage] = [self._tagRepository.createIfNotExist(name=name) for name in tags]
@@ -116,9 +111,11 @@ class BlogService(object):
 
         return targetBlog
 
+    @loggingDecorator()
     def _detectBlogImagePathsDifference(self, oldBlogImages: List[BlogImage], newBlogImagePaths: List[str]) -> List[str]:
         return [oldBlogImage.path for oldBlogImage in oldBlogImages if oldBlogImage.path not in newBlogImagePaths]
 
+    @loggingDecorator()
     def _handleBlogMainImage(self, targetBlog: Blog, isDeleteMainImage: bool, mainImage: FileStorage) -> str:
         # assign mainImageUrl to existing one in the case for unchange mainImageUrl
         mainImageUrl = targetBlog.mainImageUrl
@@ -126,27 +123,26 @@ class BlogService(object):
         # if isDeleteMainImage (user delete main image and make it empty), delete existing image and assign mainImagePath = null
         if isDeleteMainImage:
             app.logger.info("main image is delete in this request")
-            print("main image is delete in this request")
             self._fileService.deleteImageFile(targetBlog.userId, targetBlog.mainImageUrl)
             mainImageUrl = None
 
         # if mainImage exist (user replace existing image with new one), delete existing image and save new one and assign new mainImageUrl
         if mainImage is not None:
             app.logger.info("include mainImage in this request")
-            print("include mainImage in this request")
             if targetBlog.mainImageUrl is not None:  # if existing imageurl exist, if not skip deleting image
                 self._fileService.deleteImageFile(targetBlog.userId, targetBlog.mainImageUrl)
             mainImageUrl = self._fileService.saveImageFileToDir(mainImage, targetBlog.userId)
 
         return mainImageUrl
 
+    @loggingDecorator()
     def _handleBlogContentImages(self, targetBlog: Blog, blogImagePaths: [str], blogImages: [FileStorage]):
 
         # detect old image to be deleted
         detectedPaths: List[str] = self._detectBlogImagePathsDifference(targetBlog.blogImages, blogImagePaths)
 
-        print("*** diff check ***")
-        print(detectedPaths)
+        app.logger.info("*** diff check ***")
+        app.logger.info(detectedPaths)
 
         # delete old images
         for oldPath in detectedPaths:
@@ -158,9 +154,8 @@ class BlogService(object):
 
     # delete is idempotent (N requests have the same result)
     @db_transaction()
+    @loggingDecorator()
     def deleteBlogService(self, blog_id: str) -> None:
-        app.logger.info("start delete blog service")
-        print("start delete blog service")
 
         targetBlog: Blog = self._blogRepository.get(blog_id)
 

@@ -2,6 +2,7 @@ from Configs.app import app
 # from Configs.ygmailConfig import yag
 from exceptions.EmailServiceException import EmailServiceException
 from urllib.parse import urljoin
+from Aop.loggingDecorator import loggingDecorator
 
 
 class EmailClient(object):
@@ -22,9 +23,8 @@ class EmailService(object):
         self._client = EmailClient()
         pass
 
+    @loggingDecorator()
     def sendForgotPasswordEmail(self, to: str, token: str) -> None:
-        app.logger.info("start email service")
-        print("start email service")
 
         subject = "Password Reset Request"
 
@@ -35,5 +35,6 @@ class EmailService(object):
         try:
             self._client.send(to=to, subject=subject, contents=html)
         except Exception as e:
-            print(e)
+            app.logger.info("*** email service error ***")
+            app.logger.info(e)
             raise EmailServiceException()

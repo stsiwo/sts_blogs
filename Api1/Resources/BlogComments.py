@@ -9,6 +9,7 @@ from Resources.validators.blogCommentValidator import blogCommentValidator
 from Resources.validators.validatorDecorator import validate_request_with
 from flask_jwt_extended import jwt_required
 from Resources.roleAccessDecorator import requires_jwt_role_claim
+from Aop.loggingDecorator import loggingDecorator
 
 
 class BlogComments(Resource):
@@ -22,9 +23,8 @@ class BlogComments(Resource):
         self._commentSchema = CommentSchema()
 
     # get all blogs
+    @loggingDecorator()
     def get(self, blog_id: str):
-        app.logger.info("start processing get request at /blogs/{id}/comments")
-        print("start processing get request at /blogs/{id}/comments")
 
         comments: List[Dict] = self._blogCommentService.getAllCommentService(blog_id)
 
@@ -36,9 +36,8 @@ class BlogComments(Resource):
 
     # create new blog
     @validate_request_with(blogCommentValidator)
+    @loggingDecorator()
     def post(self, blog_id: str):
-        app.logger.info("start processing post request at /blogs/{id}/comments")
-        print("start processing post request at /blogs/{id}/comments")
 
         newComment: Comment = self._blogCommentService.createNewCommentService(
                 blog_id,
@@ -72,9 +71,8 @@ class BlogComments(Resource):
     # allow only admin to delete for now but it might change in future
     @jwt_required
     @requires_jwt_role_claim({'admin'})
+    @loggingDecorator()
     def delete(self, blog_id: str):
-        app.logger.info("start processing delete request at /blogs/{id}/comments")
-        print("start processing delete request at /blogs/{id}/comments")
 
         self._blogCommentService.deleteAllCommentService(blog_id)
 

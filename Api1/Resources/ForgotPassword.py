@@ -4,6 +4,7 @@ from Configs.app import app
 from flask import jsonify, request
 from application.PasswordResetService import PasswordResetService
 from Resources.validators.forgotPasswordValidator import forgotPasswordValidator
+from Aop.loggingDecorator import loggingDecorator
 
 
 class ForgotPassword(Resource):
@@ -14,9 +15,8 @@ class ForgotPassword(Resource):
         self._passwordResetService = PasswordResetService()
 
     @validate_request_with(forgotPasswordValidator)
+    @loggingDecorator()
     def post(self):
-        app.logger.info("start processing forget-password request ...")
-        print("start processing forget-password request ...")
 
         self._passwordResetService.requestForgotPasswordService(
                 email=request.json.get('email')

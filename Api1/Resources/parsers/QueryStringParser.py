@@ -1,5 +1,6 @@
 from werkzeug.datastructures import MultiDict
 from typing import List, Dict
+from Aop.loggingDecorator import loggingDecorator
 
 
 class QueryStringParser(object):
@@ -7,6 +8,7 @@ class QueryStringParser(object):
     def __init__(self):
         pass
 
+    @loggingDecorator()
     def parse(self, args: MultiDict) -> Dict:
         argsDict: Dict = {}
         argsDict['orOp'] = False

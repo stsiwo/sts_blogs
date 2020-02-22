@@ -8,9 +8,12 @@ from flask_jwt_extended import (
 )
 from flask_restful import Resource
 from application.TokenService import TokenService
+from Aop.loggingDecorator import loggingDecorator
 
 
 class TokenRemove(Resource):
+
+    @loggingDecorator()
     def post(self):
         resp = jsonify({'logout': True})
         resp.status_code = 200
@@ -26,8 +29,8 @@ class TokenRefresh(Resource):
         self._tokenService = TokenService()
 
     @jwt_refresh_token_required
+    @loggingDecorator()
     def post(self):
-        print('start handling refresh token at refresh endpoint')
         currentIdentity = get_jwt_identity()
 
         # construct response

@@ -1,5 +1,5 @@
 from flask_restful import Resource
-from typing import Dict, List
+from typing import Dict
 from flask import jsonify, request
 from application.BlogService import BlogService
 from Configs.app import app
@@ -10,9 +10,9 @@ from Infrastructure.DataModels.BlogModel import Blog
 from Resources.viewModels.BlogSchema import BlogSchema
 from Resources.roleAccessDecorator import requires_jwt_role_claim
 from flask_jwt_extended import jwt_required
-from utils.util import printObject
 from Resources.parsers.QueryStringParser import QueryStringParser
 import ast
+from Aop.loggingDecorator import loggingDecorator
 
 
 class Blogs(Resource):
@@ -29,10 +29,10 @@ class Blogs(Resource):
         self._parser = QueryStringParser()
 
     # get all blogs
+    @loggingDecorator()
     def get(self, blog_id: str = None):
         if blog_id is None:
             app.logger.info("start processing get request at /blogs")
-            print("start processing get request at /blogs")
 
             queryString: Dict = self._parser.parse(request.args)
             # { items: List[blogSchema], totalCount: number }
@@ -43,7 +43,6 @@ class Blogs(Resource):
             return response
         else:
             app.logger.info("start processing get request at /blogs/{}".format(blog_id))
-            print("start processing get request at /blogs/{}".format(blog_id))
 
             result: Dict = self._blogService.getBlogService(blog_id=blog_id)
 
@@ -56,9 +55,8 @@ class Blogs(Resource):
     @jwt_required
     @requires_jwt_role_claim({'admin', 'member'})
     @validate_request_with(createOrUpdateBlogValidator)
+    @loggingDecorator()
     def put(self, blog_id: str):
-        app.logger.info("start processing put request at /blogs")
-        print("start processing put request at /blogs")
 
         tags = ast.literal_eval(request.form.get('tags')) if request.form.get('tags') is not None else []
         blogImagePaths = ast.literal_eval(request.form.get('blogImagePaths')) if request.form.get('blogImagePaths') is not None else []
@@ -90,9 +88,9 @@ class Blogs(Resource):
     @jwt_required
     @requires_jwt_role_claim({'admin', 'member'})
     @validate_request_with(publishBlogValidator)
+    @loggingDecorator()
     def patch(self, blog_id: str):
         app.logger.info("start processing patch request at /blogs")
-        print("start processing patch request at /blogs")
 
         newPublic = self._blogService.togglePublishBlogService(blog_id, request.json.get('public'))
 
@@ -101,10 +99,11 @@ class Blogs(Resource):
         return response
 
     # delete a single blog
+    @loggingDecorator()
     def delete(self, blog_id: str):
-        app.logger.info("start processing delete request at /blogs")
-        print("start processing delete request at /blogs")
+
         self._blogService.deleteBlogService(blog_id)
+
         response = jsonify({'delete': 'ok'})
         response.status_code = 200
         return response

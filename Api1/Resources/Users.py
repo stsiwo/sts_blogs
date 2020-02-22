@@ -3,10 +3,10 @@ from flask import request, jsonify
 from Resources.validators.validatorDecorator import validate_request_with
 from flask_jwt_extended import jwt_required
 from Resources.roleAccessDecorator import requires_jwt_role_claim
-from Configs.app import app
 from Resources.validators.userUpdateValidator import userUpdateValidator
 from application.UserService import UserService
 from typing import Dict
+from Aop.loggingDecorator import loggingDecorator
 
 
 class Users(Resource):
@@ -18,9 +18,8 @@ class Users(Resource):
 
     @jwt_required
     @requires_jwt_role_claim({'admin', 'member'})
+    @loggingDecorator()
     def get(self, user_id: str):
-        app.logger.info("start processing get request at /users")
-        print("start processing get request at /users")
 
         userViewModel: Dict = self._userService.getUserService(userId=user_id)
 
@@ -34,9 +33,8 @@ class Users(Resource):
     @jwt_required
     @requires_jwt_role_claim({'admin', 'member'})
     @validate_request_with(userUpdateValidator)
+    @loggingDecorator()
     def put(self, user_id: str):
-        app.logger.info("start processing put request at /users")
-        print("start processing put request at /users")
 
         updatedUser: Dict[str, str] = self._userService.updateUserService(
                 userId=user_id,

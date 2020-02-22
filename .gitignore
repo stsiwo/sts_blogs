@@ -1,6 +1,9 @@
 *.swp
 *.swo
 
+# log file
+*.log
+
 ### Api1 ###
 # venv
 env/

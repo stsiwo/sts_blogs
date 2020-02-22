@@ -9,9 +9,9 @@ from Resources.validators.validatorDecorator import validate_request_with
 from Resources.validators.userNewBlogValidator import userNewBlogValidator
 from Infrastructure.DataModels.BlogModel import Blog
 from Resources.viewModels.BlogSchema import BlogSchema
-from utils.util import printObject
 from Resources.parsers.QueryStringParser import QueryStringParser
 import ast
+from Aop.loggingDecorator import loggingDecorator
 
 
 class UserBlogs(Resource):
@@ -32,10 +32,11 @@ class UserBlogs(Resource):
     # ================================================
     @jwt_required
     @requires_jwt_role_claim({'admin', 'member'})
+    @loggingDecorator()
     def get(self, user_id: str, blog_id: str = None):
         if blog_id is None:
             app.logger.info("start processing get request at /users/{user_id}/blogs")
-            print("start processing get request at /users/{user_id}/blogs")
+
             queryString: Dict = self._parser.parse(request.args)
 
             result: List[Dict] = self._userBlogService.getAllUserBlogService(queryString, userId=user_id)
@@ -45,7 +46,7 @@ class UserBlogs(Resource):
             return response
         else:
             app.logger.info("start processing get request at /users/{user_id}/blogs/{blog_id}")
-            print("start processing get request at /users/{user_id}/blogs/{blog_id}")
+
             queryString: Dict = self._parser.parse(request.args)
 
             result: List[Dict] = self._userBlogService.getSpecificUserBlogService(userId=user_id, blogId=blog_id)
@@ -58,12 +59,8 @@ class UserBlogs(Resource):
     @jwt_required
     @requires_jwt_role_claim({'admin', 'member'})
     @validate_request_with(userNewBlogValidator)
+    @loggingDecorator()
     def post(self, user_id: str):
-        app.logger.info("start processing post request at /blogs")
-        print("start processing post request at /blogs")
-
-        print("***content of files")
-        print(request.files.get('mainImage'))
 
         tags = ast.literal_eval(request.form.get('tags')) if request.form.get('tags') is not None else []
         blogImagePaths = ast.literal_eval(request.form.get('blogImagePaths')) if request.form.get('blogImagePaths') is not None else []
@@ -104,9 +101,8 @@ class UserBlogs(Resource):
     # delete whole blogs
     @jwt_required
     @requires_jwt_role_claim({'admin', 'member'})
+    @loggingDecorator()
     def delete(self, user_id: str):
-        app.logger.info("start processing delete request at /blogs")
-        print("start processing delete request at /blogs")
 
         self._userBlogService.deleteAllBlogService(user_id)
 

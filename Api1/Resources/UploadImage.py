@@ -1,13 +1,13 @@
 from flask_restful import Resource
 from Resources.validators.userImageValidator import userImageValidator
 from flask import jsonify, request
-from Configs.app import app
 from Resources.validators.validatorDecorator import validate_request_with
 from Resources.roleAccessDecorator import requires_jwt_role_claim
 from flask_jwt_extended import jwt_required
 import os
 from application.UploadImageService import UploadImageService
 from flask_jwt_extended import get_jwt_identity
+from Aop.loggingDecorator import loggingDecorator
 
 
 class UploadImage(Resource):
@@ -21,9 +21,8 @@ class UploadImage(Resource):
     @jwt_required
     @requires_jwt_role_claim({'admin', 'member'})
     @validate_request_with(userImageValidator)
+    @loggingDecorator()
     def post(self):
-        app.logger.info("start processing post request at /uploadimage")
-        print("start processing post request at /uploadimage")
 
         uploadedFilePath: str = self._uploadImageService.saveUploadImageService(
                 files=request.files,
@@ -38,9 +37,8 @@ class UploadImage(Resource):
     @jwt_required
     @requires_jwt_role_claim({'admin', 'member'})
     @validate_request_with(userImageValidator)
+    @loggingDecorator()
     def put(self, file_name: str):
-        app.logger.info("start processing put request at /uploadimage")
-        print("start processing put request at /uploadimage")
 
         updatedFilePath: str = self._uploadImageService.updateUploadImageService(
                 files=request.files,

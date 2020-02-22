@@ -1,5 +1,4 @@
 from Configs.extensions import db
-import datetime
 from sqlalchemy.sql import func
 
 
@@ -13,3 +12,6 @@ class BaseModel(db.Model):
 
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+    def __str__(self):
+        return str(self.__class__) + ": " + str(self.__dict__)

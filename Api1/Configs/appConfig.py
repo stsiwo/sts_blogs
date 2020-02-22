@@ -18,9 +18,9 @@ def configureApp(config_object="Configs.settings"):
     # debugger (only staging and production)
     app.debug = app.config.get("DEBUG", True)
 
-    print("*** app config ***\n")
+    app.logger.info("*** app config ***\n")
     for key in app.config:
-        print('{}: {}'.format(key, app.config.get(key)))
+        app.logger.info('{}: {}'.format(key, app.config.get(key)))
 
     # commands
     app.cli.add_command(seed_cli)
