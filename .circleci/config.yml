@@ -36,7 +36,8 @@ jobs:
             echo 'Run API service testing (feature/* branch only)'
   build-push-src-image:
     # this allow to use 'docker' in this job
-    machine: true
+    machine:
+      image: ubuntu-1604:201903-01    # recommended linux image - includes Ubuntu 16.04, docker 18.09.3, docker-compose 1.23.1
     steps:
       - checkout
       - run:
@@ -44,6 +45,9 @@ jobs:
           command: |
             source ./set-app-version-env.sh
             docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
+
+            # use multistaging skip experimental feature >= Docker 18.06
+            export DOCKER_BUILDKIT=1
     
             docker build --tag=sts-blog-spa:$APP_VERSION --tag=sts-blog-spa:latest --target=staging ./Spa
             docker tag sts-blog-spa:$APP_VERSION stsiwo/sts-blog-spa:$APP_VERSION
@@ -64,7 +68,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Create GCloud Service Key Files
+          name: Deploy to Staging Server 
           command: |
             echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
             gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
