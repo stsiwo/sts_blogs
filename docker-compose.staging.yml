@@ -15,8 +15,11 @@ services:
     image: stsiwo/sts-blog-api
     ports: 
       - "5000:5000"
+    volumes:
+      - api-logging-staging-storage:/var/log/sts-blogs-api
     depends_on:
       - db
 volumes:
   db-data-staging-storage:
   db-logging-staging-storage:
+  api-logging-staging-storage:
