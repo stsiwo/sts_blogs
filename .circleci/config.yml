@@ -184,6 +184,7 @@ workflows:
             branches:
               only:
                 - /release\/.*/
+                - /hotfix\/.*/
       - acceptance-testing:
           requires:
            - staging-deployment
@@ -191,6 +192,7 @@ workflows:
             branches:
               only:
                 - /release\/.*/
+                - /hotfix\/.*/
       - production-build-push-src-image:
           filters:
             branches:

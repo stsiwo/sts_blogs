@@ -16,7 +16,7 @@ module.exports = merge(common, {
     new webpack.DefinePlugin({
       NODE_ENV: JSON.stringify("production"),
       DEBUG: JSON.stringify(""),
-      API1_URL: JSON.stringify("http://api.stsiwo.com"),
+      API1_URL: JSON.stringify("https://api.stsiwo.com"),
       PUBLIC_IMAGE_PATH: JSON.stringify("/images/"),
     })
   ],
