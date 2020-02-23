@@ -191,7 +191,7 @@ workflows:
             branches:
               only:
                 - /release\/.*/
-      - staging-build-push-src-image:
+      - production-build-push-src-image:
           filters:
             branches:
               only:
