@@ -195,7 +195,7 @@ workflows:
           filters:
             branches:
               only:
-                - /release\/.*/
+                - master 
       - production-deployment:
           requires:
            - production-build-push-src-image
