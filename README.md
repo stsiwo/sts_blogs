@@ -88,6 +88,7 @@
         * maybe this can be automate; include startup script
         * 2.4.1: preparation
           * 2.4.1.1: add scope of full control to GCS to your instance; enable to read/write gcs from your instance
+          * 2.4.1.2: use Nearline Storage for backup and (set Lifecycle Management to send to Archive Storage... im thinking for now)
         
 ### GCP Compute Engine Template for Staging/Production Server
   
