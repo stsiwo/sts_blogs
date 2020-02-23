@@ -154,38 +154,50 @@ workflows:
   ci-cd:
     jobs:
       - build:
+        # filters: combination of tags & branchs. below case, only run when only tags is push and not run when any branch is pushed
+        # switch to tags based filters since branches based filter makes every push to the branch cause ci/cd server to run even if the work hasn't finished 
           filters:
-            branches:
+            tags:
               only:
-                - /feature\/.*/
+                - /^feature-v.*/
+            branches:
+              ignore: /.*/
       - spa-service-testing:
           requires:
             - build
           filters:
-            branches:
+            tags:
               only:
-                - /feature\/.*/
+                - /^feature-v.*/
+            branches:
+              ignore: /.*/
       - api-service-testing:
           requires:
             - build
           filters:
-            branches:
+            tags:
               only:
-                - /feature\/.*/
+                - /^feature-v.*/
+            branches:
+              ignore: /.*/
       - staging-build-push-src-image:
           filters:
-            branches:
+            tags:
               only:
-                - /release\/.*/
-                - /hotfix\/.*/
+                - /^release-v.*/
+                - /^hotfix-v.*/
+            branches:
+              ignore: /.*/
       - staging-deployment:
           requires:
             - staging-build-push-src-image
           filters:
-            branches:
+            tags:
               only:
-                - /release\/.*/
-                - /hotfix\/.*/
+                - /^release-v.*/
+                - /^hotfix-v.*/
+            branches:
+              ignore: /.*/
 # tmply disable this since out of credit of circleci 
 #      - acceptance-testing:
 #          requires:
@@ -197,16 +209,20 @@ workflows:
 #                - /hotfix\/.*/
       - production-build-push-src-image:
           filters:
-            branches:
+            tags:
               only:
-                - master 
+                - /^v.*/ 
+            branches:
+              ignore: /.*/
       - production-deployment:
           requires:
            - production-build-push-src-image
           filters:
-            branches:
+            tags:
               only:
-                - master 
+                - /^v.*/ 
+            branches:
+              ignore: /.*/
       # jobs:
       #   build:
       #     executor: gcp-executor
