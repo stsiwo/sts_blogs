@@ -69,12 +69,13 @@
         * 2.1.2. setup firewall rules (open port 80, 443)
         * 2.1.3. setup DNS (use network tag to specify the isntance)
       * 2.2. SSL (letsEncrypt with Docker config)
+        * get ssl certificate first for each domains/subdomains and setup project
         * 2.2.1. necessary files
           * 2.2.1.1. docker-compose.<env_name>.ssl.yml (dir: app)
           * 2.2.1.2. nginx default.conf (dir: app/data/nginx)
           * 2.2.1.3. initial-letsencrypt.sh (dir: app) - startup script for docker-letsencrypt stuff
         * 2.2.2. steps
-          * 2.2.2.1 can use template file (from [reference](https://medium.com/@pentacent/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71)
+          * 2.2.2.1 can use template file (from [reference](https://medium.com/@pentacent/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71))
           * 2.2.2.2. replace 'example.org' with your domain and subdomain at 'initial-letsencrypt', 'default.conf', docker-compsoe.<env_name>.ssl.yml
           * 2.2.2.3. run initial-letsencrypt script
             * there are several ways to get certificate such as single certificate with multiple domain/subdomain or certificate for each domain/subdomain. check my [gist](https://gist.github.com/stsiwo/13a55cb8abab8517b2f8f78cf6167aae)
@@ -82,6 +83,20 @@
       * 2.3. Setup App
         * 2.3.1: project env vars
           * 2.3.1.1 create 'docker-compose.<env_name>.secrets' to store and setup sensitive info
+      * 2.4. Backupper Setup:
+        * get backup data & log from each docker service and send to GCS (Cloud Storage) 
+        * maybe this can be automate; include startup script
+        * 2.4.1: preparation
+          * 2.4.1.1: add scope of full control to GCS to your instance; enable to read/write gcs from your instance
+        
+### GCP Compute Engine Template for Staging/Production Server
+  
+  1. add metadata
+      1. 'enable-oslogin': TRUE
+  2. add startup script
+  3. API scope
+      1. full scope for GCS
+
 
 ### NOTE
   - staging server/production server use different nginx config due to ssl config
