@@ -102,15 +102,26 @@ jobs:
             echo 'Excute Acceptance Testing (release/* branch only)'
             cd ./IntegrationTesting
             mvn test
-            
   production-deployment:
-    docker:
-      - image: alpine:3.7
+    executor: gcp-executor
     steps:
+      - checkout
       - run:
-          name: Deploy To Production Server (master branch only)
+          name: Deploy to Production Server 
           command: |
-            echo 'Deploy To Production Server (master branch only)'
+            echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
+            gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+            gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
+            gcloud info
+            # gcloud compute scp --quiet ./docker-compose.staging.remote.yml ./docker-compose.staging.yml $GOOGLE_COMPUTE_NAME:/home/app --zone $GOOGLE_COMPUTE_ZONE
+            # create trigger.txt which is watched by incrontab
+            echo "trigger" > trigger.txt
+            # ERROR: (gcloud.compute.scp) INVALID_ARGUMENT: Login profile size exceeds 32 KiB. Delete profile values to make additional space.
+            # SOLUTION: add below command (reference: https://github.com/kyma-project/test-infra/issues/93)
+            # REASON: may be public key is cached and exceed the limit so need to clear?? (reference: https://cloud.google.com/sdk/gcloud/reference/beta/compute/os-login/ssh-keys/remove)
+            for i in $(gcloud compute os-login ssh-keys list | grep -v FINGERPRINT); do echo $i; gcloud compute os-login ssh-keys remove --key $i; done
+            # gcloud compute scp --quiet ./docker-compose.staging.yml ./trigger.txt sts-blogs-production:/home/app --zone us-central1-a 
+            gcloud compute scp --quiet ./trigger.txt sts-blogs-production:/home/app --zone us-central1-a 
 workflows:
   version: 2.1
   ci-cd:
