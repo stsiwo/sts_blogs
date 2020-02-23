@@ -177,6 +177,7 @@ workflows:
             branches:
               only:
                 - /release\/.*/
+                - /hotfix\/.*/
       - staging-deployment:
           requires:
             - staging-build-push-src-image
