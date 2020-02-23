@@ -177,6 +177,7 @@ workflows:
             branches:
               only:
                 - /release\/.*/
+                - /hotfix\/.*/
       - staging-deployment:
           requires:
             - staging-build-push-src-image
@@ -184,13 +185,16 @@ workflows:
             branches:
               only:
                 - /release\/.*/
-      - acceptance-testing:
-          requires:
-           - staging-deployment
-          filters:
-            branches:
-              only:
-                - /release\/.*/
+                - /hotfix\/.*/
+# tmply disable this since out of credit of circleci 
+#      - acceptance-testing:
+#          requires:
+#           - staging-deployment
+#          filters:
+#            branches:
+#              only:
+#                - /release\/.*/
+#                - /hotfix\/.*/
       - production-build-push-src-image:
           filters:
             branches:
