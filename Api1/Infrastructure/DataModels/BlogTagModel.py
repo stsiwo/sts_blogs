@@ -1,5 +1,5 @@
 from Configs.extensions import db
-
+from sqlalchemy.types import CHAR
 
 tags = db.Table(
         'blogs_tags',
@@ -10,12 +10,12 @@ tags = db.Table(
         ),
         db.Column(
             'blog_id',
-            db.Integer,
-            db.ForeignKey('blogs.id', ondelete='CASCADE'),
+            CHAR(36),
+            db.ForeignKey('blogs.id', name="FK_blogs_tags__blogs", ondelete='CASCADE', onupdate='CASCADE'),
         ),
         db.Column(
             'tag_name',
             db.VARCHAR(1000),
-            db.ForeignKey('tags.name', ondelete="CASCADE"),
+            db.ForeignKey('tags.name', name="FK_blogs_tags__tags", ondelete="CASCADE", onupdate='CASCADE'),
             ),
 )

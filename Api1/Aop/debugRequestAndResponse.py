@@ -1,15 +1,15 @@
-from Configs.appConfig import app
+from Configs.app import app
 from flask import Response, request
 
 
 @app.after_request
 def after(response: Response):
-    print('***debugging response***')
-    print('***response status:')
-    print(response.status)
-    print('***response header:')
-    print(response.headers)
-    print('***response data:')
+    app.logger.info('***debugging response***')
+    app.logger.info('***response status:')
+    app.logger.info(response.status)
+    app.logger.info('***response header:')
+    app.logger.info(response.headers)
+    app.logger.info('***response data:')
     # NOTE: request for image (/images) endpoint causes following errors:
     # RuntimeError: Attempted implicit sequence conversion but the response object is in direct passthrough mode.
     # reference: https://github.com/miguelgrinberg/oreilly-flask-apis-video/issues/6
@@ -17,21 +17,21 @@ def after(response: Response):
     # solution: below line
     response.direct_passthrough = False
 
-    print(response.get_data())
+    app.logger.info(response.get_data())
 
     return response
 
 
 @app.before_request
 def before_request():
-    print('*** debugging request ***')
-    print('*** request header ***')
-    print(request.headers)
-    print('*** request cookies ***')
-    print(request.cookies)
-    print('*** request data ***')
-    print(request.data)
-    print('*** request form ***')
-    print(request.form)
-    print('*** request files ***')
-    print(request.files)
+    app.logger.info('*** debugging request ***')
+    app.logger.info('*** request header ***')
+    app.logger.info(request.headers)
+    app.logger.info('*** request cookies ***')
+    app.logger.info(request.cookies)
+    app.logger.info('*** request data ***')
+    app.logger.info(request.data)
+    app.logger.info('*** request form ***')
+    app.logger.info(request.form)
+    app.logger.info('*** request files ***')
+    app.logger.info(request.files)

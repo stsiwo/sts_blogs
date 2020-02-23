@@ -13,6 +13,16 @@ import os
 # u06. admin user access test (admin can update all other user's data)
 # NOTE: image uploading has dedicated endpoint so not include image here
 
+# remaining tasks: 
+#   * please delete once you finish bellow task and update 'click' project management tool 
+# - re-implemntation of update profile logic (https://app.clickup.com/t/4ab5pa)
+#
+#
+#
+#
+#
+#
+
 
 @pytest.mark.user_src
 @pytest.mark.user_src_put

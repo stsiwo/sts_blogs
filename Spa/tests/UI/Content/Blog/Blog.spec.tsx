@@ -8,6 +8,13 @@ import { CssGlobalContextDefaultState } from "Contexts/CssGlobalContext/CssGloba
 import Blog from "ui/Content/Blog/Blog";
 import { blogGET200EmptyResponse, blogGET200NonEmptyResponse, singleBlogGET200NonEmptyResponse, networkError, internalServerError500Response } from "../../../requests/fixtures";
 import { ContextWrapperComponent } from "../../fixtures";
+import '../../../data/mocks/localStorageMock'
+jest.mock('react-router', () => ({
+  ...jest.requireActual('react-router'), // use actual for all non-hook parts
+  useParams: () => ({
+    blogId: '1',
+  }),
+}));
 
 
 describe('bl-c1: Blog Component testing', () => {
@@ -27,16 +34,26 @@ describe('bl-c1: Blog Component testing', () => {
    * a2. (DOM) should display blog data in each input field after initial api request 
    * a3. (api fetch) should display "no blog available" when initial fetch failed because of network error 
    * a4. (api fetch) should display "no blog available" when initial fetch failed because of 4xx or 5xx 
-   * a5. (api fetch) should not start api request when this component is updated
+   * //a5. (cache) should cache specific blog in localStorage 
    *
    **/
 
   beforeAll(() => {
     console.log('bl-c1: beforeAll ')
+    /**
+     *  Error: Uncaught [TypeError: window.getSelection is not a function]
+     *  : need to mock this
+     **/
+    window.getSelection = () => {
+      return {
+        removeAllRanges: () => { }
+      } as Selection
+    }
   })
 
   beforeEach(() => {
     console.log('bl-c1: beforeEach ')
+    localStorage.clear()
   })
 
   /** test for use case which does not matter screen size  here**/
@@ -61,8 +78,7 @@ describe('bl-c1: Blog Component testing', () => {
 
       await wait(() => {
         expect(getByRole('blog-title').innerHTML).toBeTruthy()
-        expect(getByRole('blog-title').innerHTML).toBeTruthy()
-        expect(getByRole('blog-title').innerHTML).toBeTruthy()
+        expect(getByRole('blog-subtitle').innerHTML).toBeTruthy()
       })
     })
   })
@@ -94,6 +110,21 @@ describe('bl-c1: Blog Component testing', () => {
       })
     })
   })
+
+  //test("a5. (cache) should cache specific blog in localStorage", async () => {
+  //  api.request = jest.fn().mockReturnValue(Promise.resolve(singleBlogGET200NonEmptyResponse))
+  //  await act(async () => {
+  //    const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+  //      <ContextWrapperComponent component={Blog} isAuth />
+  //    )
+
+  //    await wait(() => {
+  //      const path = (api.request as any).mock.calls[0][0].url
+  //      expect(localStorage.getItem(path)).not.toBeNull() 
+  //    })
+  //  })
+
+  //})
 
   afterEach(() => {
     console.log('bl-c1: afterEach ')

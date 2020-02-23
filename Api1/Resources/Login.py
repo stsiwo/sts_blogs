@@ -6,6 +6,7 @@ from Resources.validators.loginValidator import loginValidator
 from Configs.app import app
 from application.TokenService import TokenService
 from typing import Dict
+from Aop.loggingDecorator import loggingDecorator
 
 
 class Login(Resource):
@@ -19,8 +20,9 @@ class Login(Resource):
         self._service = LoginService()
 
     @validate_request_with(loginValidator)
+    @loggingDecorator()
     def post(self):
-        app.logger.info("received post request at /login")
+
         loginedUser: Dict = self._service.loginUserService(
                 email=request.json.get('email'),
                 password=request.json.get('password'),

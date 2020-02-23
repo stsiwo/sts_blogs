@@ -16,18 +16,18 @@ def test_bc_get01_blog_comment_get_endpoint_should_return_404_since_no_blogs_dat
 
 
 @pytest.mark.blog_comment_get
-def test_bc_get02_blog_comment_get_endpoint_should_return_200_code(client, blogCommentsSeededFixture, exSession):
+def test_bc_get02_blog_comment_get_endpoint_should_return_200_code(client, blogCommentsSeededFixture, exSession, blogsSeededFixture):
 
-    blog = exSession.query(Blog).get(1)
+    blog = blogsSeededFixture[0]  # index: 0 has comments
 
     response = client.get('/blogs/' + str(blog.id) + '/comments')
     assert 200 == response.status_code
 
 
 @pytest.mark.blog_comment_get
-def test_bc_get03_blog_comment_get_endpoint_should_return_list_of_comments_for_the_blog(client, blogCommentsSeededFixture, exSession):
+def test_bc_get03_blog_comment_get_endpoint_should_return_list_of_comments_for_the_blog(client, blogCommentsSeededFixture, exSession, blogsSeededFixture):
 
-    blog = exSession.query(Blog).get(1)
+    blog = blogsSeededFixture[0]  # index: 0 has comments
 
     response = client.get('/blogs/' + str(blog.id) + '/comments')
 
@@ -46,9 +46,9 @@ def test_bc_get03_blog_comment_get_endpoint_should_return_list_of_comments_for_t
 
 
 @pytest.mark.blog_comment_post_
-def test_bc_post01_blog_comment_post_endpoint_should_return_400_code_since_invalid_input(client, httpHeaders, blogCommentsSeededFixture, exSession):
+def test_bc_post01_blog_comment_post_endpoint_should_return_400_code_since_invalid_input(client, httpHeaders, blogCommentsSeededFixture, exSession, blogsSeededFixture):
 
-    blog = exSession.query(Blog).get(1)
+    blog = blogsSeededFixture[0]  # index: 0 has comments
 
     response = client.post(
             '/blogs/' + str(blog.id) + '/comments',
@@ -59,9 +59,9 @@ def test_bc_post01_blog_comment_post_endpoint_should_return_400_code_since_inval
 
 
 @pytest.mark.blog_comment_post_
-def test_bc_post02_blog_comment_post_endpoint_should_return_201_code_for_successfully_created_comment(client, httpHeaders, blogCommentsSeededFixture, exSession):
+def test_bc_post02_blog_comment_post_endpoint_should_return_201_code_for_successfully_created_comment(client, httpHeaders, blogCommentsSeededFixture, exSession, blogsSeededFixture):
 
-    blog = exSession.query(Blog).get(1)
+    blog = blogsSeededFixture[0]
 
     response = client.post(
             '/blogs/' + str(blog.id) + '/comments',
@@ -75,9 +75,9 @@ def test_bc_post02_blog_comment_post_endpoint_should_return_201_code_for_success
 
 
 @pytest.mark.blog_comment_post_
-def test_bc_post03_blog_comment_post_endpoint_should_return_newly_created_comment_when_successfully_created(client, httpHeaders, blogCommentsSeededFixture, exSession):
+def test_bc_post03_blog_comment_post_endpoint_should_return_newly_created_comment_when_successfully_created(client, httpHeaders, blogCommentsSeededFixture, exSession, blogsSeededFixture):
 
-    blog = exSession.query(Blog).get(1)
+    blog = blogsSeededFixture[0]
 
     response = client.post(
             '/blogs/' + str(blog.id) + '/comments',
@@ -100,9 +100,9 @@ def test_bc_post03_blog_comment_post_endpoint_should_return_newly_created_commen
 # bc_delete05: 204 status code when successfully delete all comments
 
 
-def test_bc_delete01_blog_comment_delete_endpoint_should_return_401_code_for_unauthorized_access_by_guest_user(client, blogCommentsSeededFixture, exSession):
+def test_bc_delete01_blog_comment_delete_endpoint_should_return_401_code_for_unauthorized_access_by_guest_user(client, blogCommentsSeededFixture, exSession, blogsSeededFixture):
 
-    blog = exSession.query(Blog).get(2)
+    blog = blogsSeededFixture[0]
 
     response = client.delete(
             '/blogs/' + str(blog.id) + '/comments',
@@ -111,9 +111,9 @@ def test_bc_delete01_blog_comment_delete_endpoint_should_return_401_code_for_una
     assert 401 == response.status_code
 
 
-def test_bc_delete02_blog_comment_delete_endpoint_should_return_401_code_for_unauthorized_access_by_member_user(authedClient, blogCommentsSeededFixture, exSession, httpHeaders):
+def test_bc_delete02_blog_comment_delete_endpoint_should_return_401_code_for_unauthorized_access_by_member_user(authedClient, blogCommentsSeededFixture, exSession, httpHeaders, blogsSeededFixture):
 
-    blog = exSession.query(Blog).get(2)
+    blog = blogsSeededFixture[0]
 
     csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
     httpHeaders['X-CSRF-TOKEN'] = csrf_token
@@ -128,8 +128,6 @@ def test_bc_delete02_blog_comment_delete_endpoint_should_return_401_code_for_una
 
 def test_bc_delete03_blog_comment_delete_endpoint_should_return_404_code_since_there_is_no_such_a_blog(authedAdminClient, blogCommentsSeededFixture, exSession, httpHeaders):
 
-    blog = exSession.query(Blog).get(2)
-
     csrf_token = [cookie.value for cookie in authedAdminClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
     httpHeaders['X-CSRF-TOKEN'] = csrf_token
 
@@ -141,9 +139,9 @@ def test_bc_delete03_blog_comment_delete_endpoint_should_return_404_code_since_t
     assert 404 == response.status_code
 
 
-def test_bc_delete04_blog_comment_delete_endpoint_should_return_404_code_since_there_is_no_comments_for_the_blog(authedAdminClient, blogCommentsSeededFixture, exSession, httpHeaders):
+def test_bc_delete04_blog_comment_delete_endpoint_should_return_404_code_since_there_is_no_comments_for_the_blog(authedAdminClient, blogCommentsSeededFixture, exSession, httpHeaders, blogsSeededFixture):
 
-    blog = exSession.query(Blog).get(2)
+    blog = blogsSeededFixture[1]
 
     csrf_token = [cookie.value for cookie in authedAdminClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
     httpHeaders['X-CSRF-TOKEN'] = csrf_token
@@ -156,9 +154,9 @@ def test_bc_delete04_blog_comment_delete_endpoint_should_return_404_code_since_t
     assert 404 == response.status_code
 
 
-def test_bc_delete05_blog_comment_delete_endpoint_should_return_204_code_for_successfully_deletion(authedAdminClient, blogCommentsSeededFixture, exSession, httpHeaders):
+def test_bc_delete05_blog_comment_delete_endpoint_should_return_204_code_for_successfully_deletion(authedAdminClient, blogCommentsSeededFixture, exSession, httpHeaders, blogsSeededFixture):
 
-    blog = exSession.query(Blog).get(1)
+    blog = blogsSeededFixture[0]
 
     csrf_token = [cookie.value for cookie in authedAdminClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
     httpHeaders['X-CSRF-TOKEN'] = csrf_token

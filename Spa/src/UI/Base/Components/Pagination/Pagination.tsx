@@ -28,7 +28,7 @@ const Pagination: React.FunctionComponent<PaginationPropType> = (props: Paginati
       </button>
       {(pageResult.pageList.map((page: PageType) => {
         return (
-          <button className={page.css} value={page.pageNum} key={page.pageNum} onClick={handlePageClickEvent}>{page.pageNum}</button>
+          <button className={page.css} value={page.pageNum} key={page.pageNum} onClick={handlePageClickEvent} role={`page-btn-${page.pageNum}`}>{page.pageNum}</button>
         );
       }))}
       <button className='pagination-btn' role='last-page-btn' value={pageResult.maxPageNum} onClick={handlePageClickEvent}>

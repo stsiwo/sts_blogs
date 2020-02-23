@@ -69,10 +69,10 @@ const Menu: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComp
       {auth.authed &&
         <>
           <li className="header-menu-li">
-            <Link className="header-menu-li-link" to="/setting/profile" onClick={handleCloseNavBarClickEvent}>Account</Link>
+            <Link className="header-menu-li-link" to="/setting/profile" onClick={handleCloseNavBarClickEvent} role="account-link">Account</Link>
           </li>
           <li className="header-menu-li">
-            <Link className="header-menu-li-link" to="/" onClick={handleLogoutClickEvent}>Logout</Link>
+            <Link className="header-menu-li-link" to="/" onClick={handleLogoutClickEvent} role="logout-link">Logout</Link>
           </li>
         </>
       }

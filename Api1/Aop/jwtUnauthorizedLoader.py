@@ -1,12 +1,13 @@
 from Configs.extensions import jwt
 from flask import jsonify
 from exceptions.UnauthorizedException import UnauthorizedExceptionTypeEnum
+from Configs.app import app
 
 
 @jwt.unauthorized_loader
 def my_unauthorized_loader(reason_why_jwt_not_found):
-    print('***start handling unauthorized (not jwt found) at unauthorized_loader mw')
-    print(reason_why_jwt_not_found)
+    app.logger.info('***start handling unauthorized (not jwt found) at unauthorized_loader mw')
+    app.logger.info(reason_why_jwt_not_found)
     # NOTE: must return response. can't raise exception. flask does not catch and replace with Exception response
     # raise UnauthorizedException(message='access token is expired', type=UnauthorizedExceptionTypeEnum.NEITHER_ACCESS_TOKEN_AND_REFRESH_TOKEN_EXIST)
     return jsonify({

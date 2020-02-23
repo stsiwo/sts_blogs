@@ -10,7 +10,7 @@ const ImageInput: React.FunctionComponent<ImageInputPropType> = (props: ImageInp
     <div className={props.wrapperStyle}>
       <img src={props.src} className={props.imgStyle} onLoad={props.handleRevokeObjectURLOnLoad} />
       {(props.src &&
-        <div className="icon-wrapper image-delete-icon-wrapper" onClick={props.handleImageRemoveClick}>
+        <div className="icon-wrapper image-delete-icon-wrapper" onClick={props.handleImageRemoveClick} role="avatar-delete-icon">
           <MdClose className="icon" />
         </div>
       )}

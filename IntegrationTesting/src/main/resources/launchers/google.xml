@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="Google Search Tests" verbose="1" parallel="tests" thread-count="2" >
+<!-- <suite name="Google Search Tests" verbose="1" >
+ -->    <parameter name="url" value="https://www.google.com/"/>
+ <parameter name="os" value="linux"/>
+ <parameter name="node" value="http://localhost:4444"/>
+
+ <test name="Tests on Firefox">
+   <parameter name="browser" value="firefox"/>
+   <parameter name="testUserName" value="test firefox"/>
+   <parameter name="testUserEmail" value="test@firefox.com"/>
+   <parameter name="testUserPassword" value="test_firefox"/>
+   <classes>
+     <class name="test.java.example.HomePageTest"/>   
+     <class name="test.java.example.HeaderComponentTest"/> 
+     <class name="test.java.example.LoginPageTest"/> 
+     <class name="test.java.example.SignupPageTest"/> 
+     <class name="test.java.example.BlogListPageTest"/> 
+     <class name="test.java.example.ProfilePageTest"/> 
+     <class name="test.java.example.NewBlogPageTest"/> 
+     <class name="test.java.example.UpdateBlogPageTest"/> 
+     <class name="test.java.example.BlogManagementPageTest"/> 
+     <class name="test.java.example.BlogPageTest"/>
+   </classes>
+ </test>
+ <test name="Tests on Chrome" >
+   <parameter name="browser" value="chrome"/>
+   <parameter name="testUserName" value="test chrome"/>
+   <parameter name="testUserEmail" value="test@chrome.com"/>
+   <parameter name="testUserPassword" value="test_chrome"/>
+   <classes>
+     <class name="test.java.example.HomePageTest"/>  
+     <class name="test.java.example.HeaderComponentTest"/> 
+     <class name="test.java.example.LoginPageTest"/> 
+     <class name="test.java.example.SignupPageTest"/> 
+     <class name="test.java.example.BlogListPageTest"/> 
+     <class name="test.java.example.ProfilePageTest"/> 
+     <class name="test.java.example.NewBlogPageTest"/> 
+     <class name="test.java.example.UpdateBlogPageTest"/> 
+     <class name="test.java.example.BlogManagementPageTest"/> 
+     <class name="test.java.example.BlogPageTest"/>
+   </classes>
+ </test>
+ </suite>

@@ -37,7 +37,7 @@ def test_br1_get_all_should_return_no_orOp_filtered_pagination_object(blogsSeede
     dummyQS: Dict = {
             'orOp': False,
             'tags': {
-                'value': ['react'],
+                'value': ['js'],
                 'orOp': False
                 },
             'startDate': {
@@ -52,26 +52,28 @@ def test_br1_get_all_should_return_no_orOp_filtered_pagination_object(blogsSeede
 
     assert len(result['blogs']) != 0
     for blog in result['blogs']:
-        assert any(tag.name == 'react' for tag in blog.tags)
+        assert any(tag.name == 'js' for tag in blog.tags)
 
 
 @pytest.mark.blog_repo
 def test_br2_get(blogsSeededFixture):
 
+    targetBlog = blogsSeededFixture[0]
+
     blogRepo = BlogRepository()
 
-    blog = blogRepo.get(2)
+    blog = blogRepo.get(targetBlog.id)
 
-    assert blog.id == 2
+    assert blog.id == targetBlog.id
 
 
 @pytest.mark.blog_repo
-def test_ur3_find(blogsSeededFixture):
+def test_ur3_find(blogsSeededFixture, usersSeededFixture):
 
     blogRepo = BlogRepository()
 
     blogs = blogRepo.find(
-            userId=2
+            userId=usersSeededFixture.id
             )
 
     assert len(blogs) != 0
@@ -106,19 +108,21 @@ def test_br8_delete(exSession, blogsSeededFixture):
 
 
 @pytest.mark.blog_repo
-def test_br8_deleteByUserId(exSession, blogsSeededFixture):
+def test_br8_deleteByUserId(exSession, blogsSeededFixture, usersSeededFixture):
+
+    testUser = usersSeededFixture
 
     blogRepo = BlogRepository()
 
-    blogs = blogRepo.find(userId=2)
+    blogs = blogRepo.find(userId=testUser.id)
 
     assert len(blogs) != 0
 
     # test user id = 2
-    blogRepo.deleteByUserId(2)
+    blogRepo.deleteByUserId(testUser.id)
 
     exSession.commit()
 
-    deletedBlog = blogRepo.find(userId=2)
+    deletedBlog = blogRepo.find(userId=testUser.id)
 
     assert len(deletedBlog) == 0

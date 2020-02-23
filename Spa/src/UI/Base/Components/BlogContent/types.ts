@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { Node } from 'slate'
-import { CustomElementProps } from 'src/slate-react/components/custom';
+import { Node } from 'Components/fork/slate'
+import { RenderElementProps } from 'Components/fork/slate-react';
 
 export declare type BlogContentPropType = {
   userId: string
@@ -8,13 +8,14 @@ export declare type BlogContentPropType = {
   id: string
   value: Node[] 
   placeholder: string
-  onChange: (content: Node[], imageFiles: File[], imagePaths: string[]) => void 
+  onChange: (content: Node[]) => void 
   onFocus: React.EventHandler<React.FocusEvent<HTMLInputElement>>
   errorMsg: string
 }
 
-export declare type ImageCustomElementProps = CustomElementProps & {
+export declare type ImageCustomElementProps = RenderElementProps & {
   src: string
+  isNew: boolean
   publicSrc: URL
   imageFile?: Blob // extract this when saving. need to remove.
   style?: string

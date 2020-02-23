@@ -2,15 +2,15 @@ from Configs.app import app
 from Infrastructure.DataModels.BlogModel import Blog
 from Infrastructure.DataModels.TagModel import Tag
 from Infrastructure.DataModels.BlogImageModel import BlogImage
-from typing import Dict, List, BinaryIO
+from typing import Dict, List
 from Resources.viewModels.BlogSchema import BlogSchema
 from Infrastructure.transactionDecorator import db_transaction
 from Infrastructure.repositories.BlogRepository import BlogRepository
 from Infrastructure.repositories.TagRepository import TagRepository
 from exceptions.BlogNotFoundException import BlogNotFoundException
 from application.FileService import FileService
-from utils.util import printObject
 from werkzeug import FileStorage
+from Aop.loggingDecorator import loggingDecorator
 
 
 class UserBlogService(object):
@@ -29,23 +29,33 @@ class UserBlogService(object):
         self._tagRepository = TagRepository()
         self._fileService = FileService()
 
+    @loggingDecorator()
     def getAllUserBlogService(self, queryString: Dict, userId: str = None) -> List[Dict]:
-        app.logger.info("start userblog user service")
-        print("start userblog user service")
 
         # TODO; if user id does not exist, should return 404 code
         # https://app.clickup.com/t/3m574q
         # really? why?
-        result: Dict = self._blogRepository.getAll(queryString, userId)
+        result: Dict = self._blogRepository.getAll(queryString, userId, onlyPublic=False)
 
         result['blogs']: List[Dict] = [self._blogSchema.dump(blog) for blog in result['blogs']]
 
         return result
 
-    @db_transaction()
-    def createNewBlogService(self, user_id: str, title: str, subtitle: str, content: str, tags: List[str] = [], mainImage: FileStorage = None, blogImages: List[FileStorage] = [], blogImagePaths: List[str] = []) -> Blog:
+    @loggingDecorator()
+    def getSpecificUserBlogService(self, userId: str = None, blogId: str = None) -> Dict:
         app.logger.info("start userblog user service")
-        print("start userblog user service")
+
+        result: Blog = self._blogRepository.findOnlyOne(id=blogId, userId=userId)
+
+        if result is None:
+            raise BlogNotFoundException()
+        schema = self._blogSchema.dump(result)
+
+        return schema
+
+    @db_transaction()
+    @loggingDecorator()
+    def createNewBlogService(self, user_id: str, title: str, subtitle: str, content: str, tags: List[str] = [], mainImage: FileStorage = None, blogImages: List[FileStorage] = [], blogImagePaths: List[str] = []) -> Blog:
 
         # TODO; if user id does not exist, should return 404 code
         # https://app.clickup.com/t/3m574q
@@ -78,8 +88,6 @@ class UserBlogService(object):
 
     @db_transaction()
     def deleteAllBlogService(self, user_id: str) -> None:
-        app.logger.info("start delete all user blog service")
-        print("start delete all user blog service")
 
         # TODO; if user id does not exist, should return 404 code
         # https://app.clickup.com/t/3m574q

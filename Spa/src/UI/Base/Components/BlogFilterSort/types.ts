@@ -1,10 +1,12 @@
 import * as React from 'react'
+import { PaginationStatusType } from 'Components/Pagination/types';
 
 export declare type BlogFilterSortPropType = {
   currentFilters: FilterType
   currentSort: number
   setFilters: React.Dispatch<React.SetStateAction<FilterType>>
   setSort: React.Dispatch<React.SetStateAction<number>>
+  setPaginationStatus: React.Dispatch<React.SetStateAction<PaginationStatusType>>
 }
 
 export declare type TagType = {

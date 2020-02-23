@@ -7,6 +7,8 @@ from Infrastructure.DataModels.UserModel import User
 from Infrastructure.DataModels.BlogModel import Blog
 from click import ClickException
 from tests.data.generators.BlogGenerator import generateBlogModelV2
+import uuid
+import datetime
 
 
 seed_cli = AppGroup('seed')
@@ -15,6 +17,10 @@ app_cli = AppGroup('app')
 
 def check_if_exists(model, **kwargs):
     return db.session.query(model).filter_by(**kwargs).first()
+
+
+def check_if_exists_by_count(model):
+    return db.session.query(model).count()
 
 
 @seed_cli.command('roles')
@@ -68,6 +74,7 @@ def add_test_users():
 
         db.session.add(
                 User(
+                    id=str(uuid.uuid4()),
                     name="test member",
                     email="test@member.com",
                     password="test_member",
@@ -78,6 +85,7 @@ def add_test_users():
         # admin
         db.session.add(
                 User(
+                    id=str(uuid.uuid4()),
                     name="test admin",
                     email="test@admin.com",
                     password="test_admin",
@@ -87,6 +95,7 @@ def add_test_users():
 
         db.session.add(
                 User(
+                    id=str(uuid.uuid4()),
                     name="test member1",
                     email="test@member1.com",
                     password="test_member1",
@@ -95,6 +104,7 @@ def add_test_users():
                 )
         db.session.add(
                 User(
+                    id=str(uuid.uuid4()),
                     name="test member2",
                     email="test@member2.com",
                     password="test_member2",
@@ -103,6 +113,7 @@ def add_test_users():
                 )
         db.session.add(
                 User(
+                    id=str(uuid.uuid4()),
                     name="test member3",
                     email="test@member3.com",
                     password="test_member3",
@@ -111,6 +122,7 @@ def add_test_users():
                 )
         db.session.add(
                 User(
+                    id=str(uuid.uuid4()),
                     name="test member4",
                     email="test@member4.com",
                     password="test_member4",
@@ -120,9 +132,30 @@ def add_test_users():
 
         db.session.add(
                 User(
+                    id=str(uuid.uuid4()),
                     name="test member5",
                     email="test@member5.com",
                     password="test_member5",
+                    roles=memberRole
+                    )
+                )
+
+        db.session.add(
+                User(
+                    id=str(uuid.uuid4()),
+                    name="test firefox",
+                    email="test@firefox.com",
+                    password="test_firefox",
+                    roles=memberRole
+                    )
+                )
+
+        db.session.add(
+                User(
+                    id=str(uuid.uuid4()),
+                    name="test chrome",
+                    email="test@chrome.com",
+                    password="test_chrome",
                     roles=memberRole
                     )
                 )
@@ -132,19 +165,100 @@ def add_test_users():
 
 @seed_cli.command('test-blogs')
 def add_test_blogs():
-    if check_if_exists(Blog, id="1") is None:
+    if check_if_exists_by_count(Blog) is 0:
         memberUser = db.session.query(User).filter(User.name == 'test member').first()
         adminUser = db.session.query(User).filter(User.name == 'test admin').first()
         memberUser1 = db.session.query(User).filter(User.name == 'test member1').first()
+        memberFirefox = db.session.query(User).filter(User.name == 'test firefox').first()
+        memberChrome = db.session.query(User).filter(User.name == 'test chrome').first()
+        jsTag = db.session.query(Tag).filter(Tag.name == 'js').first()
+        reactTag = db.session.query(Tag).filter(Tag.name == 'react').first()
 
-        for i in range(100):
+        for i in range(50):
             db.session.add(generateBlogModelV2(user=memberUser))
 
-        for i in range(100):
-            db.session.add(generateBlogModelV2(user=adminUser))
+        for i in range(50):
+            db.session.add(generateBlogModelV2(user=memberUser, public=True))
 
-        for i in range(3):
+        for i in range(50):
+            db.session.add(generateBlogModelV2(user=adminUser, tags=[jsTag, reactTag]))
+
+        for i in range(50):
+            db.session.add(generateBlogModelV2(user=adminUser, public=True))
+
+        for i in range(50):
             db.session.add(generateBlogModelV2(user=memberUser1))
+
+        for i in range(50):
+            db.session.add(generateBlogModelV2(user=memberUser1, public=True, tags=[jsTag, reactTag]))
+
+        for i in range(50):
+            db.session.add(generateBlogModelV2(user=memberFirefox))
+
+        for i in range(50):
+            db.session.add(generateBlogModelV2(user=memberFirefox, public=True))
+
+        for i in range(50):
+            db.session.add(generateBlogModelV2(user=memberChrome, tags=[jsTag, reactTag]))
+
+        for i in range(50):
+            db.session.add(generateBlogModelV2(user=memberChrome, public=True, tags=[jsTag, reactTag]))
+
+        driverList: [User] = [memberFirefox, memberChrome]
+
+        # you don't need to define test specific data for testing specific test case
+        for user in driverList:
+            # sort & filter dedicated blogs
+            # keyword (title and subtitle)
+            db.session.add(generateBlogModelV2(
+                title="keyword",
+                user=user,
+                public=True
+                ))
+
+            # start date (createdDate)
+            db.session.add(generateBlogModelV2(
+                createdDate=datetime.datetime(1550, 5, 1, 0, 0, 0, 0),
+                user=user,
+                public=True
+                ))
+
+            # end date (createdDate)
+            db.session.add(generateBlogModelV2(
+                createdDate=datetime.datetime(2050, 6, 1, 0, 0, 0, 0),
+                user=user,
+                public=True
+                ))
+
+            # sort title (asc)
+            db.session.add(generateBlogModelV2(
+                title="aaaaa",
+                user=user,
+                public=True
+                ))
+
+            # sort title (desc)
+            db.session.add(generateBlogModelV2(
+                title="zzzz",
+                user=user,
+                public=True
+                ))
+
+            # sort clap (max = 1000)
+            db.session.add(generateBlogModelV2(
+                clap=1000,
+                user=user,
+                public=True
+                ))
+
+            # sort clap (min = 0) use existing default blog
+
+            # filter tag
+            db.session.add(generateBlogModelV2(
+                tags=[jsTag, reactTag],
+                user=user,
+                public=True
+                ))
 
         db.session.commit()
 

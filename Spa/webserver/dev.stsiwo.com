@@ -7,8 +7,9 @@ server {
     error_log /var/log/nginx/dev.stsiwo.com.error.log info;
 
     location / {
-        root   /var/www;
-        index  index.html index.htm;
+      root   /var/www;
+      # this is required because manually write for url cause 404 at react app
+      try_files $uri /index.html; 
     }
 }
 

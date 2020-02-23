@@ -7,6 +7,7 @@ from application.FileService import FileService
 from Infrastructure.repositories.UserRepository import UserRepository
 from exceptions.UserNotFoundException import UserNotFoundException
 from werkzeug.datastructures import FileStorage
+from Aop.loggingDecorator import loggingDecorator
 
 
 class UserService(object):
@@ -22,9 +23,8 @@ class UserService(object):
         self._fileService = FileService()
         self._userRepository = UserRepository()
 
+    @loggingDecorator()
     def getUserService(self, userId: str) -> Dict:
-        app.logger.info("start get user service")
-        print("start get user service")
 
         targetUser = self._userRepository.get(id=userId)
 
@@ -36,9 +36,8 @@ class UserService(object):
         return targetUser
 
     @db_transaction()
+    @loggingDecorator()
     def updateUserService(self, userId: str, input: Dict, avatarImage: FileStorage = None) -> User:
-        app.logger.info("start update user service")
-        print("start update user service")
 
         # need to implement 'optimistic locking' later
         # to avoid any confict concurrency request
@@ -47,13 +46,23 @@ class UserService(object):
         if targetUser is None:
             raise UserNotFoundException
 
-        if avatarImage is not None:
-            self._fileService.deleteImageFile(targetUser.id, targetUser.avatarUrl)
-            targetUser.avatarUrl = self._fileService.saveImageFileToDir(avatarImage, targetUser.id)
+        if targetUser.avatarUrl is not None:
+            if avatarImage is not None:
+                self._fileService.deleteImageFile(targetUser.id, targetUser.avatarUrl)
+                targetUser.avatarUrl = self._fileService.saveImageFileToDir(avatarImage, targetUser.id)
+            else:
+                if input.get("avatarDeleteFlag") is not None:
+                    self._fileService.deleteImageFile(targetUser.id, targetUser.avatarUrl)
+                    targetUser.avatarUrl = None
+        else:
+            if avatarImage is not None:
+                targetUser.avatarUrl = self._fileService.saveImageFileToDir(avatarImage, targetUser.id)
 
         targetUser.name = input.get('name')
         targetUser.email = input.get('email')
-        targetUser.password = input.get('password')
+
+        if input.get('password', None) is not None and input.get('password'):
+            targetUser.password = input.get('password')
 
         targetUser = self._userSchema.dump(targetUser)
 

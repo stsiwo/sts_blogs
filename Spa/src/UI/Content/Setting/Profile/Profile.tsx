@@ -29,6 +29,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
 
   const { currentRequestStatus: currentUpdateRequestStatus, setRequestStatus: setUpdateRequestStatus, sendRequest: sendUpdateRequest } = useRequest({})
   const { currentRequestStatus: currentUserFetchStatus, setRequestStatus: setUserFetchStatus, sendRequest: fetchUser } = useRequest({})
+  const [ currentAvatarDeleteFlag, setAvatarDeleteFlag ] = React.useState<boolean>(false)
 
   /** lifecycle **/
 
@@ -36,7 +37,8 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
     const formData = new FormData()
     formData.set('name', state.name)
     formData.set('email', state.email)
-    formData.set('password', state.password)
+    if (currentAvatarDeleteFlag) formData.set('avatarDeleteFlag', 'delete')
+    if (state.password) formData.set('password', state.password)
     if (state.avatarImage) formData.set('avatarImage', state.avatarImage)
     return formData
   }
@@ -46,6 +48,8 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
     fetchUser({
       path: path,
       method: RequestMethodEnum.GET,
+      useCache: false,
+      allowCache: false
     })
       // call from previous 'catch' and 'then' of 'fetchUser'
       // since resolve promise in the 'catch'
@@ -57,6 +61,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
 
 
   const handleImageUploadChange: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
+    setAvatarDeleteFlag(false)
     let imgFile: File = e.currentTarget.files[0]
     imgFile = generateFileWithUuidv4(imgFile)
     const imgSrc: string = window.URL.createObjectURL(imgFile);
@@ -68,6 +73,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const handleImageRemoveClick: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
+    setAvatarDeleteFlag(true)
     setUser({
       ...currentUser,
       avatarImage: null,
@@ -141,7 +147,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
   return (currentUserFetchStatus.status === ResponseResultStatusEnum.SUCCESS &&
     <div className="context-wrapper">
       <div className="main-wrapper">
-        <h2 className="profile-title">Profile Management</h2>
+        <h2 className="page-title">Profile Management</h2>
         <FetchStatus
           currentFetchStatus={currentUpdateRequestStatus}
           setFetchStatus={setUpdateRequestStatus}
@@ -222,7 +228,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
             errorMsg={currentValidationError.confirm}
           />
           <div className="grid-input-wrapper">
-            <button type="button" className="btn" onClick={handleSaveUserClickEvent}>Update</button>
+            <button type="button" className="btn" onClick={handleSaveUserClickEvent} role="update-btn">Update</button>
           </div>
         </div>
       </div>

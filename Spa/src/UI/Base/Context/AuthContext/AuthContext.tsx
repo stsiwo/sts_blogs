@@ -2,6 +2,7 @@ import { createContext, useContext, useReducer, Reducer, ReducerState, Dispatch,
 import { AuthContextType, AuthContextActionType, AuthType } from "./types";
 import { storeUserInfo, removeUserInfo, isUserLoggedIn, getUserInfo } from "../../../../storages/user";
 import { Action } from "redux";
+import { getUserTestData } from '../../../../../tests/data/UserFaker';
 var debug = require('debug')('ui:AuthContext')
 
 
@@ -42,7 +43,11 @@ export const useUpdateAuthContextReducer = (initialAuth: AuthType = null): [Redu
   //const defaultAuth = initialAuth ? initialAuth : { authed: false }
   console.log('inside useUpdateAuthContextReducer')
   console.log(isUserLoggedIn())
-  const defaultAuth = isUserLoggedIn() ? { authed: true, user: getUserInfo() } : { authed: false }
+  let defaultAuth = isUserLoggedIn() ? { authed: true, user: getUserInfo() } : { authed: false }
+  if (NODE_ENV === 'development') defaultAuth = {
+    authed: true,
+    user: getUserTestData(1)[0]
+  }
   return useReducer(updateAuthContextReducer, defaultAuth)
 }
 

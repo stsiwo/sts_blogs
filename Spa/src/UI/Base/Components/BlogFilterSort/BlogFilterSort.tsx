@@ -15,6 +15,7 @@ import { sortList, SortType } from 'domain/blog/Sort';
 import { TagType } from 'domain/tag/TagType';
 import './BlogFilterSort.scss'
 import { MdClose } from 'react-icons/md';
+import { PaginationStatusType } from 'Components/Pagination/types';
 var debug = require('debug')('ui:BlogFilterSort')
 
 const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: BlogFilterSortPropType) => {
@@ -37,12 +38,23 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
 
     if (e.currentTarget.value === "") return false
 
-    if (e.key == 'Enter' || e.key == 'Tab') {
+    if (e.key == 'Enter' || e.key == 'Tab' || e.key == ' ') {
       debug("updating tag filters")
       props.currentFilters.tags.push({ name: e.currentTarget.value })
       props.setFilters({
         ...props.currentFilters,
       })
+      // prevent illogocal when filter & pagination
+      // ex) when page=3, only changing filter cause page=3 with filter
+      //  this might ends up no result found
+      //  so get page number back to 1
+      // - it is ok to use multiple setState at single event handler because of batch update of React
+      //  and it ends up only single fetch request at useEffect
+      props.setPaginationStatus((prev: PaginationStatusType) => ({
+        ...prev,
+        page: 1,
+        limit: 20,
+      }))
       e.currentTarget.value = ""
     }
   }
@@ -52,6 +64,17 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
     props.setFilters({
       ...props.currentFilters
     })
+    // prevent illogocal when filter & pagination
+    // ex) when page=3, only changing filter cause page=3 with filter
+    //  this might ends up no result found
+    //  so get page number back to 1
+    // - it is ok to use multiple setState at single event handler because of batch update of React
+    //  and it ends up only single fetch request at useEffect
+    props.setPaginationStatus((prev: PaginationStatusType) => ({
+      ...prev,
+      page: 1,
+      limit: 20,
+    }))
   }
 
   const handleFilterCreationDateEndChangeEvent = (endDate: Date): void => {
@@ -59,6 +82,17 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
     props.setFilters({
       ...props.currentFilters
     })
+    // prevent illogocal when filter & pagination
+    // ex) when page=3, only changing filter cause page=3 with filter
+    //  this might ends up no result found
+    //  so get page number back to 1
+    // - it is ok to use multiple setState at single event handler because of batch update of React
+    //  and it ends up only single fetch request at useEffect
+    props.setPaginationStatus((prev: PaginationStatusType) => ({
+      ...prev,
+      page: 1,
+      limit: 20,
+    }))
   }
 
   const handleSortChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
@@ -76,6 +110,17 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
     props.setFilters({
       ...props.currentFilters
     })
+    // prevent illogocal when filter & pagination
+    // ex) when page=3, only changing filter cause page=3 with filter
+    //  this might ends up no result found
+    //  so get page number back to 1
+    // - it is ok to use multiple setState at single event handler because of batch update of React
+    //  and it ends up only single fetch request at useEffect
+    props.setPaginationStatus((prev: PaginationStatusType) => ({
+      ...prev,
+      page: 1,
+      limit: 20,
+    }))
   }
 
   const handleFilterDeleteIconClickEvent: React.EventHandler<React.MouseEvent<HTMLElement>> = (e) => {
@@ -84,6 +129,17 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
       ...props.currentFilters,
       [targetFilterKey]: ''
     })
+    // prevent illogocal when filter & pagination
+    // ex) when page=3, only changing filter cause page=3 with filter
+    //  this might ends up no result found
+    //  so get page number back to 1
+    // - it is ok to use multiple setState at single event handler because of batch update of React
+    //  and it ends up only single fetch request at useEffect
+    props.setPaginationStatus((prev: PaginationStatusType) => ({
+      ...prev,
+      page: 1,
+      limit: 20,
+    }))
   }
 
   const handleTagDeleteClickEvent: React.EventHandler<React.MouseEvent<HTMLElement>> = (e) => {
@@ -94,6 +150,17 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
       console.log(prev)
       return { ...prev }
     })
+    // prevent illogocal when filter & pagination
+    // ex) when page=3, only changing filter cause page=3 with filter
+    //  this might ends up no result found
+    //  so get page number back to 1
+    // - it is ok to use multiple setState at single event handler because of batch update of React
+    //  and it ends up only single fetch request at useEffect
+    props.setPaginationStatus((prev: PaginationStatusType) => ({
+      ...prev,
+      page: 1,
+      limit: 20,
+    }))
   }
 
   const handleFilterSortNavClickEvent: React.EventHandler<React.MouseEvent<HTMLElement>> = (e) => {
@@ -139,8 +206,8 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
     const wrapperStyle = currentScreenSize.isLTETablet ? "" : "aside-filter-tag-wrapper"
     const nameStyle = currentScreenSize.isLTETablet ? "" : "aside-filter-tag-name"
     debug("before render selected tags")
-    debug(currentScreenSize.isLTELaptop) 
-    debug(wrapperStyle) 
+    debug(currentScreenSize.isLTELaptop)
+    debug(wrapperStyle)
     return props.currentFilters.tags.map((tag: TagType) => {
       return (
         <Tag
@@ -232,7 +299,7 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
             <input type="text" id='tag' name='tag' className="white-input aside-filter-input" onKeyDown={handleTagInputEnterOrTabKeyClickEvent} ref={tagInputRef} placeholder="enter #tags here ..." />
           )}
           {(isTagsLimit &&
-            <input type="text" id='tag' name='tag' className="white-input aside-filter-input" onKeyDown={handleTagInputEnterOrTabKeyClickEvent} ref={tagInputRef} placeholder="opps you reached max tags limit ..." readOnly/>
+            <input type="text" id='tag' name='tag' className="white-input aside-filter-input" onKeyDown={handleTagInputEnterOrTabKeyClickEvent} ref={tagInputRef} placeholder="opps you reached max tags limit ..." readOnly />
           )}
         </div>
         <div className="aside-filter-tags-list-selected">

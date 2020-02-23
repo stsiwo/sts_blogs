@@ -19,7 +19,7 @@ from Resources.PasswordReset import PasswordReset
 api.add_resource(TokenRefresh, '/token/refresh')
 api.add_resource(TokenRemove, '/token/remove')
 api.add_resource(Users, '/users/<string:user_id>')
-api.add_resource(UserBlogs, '/users/<string:user_id>/blogs')
+api.add_resource(UserBlogs, '/users/<string:user_id>/blogs', '/users/<string:user_id>/blogs/<string:blog_id>')
 api.add_resource(Signup, '/signup')
 api.add_resource(Login, '/login')
 api.add_resource(Blogs, '/blogs', '/blogs/<string:blog_id>')

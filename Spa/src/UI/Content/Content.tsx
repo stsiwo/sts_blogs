@@ -19,7 +19,7 @@ const Content: React.FunctionComponent<{}> = (props: {}) => {
         <Route path="/login" exact component={Login} />
         <Route path="/signup" exact component={Signup} />
         <Route path="/blogs" exact component={BlogList} />
-        <Route path="/blogs/:id" exact component={Blog} />
+        <Route path="/blogs/:blogId" exact component={Blog} />
         {/** siince setting has route, remove 'exact' **/}
         <AuthRoute path="/setting" component={Setting} />
       </Switch>

@@ -3,7 +3,7 @@ import { ErrorResponseDataType } from "requests/types";
 
 export const apiConfig: AxiosRequestConfig = {
   baseURL: API1_URL,
-  timeout: 5000,
+  timeout: 30000, // default 30 sec
   // work like middleware between client and backend about response
   // can transform response data (json) 
   transformResponse: function (data) {

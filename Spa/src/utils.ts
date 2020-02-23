@@ -50,3 +50,13 @@ export function generateFileWithUuidv4(targetFile: File) {
   var blob: Blob = targetFile.slice(0, targetFile.size, targetFile.type)
   return new File([blob], targetFile.name.replace(/.*(?=\.)/, uuidv4()), { type: targetFile.type })
 }
+
+export function getUuidv4() {
+  return uuidv4()
+}
+
+export function getTimeOneHourAfter() {
+  var dt = new Date();
+  dt.setHours( dt.getHours() + 1 )
+  return dt.getTime()
+}

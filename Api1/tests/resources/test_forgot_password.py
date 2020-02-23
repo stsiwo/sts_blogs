@@ -37,7 +37,7 @@ def test_fp_post02_forgot_password_post_endpoint_should_return_404_code_since_no
 @pytest.mark.forgot_password_src_post
 def test_fp_post03_forgot_password_post_endpoint_should_return_500_code_since_internal_email_service_exception_is_thrown(client, httpHeaders, patchedYgmailSendFuncWithThrowException, usersSeededFixture, exSession):
 
-    userEmail = exSession.query(User).get(2).email
+    userEmail = usersSeededFixture.email
 
     response = client.post(
             '/forgot-password',
@@ -54,7 +54,7 @@ def test_fp_post03_forgot_password_post_endpoint_should_return_500_code_since_in
 @pytest.mark.forgot_password_src_post
 def test_fp_post04_forgot_password_post_endpoint_should_return_202_code_for_successfully_email_was_sent(client, httpHeaders, patchedYgmailSendFunc, usersSeededFixture, exSession):
 
-    userEmail = exSession.query(User).get(2).email
+    userEmail = usersSeededFixture.email
 
     response = client.post(
             '/forgot-password',

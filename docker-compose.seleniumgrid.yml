@@ -7,21 +7,40 @@ services:
     container_name: selenium-hub
     ports:
       - "4444:4444"
+    # this is for server_name at webserver (nginx) and cors at api to prevent cors error at node browser
+    # comment out for staging server (not running at local)
+    # links: 
+    #   - "webserver:dev.stsiwo.com"
+    #   - "webserver:dev.api.stsiwo.com"
   chrome:
     image: selenium/node-chrome:3.141.59-xenon
     volumes:
       - /dev/shm:/dev/shm
+        # this is for providing test src such as image to selenium node
+      - ./IntegrationTesting/src/test/resources:/tmp/selenium-data
     depends_on:
       - selenium-hub
     environment:
       - HUB_HOST=selenium-hub
       - HUB_PORT=4444
+    # this is for server_name at webserver (nginx) and cors at api to prevent cors error at node browser
+    # comment out for staging server (not running at local)
+    # links: 
+    #   - "webserver:dev.stsiwo.com"
+    #   - "webserver:dev.api.stsiwo.com"
   firefox:
     image: selenium/node-firefox:3.141.59-xenon
     volumes:
       - /dev/shm:/dev/shm
+        # this is for providing test src such as image to selenium node
+      - ./IntegrationTesting/src/test/resources:/tmp/selenium-data
     depends_on:
       - selenium-hub
     environment:
       - HUB_HOST=selenium-hub
       - HUB_PORT=4444
+    # this is for server_name at webserver (nginx) and cors at api to prevent cors error at node browser
+    # comment out for staging server (not running at local)
+    # links: 
+    #   - "webserver:dev.stsiwo.com"
+    #   - "webserver:dev.api.stsiwo.com"

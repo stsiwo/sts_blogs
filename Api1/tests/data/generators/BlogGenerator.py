@@ -4,10 +4,10 @@ from tests.data.generators.UserGenerator import generateUserModel
 from tests.data.fakers.faker import fake
 import datetime
 import pytz
+import uuid
 
 
 def generateBlogModel(
-        id=1,
         title=fake.sentence(),
         subtitle=fake.sentence(),
         content=fake.sentence(),
@@ -20,7 +20,7 @@ def generateBlogModel(
         ):
 
     blog = Blog(
-            id=id,
+            id=str(uuid.uuid4()),
             title=title,
             subtitle=subtitle,
             content=content,
@@ -43,27 +43,30 @@ def generateBlogModelV2(
         clap=None,
         tags=[],
         mainImageUrl=None,
-        createdDate=None
+        createdDate=None,
+        public=False,
         ):
 
     title = fake.sentence() if title is None else title
     subtitle = fake.sentence() if subtitle is None else subtitle
-    content = fake.sentence() if content is None else content
     clap = fake.random_int(min=0, max=100, step=1) if clap is None else clap
+    content = '[{"type":"paragraph","children":[{"text":""}]}]' if content is None else ""
     createdDate = fake.past_datetime(start_date="-30y", tzinfo=pytz.timezone('US/Pacific')) if createdDate is None else createdDate
     # need to wrap faker's datetime with pure datetime otherwise mysql complains about it:
     # error: 'datetime' object has no attribute 'translate'
     createdDate = datetime.datetime(year=createdDate.year, month=createdDate.month, day=createdDate.day, hour=createdDate.hour, minute=createdDate.minute, second=createdDate.second, microsecond=createdDate.microsecond, tzinfo=createdDate.tzinfo, fold=createdDate.fold)
 
     blog = Blog(
+            id=str(uuid.uuid4()),
             title=title,
             subtitle=subtitle,
-            content='',  # temply empty
             userId=user.id,
             clap=clap,
+            content=content,
             tags=tags,
             mainImageUrl=mainImageUrl,
-            createdDate=createdDate
+            createdDate=createdDate,
+            public=public
             )
 
     blog.user = user

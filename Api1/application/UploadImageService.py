@@ -1,9 +1,9 @@
-from Configs.app import app
 from Configs.extensions import db
 from typing import Dict, BinaryIO
 from Infrastructure.transactionDecorator import db_transaction
 from application.FileServiceDep import FileServiceDep
 from Infrastructure.DataModels.UserModel import User
+from Aop.loggingDecorator import loggingDecorator
 
 
 class UploadImageService(object):
@@ -14,9 +14,8 @@ class UploadImageService(object):
         self._fileService = FileServiceDep()
 
     @db_transaction()
+    @loggingDecorator()
     def saveUploadImageService(self, files: Dict[str, BinaryIO], fileKeyName: str, userId: str) -> str:
-        app.logger.info("start update uploadImage service")
-        print("start update uploadImage service")
 
         uploadedImagePath: str = self._fileService.saveImageFileToDir(
                 files=files,
@@ -28,9 +27,8 @@ class UploadImageService(object):
         return uploadedImagePath
 
     @db_transaction()
+    @loggingDecorator()
     def updateUploadImageService(self, files: Dict[str, BinaryIO], fileKeyName: str, originalFileName: str, userId: str) -> str:
-        app.logger.info("start update uploadImage service")
-        print("start update uploadImage service")
 
         updatedImagePath: str = self._fileService.updateImageFileToDir(
                 files=files,

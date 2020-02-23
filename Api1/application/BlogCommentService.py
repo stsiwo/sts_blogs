@@ -1,4 +1,3 @@
-from Configs.app import app
 from typing import Dict, List
 from Resources.viewModels.CommentSchema import CommentSchema
 from Infrastructure.transactionDecorator import db_transaction
@@ -7,6 +6,7 @@ from Infrastructure.DataModels.BlogModel import Blog
 from Infrastructure.repositories.BlogRepository import BlogRepository
 from exceptions.BlogNotFoundException import BlogNotFoundException
 from exceptions.CommentNotFoundException import CommentNotFoundException
+from Aop.loggingDecorator import loggingDecorator
 
 
 class BlogCommentService(object):
@@ -19,9 +19,8 @@ class BlogCommentService(object):
         self._commentSchema = CommentSchema()
         self._blogRepository = BlogRepository()
 
+    @loggingDecorator()
     def getAllCommentService(self, blog_id: str) -> List[Dict]:
-        app.logger.info("start getAllCommentCommentService service")
-        print("start getAllCommentCommentService service")
 
         blog: Blog = self._blogRepository.get(blog_id)
 
@@ -38,9 +37,8 @@ class BlogCommentService(object):
         return serializedComments
 
     @db_transaction()
+    @loggingDecorator()
     def createNewCommentService(self, blog_id: str, title: str, content: str) -> Comment:
-        app.logger.info("start createNewCommentService service")
-        print("start createNewCommentService service")
 
         blog: Blog = self._blogRepository.get(blog_id)
 
@@ -60,9 +58,8 @@ class BlogCommentService(object):
         return newComment
 
     @db_transaction()
+    @loggingDecorator()
     def deleteAllCommentService(self, blog_id: str) -> None:
-        app.logger.info("start deleteAllCommentService service")
-        print("start deleteAllCommentService service")
 
         blog: Blog = self._blogRepository.get(blog_id)
 

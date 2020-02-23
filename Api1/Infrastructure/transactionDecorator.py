@@ -23,19 +23,20 @@ def db_transaction():
             target = None
             app.logger.info("start db transaction although already started")
             try:
-                app.logger.info("calling inner service...")
+                app.logger.info("calling inner service {0}...".format(f.__name__))
                 target = f(*args, **kwargs)
-                app.logger.info("inner service has done")
+                app.logger.info("inner service {0} has done".format(f.__name__))
                 # after target function called
             except:
                 app.logger.info("something is wrong about inner service and catching in db transaction decorator")
-                print("something is wrong about inner service and catching in db transaction decorator")
+                app.logger.info("db transaction rollback")
                 db.session.rollback()
                 # this might need to change to handle exception like return 5xx response
                 # REFACTOR
                 raise
             else:
                 app.logger.info("inner service has completed successfully")
+                app.logger.info("db transaction commit")
                 db.session.commit()
             return target
         return decorated_function

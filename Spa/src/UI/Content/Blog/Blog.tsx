@@ -14,6 +14,8 @@ import { FaBookmark, FaThumbsUp } from 'react-icons/fa';
 import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
 import BePartOfIt from 'Components/BePartOfIt/BePartOfIt';
 import ManageYourBlogs from 'Components/ManageYourBlogs/ManageYourBlogs';
+import BlogContent from 'Components/BlogContent/BlogContent';
+import ReadOnlyBlogContent from 'Components/ReadOnlyBlogContent/ReadOnlyBlogContent';
 const mainImage = require('../../../../tests/data/images/colorful-1280x1280.jpg');
 const avatarImage = require('../../../../tests/data/images/coffe-4289545_640.jpg');
 const redImage = require('../../../../tests/data/images/red-girl-1920x1279.jpg');
@@ -32,7 +34,9 @@ const Blog: React.FunctionComponent<{}> = (props: {}) => {
   React.useEffect(() => {
     fetchBlog({
       path: '/blogs/' + blogId,
-      method: RequestMethodEnum.GET
+      method: RequestMethodEnum.GET,
+      useCache: false,
+      allowCache: false,
     })
       // call from previous 'catch' and 'then' of 'fetchBlog'
       // since resolve promise in the 'catch'
@@ -82,15 +86,9 @@ const Blog: React.FunctionComponent<{}> = (props: {}) => {
             <p className="blog-date">{currentBlog.createdDate.toLocaleDateString("en-US", dateFormatOption)}</p>
           </div>
           <div className="blog-content-wrapper" role='blog-content'>
-            {currentBlog.content}
-          </div>
-          <div className="clap-bookmark-wrapper">
-            <div className="icon-wrapper">
-              <FaBookmark className="icon" />
-            </div>
-            <div className="icon-wrapper">
-              <FaThumbsUp className="icon" />
-            </div>
+            <ReadOnlyBlogContent
+              value={currentBlog.content}
+            />
           </div>
           <div className="related-blog-list">
           </div>
@@ -103,6 +101,14 @@ const Blog: React.FunctionComponent<{}> = (props: {}) => {
         {(auth.authed &&
           <ManageYourBlogs />
         )}
+        <div className="clap-bookmark-wrapper">
+          <div className="icon-wrapper">
+            <FaBookmark className="icon" />
+          </div>
+          <div className="icon-wrapper">
+            <FaThumbsUp className="icon" />
+          </div>
+        </div>
       </div>
     </div>
   );

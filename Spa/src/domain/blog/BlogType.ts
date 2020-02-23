@@ -1,6 +1,6 @@
 import { AuthorType } from "../author/AuthorType";
 import { TagType } from "../tag/TagType";
-import { Node } from 'slate'
+import { Node } from 'Components/fork/slate'
 
 export declare type BlogType = {
   id: string,
@@ -14,6 +14,7 @@ export declare type BlogType = {
   tags?: Set<string>,
   blogImages?: File[],
   blogImagePaths?: string[],
+  clap?: number
 }
 
 export const initialBlogState: BlogType = {

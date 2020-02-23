@@ -4,6 +4,7 @@ from Infrastructure.DataModels.UserModel import User
 from Infrastructure.DataModels.TagModel import Tag
 from Infrastructure.DataModels.CommentModel import Comment
 import pytest
+import uuid
 
 
 @pytest.mark.blog_model
@@ -12,6 +13,7 @@ def test_user_can_create_blog(exSession, usersSeededFixture):
     user = exSession.query(User).first()
 
     blog = Blog(
+            id=str(uuid.uuid4()),
             title='test title',
             subtitle='test subtitle',
             content='test content'
@@ -35,6 +37,7 @@ def test_user_can_create_blog_with_tags(exSession, usersSeededFixture):
     tags = exSession.query(Tag).limit(3).all()
 
     blog = Blog(
+            id=str(uuid.uuid4()),
             title='test title',
             subtitle='test subtitle',
             content='test content',

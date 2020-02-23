@@ -3,15 +3,14 @@ from Infrastructure.DataModels.UserRoleModel import roles
 from Infrastructure.DataModels.BaseModel import BaseModel
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 from Configs.extensions import bcrypt
-from typing import Dict
-from utils.util import printObject
+from sqlalchemy.types import CHAR
 
 
 class User(BaseModel):
 
     __tablename__ = 'users'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(CHAR(36), primary_key=True)
     name = db.Column(db.VARCHAR(1000), nullable=False)
     email = db.Column(db.VARCHAR(1000), unique=True, nullable=False)
     _password = db.Column('password', db.VARCHAR(1000), nullable=False)

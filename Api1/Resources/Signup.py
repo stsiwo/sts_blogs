@@ -6,6 +6,7 @@ from Configs.app import app
 from application.TokenService import TokenService
 from flask import request, jsonify
 from typing import Dict
+from Aop.loggingDecorator import loggingDecorator
 
 
 class Signup(Resource):
@@ -19,8 +20,8 @@ class Signup(Resource):
         self._tokenService = TokenService()
 
     @validate_request_with(signupValidator)
+    @loggingDecorator()
     def post(self):
-        app.logger.info("received post request at /signup")
 
         newUser: Dict = self._service.registerUserService(
                 name=request.json.get('name'),

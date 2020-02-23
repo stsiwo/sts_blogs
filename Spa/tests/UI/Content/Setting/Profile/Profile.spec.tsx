@@ -30,16 +30,19 @@ describe('p-c1: Profile Component testing', () => {
    * a5. (validation) should not allow to update when user name is null/empty 
    * a6. (validation) should display error msg when email is null/empty 
    * a7. (validation) should not allow to update when email is null/empty 
-   * a8. (validation) should display error msg when password is null/empty 
-   * a9. (validation) should not allow to update when password is null/empty 
-   * a10. (validation) should display error msg when confirm is null/empty 
-   * a11. (validation) should not allow to update when confirm is null/empty 
-   * a12. (validation) should display error msg when password and confirm does not match
-   * a13. (validation) should not allow to update when password and confirm does not match
-   * a14. (EH) should start update request when 'update' is clicked 
-   * a15. (DOM) should show 'update success' message when update completed 
-   * a16. a16. (DOM) should show "update failure" message when update failed because of network issue or 4xx or 5xx error
+   * a8. (validation) should display error msg when password and confirm does not match
+   * a9. (validation) should not allow to update when password and confirm does not match
+   * a10. (EH) should start update request when 'update' is clicked 
+   * a11. (DOM) should show 'update success' message when update completed 
+   * a12. a16. (DOM) should show "update failure" message when update failed because of network issue or 4xx or 5xx error
    *
+   **/
+
+  /**
+   * remaining tasks:
+   *  - please delete task once you are done and update 'click' project management tool
+   *  
+   *  - re-implement update profile logic (https://app.clickup.com/t/4ab5pa)
    **/
 
   beforeAll(() => {
@@ -78,7 +81,7 @@ describe('p-c1: Profile Component testing', () => {
 
   test('a3. (api fetch) should not start api request when this component is updated', async () => {
 
-    api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
+    api.request = jest.fn().mockResolvedValue(userGET200Response)
     await act(async () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Profile} isAuth />
@@ -165,78 +168,7 @@ describe('p-c1: Profile Component testing', () => {
     })
   })
 
-  test('a8. (validation) should display error msg when password is null/empty ', async () => {
-
-    api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
-    await act(async () => {
-      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
-        <ContextWrapperComponent component={Profile} isAuth />
-      )
-      const passwordInput = await waitForElement(() => getByLabelText('New Password'))
-      fireEvent.focus(passwordInput) // need to focus to enable to display validation error on dom
-      fireEvent.change(passwordInput,{ target: { value: '' }})
-      const passwordErrorNode = await waitForElement(() => getByText('password is a required field'))
-      expect(passwordErrorNode).toBeInTheDocument()
-    })
-  })
-
-  test('a9. (validation) should not allow to update when password is null/empty', async () => {
-
-    api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
-    await act(async () => {
-      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
-        <ContextWrapperComponent component={Profile} isAuth />
-      )
-      const passwordInput = await waitForElement(() => getByLabelText('New Password'))
-      fireEvent.focus(passwordInput) // need to focus to enable to display validation error on dom
-      fireEvent.change(passwordInput,{ target: { value: '' }})
-      const passwordErrorNode = await waitForElement(() => getByText('password is a required field'))
-      fireEvent.click(getByText('Update'))
-      await wait(() => {
-        expect(api.request).toHaveBeenCalledTimes(1)
-      })
-    })
-  })
-
-  test('a10. (validation) should display error msg when confirm is null/empty', async () => {
-
-    api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
-    await act(async () => {
-      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
-        <ContextWrapperComponent component={Profile} isAuth />
-      )
-      const confirmInput = await waitForElement(() => getByLabelText('Password Confirm'))
-      const passwordInput = await waitForElement(() => getByLabelText('New Password'))
-      fireEvent.change(confirmInput,{ target: { value: '' }})
-      fireEvent.change(passwordInput,{ target: { value: '' }})
-      fireEvent.focus(confirmInput) // need to focus to enable to display validation error on dom
-      const confirmErrorNode = await waitForElement(() => getByText('confirm is a required field'))
-      expect(confirmErrorNode).toBeInTheDocument()
-    })
-  })
-
-  test('a11. (validation) should not allow to update when confirm is null/empty', async () => {
-
-    api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
-    await act(async () => {
-      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
-        <ContextWrapperComponent component={Profile} isAuth />
-      )
-      const confirmInput = await waitForElement(() => getByLabelText('Password Confirm'))
-      const passwordInput = await waitForElement(() => getByLabelText('New Password'))
-      fireEvent.focus(confirmInput) // need to focus to enable to display validation error on dom
-      fireEvent.focus(passwordInput) // need to focus to enable to display validation error on dom
-      fireEvent.change(confirmInput,{ target: { value: '' }})
-      fireEvent.change(passwordInput,{ target: { value: '' }})
-      const confirmErrorNode = await waitForElement(() => getByText('confirm is a required field'))
-      fireEvent.click(getByText('Update'))
-      await wait(() => {
-        expect(api.request).toHaveBeenCalledTimes(1)
-      })
-    })
-  })
-
-  test('a12. (validation) should display error msg when password and confirm does not match', async () => {
+  test('a8. (validation) should display error msg when password and confirm does not match', async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
     await act(async () => {
@@ -251,7 +183,7 @@ describe('p-c1: Profile Component testing', () => {
     })
   })
 
-  test('a13. (validation) should not allow to update when password and confirm does not match', async () => {
+  test('a9. (validation) should not allow to update when password and confirm does not match', async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
     await act(async () => {
@@ -269,7 +201,7 @@ describe('p-c1: Profile Component testing', () => {
     })
   })
 
-  test('a14. (EH) should start update request when "update" is clicked', async () => {
+  test('a10. (EH) should start update request when "update" is clicked', async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
     await act(async () => {
@@ -286,7 +218,7 @@ describe('p-c1: Profile Component testing', () => {
     })
   })
 
-  test('a15. (DOM) should show "update success" message when update completed', async () => {
+  test('a11. (DOM) should show "update success" message when update completed', async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
     await act(async () => {
@@ -304,7 +236,7 @@ describe('p-c1: Profile Component testing', () => {
     })
   })
 
-  test('a16. (DOM) should show "update failure" message when update failed because of network issue', async () => {
+  test('a12. (DOM) should show "update failure" message when update failed because of network issue', async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
     await act(async () => {
@@ -322,7 +254,7 @@ describe('p-c1: Profile Component testing', () => {
     })
   })
   
-  test('a17. (DOM) should show "update failure" message when update failed because of 4xx/5xx error', async () => {
+  test('a13. (DOM) should show "update failure" message when update failed because of 4xx/5xx error', async () => {
 
     api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
     await act(async () => {

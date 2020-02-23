@@ -1,9 +1,9 @@
 from Configs.app import app
-from flask import abort
 from Infrastructure.repositories.UserRepository import UserRepository
 from Resources.viewModels.UserSchema import UserSchema
 from exceptions.EmailNotFoundException import EmailNotFoundException
 from exceptions.PasswordInvalidException import PasswordInvalidException
+from Aop.loggingDecorator import loggingDecorator
 
 
 class LoginService(object):
@@ -16,9 +16,8 @@ class LoginService(object):
         self._userRepository = UserRepository()
         self._userSchema = UserSchema(only=['id', 'name', 'avatarUrl', 'roles'])
 
+    @loggingDecorator()
     def loginUserService(self, email: str, password: str):
-        app.logger.info("start login user service")
-        print("start login user service")
 
         loginUser = self._userRepository.find(email=email)
 
@@ -29,6 +28,6 @@ class LoginService(object):
             raise PasswordInvalidException
 
         userViewModel = self._userSchema.dump(loginUser)
-        print('*** user view model: {}'.format(userViewModel))
+        app.logger.info('*** user view model: {}'.format(userViewModel))
 
         return userViewModel

@@ -52,8 +52,8 @@ const BlogItemOverlay: React.FunctionComponent<BlogItemOverlayPropsType> = (prop
           <div className="white-icon-wrapper">
             <FaEdit className="icon" />
           </div>
-        </Link>
-        <div className="white-icon-wrapper" role="blog-delete-icon" onClick={props.handleDeleteBlogClickEvent}>
+        </Link>{'   '}
+        <div className="white-icon-wrapper" role="blog-delete-icon" onClick={props.handleDeleteBlogClickEvent} data-blog-id={props.blogId}>
           <MdDeleteForever className="icon" />
         </div>
       </div>
@@ -96,23 +96,38 @@ const BlogItem: React.FunctionComponent<BlogItemPropType> = (props: BlogItemProp
     })
   }
 
+  const handleBlogItemTouchStartEvent: React.EventHandler<React.TouchEvent<HTMLDivElement>> = (e) => {
+    console.log('enter eh is called')
+    console.log('componentShow to true')
+    console.log('isMouseEnter to true')
+    setOverlayState({
+      ...currentOverlayState,
+      componentShow: true,
+      isMouseEnter: true
+    })
+  }
+
   const renderTags = (tagSet: Set<string>): React.ReactNode => {
-    return Array.from(tagSet).map((tag: string) => <div className="blog-list-filter-tags-tag" key={tag}>{tag}</div>)
+    return Array.from(tagSet).map((tag: string) => <span className="blog-list-filter-tags-tag" key={tag}>{`${tag} `}</span>)
   }
 
   const isOverlay: boolean = props.isEditDeleteOverlay ? props.isEditDeleteOverlay : false
   
   const renderBlogItem: () => React.ReactNode = () => {
     return (
-      <div className="blog-list-item-wrapper" onMouseEnter={handleBlogItemMouseEnterEvent} onMouseLeave={handleBlogItemMouseLeaveEvent} role="blog-item">
+      <div className="blog-list-item-wrapper" onMouseEnter={handleBlogItemMouseEnterEvent} onMouseLeave={handleBlogItemMouseLeaveEvent} onTouchStart={handleBlogItemTouchStartEvent} role="blog-item">
         <img className="blog-list-item-img" src={props.blog.mainImageUrl} alt="blog item" width="150px" height="100px" />
         <div className="blog-list-item-desc">
           <h2 className="blog-list-item-desc-title">{props.blog.title}</h2>
           {(!currentScreenSize.isMobileL &&
-            <h3 className="blog-list-item-desc-subtitle">{props.blog.subtitle}</h3>)}
+            <h3 className="blog-list-item-desc-subtitle">{props.blog.subtitle}</h3>
+          )}
           <div className="blog-list-item-desc-detail">
-            {renderTags(props.blog.tags)}
+            <p className="blog-list-item-desc-detail-tag">
+              {renderTags(props.blog.tags)}
+            </p>
             <p className="blog-list-item-desc-detail-date">{props.blog.createdDate.toLocaleDateString("en-US", dateFormatOption)}</p>
+            <p className="blog-list-item-desc-detail-clap">{props.blog.clap} claps</p>
           </div>
           <div className="blog-list-item-desc-author">
             <img src={props.blog.author.avatarUrl} alt="avatar image" className="blog-list-item-desc-author-img" />
@@ -132,8 +147,14 @@ const BlogItem: React.FunctionComponent<BlogItemPropType> = (props: BlogItemProp
   }
 
   if (!isOverlay) {
+    /**
+     * a tag is not scrolled into view issue: selenium
+     *  - even if a tag is totally visible from window, selenium complains about this
+     *  - when i check devtool (chrome), a tag is not highlihgted as blue so this is the reason??
+     *  - as workaround, make a tag style inline-block
+     **/
     return (
-      <Link to={`/blogs/${props.blog.id}`} className="black-link" key={props.blog.id} role="blog-item">
+      <Link to={`/blogs/${props.blog.id}`} className="black-link blog-link" key={props.blog.id} role="blog-item">
         {renderBlogItem()}
       </Link >
     );

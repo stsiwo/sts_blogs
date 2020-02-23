@@ -26,6 +26,11 @@ import BlogItem from 'Components/BlogItem/BlogItem';
 import { getBlogTestData } from '../../../../../tests/data/BlogFaker';
 var debug = require('debug')('ui:BlogManagement')
 
+export enum FetchContextEnum {
+  FETCH,
+  DELETE
+}
+
 const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
 
 
@@ -48,6 +53,9 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   const { currentRequestStatus: currentInitialBlogsFetchStatus, setRequestStatus: setInitialBlogsFetchStatus, sendRequest: sendBlogsFetchRequest, currentCancelSource: currentFetchCancelSource } = useRequest({})
   const { currentRequestStatus: currentDeleteRequestStatus, setRequestStatus: setDeleteRequestStatus, sendRequest: sendDeleteRequest, currentCancelSource: currentDeleteCancelSource } = useRequest({})
   const [currentRefreshCount, setRefreshCount] = React.useState<number>(null)
+  // diable cache when refersh request
+  const [isRefresh, setIsRefresh] = React.useState<boolean>(false)
+  const [curFetchContext, setFetchContext] = React.useState<FetchContextEnum>(FetchContextEnum.FETCH)
 
   const queryString = {
     page: currentPaginationStatus.page,
@@ -62,17 +70,23 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   React.useEffect(() => {
     debug("start useEffect")
     // might can move to inside eh of refresh click
-
+    
     debug("start send blog fetch request")
+    setFetchContext(FetchContextEnum.FETCH)
     sendBlogsFetchRequest({
       path: '/users/' + userId + '/blogs',
       method: RequestMethodEnum.GET,
       queryString: queryString,
+      ...(isRefresh && { useCache: false }),
     })
       .then((result: ResponseResultType<BlogListResponseDataType>) => {
-        if (result.status === ResponseResultStatusEnum.SUCCESS) {
+
+        if (NODE_ENV === 'development') {
+          console.log("development env so inject blog test data")
+          setBlogs(getBlogTestData())
+        }
+        else if (result.status === ResponseResultStatusEnum.SUCCESS) {
           console.log("fetch success and receive data")
-          console.log(result.data)
           setBlogs(result.data.blogs)
 
           // assign new total count of pagination
@@ -81,6 +95,7 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
             totalCount: result.data.totalCount
           })
         }
+        setIsRefresh(false)
       })
   }, [
       JSON.stringify(queryString),
@@ -97,17 +112,30 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const handleDeleteBlogClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = (e) => {
-    sendDeleteRequest({
-      path: '/users/' + userId + '/blogs',
-      method: RequestMethodEnum.DELETE,
-    })
-      .then((data: BlogListResponseDataType) => {
-        // operation after successful delete request
+    console.log("start handling delete blog click event")
+    const result: boolean = window.confirm("Are you sure to delete this blog?")
+    if (result) {
+      console.log("confirm is OK")
+      const blogId = e.currentTarget.getAttribute('data-blog-id')
+      setFetchContext(FetchContextEnum.DELETE)
+      sendDeleteRequest({
+        path: '/blogs/' + blogId,
+        method: RequestMethodEnum.DELETE,
+        useCache: false,
+        allowCache: false
       })
+        .then((data: BlogListResponseDataType) => {
+          console.log("'then' after delete request")
+          setIsRefresh(true)
+          const nextRefreshCount = currentRefreshCount + 1
+          setRefreshCount(nextRefreshCount)
+        })
+    }
   }
 
   const handleRefreshClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = async (e) => {
     debug("start handling refresh click")
+    setIsRefresh(true)
     const nextRefreshCount = currentRefreshCount + 1
     setRefreshCount(nextRefreshCount)
   }
@@ -135,6 +163,7 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   return (
     <div className="context-wrapper">
       <div className="main-wrapper">
+        <h2 className="page-title">Blog Management</h2>
         <BlogListController
           currentFetchStatus={currentInitialBlogsFetchStatus}
           setFetchStatus={setInitialBlogsFetchStatus}
@@ -143,20 +172,15 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
           handleFilterSortNavClickEvent={handleFilterSortNavClickEvent}
           currentPaginationStatus={currentPaginationStatus}
           setPaginationStatus={setPaginationStatus}
-        />
-
-        {/** how to deal with another request rather than initial fetch **/}
-        <FetchStatus
-          currentFetchStatus={currentDeleteRequestStatus}
-          setFetchStatus={setDeleteRequestStatus}
-          fetchingMsg={'deleting...'}
-          successMsg={'ok'}
-          failureMsg={'failed'}
+          currentDeleteFetchStatus={currentDeleteRequestStatus}
+          setDeleteFetchStatus={setDeleteRequestStatus}
+          curFetchContext={curFetchContext}
         />
         <div className="blog-management-items-wrapper">
+          {(NODE_ENV === 'development' && currentBlogs.length !== 0 && renderBlogs(currentBlogs))}
           {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FETCHING && <p role="fetching">fetching ... </p>)}
-          {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FAILURE  && <p>sorry.. blogs are not currently available...</p>)}
-          {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.SUCCESS && currentBlogs.length === 0 && <p>there is no blog based on the your sort & filter</p>)}
+          {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FAILURE && <p>sorry.. blogs are not currently available...</p>)}
+          {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.SUCCESS && currentBlogs.length === 0 && <p role="no-search-result-title">there is no blog based on the your sort & filter</p>)}
           {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.SUCCESS && currentBlogs.length !== 0 && renderBlogs(currentBlogs))}
         </div>
         <Pagination
@@ -170,6 +194,7 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
           currentSort={currentSort}
           setFilters={setFilters}
           setSort={setSort}
+          setPaginationStatus={setPaginationStatus}
         />
       </div>
     </div>

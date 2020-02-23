@@ -8,10 +8,10 @@ from application.EmailService import EmailService
 from Infrastructure.transactionDecorator import db_transaction
 from itsdangerous import BadSignature, SignatureExpired
 from Infrastructure.repositories.UserRepository import UserRepository
-from utils.util import printObject
 from exceptions.ResetPasswordTokenExpiredException import ResetPasswordTokenExpiredException
 from exceptions.BadSignatureException import BadSignatureException
 from exceptions.EmailNotFoundException import EmailNotFoundException
+from Aop.loggingDecorator import loggingDecorator
 
 
 class PasswordResetService(object):
@@ -24,9 +24,8 @@ class PasswordResetService(object):
         self._emailService = EmailService()
         self._userRepository = UserRepository()
 
+    @loggingDecorator()
     def requestForgotPasswordService(self, email: str):
-        app.logger.info("start requestForgotPasswordService service")
-        print("start requestForgotPasswordService service")
 
         user = self._userRepository.find(email=email)
         
@@ -43,11 +42,9 @@ class PasswordResetService(object):
             )
 
     @db_transaction()
+    @loggingDecorator()
     def resetPasswordService(self, token: str, newPassword: str):
         app.logger.info("start resetPasswordService service")
-        print("start resetPasswordService service")
-
-        printObject(api.errors)
 
         try:
             userId = decodeForgotPasswordToken(token)
@@ -57,5 +54,7 @@ class PasswordResetService(object):
         except BadSignature as e:
             raise BadSignatureException
         else:
+            app.logger.info("*** user password of userId ***")
+            app.logger.info(userId)
             user = db.session.query(User).get(userId)
             user.password = newPassword

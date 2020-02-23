@@ -70,178 +70,68 @@ def test_ub05_blogs_get_endpoint_should_return_200_with_its_own_blogs(authedClie
 
 
 @pytest.mark.user_blog_src
-@pytest.mark.user_blog_src_post
-def test_ub07_blogs_post_endpoint_should_return_400_for_bad_request_for_invalid_input(authedClient, database, application, multipartHttpHeaders):
+@pytest.mark.user_blog_src_get_id
+def test_ub051_blogs_get_endpoint_should_return_404_when_specified_blog_does_not_exist(authedClient, database, application, blogsSeededFixture):
 
     userId = None
 
     with application.app_context():
-        user = database.session.query(User).filter_by(email='test@test.com').first()
+        user = database.session.query(User).first()
         userId = user.id
 
     csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
-    multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
-
-    response = authedClient.post('/users/' + str(userId) + '/blogs', headers=multipartHttpHeaders)
-    assert 400 == response.status_code
+    response = authedClient.get('/users/' + str(userId) + '/blogs/' + 'blog-does-not_exit', headers={'X-CSRF-TOKEN': csrf_token})
+    assert 404 == response.status_code
 
 
 @pytest.mark.user_blog_src
-@pytest.mark.user_blog_src_post
-def test_ub08_blogs_post_endpoint_should_return_201_when_successfully_created(authedClient, database, application, multipartHttpHeaders, testNewBlogData):
+@pytest.mark.user_blog_src_get_id
+def test_ub051_blogs_get_endpoint_should_return_200_when_specified_blog_exist_and_include_non_public(authedClient, database, application, blogsSeededFixture):
 
     userId = None
 
     with application.app_context():
-        user = database.session.query(User).filter_by(email='test@test.com').first()
+        user = database.session.query(User).first()
         userId = user.id
+        targetBlogs = [blog for blog in blogsSeededFixture if blog.public is False]
+
+    targetBlog = targetBlogs[0]
 
     csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
-    multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
-
-    response = authedClient.post(
-            '/users/' + str(userId) + '/blogs',
-            data=testNewBlogData,
-            headers=multipartHttpHeaders
-            )
+    response = authedClient.get('/users/' + str(userId) + '/blogs/' + targetBlog.id, headers={'X-CSRF-TOKEN': csrf_token})
+    assert 200 == response.status_code
 
     data = decodeResponseByteJsonToDictionary(response.data)
 
-    assert 201 == response.status_code
-    assert data['blog']['id'] is not None
+    assert data is not None
+    assert data['blog']['id'] == targetBlog.id
+    assert data['blog']['public'] is False
+    assert data['blog']['author']['id'] == userId
 
 
 @pytest.mark.user_blog_src
-@pytest.mark.user_blog_src_post
-def test_ub10_blogs_post_endpoint_should_return_location_header_to_new_blog(authedClient, database, application, multipartHttpHeaders, testNewBlogData):
+@pytest.mark.user_blog_src_get_id
+def test_ub051_blogs_get_endpoint_should_return_200_when_specified_blog_exist_and_include_public(authedClient, database, application, blogsSeededFixture):
 
     userId = None
 
     with application.app_context():
-        user = database.session.query(User).filter_by(email='test@test.com').first()
+        user = database.session.query(User).first()
         userId = user.id
+        targetBlogs = [blog for blog in blogsSeededFixture if blog.public is True]
+
+    targetBlog = targetBlogs[0]
 
     csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
-    multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
-
-    response = authedClient.post(
-            '/users/' + str(userId) + '/blogs',
-            data=testNewBlogData,
-            headers=multipartHttpHeaders
-            )
+    response = authedClient.get('/users/' + str(userId) + '/blogs/' + targetBlog.id, headers={'X-CSRF-TOKEN': csrf_token})
+    assert 200 == response.status_code
 
     data = decodeResponseByteJsonToDictionary(response.data)
 
-    assert response.headers['location'] == 'http://localhost/blogs/{}'.format(data['blog']['id'])
-
-
-@pytest.mark.user_blog_src
-@pytest.mark.user_blog_src_post
-def test_ub11_blogs_post_endpoint_should_return_201_with_created_blog_when_admin_request_creating_the_blog(authedAdminClient, database, application, multipartHttpHeaders, usersSeededFixture, testNewBlogData):
-
-    userId = None
-
-    with application.app_context():
-        user = database.session.query(User).filter_by(email='test@test.com').first()
-        userId = user.id
-
-    csrf_token = [cookie.value for cookie in authedAdminClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
-    multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
-
-    response = authedAdminClient.post(
-            '/users/' + str(userId) + '/blogs',
-            data=testNewBlogData,
-            headers=multipartHttpHeaders
-            )
-
-    data = decodeResponseByteJsonToDictionary(response.data)
-
-    assert 201 == response.status_code
-    assert data['blog']['id'] is not None
-
-
-@pytest.mark.user_blog_src
-@pytest.mark.user_blog_src_post
-def test_ub13_blogs_post_endpoint_should_return_location_header_to_new_blog(authedAdminClient, database, application, multipartHttpHeaders, usersSeededFixture, testNewBlogData):
-
-    userId = None
-
-    with application.app_context():
-        user = database.session.query(User).filter_by(email='test@test.com').first()
-        userId = user.id
-
-    csrf_token = [cookie.value for cookie in authedAdminClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
-    multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
-
-    response = authedAdminClient.post(
-            '/users/' + str(userId) + '/blogs',
-            data=testNewBlogData,
-            headers=multipartHttpHeaders
-            )
-
-    data = decodeResponseByteJsonToDictionary(response.data)
-
-    assert response.headers['location'] == 'http://localhost/blogs/{}'.format(data['blog']['id'])
-
-
-@pytest.mark.user_blog_src
-@pytest.mark.user_blog_src_post
-def test_ub14_blogs_post_endpoint_should_return_with_created_blog_with_main_image_url_when_request_include_main_image(authedClient, database, application, multipartHttpHeaders, testNewBlogDataWithMainImage, testFileStorage):
-
-    userId = None
-
-    with application.app_context():
-        user = database.session.query(User).filter_by(email='test@test.com').first()
-        userId = user.id
-
-    csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
-    multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
-
-    response = authedClient.post(
-            '/users/' + str(userId) + '/blogs',
-            data=testNewBlogDataWithMainImage,
-            headers=multipartHttpHeaders
-            )
-
-    data = decodeResponseByteJsonToDictionary(response.data)
-
-    assert os.path.join(str(userId), testFileStorage.filename) in data['blog']['mainImageUrl']
-
-
-@pytest.mark.user_blog_src
-@pytest.mark.user_blog_src_post
-def test_ub15_blogs_post_endpoint_should_return_201_with_created_blog_with_blog_images_when_user_add_multiple_blog_images_in_content(authedClient, database, application, multipartHttpHeaders, testNewBlogDataWithMainImage, testFileStorage, testFileStorage1, testFileStorage2):
-
-    userId = None
-
-    with application.app_context():
-        user = database.session.query(User).filter_by(email='test@test.com').first()
-        userId = user.id
-
-    csrf_token = [cookie.value for cookie in authedClient.cookie_jar if cookie.name == 'csrf_access_token'][0]
-    multipartHttpHeaders['X-CSRF-TOKEN'] = csrf_token
-
-    testNewBlogDataWithMainImage['blogImagePaths'] = json.dumps([
-            os.path.join(application.config.get('PUBLIC_FILE_FOLDER'), str(userId), testFileStorage1.filename),
-            os.path.join(application.config.get('PUBLIC_FILE_FOLDER'), str(userId), testFileStorage2.filename)
-            ], separators=(',', ':'))
-
-    testNewBlogDataWithMainImage['blogImages[]'] = [
-            testFileStorage1.stream,
-            testFileStorage2.stream
-            ]
-
-    response = authedClient.post(
-            '/users/' + str(userId) + '/blogs',
-            data=testNewBlogDataWithMainImage,
-            headers=multipartHttpHeaders
-            )
-
-    data = decodeResponseByteJsonToDictionary(response.data)
-
-    assert os.path.join(str(userId), testFileStorage.filename) in data['blog']['mainImageUrl']
-    assert os.path.exists(os.path.join(application.config.get('APP_ROOT'), application.config.get('UPLOAD_FOLDER'), str(userId), testFileStorage1.filename))
-    assert os.path.exists(os.path.join(application.config.get('APP_ROOT'), application.config.get('UPLOAD_FOLDER'), str(userId), testFileStorage2.filename))
+    assert data is not None
+    assert data['blog']['id'] == targetBlog.id
+    assert data['blog']['public'] is True
+    assert data['blog']['author']['id'] == userId
 
 
 @pytest.mark.user_blog_src

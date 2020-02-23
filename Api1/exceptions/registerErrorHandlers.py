@@ -11,6 +11,7 @@ from exceptions.UploadedFileException import UploadedFileException
 from exceptions.UserNotFoundException import UserNotFoundException
 from exceptions.UnauthorizedException import UnauthorizedException
 from exceptions.InvalidJwtTokenException import InvalidJwtTokenException
+from exceptions.UserAlreadyExistException import UserAlreadyExistException
 
 
 def constructResponse(error):
@@ -71,4 +72,9 @@ def unauthorized(error):
 
 @app.errorhandler(InvalidJwtTokenException)
 def invalidJetToken(error):
+    return constructResponse(error)
+
+
+@app.errorhandler(UserAlreadyExistException)
+def userAlreadyExist(error):
     return constructResponse(error)

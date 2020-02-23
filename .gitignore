@@ -1,6 +1,9 @@
 *.swp
 *.swo
 
+# log file
+*.log
+
 ### Api1 ###
 # venv
 env/
@@ -28,3 +31,8 @@ dist/
 
 # docker secrets
 docker-compose.secrets.yml
+
+### Integration Testing ###
+
+# mvn target (compiled files)
+IntegrationTesting/target/

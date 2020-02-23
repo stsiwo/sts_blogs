@@ -22,4 +22,5 @@ def test_blog_view_model_should_return_appropriate_view_model(blogsSeededFixture
     assert 'avatarUrl' in blogViewModel.get('author').keys()
     assert 'comments' in blogViewModel.keys()
     assert 'tags' in blogViewModel.keys()
-    assert 'blogImages' in blogViewModel.keys()
+    # remove this property from schema since does not need it
+    # assert 'blogImages' in blogViewModel.keys()

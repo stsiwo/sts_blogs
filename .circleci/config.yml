@@ -1,43 +1,74 @@
 version: 2.1
 
 executors:
-  my-executor:
+  gcp-executor:
     docker:
-      - image: stsiwo/circleci-base:1.04 
+      - image: stsiwo/circleci-base:1.05
     working_directory: /app
+  # use this since pre-built image from circleci installed old verison of docker-compose and can't upgrade with 'circleci' user
+  jdk-browsers-executor:
+    docker:
+      - image: circleci/openjdk:latest-browsers
 
 jobs:
   build:
-    machine: true
+    executor: gcp-executor
+    steps:
+      - run:
+          name: Prepare Service Testings (feature/* branch only)
+          command: |
+            echo 'Prepare Service Testings (feature/* branch only)'
+  spa-service-testing:
+    docker:
+      - image: alpine:3.7
+    steps:
+      - run:
+          name: Run SPA service testing (feature/* branch only)
+          command: |
+            echo 'Run SPA service testing (feature/* branch only)'
+  api-service-testing:
+    docker:
+      - image: alpine:3.7
+    steps:
+      - run:
+          name: Run API service testing (feature/* branch only)
+          command: |
+            echo 'Run API service testing (feature/* branch only)'
+  build-push-src-image:
+    # this allow to use 'docker' in this job
+    machine:
+      image: ubuntu-1604:201903-01    # recommended linux image - includes Ubuntu 16.04, docker 18.09.3, docker-compose 1.23.1
     steps:
       - checkout
       - run:
-          name: Build Image & Push Docker Hub 
+          name: Build Image & Push Docker Hub (feature/* branch only)
           command: |
             source ./set-app-version-env.sh
             docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
 
-            docker build --tag=sts-blog-spa:$APP_VERSION --tag=sts-blog-spa --target=staging ./Spa
+            # use multistaging skip experimental feature >= Docker 18.06
+            export DOCKER_BUILDKIT=1
+    
+            docker build --tag=sts-blog-spa:$APP_VERSION --tag=sts-blog-spa:latest --target=staging ./Spa
             docker tag sts-blog-spa:$APP_VERSION stsiwo/sts-blog-spa:$APP_VERSION
-            docker tag sts-blog-spa stsiwo/sts-blog-spa
+            docker tag sts-blog-spa:latest stsiwo/sts-blog-spa:latest
             docker push stsiwo/sts-blog-spa
-
-            docker build --tag=sts-blog-api:$APP_VERSION --tag=sts-blog-api --target=staging ./Api1
+    
+            docker build --tag=sts-blog-api:$APP_VERSION --tag=sts-blog-api:latest --target=staging ./Api1
             docker tag sts-blog-api:$APP_VERSION stsiwo/sts-blog-api:$APP_VERSION
-            docker tag sts-blog-api stsiwo/sts-blog-api
+            docker tag sts-blog-api:latest stsiwo/sts-blog-api:latest
             docker push stsiwo/sts-blog-api
-
-            docker build --tag=sts-blog-db:$APP_VERSION --tag=sts-blog-db ./Db
+    
+            docker build --tag=sts-blog-db:$APP_VERSION --tag=sts-blog-db:latest ./Db
             docker tag sts-blog-db:$APP_VERSION stsiwo/sts-blog-db:$APP_VERSION
-            docker tag sts-blog-db stsiwo/sts-blog-db
+            docker tag sts-blog-db:latest stsiwo/sts-blog-db:latest
             docker push stsiwo/sts-blog-db
-
-  deploy:
-    executor: my-executor
+  staging-deployment:
+    executor: gcp-executor
     steps:
       - checkout
       - run:
-          name: Create GCloud Service Key Files
+          name: Deploy to Staging Server 
           command: |
             echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
             gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
@@ -51,16 +82,212 @@ jobs:
             # REASON: may be public key is cached and exceed the limit so need to clear?? (reference: https://cloud.google.com/sdk/gcloud/reference/beta/compute/os-login/ssh-keys/remove)
             for i in $(gcloud compute os-login ssh-keys list | grep -v FINGERPRINT); do echo $i; gcloud compute os-login ssh-keys remove --key $i; done
             gcloud compute scp --quiet ./docker-compose.staging.yml ./trigger.txt my-15th-startup-test:/home/app --zone us-central1-a 
+  acceptance-testing:
+    # can use 'windows os' and 'mac os' executor to do integration test for those platform
+    # but for now only do it at this Linux platform
+    executor: jdk-browsers-executor
+    steps:
+      - checkout
+      - run: mkdir test-reports
+      - run:
+          name: Download Selenium
+          command: curl -O http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar
+      - run:
+          name: Start Selenium
+          command: java -jar selenium-server-standalone-3.5.3.jar -log test-reports/selenium.log
+          background: true
+      - run:
+          name: Excute Acceptance Testing (release/* branch only)
+          command: |
+            echo 'Excute Acceptance Testing (release/* branch only)'
+            cd ./IntegrationTesting
+            mvn test
+            
+  production-deployment:
+    docker:
+      - image: alpine:3.7
+    steps:
+      - run:
+          name: Deploy To Production Server (master branch only)
+          command: |
+            echo 'Deploy To Production Server (master branch only)'
 workflows:
-  version: 2
-  build-deploy:
+  version: 2.1
+  ci-cd:
     jobs:
-      - build
-      - deploy: 
+      - build:
+          filters:
+            branches:
+              only:
+                - /feature\/.*/
+      - spa-service-testing:
           requires:
-            - build 
-
-
+            - build
+          filters:
+            branches:
+              only:
+                - /feature\/.*/
+      - api-service-testing:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - /feature\/.*/
+      - build-push-src-image:
+          filters:
+            branches:
+              only:
+                - /release\/.*/
+      - staging-deployment:
+          requires:
+            - build-push-src-image
+          filters:
+            branches:
+              only:
+                - /release\/.*/
+      - acceptance-testing:
+          requires:
+           - staging-deployment
+          filters:
+            branches:
+              only:
+                - /release\/.*/
+      - production-deployment:
+          filters:
+            branches:
+              only:
+                - master 
+      # jobs:
+      #   build:
+      #     executor: gcp-executor
+      #     steps:
+      #       - run:
+      #           name: Build
+      #           command: |
+      #             echo 'Build'
+      #       - run: mkdir -p workspace
+      #       - run: echo "Hello, world!" > workspace/echo-output
+      # 
+      #       # Persist the specified paths (workspace/echo-output) into the workspace for use in downstream job.
+      #       - persist_to_workspace:
+      #           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
+      #           # taken to be the root directory of the workspace.
+      #           root: workspace
+      #           # Must be relative path from root
+      #           paths:
+      #             - echo-output
+      #   spa-service-testing:
+      #     executor: gcp-executor
+      #     steps:
+      #       - attach_workspace:
+      #           # Must be absolute path or relative path from working_directory
+      #           at: /tmp/workspace
+      # 
+      #       - run: |
+      #           head /tmp/workspace/echo-output
+      #           if [[ "cat /tmp/workspace/echo-output" == "Hello, world!" ]]; then
+      #             echo "It worked!";
+      #           else
+      #             echo "Nope!"; exit 1
+      #           fi
+      #       - run:
+      #           name: Run Spa (dev and release and master)
+      #           command: |
+      #             echo 'Running Spa Testing (dev only)'
+      #   api-service-testing:
+      #     docker:
+      #       - image: alpine:3.7
+      #     steps:
+      #       - run:
+      #           name: Run api (dev and release and master)
+      #           command: |
+      #             echo 'Running api Testing (dev only)'
+      #   acceptance-testing:
+      #     docker:
+      #       - image: alpine:3.7
+      #     steps:
+      #       - run:
+      #           name: Run Acceptance Testing (release and master)
+      #           command: |
+      #             echo 'Running api Testing (dev only)'
+      #   deploy-staging:
+      #     docker: 
+      #       - image: alpine:3.7
+      #     steps:
+      #       - run:
+      #           name: Deploy to Staging (release and master and if acceptance testing has passed)
+      #           command: |
+      #             echo 'Deploy to Staging (release only and if acceptance testing has passed)'
+      #   deploy-production:
+      #     docker:
+      #       - image: alpine:3.7
+      #     steps:
+      #       - run:
+      #           name: Deploy to Production (release and master and if acceptance testing has passed)
+      #           command: |
+      #             echo 'Deploy to Production (release only and if acceptance testing has passed)'
+# executors:
+#   gcp-executor:
+#     docker:
+#       - image: stsiwo/circleci-base:1.04 
+#     working_directory: /app
+# 
+    # jobs:
+    #   build:
+    #     machine: true
+    #     steps:
+    #       - checkout
+    #       - run:
+    #           name: Build Image & Push Docker Hub 
+    #           command: |
+    #             source ./set-app-version-env.sh
+    #             docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
+    # 
+    #             docker build --tag=sts-blog-spa:$APP_VERSION --tag=sts-blog-spa --target=staging ./Spa
+    #             docker tag sts-blog-spa:$APP_VERSION stsiwo/sts-blog-spa:$APP_VERSION
+    #             docker tag sts-blog-spa stsiwo/sts-blog-spa
+    #             docker push stsiwo/sts-blog-spa
+    # 
+    #             docker build --tag=sts-blog-api:$APP_VERSION --tag=sts-blog-api --target=staging ./Api1
+    #             docker tag sts-blog-api:$APP_VERSION stsiwo/sts-blog-api:$APP_VERSION
+    #             docker tag sts-blog-api stsiwo/sts-blog-api
+    #             docker push stsiwo/sts-blog-api
+    # 
+    #             docker build --tag=sts-blog-db:$APP_VERSION --tag=sts-blog-db ./Db
+    #             docker tag sts-blog-db:$APP_VERSION stsiwo/sts-blog-db:$APP_VERSION
+    #             docker tag sts-blog-db stsiwo/sts-blog-db
+    #             docker push stsiwo/sts-blog-db
+    # 
+    #   deploy:
+    #     executor: gcp-executor
+    #     steps:
+    #       - checkout
+    #       - run:
+    #           name: Create GCloud Service Key Files
+    #           command: |
+    #             echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
+    #             gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+    #             gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
+    #             gcloud info
+    #             # gcloud compute scp --quiet ./docker-compose.staging.remote.yml ./docker-compose.staging.yml $GOOGLE_COMPUTE_NAME:/home/app --zone $GOOGLE_COMPUTE_ZONE
+    #             # create trigger.txt which is watched by incrontab
+    #             echo "trigger" > trigger.txt
+    #             # ERROR: (gcloud.compute.scp) INVALID_ARGUMENT: Login profile size exceeds 32 KiB. Delete profile values to make additional space.
+    #             # SOLUTION: add below command (reference: https://github.com/kyma-project/test-infra/issues/93)
+    #             # REASON: may be public key is cached and exceed the limit so need to clear?? (reference: https://cloud.google.com/sdk/gcloud/reference/beta/compute/os-login/ssh-keys/remove)
+    #             for i in $(gcloud compute os-login ssh-keys list | grep -v FINGERPRINT); do echo $i; gcloud compute os-login ssh-keys remove --key $i; done
+    #             gcloud compute scp --quiet ./docker-compose.staging.yml ./trigger.txt my-15th-startup-test:/home/app --zone us-central1-a 
+    # workflows:
+    #   version: 2
+    #   build-deploy:
+    #     jobs:
+    #       - build
+    #       - deploy: 
+    #           requires:
+    #             - build 
+    # 
+    # 
   ### TESTING
   #  build:
   #    docker:

@@ -16,10 +16,15 @@ class BlogRepository(BaseRepository[Blog]):
         super().__init__()
         self._blogFilterBuilder = BlogFilterBuilder()
 
-    def getAll(self, queryString: Dict = {}, userId: str = None) -> Dict:
+    # only public
+    def getAll(self, queryString: Dict = {}, userId: str = None, onlyPublic: bool = True) -> Dict:
 
         # base
         query: Query = self._session.query(Blog).group_by(Blog.id)
+
+        # only public
+        if onlyPublic:
+            query = query.filter_by(public=True)
 
         # filters
         # query = self._blogFilterBuilder.build(query, queryString)
@@ -50,8 +55,14 @@ class BlogRepository(BaseRepository[Blog]):
     def get(self, id: str) -> Blog:
         return self._session.query(Blog).get(id)
 
+    def getIfPublic(self, id: str) -> Blog:
+        return self._session.query(Blog).filter_by(id=id, public=True).first()
+
     def find(self, **kwargs) -> List[Blog]:
         return self._session.query(Blog).filter_by(**kwargs).all()
+
+    def findOnlyOne(self, **kwargs) -> Blog:
+        return self._session.query(Blog).filter_by(**kwargs).first()
 
     def delete(self, id: str):
         return self._session.query(Blog).filter_by(id=id).delete()

@@ -3,6 +3,12 @@
   <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
     <title><%= htmlWebpackPlugin.options.title %></title>
+    <!--
+      error: Uncaught SyntaxError: Unexpected token '<'
+      solution: add <base> tag
+      reference: https://github.com/webpack/webpack/issues/2882 
+    -->
+    <base href="/" />
     <style>
       html {
         width: 100%;
