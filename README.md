@@ -98,7 +98,20 @@
   3. API scope
       1. full scope for GCS
 
-
+### Bump Up Version
+  - support major/minor/patch version:
+    * major: imcompatible change
+    * minor: backward compatible change
+    * patch: hotfix at master branch
+  - use command: /bin/bash ./bump-version.sh \[-option\]
+    - options:
+      - increment major version: -m
+      - increment minor version: -i
+      - increment patch version: -p
+  - run above command when:
+    - before finishing release branch to increment major/minor version and commit
+    - after hotfix to increment patch version
+   
 ### NOTE
   - staging server/production server use different nginx config due to ssl config
     - make sure to match with local nginx config manually
