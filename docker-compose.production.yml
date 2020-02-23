@@ -1,7 +1,29 @@
-version: '3'
-# use for swarm mode
+version: '3.4'
 services:
-  spa:
-  api:
   db:
+    image: stsiwo/sts-blog-db-production 
+    volumes:
+      - db-data-production-storage:/var/lib/mysql 
+      - db-logging-production-storage:/var/log/mysql
+  webserver:
+    image: stsiwo/sts-blog-spa-production
+    ports: 
+      - "80:80"
+    volumes:
+      - webserver-logging-production-storage:/var/log/nginx
+    depends_on:
+      - api1
+  api1:
+    image: stsiwo/sts-blog-api-production
+    ports: 
+      - "5000:5000"
+    volumes:
+      - api-logging-production-storage:/var/log/sts-blogs-api
+    depends_on:
+      - db
+volumes:
+  db-data-production-storage:
+  db-logging-production-storage:
+  api-logging-production-storage:
+  webserver-logging-production-storage:
 
