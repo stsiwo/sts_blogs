@@ -36,3 +36,10 @@ WORKDIR /app
 COPY ./ ./ 
 RUN ["chmod", "+x", "./entrypoint.staging.sh"]
 ENTRYPOINT ["./entrypoint.staging.sh"]
+
+FROM dep-install as production
+
+WORKDIR /app
+COPY ./ ./ 
+RUN ["chmod", "+x", "./entrypoint.production.sh"]
+ENTRYPOINT ["./entrypoint.production.sh"]

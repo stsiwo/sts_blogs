@@ -34,7 +34,7 @@ jobs:
           name: Run API service testing (feature/* branch only)
           command: |
             echo 'Run API service testing (feature/* branch only)'
-  build-push-src-image:
+  staging-build-push-src-image:
     # this allow to use 'docker' in this job
     machine:
       image: ubuntu-1604:201903-01    # recommended linux image - includes Ubuntu 16.04, docker 18.09.3, docker-compose 1.23.1
@@ -102,15 +102,53 @@ jobs:
             echo 'Excute Acceptance Testing (release/* branch only)'
             cd ./IntegrationTesting
             mvn test
-            
-  production-deployment:
-    docker:
-      - image: alpine:3.7
+  production-build-push-src-image:
+    machine:
+      image: ubuntu-1604:201903-01    # recommended linux image - includes Ubuntu 16.04, docker 18.09.3, docker-compose 1.23.1
     steps:
+      - checkout
       - run:
-          name: Deploy To Production Server (master branch only)
+          name: Build Image & Push Docker Hub (feature/* branch only)
           command: |
-            echo 'Deploy To Production Server (master branch only)'
+            source ./set-app-version-env.sh
+            docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
+
+            # use multiproduction skip experimental feature >= Docker 18.06
+            export DOCKER_BUILDKIT=1
+    
+            docker build --tag=sts-blog-spa-production:$APP_VERSION --tag=sts-blog-spa-production:latest --target=production ./Spa
+            docker tag sts-blog-spa-production:$APP_VERSION stsiwo/sts-blog-spa-production:$APP_VERSION
+            docker tag sts-blog-spa-production:latest stsiwo/sts-blog-spa-production:latest
+            docker push stsiwo/sts-blog-spa-production
+    
+            docker build --tag=sts-blog-api-production:$APP_VERSION --tag=sts-blog-api-production:latest --target=production ./Api1
+            docker tag sts-blog-api-production:$APP_VERSION stsiwo/sts-blog-api-production:$APP_VERSION
+            docker tag sts-blog-api-production:latest stsiwo/sts-blog-api-production:latest
+            docker push stsiwo/sts-blog-api-production
+    
+            docker build --tag=sts-blog-db-production:$APP_VERSION --tag=sts-blog-db-production:latest ./Db
+            docker tag sts-blog-db-production:$APP_VERSION stsiwo/sts-blog-db-production:$APP_VERSION
+            docker tag sts-blog-db-production:latest stsiwo/sts-blog-db-production:latest
+            docker push stsiwo/sts-blog-db-production
+  production-deployment:
+    executor: gcp-executor
+    steps:
+      - checkout
+      - run:
+          name: Deploy to Production Server 
+          command: |
+            echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
+            gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+            gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
+            gcloud info
+            # gcloud compute scp --quiet ./docker-compose.staging.remote.yml ./docker-compose.staging.yml $GOOGLE_COMPUTE_NAME:/home/app --zone $GOOGLE_COMPUTE_ZONE
+            # create trigger.txt which is watched by incrontab
+            echo "trigger" > trigger.txt
+            # ERROR: (gcloud.compute.scp) INVALID_ARGUMENT: Login profile size exceeds 32 KiB. Delete profile values to make additional space.
+            # SOLUTION: add below command (reference: https://github.com/kyma-project/test-infra/issues/93)
+            # REASON: may be public key is cached and exceed the limit so need to clear?? (reference: https://cloud.google.com/sdk/gcloud/reference/beta/compute/os-login/ssh-keys/remove)
+            for i in $(gcloud compute os-login ssh-keys list | grep -v FINGERPRINT); do echo $i; gcloud compute os-login ssh-keys remove --key $i; done
+            gcloud compute scp --quiet ./docker-compose.production.yml ./trigger.txt sts-blogs-production:/home/app --zone us-central1-a 
 workflows:
   version: 2.1
   ci-cd:
@@ -134,14 +172,14 @@ workflows:
             branches:
               only:
                 - /feature\/.*/
-      - build-push-src-image:
+      - staging-build-push-src-image:
           filters:
             branches:
               only:
                 - /release\/.*/
       - staging-deployment:
           requires:
-            - build-push-src-image
+            - staging-build-push-src-image
           filters:
             branches:
               only:
@@ -153,7 +191,14 @@ workflows:
             branches:
               only:
                 - /release\/.*/
+      - production-build-push-src-image:
+          filters:
+            branches:
+              only:
+                - /release\/.*/
       - production-deployment:
+          requires:
+           - production-build-push-src-image
           filters:
             branches:
               only:
