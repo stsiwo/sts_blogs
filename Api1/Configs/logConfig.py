@@ -1,8 +1,14 @@
 from logging.config import dictConfig
 from datetime import datetime
+from Configs.settings import currentEnv
+
+# testing & development: put log file at root directory of this project
+# staging & production: put log file at /var/log/sts-blogs-api/
+logFilePath = '/var/log/sts-blogs-api/api.' + datetime.now().strftime("%m-%d-%Y") + ".log" if currentEnv == 'STAGING' or currentEnv == 'PRODUCTION' else "api." + datetime.now().strftime("%m-%d-%Y") + ".log"
 
 # log config
 # must before flask app is instanciate
+# if need config after flask app is instantiated, need to remove default logger config
 dictConfig({
     'version': 1,
     'formatters': {'default': {
@@ -16,7 +22,7 @@ dictConfig({
         },
         'file': {
                 'class': 'logging.handlers.RotatingFileHandler',
-                'filename': '/var/log/sts-blogs-api/api.' + datetime.now().strftime("%m-%d-%Y") + ".log",
+                'filename': logFilePath,
                 'mode': 'w',
                 'formatter': 'default',
                 'maxBytes': 10*1024*1024,

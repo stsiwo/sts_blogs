@@ -838,9 +838,6 @@ def test_b14_blogs_put_endpoint_should_return_200_when_successfully_update_publi
             '/blogs/{}'.format(existingBlog.id),
             json={
                 "public": "1",
-                "userId": existingBlog.user.id,
-                "title": existingBlog.title,
-                "subtitle": existingBlog.subtitle
                 },
             headers=httpHeaders
             )
@@ -864,9 +861,6 @@ def test_b14_blogs_put_endpoint_should_return_200_when_successfully_update_publi
             '/blogs/{}'.format(existingBlog.id),
             json={
                 "public": "0",
-                "userId": existingBlog.user.id,
-                "title": existingBlog.title,
-                "subtitle": existingBlog.subtitle
                 },
             headers=httpHeaders
             )
@@ -890,9 +884,6 @@ def test_b14_blogs_put_endpoint_should_return_404_when_there_is_no_blog_exists(a
             '/blogs/{}'.format(noExistingBlogId),
             json={
                 "public": "0",
-                "userId": usersSeededFixture.id,
-                "title": "does not exist title",
-                "subtitle": "does not exist subtitle"
                 },
             headers=httpHeaders
             )

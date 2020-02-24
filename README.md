@@ -3,17 +3,19 @@
 ### API1
   - testing
      - use testing docker container
+      * if database schema is updated, you need to run ./initial-migration-setup
       - command)
         - docker build --tag=api1:testing --target=testing . 
           // at root directory of api1 project
-        - docker run --name=api1-testing -v ${PWD}:/app -v /var/log/sts-blogs-api:/var/log/sts-blogs-api -e ${PWD}/.env.testing api1:testing <additional_pytest_command>
+        - docker run --name=api1-testing -v ${PWD}:/app -e ${PWD}/.env.testing api1:testing <additional_pytest_command>
           // ex) docker run .... api1:testing -m blog_src_get (run only test whose marks include 'blog_src_get')
           // run it
   - development
-     - command)
+      * if database schema is updated, you need to run ./initial-migration-setup
+      - command)
         - docker build --tag=api1:development --target=development . 
           // at root directory of api1 project
-        - docker run --name=api1-development -v ${PWD}:/app -v /var/log/sts-blogs-api:/var/log/sts-blogs-api -e ${PWD}/.env.development -p 5000:5000 api1:development  
+        - docker run --name=api1-development -v ${PWD}:/app -e ${PWD}/.env.development -p 5000:5000 api1:development  
           // run it
 
 ### SPA
@@ -57,6 +59,26 @@
       - if use any commercial automate testing tools, it can increase more variety of platform.
     - switch integration testing from python to Java since Java provide easier setting for parallel testing. can achieve the parallel testing using Python but need manually config for it, so move to Java.
 
+### API DB migration Logic
+  - use a single migration (SQLite context) for testing, development, staging, production to avoid any duplication of migration data
+  - use SQLite for development, testing
+  - use MySQL for staging, production
+  - setup workflow: when initial db, follow bellow steps
+    * 0. set 'FLASK_ENV=development' or 'testing' to set target db to SQLite
+    * 1. run 'flask db init' to create migration folder
+    * 2. run 'flask db migrate' to detect new change
+    * 3. run 'testing-dev-db-setup.sh' to create db and seed initial data for testing and development
+  - update workflow: when update db schema, follow bellow steps
+    * 1. run 'flask db migrate' (create new version file to detect any update)
+    * 2. run 'update-migration.sh' for updating testing and development sqlite database (internally just upgrade database)
+  - staging & production db
+    - entrypoint.sh for each env handle 'upgrade' and seed initial data to each db
+    
+  * IMPORTANT NOTE
+    - need to use SQLite context script to create db schema and insert data to MySQL. there are errors because of different context
+      * 1. add 'render_as_batch=True,' to 'env.py': since SQLite does not support 'alter' statement 
+      * 2. modify '(CURRENT_TIMESTAMP)' to 'CURRENT_TIMESTAMP': typical error when creating MySQL with SQLite Context script
+
 ### Deployment (Setup Staging & Production Server)
   - use GCP Compute Engine.
   - use startup script to automate initial config at server as much as possible
@@ -98,7 +120,20 @@
   3. API scope
       1. full scope for GCS
 
-
+### Bump Up Version
+  - support major/minor/patch version:
+    * major: imcompatible change
+    * minor: backward compatible change
+    * patch: hotfix at master branch
+  - use command: /bin/bash ./bump-version.sh \[-option\]
+    - options:
+      - increment major version: -m
+      - increment minor version: -i
+      - increment patch version: -p
+  - run above command when:
+    - before finishing release branch to increment major/minor version and commit
+    - after hotfix to increment patch version
+   
 ### NOTE
   - staging server/production server use different nginx config due to ssl config
     - make sure to match with local nginx config manually
