@@ -59,6 +59,26 @@
       - if use any commercial automate testing tools, it can increase more variety of platform.
     - switch integration testing from python to Java since Java provide easier setting for parallel testing. can achieve the parallel testing using Python but need manually config for it, so move to Java.
 
+### API DB migration Logic
+  - use a single migration (SQLite context) for testing, development, staging, production to avoid any duplication of migration data
+  - use SQLite for development, testing
+  - use MySQL for staging, production
+  - setup workflow: when initial db, follow bellow steps
+    * 0. set 'FLASK_ENV=development' or 'testing' to set target db to SQLite
+    * 1. run 'flask db init' to create migration folder
+    * 2. run 'flask db migrate' to detect new change
+    * 3. run 'testing-dev-db-setup.sh' to create db and seed initial data for testing and development
+  - update workflow: when update db schema, follow bellow steps
+    * 1. run 'flask db migrate' (create new version file to detect any update)
+    * 2. run 'update-migration.sh' for updating testing and development sqlite database (internally just upgrade database)
+  - staging & production db
+    - entrypoint.sh for each env handle 'upgrade' and seed initial data to each db
+    
+  * IMPORTANT NOTE
+    - need to use SQLite context script to create db schema and insert data to MySQL. there are errors because of different context
+      * 1. add 'render_as_batch=True,' to 'env.py': since SQLite does not support 'alter' statement 
+      * 2. modify '(CURRENT_TIMESTAMP)' to 'CURRENT_TIMESTAMP': typical error when creating MySQL with SQLite Context script
+
 ### Deployment (Setup Staging & Production Server)
   - use GCP Compute Engine.
   - use startup script to automate initial config at server as much as possible
