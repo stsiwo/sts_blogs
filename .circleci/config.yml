@@ -156,6 +156,8 @@ workflows:
       - build:
         # filters: combination of tags & branchs. below case, only run when only tags is push and not run when any branch is pushed
         # switch to tags based filters since branches based filter makes every push to the branch cause ci/cd server to run even if the work hasn't finished 
+        # but it is really troublesome if using tags although bettern branches based filter
+        # need to find the way to properly trigger ci/cd run when I want not when every time push to remote
           filters:
             tags:
               only:
