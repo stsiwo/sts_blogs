@@ -2,7 +2,7 @@
 set -e
 
 
-export FLASK_ENV=staging
+export FLASK_ENV=production
 export FLASK_APP=./run.py
 
 # wait until db is ready

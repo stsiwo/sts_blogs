@@ -5,11 +5,12 @@ from utils.util import printObject, decodeResponseByteJsonToDictionary, mapCooki
 
 @pytest.mark.token
 @pytest.mark.expired_at_and_no_expired_rt
+@pytest.mark.ppp
 def test_t01_should_return_401_with_access_token_expired_type(authedClientForTokenTest, exSession, httpHeaders):
 
     client = authedClientForTokenTest(access_token_expiry=1, refresh_token_expiry=1000)
 
-    userId = exSession.query(User).filter(User.email == 'test@test.com').first()
+    userId = exSession.query(User).filter(User.email == 'test@test.com').first().id
 
     csrf_token = [cookie.value for cookie in client.cookie_jar if cookie.name == 'csrf_access_token'][0]
     httpHeaders['X-CSRF-TOKEN'] = csrf_token
