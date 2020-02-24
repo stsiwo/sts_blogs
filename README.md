@@ -3,6 +3,7 @@
 ### API1
   - testing
      - use testing docker container
+      * if database schema is updated, you need to run ./initial-migration-setup
       - command)
         - docker build --tag=api1:testing --target=testing . 
           // at root directory of api1 project
@@ -10,7 +11,8 @@
           // ex) docker run .... api1:testing -m blog_src_get (run only test whose marks include 'blog_src_get')
           // run it
   - development
-     - command)
+      * if database schema is updated, you need to run ./initial-migration-setup
+      - command)
         - docker build --tag=api1:development --target=development . 
           // at root directory of api1 project
         - docker run --name=api1-development -v ${PWD}:/app -v /var/log/sts-blogs-api:/var/log/sts-blogs-api -e ${PWD}/.env.development -p 5000:5000 api1:development  
