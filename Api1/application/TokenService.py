@@ -22,7 +22,7 @@ class TokenService(object):
         access_token = create_access_token(identity=identity)
         refresh_token = create_refresh_token(identity=identity)
 
-        app.logger.infoObject(access_token)
+        app.logger.info(access_token)
 
         app.logger.info("about save token in cookie")
         self.__saveTokenInCookie(response, access_token, refresh_token)
@@ -34,4 +34,4 @@ class TokenService(object):
         set_access_cookies(response, access_token)
         set_refresh_cookies(response, refresh_token)
 
-        app.logger.infoObject(session)
+        app.logger.info(session)

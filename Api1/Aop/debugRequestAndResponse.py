@@ -25,6 +25,8 @@ def after(response: Response):
 @app.before_request
 def before_request():
     app.logger.info('*** debugging request ***')
+    app.logger.info('*** request destination ***')
+    app.logger.info(request.url)
     app.logger.info('*** request header ***')
     app.logger.info(request.headers)
     app.logger.info('*** request cookies ***')
