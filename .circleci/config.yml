@@ -151,58 +151,123 @@ jobs:
             gcloud compute scp --quiet ./docker-compose.production.yml ./trigger.txt sts-blogs-production:/home/app --zone us-central1-a 
 workflows:
   version: 2.1
-  ci-cd:
+  release-workflow:
+    # workflow after release branch is created
     jobs:
       - build:
           filters:
             branches:
-              only:
-                - /feature\/.*/
+              ignore:
+                - /.*/
       - spa-service-testing:
           requires:
             - build
           filters:
             branches:
-              only:
-                - /feature\/.*/
+              ignore:
+                - /.*/
       - api-service-testing:
           requires:
             - build
           filters:
             branches:
-              only:
-                - /feature\/.*/
+              ignore:
+                - /.*/
       - staging-build-push-src-image:
+          requires:
+            - api-service-testing
+            - spa-service-testing
           filters:
             branches:
-              only:
-                - /release\/.*/
+              ignore:
+                - /.*/
       - staging-deployment:
           requires:
             - staging-build-push-src-image
           filters:
             branches:
-              only:
-                - /release\/.*/
+              ignore:
+                - /.*/
       - acceptance-testing:
           requires:
            - staging-deployment
           filters:
             branches:
-              only:
-                - /release\/.*/
+              ignore:
+                - /.*/
+  master-from-release-workflow:
+    # workflow after release branch is merge to master
+    jobs:
       - production-build-push-src-image:
           filters:
             branches:
-              only:
-                - master 
+              ignore:
+                - /.*/
       - production-deployment:
           requires:
            - production-build-push-src-image
           filters:
             branches:
-              only:
-                - master 
+              ignore:
+                - /.*/
+  master-from-hotfix-workflow:
+    # workflow after hotfix is fixed and merge to master
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore:
+                - /.*/
+      - spa-service-testing:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore:
+                - /.*/
+      - api-service-testing:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore:
+                - /.*/
+      - staging-build-push-src-image:
+          requires:
+            - api-service-testing
+            - spa-service-testing
+          filters:
+            branches:
+              ignore:
+                - /.*/
+      - staging-deployment:
+          requires:
+            - staging-build-push-src-image
+          filters:
+            branches:
+              ignore:
+                - /.*/
+      - acceptance-testing:
+          requires:
+           - staging-deployment
+          filters:
+            branches:
+              ignore:
+                - /.*/
+      - production-build-push-src-image:
+          requires:
+           - acceptance-testing 
+          filters:
+            branches:
+              ignore:
+                - /.*/
+      - production-deployment:
+          requires:
+           - production-build-push-src-image
+          filters:
+            branches:
+              ignore:
+                - /.*/
       # jobs:
       #   build:
       #     executor: gcp-executor
