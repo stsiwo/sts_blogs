@@ -166,7 +166,7 @@ workflows:
     # workflow after release branch is created
     when: << pipeline.parameters.run_release_workflow >>
     jobs:
-      - build:
+      - build
         # filters: combination of tags & branchs. below case, only run when only tags is push and not run when any branch is pushed
         # switch to tags based filters since branches based filter makes every push to the branch cause ci/cd server to run even if the work hasn't finished 
         # but it is really troublesome if using tags although bettern branches based filter
@@ -192,7 +192,7 @@ workflows:
     # workflow after release branch is merge to master
     when: << pipeline.parameters.run_master_from_release_workflow >>
     jobs:
-      - production-build-push-src-image:
+      - production-build-push-src-image
       - production-deployment:
           requires:
            - production-build-push-src-image
@@ -200,7 +200,7 @@ workflows:
     # workflow after hotfix is fixed and merge to master
     when: << pipeline.parameters.run_master_from_hotfix_workflow >>
     jobs:
-      - build:
+      - build
       - spa-service-testing:
           requires:
             - build
