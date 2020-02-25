@@ -153,6 +153,7 @@ workflows:
   version: 2.1
   release-workflow:
     # workflow after release branch is created
+    when: << pipeline.parameters.run_release_workflow >>
     jobs:
       - build:
         # filters: combination of tags & branchs. below case, only run when only tags is push and not run when any branch is pushed
@@ -160,119 +161,57 @@ workflows:
         # but it is really troublesome if using tags although bettern branches based filter
         # need to find the way to properly trigger ci/cd run when I want not when every time push to remote
         # as workaround: use api to trigger workflow!!!!!!!!!!!!!!
-          filters:
-            branches:
-              ignore:
-                - /.*/
       - spa-service-testing:
           requires:
             - build
-          filters:
-            branches:
-              ignore:
-                - /.*/
       - api-service-testing:
           requires:
             - build
-          filters:
-            branches:
-              ignore:
-                - /.*/
       - staging-build-push-src-image:
           requires:
             - api-service-testing
             - spa-service-testing
-          filters:
-            branches:
-              ignore:
-                - /.*/
       - staging-deployment:
           requires:
             - staging-build-push-src-image
-          filters:
-            branches:
-              ignore:
-                - /.*/
       - acceptance-testing:
           requires:
            - staging-deployment
-          filters:
-            branches:
-              ignore:
-                - /.*/
   master-from-release-workflow:
     # workflow after release branch is merge to master
+    when: << pipeline.parameters.run_master_from_release_workflow >>
     jobs:
       - production-build-push-src-image:
-          filters:
-            branches:
-              ignore:
-                - /.*/
       - production-deployment:
           requires:
            - production-build-push-src-image
-          filters:
-            branches:
-              ignore:
-                - /.*/
   master-from-hotfix-workflow:
     # workflow after hotfix is fixed and merge to master
+    when: << pipeline.parameters.run_master_from_hotfix_workflow >>
     jobs:
       - build:
-          filters:
-            branches:
-              ignore:
-                - /.*/
       - spa-service-testing:
           requires:
             - build
-          filters:
-            branches:
-              ignore:
-                - /.*/
       - api-service-testing:
           requires:
             - build
-          filters:
-            branches:
-              ignore:
-                - /.*/
       - staging-build-push-src-image:
           requires:
             - api-service-testing
             - spa-service-testing
-          filters:
-            branches:
-              ignore:
-                - /.*/
       - staging-deployment:
           requires:
             - staging-build-push-src-image
-          filters:
-            branches:
-              ignore:
-                - /.*/
       - acceptance-testing:
           requires:
            - staging-deployment
-          filters:
-            branches:
-              ignore:
-                - /.*/
       - production-build-push-src-image:
           requires:
            - acceptance-testing 
-          filters:
-            branches:
-              ignore:
-                - /.*/
       - production-deployment:
           requires:
            - production-build-push-src-image
-          filters:
-            branches:
-              ignore:
-                - /.*/
       # jobs:
       #   build:
       #     executor: gcp-executor
