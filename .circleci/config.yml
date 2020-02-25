@@ -1,5 +1,16 @@
 version: 2.1
 
+parameters:
+  run_release_workflow:
+    type: boolean
+    default: false
+  run_master_from_release_workflow:
+    type: boolean
+    default: false
+  run_master_from_hotfix_workflow:
+    type: boolean
+    default: false
+
 executors:
   gcp-executor:
     docker:
