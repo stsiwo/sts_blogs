@@ -214,9 +214,10 @@ workflows:
       - staging-deployment:
           requires:
             - staging-build-push-src-image
-      - acceptance-testing:
-          requires:
-           - staging-deployment
+      # temporary disable since out of credit
+      #- acceptance-testing:
+      #requires:
+      #- staging-deployment
       - production-build-push-src-image:
           requires:
            - acceptance-testing 
