@@ -150,3 +150,11 @@
     : TS2456: Type alias 'NodeMatch' circularly references itself.
       -> even if you install the same package, i think the author does not do proper versioning.
       -> i got different dist when install it so be careful
+
+### TODO
+  - reivew deployment 
+    - ideally don't ssh to vm and use ci/cd to deploy everything
+  - alternative for incrontab
+    - does gcp provide the nice feature to trigger bash script when upload file?
+  - switch to aws
+    - gcp will shut down at 2023???????
