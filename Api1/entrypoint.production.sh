@@ -13,5 +13,9 @@ done
 
 >&2 echo "MySQL is ready... start initial tables & data for flask app"
 
+# seed
+flask seed roles
+flask seed tags
+
 # start server
 gunicorn -c python:wsgi_config run:main
