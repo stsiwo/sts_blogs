@@ -219,8 +219,8 @@ workflows:
       #requires:
       #- staging-deployment
       - production-build-push-src-image:
-          requires:
-           - acceptance-testing 
+        #requires:
+        #- acceptance-testing 
       - production-deployment:
           requires:
            - production-build-push-src-image
