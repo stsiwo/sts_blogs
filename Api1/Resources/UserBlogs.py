@@ -55,34 +55,34 @@ class UserBlogs(Resource):
             response.status_code = 200
             return response
 
-    # create new blog
-    @jwt_required
-    @requires_jwt_role_claim({'admin', 'member'})
-    @validate_request_with(userNewBlogValidator)
-    @loggingDecorator()
-    def post(self, user_id: str):
+    # create new blog (depreciated for auto-save feature) use /blogs/{id} endpoint for create/update
+    # @jwt_required
+    # @requires_jwt_role_claim({'admin', 'member'})
+    # @validate_request_with(userNewBlogValidator)
+    # @loggingDecorator()
+    # def post(self, user_id: str):
 
-        tags = ast.literal_eval(request.form.get('tags')) if request.form.get('tags') is not None else []
-        blogImagePaths = ast.literal_eval(request.form.get('blogImagePaths')) if request.form.get('blogImagePaths') is not None else []
+    #    tags = ast.literal_eval(request.form.get('tags')) if request.form.get('tags') is not None else []
+    #    blogImagePaths = ast.literal_eval(request.form.get('blogImagePaths')) if request.form.get('blogImagePaths') is not None else []
 
-        newBlog: Blog = self._userBlogService.createNewBlogService(
-                user_id=user_id,
-                title=request.form.get('title'),
-                subtitle=request.form.get('subtitle'),
-                content=request.form.get('content'),
-                tags=tags,
-                blogImagePaths=blogImagePaths,
-                mainImage=request.files.get('mainImage', None),
-                blogImages=request.files.getlist('blogImages[]')
-                )
+    #    newBlog: Blog = self._userBlogService.createNewBlogService(
+    #            user_id=user_id,
+    #            title=request.form.get('title'),
+    #            subtitle=request.form.get('subtitle'),
+    #            content=request.form.get('content'),
+    #            tags=tags,
+    #            blogImagePaths=blogImagePaths,
+    #            mainImage=request.files.get('mainImage', None),
+    #            blogImages=request.files.getlist('blogImages[]')
+    #            )
 
-        blogSchema = self._blogSchema.dump(newBlog)
+    #    blogSchema = self._blogSchema.dump(newBlog)
 
-        response = jsonify({'blog': blogSchema})
-        response.status_code = 201
-        # after db.session.commit(), newBlog.id is automcatically assigned my SQLAlchemy
-        response.headers['location'] = '/blogs/' + str(newBlog.id)
-        return response
+    #    response = jsonify({'blog': blogSchema})
+    #    response.status_code = 201
+    #    # after db.session.commit(), newBlog.id is automcatically assigned my SQLAlchemy
+    #    response.headers['location'] = '/blogs/' + str(newBlog.id)
+    #    return response
 
     # replace existing whole blogs or create whole blogs if does not exist
     # payload must be whole blogs (all properties of blog)
