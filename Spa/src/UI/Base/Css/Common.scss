@@ -5,6 +5,11 @@ body {
   font-family: $mainFontFamily;
 }
 
+.page-title-center {
+  font-size: $titleFontSize;
+  text-align: center;
+}
+
 .app-wrapper {
   display: flex;
   flex-direction: column;
@@ -330,6 +335,7 @@ body {
 }
 
 .page-title {
+  font-size: $titleFontSize;
   position: relative;
   padding: 0.83em;
 }

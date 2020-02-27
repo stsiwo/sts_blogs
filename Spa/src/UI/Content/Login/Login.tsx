@@ -74,7 +74,7 @@ const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCom
 
   return (
     <div className="login-form-cover">
-      <h2 className="login-form-title">Login</h2>
+      <h2 className="page-title-center">Login</h2>
       <FetchStatus
         currentFetchStatus={currentRequestStatus}
         setFetchStatus={setRequestStatus}

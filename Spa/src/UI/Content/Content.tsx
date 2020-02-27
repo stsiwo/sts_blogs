@@ -10,6 +10,7 @@ import Signup from './Signup/Signup';
 import { AuthRoute } from 'Components/AuthRoute';
 import ForgotPasswordEmailModal from 'Components/ForgotPasswordEmailModal/ForgotPasswordEmailModal';
 import { useLocation } from 'react-router';
+import ResetPassword from './ResetPassword/ResetPassword';
 
 
 const Content: React.FunctionComponent<{}> = (props: {}) => {
@@ -26,12 +27,12 @@ const Content: React.FunctionComponent<{}> = (props: {}) => {
   let location = useLocation();
   let background = location.state && location.state.background;
 
-
   return (
     <section className="content-wrapper">
       <Switch location={background || location}>
         <Route path="/" exact component={Home} />
         <Route path="/login" exact component={Login} />
+        <Route path="/password-reset/:token" exact component={ResetPassword} />
         <Route path="/signup" exact component={Signup} />
         <Route path="/blogs" exact component={BlogList} />
         <Route path="/blogs/:blogId" exact component={Blog} />
