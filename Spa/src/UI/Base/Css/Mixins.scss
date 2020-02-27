@@ -82,3 +82,18 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+@mixin base-btn {
+  border-radius: 7px;
+  height: 30px;
+  box-sizing: border-box;
+  padding: 10px 50px 10px 50px;
+  margin: 15px auto;
+  font-family: $mainFontFamily;
+  font-size: $subTitleFontSize;
+  font-weight: bold;
+  line-height: 0px; 
+  outline: none; 
+  cursor: pointer;
+  display: block;
+}

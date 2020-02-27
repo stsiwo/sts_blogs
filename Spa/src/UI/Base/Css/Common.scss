@@ -20,8 +20,13 @@ body {
 
 .white-input {
   @include base-input;
+  font-size: $regularFontSize;
   color: white;
   padding: 5px;
+}
+
+.white-input-label {
+  font-size: $subTitleFontSize;
 }
 
 .black-input {
@@ -65,6 +70,12 @@ body {
   width: 30px;
   height: 30px;
   @include base-icon;
+}
+
+.raw-icon {
+  width: 30px;
+  height: 30px;
+  display: block;
 }
 
 .small-icon-wrapper {
@@ -112,26 +123,30 @@ body {
 
 .btn {
   background-color: black;
-  color: white;
   border: solid 2px black;
-  border-radius: 7px;
-  height: 30px;
-  box-sizing: border-box;
-  padding: 10px 50px 10px 50px;
-  margin: 15px auto;
-  font-family: $mainFontFamily;
-  font-size: $subTitleFontSize;
-  font-weight: bold;
-  line-height: 0px; 
+  color: white;
   box-shadow: 1px 2px 2px grey;
-  outline: none; 
-  cursor: pointer;
-  display: block;
+  @include base-btn;
 }
 
 .btn:active {
   background-color: white;
   color: black;
+  outline: none; 
+  box-shadow: none; 
+}
+
+.white-btn {
+  background-color: white;
+  color: black;
+  box-shadow: 1px 2px 2px grey;
+  @include base-btn;
+
+}
+
+.white-btn:active {
+  background-color: black;
+  color: white;
   outline: none; 
   box-shadow: none; 
 }
@@ -150,8 +165,6 @@ body {
 
 .black-tag-name {
 }
-
-
 
 .context-wrapper {
 

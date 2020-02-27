@@ -9,13 +9,14 @@ import './Login.scss';
 import FetchStatus from 'Components/ApiFetch/FetchStatus';
 import { useDispatch } from 'react-redux';
 import Input from 'Components/Input/Input';
-import { useRouteMatch } from 'react-router';
+import { useRouteMatch, useLocation } from 'react-router';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { useKeyupListener } from 'Hooks/KeyupListener/useKeyupListener';
 var debug = require('debug')('ui:Login')
 
 const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComponentProps<{}>) => {
 
+  let location = useLocation();
   const [currentUserLoginStatus, setUserLoginStatus] = React.useState<UserLoginType>(initialUserLoginStatus)
   const { currentRequestStatus, setRequestStatus, sendRequest } = useRequest({})
   const { currentValidationError, touch, validate } = useUserLoginValidation({ domain: currentUserLoginStatus })
@@ -120,6 +121,16 @@ const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCom
           errorStyle={'confirm-error small-input-error'}
           inputType={'password'}
         />
+        <div className="signup-login-link-wrapper">
+          <Link 
+            to={{
+              pathname: '/forgot-password',
+              state: { background: location }
+            }}
+          >
+            forget your password&#63;
+          </Link>
+        </div>
         <div className="signup-login-link-wrapper">
           <span>if you don&rsquo;t have account,  </span><Link to={`/signup`} >Signup Page</Link>
         </div>
