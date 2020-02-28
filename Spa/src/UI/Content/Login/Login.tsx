@@ -123,6 +123,7 @@ const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCom
         />
         <div className="signup-login-link-wrapper">
           <Link 
+            role="forgot-password-link"
             to={{
               pathname: '/forgot-password',
               state: { background: location }

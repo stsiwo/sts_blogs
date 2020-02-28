@@ -48,7 +48,7 @@ const ForgotPasswordEmailModal: React.FunctionComponent<ForgotPasswordEmailModal
   }
 
   return (
-    <div className="forgot-password-email-modal-wrapper">
+    <div className="forgot-password-email-modal-wrapper" role="forgot-password-email-modal">
       <h1 className="forgot-password-email-modal-title">Forgot Password Request</h1>
       <p className="forgot-password-email-modal-sentence">Please enter your registered email address</p>
       <Input

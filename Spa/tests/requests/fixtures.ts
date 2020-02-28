@@ -97,6 +97,40 @@ export const badRequest400Response: AxiosResponse<ErrorResponseDataType> = {
   config: {},
 }
 
+export const invalidToken400Response: AxiosError<ErrorResponseDataType> = {
+  name: 'error message',
+  message: 'token is invalid. it seems wrong type. please start over again.',
+  config: {},
+  response: {
+    data: {
+      title: 'bad request',
+      message: 'token is invalid. it seems wrong type. please start over again.',
+    } as ErrorResponseDataType,
+    status: 400,
+    statusText: 'Bad Request',
+    headers: {},
+    config: {},
+  } as AxiosResponse,
+  isAxiosError: false
+}
+
+export const expiredToken400Response: AxiosError<ErrorResponseDataType> = {
+  name: 'error message',
+  message: 'token is invalid. it seems wrong type. please start over again.',
+  config: {},
+  response: {
+    data: {
+      title: 'bad request',
+      message: 'reset password token is exipred. please start over again.',
+    } as ErrorResponseDataType,
+    status: 400,
+    statusText: 'Bad Request',
+    headers: {},
+    config: {},
+  } as AxiosResponse,
+  isAxiosError: false
+}
+
 export const unauthorized401Response: AxiosResponse<ErrorResponseDataType> = {
   data: {
     type: Error401ResponseDataTypeEnum.ACCESS_TOKEN_EXPIRED,
@@ -200,15 +234,15 @@ export const invalidToken422Response: AxiosError<ErrorResponseDataType> = {
 
 export const notFound404ResponseV2: AxiosError<ErrorResponseDataType> = {
   name: 'not found error',
-  message: 'not found error',
+  message: 'provided email is not found',
   config: {},
   response: {
     data: {
       title: 'not found 404 response title',
-      message: 'not found',
+      message: 'provided email is not found',
     } as ErrorResponseDataType,
     status: 404,
-    statusText: 'Unauthorized',
+    statusText: 'Not Found',
     headers: {},
     config: {},
   } as AxiosResponse,

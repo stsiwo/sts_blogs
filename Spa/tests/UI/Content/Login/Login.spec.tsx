@@ -4,9 +4,10 @@ import { fireEvent, queryByRole, queryByText, render, wait, waitForElement } fro
 import * as React from 'react';
 import { act } from 'react-dom/test-utils';
 import { api } from 'requests/api';
-import { userGET200Response, internalServerError500Response, networkError } from '../../../requests/fixtures';
+import { userGET200Response, internalServerError500Response, networkError, notFound404ResponseV2 } from '../../../requests/fixtures';
 import { ContextWrapperComponent } from '../../fixtures';
 import Login from 'ui/Content/Login/Login';
+import ForgotPasswordEmailModal from 'Components/ForgotPasswordEmailModal/ForgotPasswordEmailModal';
 
 
 describe('l-c1: Login Component testing', () => {
@@ -34,6 +35,13 @@ describe('l-c1: Login Component testing', () => {
    * a13. (DOM) should show 'login success' message when login completed 
    * a14. (DOM) should show "login failure" message when login failed because of network issue
    * a15. (DOM) should show "login failure" message when login failed because of 4xx or 5xx error
+   * a16. (forgot password:DOM) should open FG modal when click the link
+   * a17. (forgot password:DOM) should close FG modal when click the close icon
+   * a18. (forgot password:DOM) should display error msg when user email is null/empty 
+   * a19. (forgot password:validation) should not allow to send FG request when user email is null/empty 
+   * a20. (forgot password:fetch) should show 'FG success' message when login completed 
+   * a21. (forgot password:fetch) should show "FG failure" message when login failed because of network issue
+   * a22. (forgot password:fetch) should show "FG failure" message when login failed because the email does not exist (404)
    *
    **/
 
@@ -178,7 +186,7 @@ describe('l-c1: Login Component testing', () => {
   const seedInputTestValues = (targetNodes: HTMLElement[], values: string[]): void => {
     targetNodes.forEach((node: HTMLElement, index: number) => {
       fireEvent.focus(node)
-        fireEvent.change(node, { target: { value: values[index] }}) 
+      fireEvent.change(node, { target: { value: values[index] } })
     })
   }
 
@@ -232,7 +240,7 @@ describe('l-c1: Login Component testing', () => {
       })
     })
   })
-  
+
   test('a15. (DOM) should show "login failure" message when login failed because of 4xx or 5xx error', async () => {
     api.request = jest.fn().mockReturnValue(Promise.reject(internalServerError500Response))
     await act(async () => {
@@ -281,6 +289,130 @@ describe('l-c1: Login Component testing', () => {
       // wait for expectation meet otherwise async timeout
       await wait(() => {
         expect(getByText('requesting user login failed')).toBeInTheDocument()
+      })
+    })
+  })
+
+  test('a16. (forgot password:DOM) should open FG modal when click the link', async () => {
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={Login} />
+      )
+      const forgotPasswordLink = await waitForElement(() => getByRole('forgot-password-link'))
+      /**
+       * since jest only render Login Component (without any Route config), it is not possible to render or move to another page by clicking the link
+       * so just assert href of the link
+       **/
+      expect(forgotPasswordLink.getAttribute("href")).toBe("/forgot-password")
+
+    })
+  })
+
+  test('a17. (forgot password:DOM) should close FG modal when click the close icon', async () => {
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={ForgotPasswordEmailModal} />
+      )
+      const forgotPasswordCloseIcon = await waitForElement(() => getByRole('close-forgot-password-modal-link'))
+      /**
+       * since jest only render Login Component (without any Route config), it is not possible to render or move to another page by clicking the link
+       * so just assert href of the link
+       **/
+      expect(forgotPasswordCloseIcon.getAttribute("href")).toBe("/login")
+    })
+  })
+
+  test('a18. (forgot password:DOM) should display error msg when user email is null/empty', async () => {
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={ForgotPasswordEmailModal} />
+      )
+      const emailInput = await waitForElement(() => getByLabelText('Email'))
+      fireEvent.focus(emailInput) // need to focus to enable to display validation error on dom
+      fireEvent.change(emailInput, { target: { value: '' } })
+      const emailErrorNode = await waitForElement(() => getByText('email is a required field'))
+      expect(emailErrorNode).toBeInTheDocument()
+    })
+  })
+
+  test('a19. (forgot password:validation) should not allow to send FG request when user email is null/empty', async () => {
+    api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={ForgotPasswordEmailModal} />
+      )
+      const emailInput = await waitForElement(() => getByLabelText('Email'))
+      fireEvent.focus(emailInput) // need to focus to enable to display validation error on dom
+      fireEvent.change(emailInput, { target: { value: '' } })
+      const emailErrorNode = await waitForElement(() => getByText('email is a required field'))
+      fireEvent.click(getByRole('forgot-password-btn'))
+      await waitForElement(() => getByText('please fix validation errors before submit'))
+      expect(api.request).toHaveBeenCalledTimes(0)
+    })
+  })
+
+  test('a20. (forgot password:fetch) should show "FG success" message when login completed', async () => {
+    api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={ForgotPasswordEmailModal}  />
+      )
+      const inputs = await waitForElement(() => [
+        getByLabelText('Email'),
+      ])
+
+      seedInputTestValues(inputs, [
+        'test@test.com',
+      ])
+
+      fireEvent.click(getByRole('forgot-password-btn'))
+      // wait for expectation meet otherwise async timeout
+      await wait(() => {
+        expect(getByText('requesting forgot password success. please check your email box.')).toBeInTheDocument()
+      })
+    })
+  })
+
+  test('a21. (forgot password:fetch) should show "FG failure" message when login failed because of network issue', async () => {
+    api.request = jest.fn().mockReturnValue(Promise.reject(internalServerError500Response))
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={ForgotPasswordEmailModal} />
+      )
+      const inputs = await waitForElement(() => [
+        getByLabelText('Email'),
+      ])
+
+      seedInputTestValues(inputs, [
+        'test@test.com',
+      ])
+
+      fireEvent.click(getByRole('forgot-password-btn'))
+      // wait for expectation meet otherwise async timeout
+      await wait(() => {
+        expect(getByText('requesting forgot password failed')).toBeInTheDocument()
+      })
+    })
+  })
+
+  test('a22. (forgot password:fetch) should show "FG failure" message when login failed because the email does not exist (404)', async () => {
+    api.request = jest.fn().mockReturnValue(Promise.reject(notFound404ResponseV2))
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+        <ContextWrapperComponent component={ForgotPasswordEmailModal} />
+      )
+      const inputs = await waitForElement(() => [
+        getByLabelText('Email'),
+      ])
+
+      seedInputTestValues(inputs, [
+        'test@test.com',
+      ])
+
+      fireEvent.click(getByRole('forgot-password-btn'))
+      // wait for expectation meet otherwise async timeout
+      await wait(() => {
+        expect(getByText('provided email is not found')).toBeInTheDocument()
       })
     })
   })
