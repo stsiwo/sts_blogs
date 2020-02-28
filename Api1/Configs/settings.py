@@ -114,4 +114,4 @@ MAIL_USERNAME = str(os.getenv('MAIL_USERNAME', ''))
 
 MAIL_PASSWORD = str(os.getenv('MAIL_PASSWORD', ''))
 
-MAIL_SUPPRESS_SEND = bool(os.getenv('', False))
+MAIL_SUPPRESS_SEND = bool(os.getenv('MAIL_SUPPRESS_SEND', False))

@@ -69,5 +69,5 @@ def test_fp_post04_forgot_password_post_endpoint_should_return_202_code_for_succ
         assert response.status_code == 202
         # email assertion
         assert len(outbox) == 1
-        assert outbox[0].subject == "Your Reset Password Request"
+        assert outbox[0].subject == "Your Password Reset Request"
         assert userEmail in outbox[0].recipients
