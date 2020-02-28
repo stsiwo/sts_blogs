@@ -2,6 +2,7 @@ from utils.util import printObject
 from exceptions.EmailServiceException import EmailServiceException
 import pytest
 from Infrastructure.DataModels.UserModel import User
+from Configs.extensions import mail
 
 # POST /user/forgot-password (request for forgot password)
 # fp_post01: 400 code for invalid input
@@ -52,17 +53,21 @@ def test_fp_post03_forgot_password_post_endpoint_should_return_500_code_since_in
 
 @pytest.mark.forgot_password_src
 @pytest.mark.forgot_password_src_post
-def test_fp_post04_forgot_password_post_endpoint_should_return_202_code_for_successfully_email_was_sent(client, httpHeaders, patchedYgmailSendFunc, usersSeededFixture, exSession):
+def test_fp_post04_forgot_password_post_endpoint_should_return_202_code_for_successfully_email_was_sent(client, httpHeaders, usersSeededFixture, exSession):
 
     userEmail = usersSeededFixture.email
 
-    response = client.post(
-            '/forgot-password',
-            json={
-                'email': userEmail
-                },
-            headers=httpHeaders)
+    with mail.record_messages() as outbox:
+        response = client.post(
+                '/forgot-password',
+                json={
+                    'email': userEmail
+                    },
+                headers=httpHeaders)
 
-    printObject(response.data)
-    assert response.status_code == 202
-    assert patchedYgmailSendFunc.assert_called
+        printObject(response.data)
+        assert response.status_code == 202
+        # email assertion
+        assert len(outbox) == 1
+        assert outbox[0].subject == "Your Reset Password Request"
+        assert userEmail in outbox[0].recipients

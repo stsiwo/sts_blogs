@@ -28,7 +28,7 @@ class PasswordResetService(object):
     def requestForgotPasswordService(self, email: str):
 
         user = self._userRepository.find(email=email)
-        
+
         # TODO: remove this and use 'email detection feature (type ahead) in front end
         # https://app.clickup.com/t/3m56ux
         if user is None:
@@ -38,7 +38,8 @@ class PasswordResetService(object):
 
         self._emailService.sendForgotPasswordEmail(
             to=user.email,
-            token=token
+            token=token,
+            recipientName=user.name
             )
 
     @db_transaction()

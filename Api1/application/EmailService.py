@@ -3,38 +3,45 @@ from Configs.app import app
 from exceptions.EmailServiceException import EmailServiceException
 from urllib.parse import urljoin
 from Aop.loggingDecorator import loggingDecorator
-
-
-class EmailClient(object):
-    """ please replace with real impl """
-
-    def __init__(self):
-        pass
-
-    def send(self, to, subject, contents):
-        pass
+from Infrastructure.Email.Client.EmailClient import EmailClient
+from Infrastructure.Email.Template.EmailTemplateBase import EmailTemplateBase
+# need to import all of subclass of this, to use '__subclasses__()'
+from Infrastructure.Email.Template.ResetPasswordTemplate import ResetPasswordTemplate
 
 
 class EmailService(object):
 
     _client: EmailClient
 
+    template: EmailTemplateBase
+
     def __init__(self):
         self._client = EmailClient()
         pass
 
+    def _setTemplateFromKey(self, key: str):
+        for SubTemplate in EmailTemplateBase.__subclasses__():
+            if SubTemplate.key == key:
+                self.template = SubTemplate()
+
     @loggingDecorator()
-    def sendForgotPasswordEmail(self, to: str, token: str) -> None:
+    def sendForgotPasswordEmail(self, to: str, token: str, recipientName: str) -> None:
 
-        subject = "Password Reset Request"
+        resetLink = urljoin(app.config['CLIENT_SPA_URL'], '/password-reset?token={}'.format(token))
 
-        clientResetPasswordUrl = urljoin(app.config['CLIENT_SPA_URL'], '/password-reset?token={}'.format(token))
-
-        html = '<a href="{}">Reset Your Password</a>'.format(clientResetPasswordUrl)
+        self._setTemplateFromKey("reset-password")
+        self.template.setRecipients([to])
+        self.template.makeTemplate(recipient=recipientName, resetLink=resetLink)
 
         try:
-            self._client.send(to=to, subject=subject, contents=html)
+            self._client.send(
+                    subject=self.template.subject,
+                    sender=self.template.sender,
+                    recipients=self.template.recipients,
+                    html=self.template.html
+                    )
+
         except Exception as e:
-            app.logger.info("*** email service error ***")
-            app.logger.info(e)
+            app.logger.error("*** email service error ***")
+            app.logger.error(e.message)
             raise EmailServiceException()

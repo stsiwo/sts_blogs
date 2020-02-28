@@ -28,8 +28,8 @@ def db_transaction():
                 app.logger.info("inner service {0} has done".format(f.__name__))
                 # after target function called
             except:
-                app.logger.info("something is wrong about inner service and catching in db transaction decorator")
-                app.logger.info("db transaction rollback")
+                app.logger.error("something is wrong about inner service and catching in db transaction decorator")
+                app.logger.error("db transaction rollback")
                 db.session.rollback()
                 # this might need to change to handle exception like return 5xx response
                 # REFACTOR
