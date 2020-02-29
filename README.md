@@ -133,6 +133,12 @@
   - run above command when:
     - before finishing release branch to increment major/minor version and commit
     - after hotfix to increment patch version
+    
+### Dummy SMTP/POP3 Server
+  - use Mailtrap for staging environment
+  - NOTE
+    * (smtp) use TLS (not SSL)
+    * (pop3 & javax.mail) emailSession.getStore("pop3"); // not "pop3s"
    
 ### NOTE
   - staging server/production server use different nginx config due to ssl config
