@@ -16,7 +16,8 @@ import { Node } from 'Components/fork/slate'
 import { replaceTmpSrcWithPublicSrc } from 'Components/BlogContent/helpers';
 import { generateFileWithUuidv4 } from 'src/utils';
 import EditBlog from 'Components/EditBlog/EditBlog';
-var debug = require('debug')('ui:UpdateBlog')
+import { logger } from 'configs/logger';
+const log = logger("UpdateBlog");
 
 const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
 
@@ -27,7 +28,7 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
   const { auth } = useAuthContext()
 
   React.useEffect(() => {
-    debug('initial fetch at useEffect at UpdateBlog')
+    log('initial fetch at useEffect at UpdateBlog')
     fetchBlog({
       path: 'users/' + auth.user.id + '/blogs/' + blogId,
       method: RequestMethodEnum.GET,
@@ -37,7 +38,7 @@ const UpdateBlog: React.FunctionComponent<{}> = (props: {}) => {
       // call from previous 'catch' and 'then' of 'fetchBlog'
       // since resolve promise in the 'catch'
       .then((result: ResponseResultType<BlogResponseDataType>) => {
-        debug('then func of fetchBlog func')
+        log('then func of fetchBlog func')
         if (result.status === ResponseResultStatusEnum.SUCCESS) {
           setBlog(result.data.blog)
           setIsInitialGetFetchDone(true)

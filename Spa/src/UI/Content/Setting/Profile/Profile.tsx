@@ -10,7 +10,8 @@ import * as React from 'react';
 import { RequestMethodEnum, ResponseResultStatusEnum, ResponseResultType, UserResponseDataType } from 'requests/types';
 import './Profile.scss';
 import { generateFileWithUuidv4 } from 'src/utils';
-var debug = require('debug')('ui:Profile')
+import { logger } from 'configs/logger';
+const log = logger("Profile");
 
 
 const Profile: React.FunctionComponent<{}> = (props: {}) => {
@@ -18,10 +19,10 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
 
   /** state **/
   const { auth } = useAuthContext() 
-  debug(auth)
+  log(auth)
   const [currentUser, setUser] = React.useState<UserType>(auth.user)
-  debug('before useValidation')
-  debug(currentUser)
+  log('before useValidation')
+  log(currentUser)
   const { currentValidationError, touch, validate } = useProfileValidation({ domain: currentUser })
 
   const path: string = '/users/' + currentUser.id
@@ -44,7 +45,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   React.useEffect(() => {
-    debug('initial fetch for user data')
+    log('initial fetch for user data')
     fetchUser({
       path: path,
       method: RequestMethodEnum.GET,
@@ -54,7 +55,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
       // call from previous 'catch' and 'then' of 'fetchUser'
       // since resolve promise in the 'catch'
       .then((result: ResponseResultType<UserResponseDataType>) => {
-        debug('then func of fetchUser func')
+        log('then func of fetchUser func')
         if (result.status === ResponseResultStatusEnum.SUCCESS) setUser(result.data.user)
       })
   }, []);
@@ -86,8 +87,8 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const handleNameChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
-    debug('handling name change event')
-    debug(e.currentTarget.value)
+    log('handling name change event')
+    log(e.currentTarget.value)
     setUser({
       ...currentUser,
       name: e.currentTarget.value
@@ -116,11 +117,11 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const handleSaveUserClickEvent: React.EventHandler<React.MouseEvent<HTMLInputElement>> = async (e) => {
-    debug('clicked update butuon')
+    log('clicked update butuon')
     // final check validation ...
     validate()
       .then(() => {
-        debug('validation passed at save button event handler')
+        log('validation passed at save button event handler')
         sendUpdateRequest({
           path: path,
           method: method,
@@ -128,7 +129,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
           data: mapStateToFormData(currentUser)
         })
       }, () => {
-        debug('validation failed at save button event handler')
+        log('validation failed at save button event handler')
       })
   }
 

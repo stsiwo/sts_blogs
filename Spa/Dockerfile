@@ -13,6 +13,7 @@ CMD ["npm", "run", "start-docker"]
 FROM dev-install as testing 
 
 WORKDIR /app
+ENV DEBUG=*
 ENTRYPOINT ["npx", "jest"]
 
 FROM development as build-staging-local 

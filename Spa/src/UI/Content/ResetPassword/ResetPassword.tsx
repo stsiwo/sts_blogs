@@ -12,7 +12,8 @@ import Input from 'Components/Input/Input';
 import { useRouteMatch, useLocation, useParams } from 'react-router';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { useKeyupListener } from 'Hooks/KeyupListener/useKeyupListener';
-var debug = require('debug')('ui:ResetPassword')
+import { logger } from 'configs/logger';
+const log = logger("ResetPassword");
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -42,7 +43,7 @@ const ResetPassword: React.FunctionComponent<RouteComponentProps<{}>> = (props: 
     // final check validation ...
     validate()
       .then(() => {
-        debug('validation passed')
+        log('validation passed')
         sendRequest({
           path: '/password-reset?token=' + query.get("token"),
           method: RequestMethodEnum.POST,
@@ -54,7 +55,7 @@ const ResetPassword: React.FunctionComponent<RouteComponentProps<{}>> = (props: 
           .then((result: ResponseResultType<{}>) => {
           })
       }, () => {
-        debug('validation failed at save button event handler')
+        log('validation failed at save button event handler')
       })
   }
 
@@ -64,7 +65,7 @@ const ResetPassword: React.FunctionComponent<RouteComponentProps<{}>> = (props: 
   })
 
   const handleSubmitClickEvent: React.EventHandler<React.MouseEvent<HTMLInputElement>> = async (e) => {
-    debug('clicked update butuon')
+    log('clicked update butuon')
     _submitResetPasswordForm()
   }
 

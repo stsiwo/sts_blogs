@@ -10,7 +10,8 @@ import FetchStatus from 'Components/ApiFetch/FetchStatus';
 import Input from 'Components/Input/Input';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { useKeyupListener } from 'Hooks/KeyupListener/useKeyupListener';
-var debug = require('debug')('ui:Signup')
+import { logger } from 'configs/logger';
+const log = logger("Signup");
 
 const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComponentProps<{}>) => {
 
@@ -38,7 +39,7 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
     // final check validation ...
     validate()
       .then(() => {
-        debug('validation passed')
+        log('validation passed')
         sendRequest({
           path: '/signup',
           method: RequestMethodEnum.POST,
@@ -48,18 +49,18 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
           .then((result: ResponseResultType<UserResponseDataType>) => {
             // this 'then' block is called only when request success
             if (result.status === ResponseResultStatusEnum.SUCCESS) {
-              debug('got response with user data')
-              debug(result)
+              log('got response with user data')
+              log(result)
               authDispatch({
                 type: 'login',
                 user: result.data.user as UserType
               })
-              debug('before redirect')
+              log('before redirect')
               props.history.push('/')
             }
           })
       }, () => {
-        debug('validation failed at save button event handler')
+        log('validation failed at save button event handler')
       })
   }
 

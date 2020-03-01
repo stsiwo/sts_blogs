@@ -24,7 +24,8 @@ import BePartOfIt from 'Components/BePartOfIt/BePartOfIt';
 import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
 import ManageYourBlogs from 'Components/ManageYourBlogs/ManageYourBlogs';
 import { useLocation } from 'react-router';
-var debug = require('debug')('ui:BlogList')
+import { logger } from 'configs/logger';
+const log = logger("BlogList");
 
 declare type FetchResultType = {
   status: ResponseResultStatusEnum
@@ -79,12 +80,12 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   React.useEffect(() => {
-    debug("start useEffect")
+    log("start useEffect")
     // might can move to inside eh of refresh click
-    debug('before request')
-    debug(currentFilters)
+    log('before request')
+    log(currentFilters)
 
-    debug("start send blog fetch request")
+    log("start send blog fetch request")
     sendBlogsFetchRequest({
       path: path,
       method: RequestMethodEnum.GET,
@@ -93,8 +94,8 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
     })
       .then((result: ResponseResultType<BlogListResponseDataType>) => {
         if (result.status === ResponseResultStatusEnum.SUCCESS) {
-          debug('fetch blog list success.')
-          debug(result.data.blogs)
+          log('fetch blog list success.')
+          log(result.data.blogs)
           setBlogs(result.data.blogs)
           // assign new total count of pagination
           setPaginationStatus({
@@ -119,15 +120,15 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const handleRefreshClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = async (e) => {
-    debug("start handling refresh click")
+    log("start handling refresh click")
     setIsRefresh(true)
     const nextRefreshCount = currentRefreshCount + 1
     setRefreshCount(nextRefreshCount)
   }
 
   const handleCancelClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = (e) => {
-    debug('handle cancel click')
-    debug(currentCancelSource)
+    log('handle cancel click')
+    log(currentCancelSource)
     currentCancelSource.cancel("refresh request is canceled")
   }
 
@@ -144,8 +145,8 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
     return tagList.map((tag: TagType) => <div className="blog-list-filter-tags-tag" key={tag.name}>{tag.name}</div>)
   }
 
-  debug("current blog original or cache")
-  debug(currentBlogs)
+  log("current blog original or cache")
+  log(currentBlogs)
 
   // maybe can reuse frame (structure of element) of Home.tsx
   // #REFACTOR

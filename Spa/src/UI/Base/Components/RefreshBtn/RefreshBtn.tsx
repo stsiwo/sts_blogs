@@ -6,7 +6,8 @@ import './RefreshBtn.scss';
 import { RefreshBtnPropType } from './types';
 import { request, getCancelTokenSource } from 'requests/request';
 import { api } from 'requests/api';
-var debug = require('debug')('ui:RefreshBtn')
+import { logger } from 'configs/logger';
+const log = logger("RefreshBtn");
 
 const RefreshBtn: React.FunctionComponent<RefreshBtnPropType> = (props: RefreshBtnPropType) => {
 
@@ -20,9 +21,9 @@ const RefreshBtn: React.FunctionComponent<RefreshBtnPropType> = (props: RefreshB
   const encodedQueryString = buildQueryString(props.queryString)
 
   const handleRefreshClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = async (e) => {
-    debug('handle refresh click')
+    log('handle refresh click')
 
-    debug('set cancel source to state')
+    log('set cancel source to state')
     const cancelSource: CancelTokenSource = getCancelTokenSource() 
     setCancelSource(cancelSource)
 
@@ -59,8 +60,8 @@ const RefreshBtn: React.FunctionComponent<RefreshBtnPropType> = (props: RefreshB
   }
 
   const handleCancelClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
-    debug('handle cancel click')
-    debug(currentCancelSource)
+    log('handle cancel click')
+    log(currentCancelSource)
     currentCancelSource.cancel("refresh request is canceled")
   }
 

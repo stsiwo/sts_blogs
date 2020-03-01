@@ -24,7 +24,8 @@ import './BlogManagement.scss';
 import BlogListController from 'Components/BlogListController/BlogListController';
 import BlogItem from 'Components/BlogItem/BlogItem';
 import { getBlogTestData } from '../../../../../tests/data/BlogFaker';
-var debug = require('debug')('ui:BlogManagement')
+import { logger } from 'configs/logger';
+const log = logger("BlogManagement");
 
 export enum FetchContextEnum {
   FETCH,
@@ -68,10 +69,10 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   React.useEffect(() => {
-    debug("start useEffect")
+    log("start useEffect")
     // might can move to inside eh of refresh click
     
-    debug("start send blog fetch request")
+    log("start send blog fetch request")
     setFetchContext(FetchContextEnum.FETCH)
     sendBlogsFetchRequest({
       path: '/users/' + userId + '/blogs',
@@ -82,11 +83,11 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
       .then((result: ResponseResultType<BlogListResponseDataType>) => {
 
         if (NODE_ENV === 'development') {
-          debug("development env so inject blog test data")
+          log("development env so inject blog test data")
           setBlogs(getBlogTestData())
         }
         else if (result.status === ResponseResultStatusEnum.SUCCESS) {
-          debug("fetch success and receive data")
+          log("fetch success and receive data")
           setBlogs(result.data.blogs)
 
           // assign new total count of pagination
@@ -112,10 +113,10 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const handleDeleteBlogClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = (e) => {
-    debug("start handling delete blog click event")
+    log("start handling delete blog click event")
     const result: boolean = window.confirm("Are you sure to delete this blog?")
     if (result) {
-      debug("confirm is OK")
+      log("confirm is OK")
       const blogId = e.currentTarget.getAttribute('data-blog-id')
       setFetchContext(FetchContextEnum.DELETE)
       sendDeleteRequest({
@@ -125,7 +126,7 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
         allowCache: false
       })
         .then((data: BlogListResponseDataType) => {
-          debug("'then' after delete request")
+          log("'then' after delete request")
           setIsRefresh(true)
           const nextRefreshCount = currentRefreshCount + 1
           setRefreshCount(nextRefreshCount)
@@ -134,21 +135,21 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const handleRefreshClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = async (e) => {
-    debug("start handling refresh click")
+    log("start handling refresh click")
     setIsRefresh(true)
     const nextRefreshCount = currentRefreshCount + 1
     setRefreshCount(nextRefreshCount)
   }
 
   const handleFetchCancelClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = (e) => {
-    debug('handle cancel click')
-    debug(currentFetchCancelSource)
+    log('handle cancel click')
+    log(currentFetchCancelSource)
     currentFetchCancelSource.cancel("refresh request is canceled")
   }
 
   const handleDeleteCancelClickEvent: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
-    debug('handle cancel click')
-    debug(currentDeleteCancelSource)
+    log('handle cancel click')
+    log(currentDeleteCancelSource)
     currentDeleteCancelSource.cancel("delete request is canceled")
   }
   /** render **/

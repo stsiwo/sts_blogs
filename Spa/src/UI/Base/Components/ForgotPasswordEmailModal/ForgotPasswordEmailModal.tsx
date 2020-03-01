@@ -9,7 +9,8 @@ import { useRequest } from 'Hooks/Request/useRequest';
 import { RequestMethodEnum, ResponseResultType, ResponseResultStatusEnum } from 'requests/types';
 import FetchStatus from 'Components/ApiFetch/FetchStatus';
 import { IoMdCloseCircleOutline } from "react-icons/io";
-var debug = require('debug')('ui:ForgotPasswordModal')
+import { logger } from 'configs/logger';
+const log = logger("ForgotPasswordModal");
 
 
 const ForgotPasswordEmailModal: React.FunctionComponent<ForgotPasswordEmailModalPropType> = (props: ForgotPasswordEmailModalPropType) => {
@@ -30,10 +31,10 @@ const ForgotPasswordEmailModal: React.FunctionComponent<ForgotPasswordEmailModal
   }
 
   const handleSubmitClickEvent: React.EventHandler<React.MouseEvent<HTMLInputElement>> = async (e) => {
-    debug('clicked update butuon')
+    log('clicked update butuon')
     validate()
       .then(() => {
-        debug('validation passed')
+        log('validation passed')
         sendForgotPasswordRequest({
           path: '/forgot-password',
           method: RequestMethodEnum.POST,
@@ -43,7 +44,7 @@ const ForgotPasswordEmailModal: React.FunctionComponent<ForgotPasswordEmailModal
           .then((result: ResponseResultType<{}>) => {
           })
       }, () => {
-        debug('validation failed at save button event handler')
+        log('validation failed at save button event handler')
       })
   }
 

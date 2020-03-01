@@ -1,5 +1,6 @@
 import { CacheData } from './types'
-var debug = require('debug')('ui:getCachedData')
+import { logger } from 'configs/logger';
+const log = logger("getCachedData");
 
 function deserialize(serializedJavascript: string){
   /**
@@ -15,16 +16,16 @@ function deserialize(serializedJavascript: string){
  *  - cache before expireAt
  **/
 export function getCachedData(path: string) {
-  debug("getCachedData is called with path: " + path)
+  log("getCachedData is called with path: " + path)
   const cache: CacheData = deserialize(localStorage.getItem(path))
 
-  debug("content of cache")
-  debug(cache)
+  log("content of cache")
+  log(cache)
   if (cache) {
-    debug("cache.expireAt > Date.now()")
-    debug(cache.expireAt > Date.now())
+    log("cache.expireAt > Date.now()")
+    log(cache.expireAt > Date.now())
     if (cache.expireAt > Date.now()) {
-      debug("before expire")
+      log("before expire")
       return cache.data
     }
   }

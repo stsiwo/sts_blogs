@@ -8,7 +8,8 @@ import { Link } from 'react-router-dom';
 import { TagType } from 'domain/tag/TagType';
 import { dateFormatOption } from 'src/utils';
 import { useRouteMatch } from 'react-router';
-var debug = require('debug')('ui:BlogItem')
+import { logger } from 'configs/logger';
+const log = logger("BlogItem");
 
 
 const BlogItemOverlay: React.FunctionComponent<BlogItemOverlayPropsType> = (props: BlogItemOverlayPropsType) => {
@@ -18,7 +19,7 @@ const BlogItemOverlay: React.FunctionComponent<BlogItemOverlayPropsType> = (prop
   const onTransaction: React.EventHandler<React.TransitionEvent<HTMLDivElement>> = (e) => {
     // when mouse leaves
     if (!props.currentOverlayState.isMouseEnter) {
-      debug('didmount is false and componentshow to false at end of transaction')
+      log('didmount is false and componentshow to false at end of transaction')
       props.setOverlayState({
         ...props.currentOverlayState,
         componentShow: false,
@@ -28,7 +29,7 @@ const BlogItemOverlay: React.FunctionComponent<BlogItemOverlayPropsType> = (prop
 
   React.useEffect(() => {
     if (props.currentOverlayState.isMouseEnter) {
-      debug('overlay component did mounted to true at did update')
+      log('overlay component did mounted to true at did update')
       props.setOverlayState({
         ...props.currentOverlayState,
         didMounted: true,
@@ -76,9 +77,9 @@ const BlogItem: React.FunctionComponent<BlogItemPropType> = (props: BlogItemProp
   const [curBool, setBool] = React.useState<boolean>(false)
 
   const handleBlogItemMouseEnterEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = (e) => {
-    debug('enter eh is called')
-    debug('componentShow to true')
-    debug('isMouseEnter to true')
+    log('enter eh is called')
+    log('componentShow to true')
+    log('isMouseEnter to true')
     setOverlayState({
       ...currentOverlayState,
       componentShow: true,
@@ -87,9 +88,9 @@ const BlogItem: React.FunctionComponent<BlogItemPropType> = (props: BlogItemProp
   }
 
   const handleBlogItemMouseLeaveEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = (e) => {
-    debug('leave eh is called')
-    debug('didmount to false')
-    debug('isMouseEnter to false')
+    log('leave eh is called')
+    log('didmount to false')
+    log('isMouseEnter to false')
     setOverlayState({
       ...currentOverlayState,
       didMounted: false,
@@ -98,9 +99,9 @@ const BlogItem: React.FunctionComponent<BlogItemPropType> = (props: BlogItemProp
   }
 
   const handleBlogItemTouchStartEvent: React.EventHandler<React.TouchEvent<HTMLDivElement>> = (e) => {
-    debug('enter eh is called')
-    debug('componentShow to true')
-    debug('isMouseEnter to true')
+    log('enter eh is called')
+    log('componentShow to true')
+    log('isMouseEnter to true')
     setOverlayState({
       ...currentOverlayState,
       componentShow: true,

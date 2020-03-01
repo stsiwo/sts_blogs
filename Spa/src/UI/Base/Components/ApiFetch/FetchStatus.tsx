@@ -2,10 +2,12 @@ import * as React from 'react';
 import './FetchStatus.scss';
 import { FetchStatusPropType } from './types';
 import { ResponseResultStatusEnum } from 'requests/types';
-var debug = require('debug')('ui:FetchStatus')
+import { logger } from 'configs/logger';
+const log = logger("FetchStatus");
+
 
 const FetchStatus: React.FunctionComponent<FetchStatusPropType> = (props: FetchStatusPropType) => {
-  debug('Component start')
+  log('Component start')
 
   const fetchingMsg = (props.fetchingMsg) ? props.fetchingMsg : 'fetching'
   const successMsg = (props.successMsg) ? props.successMsg : 'success'

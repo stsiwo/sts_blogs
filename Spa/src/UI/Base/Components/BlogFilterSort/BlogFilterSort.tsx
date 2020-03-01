@@ -16,7 +16,9 @@ import { TagType } from 'domain/tag/TagType';
 import './BlogFilterSort.scss'
 import { MdClose } from 'react-icons/md';
 import { PaginationStatusType } from 'Components/Pagination/types';
-var debug = require('debug')('ui:BlogFilterSort')
+import { logger } from 'configs/logger';
+const log = logger("BlogFilterSort");
+
 
 const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: BlogFilterSortPropType) => {
 
@@ -33,13 +35,13 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
 
   /** EH **/
   const handleTagInputEnterOrTabKeyClickEvent: React.EventHandler<React.KeyboardEvent<HTMLInputElement>> = (e) => {
-    debug('start handling new tag input')
-    debug(e.currentTarget.value)
+    log('start handling new tag input')
+    log(e.currentTarget.value)
 
     if (e.currentTarget.value === "") return false
 
     if (e.key == 'Enter' || e.key == 'Tab' || e.key == ' ') {
-      debug("updating tag filters")
+      log("updating tag filters")
       props.currentFilters.tags.push({ name: e.currentTarget.value })
       props.setFilters({
         ...props.currentFilters,
@@ -96,15 +98,15 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
   }
 
   const handleSortChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
-    debug('handling sort change ...')
-    debug(e.currentTarget.value)
+    log('handling sort change ...')
+    log(e.currentTarget.value)
     props.setSort(parseInt(e.currentTarget.value))
   }
 
   const handleKeywordChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
-    debug('handling keyword change ...')
+    log('handling keyword change ...')
 
-    debug(e.currentTarget.value)
+    log(e.currentTarget.value)
 
     props.currentFilters.keyword = e.currentTarget.value
     props.setFilters({
@@ -146,8 +148,8 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
     const targetTag: string = e.currentTarget.getAttribute('data-tag')
     props.setFilters((prev: FilterType) => {
       prev.tags.splice(prev.tags.indexOf(targetTag as unknown as TagType), 1)
-      debug('inside tag delete')
-      debug(prev)
+      log('inside tag delete')
+      log(prev)
       return { ...prev }
     })
     // prevent illogocal when filter & pagination
@@ -176,7 +178,7 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
     /** must enable componentdidupdate also, otherwise not close when click outside **/
     const handleFilterSortNavCloseWhenOutsideClickEvent = (e: Event) => {
 
-      debug('add event listener during this component is mounted')
+      log('add event listener during this component is mounted')
       if (filterSortBarWrapperRef.current.contains(e.target)) {
         return false;
       }
@@ -187,7 +189,7 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
     }
 
     return () => {
-      debug('remove event listener after this component is unmounted')
+      log('remove event listener after this component is unmounted')
       window.removeEventListener('mousedown', handleFilterSortNavCloseWhenOutsideClickEvent);
     }
   })
@@ -205,9 +207,9 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
   const renderCurrentTags = () => {
     const wrapperStyle = currentScreenSize.isLTETablet ? "" : "aside-filter-tag-wrapper"
     const nameStyle = currentScreenSize.isLTETablet ? "" : "aside-filter-tag-name"
-    debug("before render selected tags")
-    debug(currentScreenSize.isLTELaptop)
-    debug(wrapperStyle)
+    log("before render selected tags")
+    log(currentScreenSize.isLTELaptop)
+    log(wrapperStyle)
     return props.currentFilters.tags.map((tag: TagType) => {
       return (
         <Tag
