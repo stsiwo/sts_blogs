@@ -33,7 +33,7 @@ fi
 # prepare json body for request
 # JSON syntax: property name must be enclosed with DOUBLE QUOTES (NOT SINGLE QUOTES)
 body=$(cat <<EOF
-  { "parameters": { "$target_workflow": true, "branch": "$target_branch" }}
+  { "branch": "$target_branch", "parameters": { "$target_workflow": true }}
 EOF
 )
 
