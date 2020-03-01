@@ -156,6 +156,12 @@
     : TS2456: Type alias 'NodeMatch' circularly references itself.
       -> even if you install the same package, i think the author does not do proper versioning.
       -> i got different dist when install it so be careful
+      
+  - debug npm library
+    - so buggy, esp using with webpack. 
+      - even if set DEBUG env var, still not show logging in console.
+      - maybe webpack cache is involving in this some way?
+      - switch to console.log with env condition
 
 ### TODO
   - reivew deployment 
