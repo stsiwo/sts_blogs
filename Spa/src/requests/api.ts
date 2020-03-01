@@ -43,8 +43,8 @@ axios.interceptors.request.use((config) => {
 
 }, null)
 
-console.log('axios defaults')
-console.log(axios.defaults)
+debug('axios defaults')
+debug(axios.defaults)
 
 export const api = axios
 

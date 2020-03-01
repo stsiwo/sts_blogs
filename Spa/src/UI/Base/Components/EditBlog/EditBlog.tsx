@@ -40,7 +40,6 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId,
 
   const titleInputRef: React.MutableRefObject<HTMLInputElement> = { current: null }
   const subtitleInputRef: React.MutableRefObject<HTMLInputElement> = { current: null }
-
   const [currentIsDeleteMainImage, setIsDeleteMainImage] = React.useState<boolean>(false)
   const { currentValidationError, touch, validate } = useBlogValidation({ domain: currentBlog })
   const { currentRequestStatus: currentBlogStatus, setRequestStatus: setBlogStatus, sendRequest: saveRequest } = useRequest({})
@@ -125,7 +124,7 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId,
     }
     // give condition to make this allow to request only if initial blog data is seeded from server
     if (isInitialGetFetchDone) {
-      console.log("start autoSave useEffect at EditBlog")
+      debug("start autoSave useEffect at EditBlog")
       autoSave()
       setFetchContext(FetchContextEnum.SAVE)
     }
@@ -138,8 +137,8 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId,
     ])
 
   const changeInputWidthDynamically = (inputRef: React.MutableRefObject<HTMLInputElement>, currentChLength: number): void => {
-    console.log(inputRef)
-    console.log(currentChLength)
+    debug(inputRef)
+    debug(currentChLength)
     inputRef.current.style.width = currentChLength > 30 ? currentChLength + 'ch' : 30 + 'ch';
   }
 

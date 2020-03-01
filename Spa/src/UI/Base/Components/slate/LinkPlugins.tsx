@@ -91,7 +91,6 @@ export const LinkToolBarBtn: React.FunctionComponent<ToolBarBtnType> = (props) =
       role="links-toolbar-icon"
       className={currentClassName}
       onMouseDown={(e: React.MouseEvent<HTMLElement>) => {
-        console.log("you clicked insert iamge btn")
         event.preventDefault()
         const url = window.prompt('Enter the URL of the link:')
         if (!url) return

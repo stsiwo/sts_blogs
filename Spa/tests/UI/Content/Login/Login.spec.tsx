@@ -46,11 +46,9 @@ describe('l-c1: Login Component testing', () => {
    **/
 
   beforeAll(() => {
-    console.log('l-c1: beforeAll ')
   })
 
   beforeEach(() => {
-    console.log('l-c1: beforeEach ')
 
   })
 
@@ -417,11 +415,9 @@ describe('l-c1: Login Component testing', () => {
     })
   })
   afterEach(() => {
-    console.log('l-c1: afterEach ')
   })
 
   afterAll(() => {
-    console.log('l-c1: afterAll ')
   })
 
 })

@@ -146,8 +146,8 @@ const BlogFilterSort: React.FunctionComponent<BlogFilterSortPropType> = (props: 
     const targetTag: string = e.currentTarget.getAttribute('data-tag')
     props.setFilters((prev: FilterType) => {
       prev.tags.splice(prev.tags.indexOf(targetTag as unknown as TagType), 1)
-      console.log('inside tag delete')
-      console.log(prev)
+      debug('inside tag delete')
+      debug(prev)
       return { ...prev }
     })
     // prevent illogocal when filter & pagination

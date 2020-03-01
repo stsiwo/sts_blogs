@@ -31,7 +31,7 @@ class EmailService(object):
 
         self._setTemplateFromKey("reset-password")
         self.template.setRecipients([to])
-        self.template.makeTemplate(recipient=recipientName, resetLink=resetLink)
+        self.template.makeTemplate(recipient=recipientName, recipientEmail=to, resetLink=resetLink)
 
         try:
             self._client.send(
@@ -43,5 +43,5 @@ class EmailService(object):
 
         except Exception as e:
             app.logger.error("*** email service error ***")
-            app.logger.error(e.message)
+            app.logger.error(vars(e))
             raise EmailServiceException()

@@ -88,7 +88,7 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
                 // undo 
                 case 'z': {
                   event.preventDefault()
-                  console.log("let's undo")
+                  debug("let's undo")
                   editor.undo()
                   break
                 }
@@ -96,7 +96,7 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
                 // redo
                 case 'y': {
                   event.preventDefault()
-                  console.log("let's undo")
+                  debug("let's undo")
                   editor.redo()
                   break
                 }
@@ -105,8 +105,8 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
                 if (isHotkey(hotkey, event as unknown as KeyboardEvent)) {
                   event.preventDefault()
                   const mark = HOTKEYS[hotkey as keyof typeof HOTKEYS]
-                  console.log("mark at onKeyDown of toolbar")
-                  console.log(mark)
+                  debug("mark at onKeyDown of toolbar")
+                  debug(mark)
                   toggleMark(editor, mark)
                 }
               }

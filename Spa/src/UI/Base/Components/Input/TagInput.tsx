@@ -22,7 +22,6 @@ const TagInput: React.FunctionComponent<TagInputPropType> = (props: TagInputProp
   }
 
   const handleTagInputEnterOrTabKeyClickEvent: React.EventHandler<React.KeyboardEvent<HTMLInputElement>> = (e) => {
-    console.log("tag keyboard event occurred!!!")
 
     // remove any space around tag value
     const targetValue: string = e.currentTarget.value.replace(/\s/g, '');

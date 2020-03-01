@@ -34,12 +34,9 @@ describe('h-c1: Setting Component testing', () => {
    **/
 
   beforeAll(() => {
-    console.log('h-c1: beforeAll ')
   })
 
   beforeEach(() => {
-    console.log('h-c1: beforeEach ')
-
   })
 
   /** test for use case which does not matter screen size  here**/
@@ -67,22 +64,18 @@ describe('h-c1: Setting Component testing', () => {
   describe('<= laptop screen', () => {
 
     beforeAll(() => {
-      console.log('h-c1: beforeAll: <= laptop screen')
       Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: CssGlobalContextDefaultState.tabletSize })
       window.dispatchEvent(new Event('resize'));
     })
 
     beforeEach(() => {
-      console.log('h-c1: beforeEach: <= laptop screen')
 
     })
 
     afterEach(() => {
-      console.log('h-c1: afterEach: <= laptop screen ')
     })
 
     afterAll(() => {
-        console.log('h-c1: afterAll; <= laptop screen ')
       })
 
     })
@@ -90,32 +83,25 @@ describe('h-c1: Setting Component testing', () => {
     describe('> laptop screen', () => {
 
     beforeAll(() => {
-      console.log('h-c1: beforeAll: > laptop screen')
       Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: CssGlobalContextDefaultState.laptopSize + 1 })
       window.dispatchEvent(new Event('resize'));
     })
 
     beforeEach(() => {
-      console.log('h-c1: beforeEach: > laptop screen')
-
     })
 
     afterEach(() => {
-      console.log('h-c1: afterEach: > laptop screen ')
     })
 
     afterAll(() => {
-      console.log('h-c1: afterAll; > laptop screen ')
     })
 
   })
 
   afterEach(() => {
-    console.log('h-c1: afterEach ')
   })
 
   afterAll(() => {
-    console.log('h-c1: afterAll ')
   })
 
 })

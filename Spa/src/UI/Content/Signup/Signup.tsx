@@ -54,7 +54,7 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
                 type: 'login',
                 user: result.data.user as UserType
               })
-              console.log('before redirect')
+              debug('before redirect')
               props.history.push('/')
             }
           })

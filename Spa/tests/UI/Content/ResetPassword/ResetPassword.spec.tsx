@@ -38,11 +38,9 @@ describe('l-c1: ResetPassword Component testing', () => {
    **/
 
   beforeAll(() => {
-    console.log('l-c1: beforeAll ')
   })
 
   beforeEach(() => {
-    console.log('l-c1: beforeEach ')
 
   })
 
@@ -172,7 +170,7 @@ describe('l-c1: ResetPassword Component testing', () => {
       fireEvent.click(getByRole('reset-password-btn'))
       // wait for expectation meet otherwise async timeout
       await wait(() => {
-        expect(getByText('requesting user resetpassword success')).toBeInTheDocument()
+        expect(getByText('requesting reset password success')).toBeInTheDocument()
       })
     })
   })
@@ -196,7 +194,7 @@ describe('l-c1: ResetPassword Component testing', () => {
       fireEvent.click(getByRole('reset-password-btn'))
       // wait for expectation meet otherwise async timeout
       await wait(() => {
-        expect(getByText('requesting user resetpassword failed')).toBeInTheDocument()
+        expect(getByText('requesting reset password failed')).toBeInTheDocument()
       })
     })
   })
@@ -269,11 +267,9 @@ describe('l-c1: ResetPassword Component testing', () => {
     })
   })
   afterEach(() => {
-    console.log('l-c1: afterEach ')
   })
 
   afterAll(() => {
-    console.log('l-c1: afterAll ')
   })
 
 })

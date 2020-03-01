@@ -52,7 +52,7 @@ const ForgotPasswordEmailModal: React.FunctionComponent<ForgotPasswordEmailModal
       <h1 className="forgot-password-email-modal-title">Forgot Password Request</h1>
       <p className="forgot-password-email-modal-sentence">Please enter your registered email address</p>
       <Input
-        id={"email"}
+        id={"forgot-password-email"}
         inputStyle={"white-input"}
         inputValue={currentForgotPasswordStatus.email}
         label={"Email"}

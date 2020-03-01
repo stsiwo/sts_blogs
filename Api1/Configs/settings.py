@@ -102,7 +102,7 @@ CLIENT_SPA_URL = os.getenv('CLIENT_SPA_URL', '')
 TESTING = bool(os.getenv('TESTING', False))
 
 # email
-MAIL_SERVER = "smtp.mailgun.org"
+MAIL_SERVER = str(os.getenv('MAIL_SERVER', "smtp.mailgun.org"))
 
 MAIL_PORT = int(os.getenv('MAIL_PORT', 465))
 

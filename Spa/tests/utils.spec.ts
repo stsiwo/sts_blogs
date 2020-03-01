@@ -29,7 +29,6 @@ describe('utils testing', () => {
 
   test('Date object test', () => {
     const date = new Date()
-    console.log(date.toJSON())
   })
 
   test('Array is empty', () => {
@@ -48,8 +47,5 @@ describe('utils testing', () => {
   }
 
   test('test promise', async () => {
-
-    console.log(await testPromise(true))
-
   })
 })

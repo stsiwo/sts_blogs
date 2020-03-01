@@ -75,15 +75,21 @@ export const networkError: AxiosError = {
   message: 'network error'
 }
 
-export const internalServerError500Response: AxiosResponse<ErrorResponseDataType> = {
-  data: {
-    title: 'internal server error',
-    message: 'internal server error message',
-  } as ErrorResponseDataType,
-  status: 500,
-  statusText: 'Internal Server Error',
-  headers: {},
+export const internalServerError500Response: AxiosError<ErrorResponseDataType> = {
+  name: 'error message',
+  message: 'internal server error message',
   config: {},
+  response: {
+    data: {
+      title: 'internal server error',
+      message: 'internal server error message',
+    } as ErrorResponseDataType,
+    status: 500,
+    statusText: 'Internal Server Error',
+    headers: {},
+    config: {},
+  } as AxiosResponse,
+  isAxiosError: false
 }
 
 export const badRequest400Response: AxiosResponse<ErrorResponseDataType> = {

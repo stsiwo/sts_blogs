@@ -14,9 +14,10 @@
    <parameter name="testUserEmail" value="test@firefox.com"/>
    <parameter name="testUserPassword" value="test_firefox"/>
    <classes>
+     <class name="test.java.example.LoginPageTest"/> 
+     <!--
      <class name="test.java.example.HomePageTest"/>   
      <class name="test.java.example.HeaderComponentTest"/> 
-     <class name="test.java.example.LoginPageTest"/> 
      <class name="test.java.example.SignupPageTest"/> 
      <class name="test.java.example.BlogListPageTest"/> 
      <class name="test.java.example.ProfilePageTest"/> 
@@ -24,8 +25,10 @@
      <class name="test.java.example.UpdateBlogPageTest"/> 
      <class name="test.java.example.BlogManagementPageTest"/> 
      <class name="test.java.example.BlogPageTest"/>
+     -->
    </classes>
  </test>
+     <!--
  <test name="Tests on Chrome" >
    <parameter name="browser" value="chrome"/>
    <parameter name="testUserName" value="test chrome"/>
@@ -44,4 +47,5 @@
      <class name="test.java.example.BlogPageTest"/>
    </classes>
  </test>
+     -->
  </suite>

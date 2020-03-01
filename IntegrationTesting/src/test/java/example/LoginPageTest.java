@@ -10,6 +10,7 @@ import main.java.base.Config;
 import main.java.page.BlogListPage;
 import main.java.page.HomePage;
 import main.java.page.LoginPage;
+import main.java.page.ResetPasswordPage;
 import main.java.page.SignupPage;
 import main.java.uimapper.HomeUIMapper;
 import main.java.uimapper.LoginUIMapper;
@@ -111,5 +112,33 @@ public class LoginPageTest extends BaseTest {
 	  loginPage.waitForElementBy(LoginUIMapper.FETCH_ERR_MSG);
 	  
 	  Assert.assertTrue(loginPage.isExistInPage("entered password is invalid."));
+  }
+
+  @Test(dataProvider = "mobile")
+  public void shouldDisplaySuccessMessageWhenForgotPasswordRequest(Dimension ssize) {
+	  this.driver.manage().window().setSize(ssize);
+	  
+	  LoginPage loginPage = new LoginPage(this.driver, true);
+
+    loginPage.clickForgotPasswordLinkAndWaitForModal();
+
+    loginPage.fillForgotPasswordEmailInputBy(this.testUser.email);
+
+    loginPage.submitForgotPasswordRequest();
+    loginPage.isExistInPage("requesting forgot password success. please check your email box.");
+
+    String resetPasswordUrl = loginPage.tryUntilGetResetPasswordUrl(this.testUser.email, 5);
+
+    this.driver.get(resetPasswordUrl);
+
+    ResetPasswordPage rpPage = new ResetPasswordPage(this.driver, false);
+
+    this.testUser.password = "my-new-password";
+
+    rpPage.fillInputsBy(this.testUser.password, this.testUser.password);
+
+    rpPage.submitResetPasswordForm();
+	  
+	  Assert.assertTrue(rpPage.isExistInPage("requesting reset password success"));
   }
 }
