@@ -185,9 +185,9 @@ workflows:
       - staging-deployment:
           requires:
             - staging-build-push-src-image
-      - acceptance-testing:
-          requires:
-           - staging-deployment
+     #- acceptance-testing:
+     #     requires:
+     #      - staging-deployment
   master-from-release-workflow:
     # workflow after release branch is merge to master
     when: << pipeline.parameters.run_master_from_release_workflow >>
