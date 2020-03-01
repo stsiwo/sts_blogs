@@ -126,7 +126,6 @@ public class LoginPageTest extends BaseTest {
 
     loginPage.submitForgotPasswordRequest();
 
-    loginPage.takeScreenshot("forgot-password-reset");
     loginPage.waitForElementToHaveTextBy(LoginUIMapper.FETCHE_SUCCESS_STATUS, "requesting forgot password success. please check your email box.");
 
     String resetPasswordUrl = loginPage.tryUntilGetResetPasswordUrl(this.testUser.email, 5);
@@ -135,12 +134,33 @@ public class LoginPageTest extends BaseTest {
 
     ResetPasswordPage rpPage = new ResetPasswordPage(this.driver, false);
 
-    this.testUser.password = "my-new-password";
+    String newPassword = "my-new-password";
 
-    rpPage.fillInputsBy(this.testUser.password, this.testUser.password);
+    rpPage.fillInputsBy(newPassword, newPassword);
 
     rpPage.submitResetPasswordForm();
 	  
 	  Assert.assertTrue(rpPage.isExistInPage("requesting reset password success"));
+
+    // cleanup (get default password back)
+    LoginPage loginPageAfter = rpPage.moveToLoginPage();
+
+    loginPageAfter.clickForgotPasswordLinkAndWaitForModal();
+
+    loginPageAfter.fillForgotPasswordEmailInputBy(this.testUser.email);
+
+    loginPageAfter.submitForgotPasswordRequest();
+
+    loginPageAfter.waitForElementToHaveTextBy(LoginUIMapper.FETCHE_SUCCESS_STATUS, "requesting forgot password success. please check your email box.");
+
+    String resetPasswordUrl2nd = loginPage.tryUntilGetResetPasswordUrl(this.testUser.email, 5);
+
+    this.driver.get(resetPasswordUrl2nd);
+
+    ResetPasswordPage rpPage2nd = new ResetPasswordPage(this.driver, false);
+
+    rpPage2nd.fillInputsBy(this.testUser.password, this.testUser.password);
+
+    rpPage2nd.submitResetPasswordForm();
   }
 }

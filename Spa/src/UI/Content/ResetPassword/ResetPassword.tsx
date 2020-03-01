@@ -44,11 +44,10 @@ const ResetPassword: React.FunctionComponent<RouteComponentProps<{}>> = (props: 
       .then(() => {
         debug('validation passed')
         sendRequest({
-          path: '/password-reset',
+          path: '/password-reset?token=' + query.get("token"),
           method: RequestMethodEnum.POST,
           headers: { 'content-type': 'application/json' },
           data: JSON.stringify({ 
-            token: query.get("token"),
             password: currentUserResetPasswordStatus.password 
           })
         })
