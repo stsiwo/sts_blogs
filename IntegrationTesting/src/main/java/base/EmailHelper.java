@@ -52,9 +52,6 @@ public class EmailHelper {
       // create the folder object and open it
       Folder emailFolder = store.getFolder("INBOX");
       emailFolder.open(Folder.READ_ONLY);
-
-      BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-
       // retrieve the messages from the folder in an array and print it
       Message[] messages = emailFolder.getMessages();
       System.out.println("messages.length---" + messages.length);
@@ -78,12 +75,6 @@ public class EmailHelper {
                 extractTargetResetPasswordUrl(message, targetUrl);
                 System.out.println("-----------------------------------");
                 System.out.println(targetUrl.toString());
-                String line = reader.readLine();
-                if ("YES".equals(line)) {
-                   message.writeTo(System.out);
-                } else if ("QUIT".equals(line)) {
-                   break;
-                }
                 return targetUrl.toString();
             }
           }

@@ -14,10 +14,13 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { useKeyupListener } from 'Hooks/KeyupListener/useKeyupListener';
 var debug = require('debug')('ui:ResetPassword')
 
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
 
 const ResetPassword: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComponentProps<{}>) => {
 
-  const { token } = useParams()
+  let query = useQuery();
   const [currentUserResetPasswordStatus, setUserResetPasswordStatus] = React.useState<UserResetPasswordType>(initialUserResetPasswordStatus)
   const { currentRequestStatus, setRequestStatus, sendRequest } = useRequest({})
   const { currentValidationError, touch, validate } = useUserResetPasswordValidation({ domain: currentUserResetPasswordStatus })
@@ -45,7 +48,7 @@ const ResetPassword: React.FunctionComponent<RouteComponentProps<{}>> = (props: 
           method: RequestMethodEnum.POST,
           headers: { 'content-type': 'application/json' },
           data: JSON.stringify({ 
-            token: token,
+            token: query.get("token"),
             password: currentUserResetPasswordStatus.password 
           })
         })
