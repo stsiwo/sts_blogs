@@ -49,7 +49,6 @@ describe('ub-c1: UpdateBlog Component testing', () => {
 
 
   beforeAll(() => {
-    console.log('ub-c1: beforeAll ')
     /**
      *  Error: Uncaught [TypeError: window.getSelection is not a function]
      *  : need to mock this
@@ -62,7 +61,6 @@ describe('ub-c1: UpdateBlog Component testing', () => {
   })
 
   beforeEach(() => {
-    console.log('ub-c1: beforeEach ')
     //localStorage.clear()
   })
 
@@ -87,7 +85,6 @@ describe('ub-c1: UpdateBlog Component testing', () => {
       )
 
       await wait(() => {
-        debug()
         expect(getByLabelText('Title').getAttribute('value')).toBeTruthy()
         expect(getByLabelText('Subtitle').getAttribute('value')).toBeTruthy()
         // temply remove
@@ -325,7 +322,6 @@ describe('ub-c1: UpdateBlog Component testing', () => {
       fireEvent.focus(publishBtn) // don't foreget focus first 
       fireEvent.click(publishBtn)
       await wait(() => {
-        debug()
         expect(getByText('ok')).toBeInTheDocument()
       })
     })
@@ -388,11 +384,9 @@ describe('ub-c1: UpdateBlog Component testing', () => {
   })
 
   afterEach(() => {
-    console.log('ub-c1: afterEach ')
   })
 
   afterAll(() => {
-    console.log('ub-c1: afterAll ')
   })
 
 })

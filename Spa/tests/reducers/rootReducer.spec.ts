@@ -86,7 +86,6 @@ describe('rr01_rootReducer', () => {
     let store = createStore(rootReducer)
 
     let action: ToggleTagsFetchingFlagActionType = toggleTagsFetchingFlagActionCreator(true)
-    console.log(action)
     store.dispatch(action)
 
     expect(store.getState().app.isTagsFetching).toEqual(true)
@@ -97,7 +96,6 @@ describe('rr01_rootReducer', () => {
     let store = createStore(rootReducer)
 
     let action: ToggleBlogsFetchingFlagActionType = toggleBlogsFetchingFlagActionCreator(true)
-    console.log(action)
     store.dispatch(action)
 
     expect(store.getState().app.isBlogsFetching).toEqual(true)

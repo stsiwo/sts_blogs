@@ -54,7 +54,7 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
                 type: 'login',
                 user: result.data.user as UserType
               })
-              console.log('before redirect')
+              debug('before redirect')
               props.history.push('/')
             }
           })
@@ -74,7 +74,7 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
 
   return (
     <div className="signup-form-cover">
-      <h2 className="signup-form-title">Signup</h2>
+      <h2 className="page-title-center">Signup</h2>
       <FetchStatus
         currentFetchStatus={currentRequestStatus}
         setFetchStatus={setRequestStatus}

@@ -81,8 +81,8 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   React.useEffect(() => {
     debug("start useEffect")
     // might can move to inside eh of refresh click
-    console.log('before request')
-    console.log(currentFilters)
+    debug('before request')
+    debug(currentFilters)
 
     debug("start send blog fetch request")
     sendBlogsFetchRequest({

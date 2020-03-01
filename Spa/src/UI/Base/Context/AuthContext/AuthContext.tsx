@@ -18,7 +18,6 @@ export const useAuthContext = (): AuthContextType => {
 const updateAuthContextReducer: Reducer<AuthType, AuthContextActionType> = (state, action) => {
   switch (action.type) {
     case 'login':
-      console.log('(context) login case reducer')
       debug('action:')
       debug(action)
       storeUserInfo(action.user)
@@ -27,7 +26,6 @@ const updateAuthContextReducer: Reducer<AuthType, AuthContextActionType> = (stat
         user: action.user
       }
     case 'logout':
-      console.log('(context) logout case reducer')
       removeUserInfo()
       return {
         authed: false
@@ -41,8 +39,6 @@ const updateAuthContextReducer: Reducer<AuthType, AuthContextActionType> = (stat
 export const useUpdateAuthContextReducer = (initialAuth: AuthType = null): [ReducerState<Reducer<AuthType, AuthContextActionType>>, Dispatch<ReducerAction<Reducer<AuthType, AuthContextActionType>>>] => {
 
   //const defaultAuth = initialAuth ? initialAuth : { authed: false }
-  console.log('inside useUpdateAuthContextReducer')
-  console.log(isUserLoggedIn())
   let defaultAuth = isUserLoggedIn() ? { authed: true, user: getUserInfo() } : { authed: false }
   if (NODE_ENV === 'development') defaultAuth = {
     authed: true,

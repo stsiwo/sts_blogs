@@ -82,11 +82,11 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
       .then((result: ResponseResultType<BlogListResponseDataType>) => {
 
         if (NODE_ENV === 'development') {
-          console.log("development env so inject blog test data")
+          debug("development env so inject blog test data")
           setBlogs(getBlogTestData())
         }
         else if (result.status === ResponseResultStatusEnum.SUCCESS) {
-          console.log("fetch success and receive data")
+          debug("fetch success and receive data")
           setBlogs(result.data.blogs)
 
           // assign new total count of pagination
@@ -112,10 +112,10 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   }
 
   const handleDeleteBlogClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = (e) => {
-    console.log("start handling delete blog click event")
+    debug("start handling delete blog click event")
     const result: boolean = window.confirm("Are you sure to delete this blog?")
     if (result) {
-      console.log("confirm is OK")
+      debug("confirm is OK")
       const blogId = e.currentTarget.getAttribute('data-blog-id')
       setFetchContext(FetchContextEnum.DELETE)
       sendDeleteRequest({
@@ -125,7 +125,7 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
         allowCache: false
       })
         .then((data: BlogListResponseDataType) => {
-          console.log("'then' after delete request")
+          debug("'then' after delete request")
           setIsRefresh(true)
           const nextRefreshCount = currentRefreshCount + 1
           setRefreshCount(nextRefreshCount)

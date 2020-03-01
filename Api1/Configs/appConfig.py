@@ -1,7 +1,7 @@
 from Configs.app import app
 from flask_cors import CORS
 from Configs.extensions import (
-        api, db, jwt, migrate, ma, bcrypt
+        api, db, jwt, migrate, ma, bcrypt, mail
         )
 from commands import (
         seed_cli,
@@ -57,6 +57,7 @@ def configureApp(config_object="Configs.settings"):
     ma.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
+    mail.init_app(app)
 
     # cores
     # withCredentials in client: only one domain is allowed to communicate

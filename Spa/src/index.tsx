@@ -11,6 +11,7 @@ import 'ui/Base/Css/Common.scss';
 import Content from 'ui/Content/Content';
 import Header from 'ui/Header/Header';
 import Footer from 'ui/Footer/Footer';
+var debug = require('debug')('ui:Index')
 
 // import css for debug (only development)
 if (NODE_ENV === 'development') require('ui/Base/Css/Debug.scss');
@@ -33,8 +34,8 @@ const ScrollToTop: React.FunctionComponent<{}> = (props) => {
 
 // enable debug
 DEBUG
-console.log('env vars:')
-console.log(DEBUG)
+debug('env vars:')
+debug(DEBUG)
 
 var debug = require('debug')('ui:App')
 const App = (props: any) => {

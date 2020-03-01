@@ -4,7 +4,7 @@ import org.openqa.selenium.By;
 
 public final class SignupUIMapper {
 
-    public final static By PAGE_TITLE = By.cssSelector("h2[class='signup-form-title']");
+    public final static By PAGE_TITLE = By.cssSelector("h2[class='page-title-center']");
 	
     public final static By NAME_INPUT = By.id("name");
     	    

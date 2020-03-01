@@ -25,6 +25,26 @@ export const initialUserState: UserType = {
   roles: [], 
 }
 
+export declare type ForgotPasswordType = {
+  email: string
+}
+
+export const initialForgotPasswordStatus: ForgotPasswordType = {
+  email: '',
+}
+
+export declare type UserResetPasswordType = {
+  password: string
+  confirm: string
+}
+
+export const initialUserResetPasswordStatus: UserResetPasswordType = {
+  password: '',
+  confirm: ''
+}
+
+export declare type UserResetPasswordRequestDataType = UserResetPasswordType 
+
 export declare type UserLoginRequestDataType = {
   email: string
   password: string
