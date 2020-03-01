@@ -14,6 +14,7 @@ import main.java.page.ResetPasswordPage;
 import main.java.page.SignupPage;
 import main.java.uimapper.HomeUIMapper;
 import main.java.uimapper.LoginUIMapper;
+import main.java.uimapper.ResetPasswordUIMapper;
 
 public class LoginPageTest extends BaseTest {
 
@@ -139,6 +140,7 @@ public class LoginPageTest extends BaseTest {
     rpPage.fillInputsBy(newPassword, newPassword);
 
     rpPage.submitResetPasswordForm();
+    rpPage.waitForElementToHaveTextBy(ResetPasswordUIMapper.FETCHE_SUCCESS_STATUS, "requesting reset password success");
 	  
 	  Assert.assertTrue(rpPage.isExistInPage("requesting reset password success"));
 

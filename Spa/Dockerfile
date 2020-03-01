@@ -23,6 +23,7 @@ RUN ["npm", "run", "build-staging-local"]
 FROM development as build-staging 
 
 WORKDIR /app
+ENV DEBUG=*
 RUN ["npm", "run", "build-staging"]
 
 FROM development as build 
