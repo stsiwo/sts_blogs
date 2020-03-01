@@ -58,7 +58,6 @@ export const useRequest = (input: UseRequestStatusInputType): UseRequestStatusOu
     })
       .then((responseResult: ResponseResultType) => {
         log('fetch data function receive response successfully')
-        log(responseResult)
         setRequestStatus(responseResult)
 
         if (args.allowCache) {
