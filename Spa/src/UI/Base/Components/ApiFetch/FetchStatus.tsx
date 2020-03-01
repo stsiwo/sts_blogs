@@ -13,9 +13,9 @@ const FetchStatus: React.FunctionComponent<FetchStatusPropType> = (props: FetchS
 
   return (
     <div className="fetch-status-wrapper">
-      {(props.currentFetchStatus.status === ResponseResultStatusEnum.FETCHING && <h3 className="fetch-status-title">{fetchingMsg}</h3>)}
-      {(props.currentFetchStatus.status === ResponseResultStatusEnum.SUCCESS && <h3 className="fetch-status-title">{successMsg}</h3>)}
-      {(props.currentFetchStatus.status === ResponseResultStatusEnum.FAILURE && <h3 className="fetch-status-title">{failureMsg}</h3>)}
+      {(props.currentFetchStatus.status === ResponseResultStatusEnum.FETCHING && <h3 className="fetch-status-title" role="fetching-status">{fetchingMsg}</h3>)}
+      {(props.currentFetchStatus.status === ResponseResultStatusEnum.SUCCESS && <h3 className="fetch-status-title" role="fetch-success-status">{successMsg}</h3>)}
+      {(props.currentFetchStatus.status === ResponseResultStatusEnum.FAILURE && <h3 className="fetch-status-title" role="fetch-failure-status">{failureMsg}</h3>)}
       {(props.currentFetchStatus.errorMsg && <p className="fetch-status-err-msg">{props.currentFetchStatus.errorMsg}</p>)}
     </div>
   );

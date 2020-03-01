@@ -21,4 +21,10 @@ public class ResetPasswordUIMapper {
     public final static By LOGIN_LINK = By.linkText("Login Page"); 
   
     public final static By FETCH_ERR_MSG = By.cssSelector("p.fetch-status-err-msg");
+
+    public final static By FETCHING_STATUS = By.cssSelector("h3[role='fetching-status']");
+    
+    public final static By FETCHE_SUCCESS_STATUS = By.cssSelector("h3[role='fetch-success-status']");
+
+    public final static By FETCH_FAILURE_STATUS = By.cssSelector("h3[role='fetch-failure-status']");
 }

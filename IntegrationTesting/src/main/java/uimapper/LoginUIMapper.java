@@ -32,9 +32,14 @@ public class LoginUIMapper {
 
     public final static By FORGOT_PASSWORD_EMAIL_INPUT = By.id("forgot-password-email");
 
-    public final static By FORGOT_PASSWORD_SUBMIT_BTN = By.cssSelector("div[role='forgot-password-btn']");
+    public final static By FORGOT_PASSWORD_SUBMIT_BTN = By.cssSelector("input[role='forgot-password-btn']");
 
     public final static By FORGOT_PASSWORD_MODAL_CLOSE_ICON = By.cssSelector("div[role='close-forgot-password-modal-link']");
 
+    public final static By FETCHING_STATUS = By.cssSelector("h3[role='fetching-status']");
+    
+    public final static By FETCHE_SUCCESS_STATUS = By.cssSelector("h3[role='fetch-success-status']");
+
+    public final static By FETCH_FAILURE_STATUS = By.cssSelector("h3[role='fetch-failure-status']");
 
 }

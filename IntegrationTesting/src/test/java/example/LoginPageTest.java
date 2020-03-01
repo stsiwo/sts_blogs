@@ -125,7 +125,9 @@ public class LoginPageTest extends BaseTest {
     loginPage.fillForgotPasswordEmailInputBy(this.testUser.email);
 
     loginPage.submitForgotPasswordRequest();
-    loginPage.isExistInPage("requesting forgot password success. please check your email box.");
+
+    loginPage.takeScreenshot("forgot-password-reset");
+    loginPage.waitForElementToHaveTextBy(LoginUIMapper.FETCHE_SUCCESS_STATUS, "requesting forgot password success. please check your email box.");
 
     String resetPasswordUrl = loginPage.tryUntilGetResetPasswordUrl(this.testUser.email, 5);
 
