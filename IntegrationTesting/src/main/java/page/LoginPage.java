@@ -60,7 +60,7 @@ public class LoginPage extends BasePage {
   public String tryUntilGetResetPasswordUrl(String targetEmail, int numOfAttempt) {
     int count = 0;
     String resetPasswordUrl = null; 
-    while (count == numOfAttempt && resetPasswordUrl != null) {
+    while (count < numOfAttempt && resetPasswordUrl == null) {
       try {
         Thread.sleep(1000);
       } catch (InterruptedException e) {

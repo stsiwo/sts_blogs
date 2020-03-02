@@ -1,6 +1,7 @@
 #!/bin/bash
 
 workflow="$1" # type of workflow to be run
+target_branch="$2" # brach to be checked out to circleci
 release_workflow="release"
 master_from_release_workflow="master-release"
 master_from_hotfix_workflow="master-hotfix"
@@ -32,7 +33,7 @@ fi
 # prepare json body for request
 # JSON syntax: property name must be enclosed with DOUBLE QUOTES (NOT SINGLE QUOTES)
 body=$(cat <<EOF
-  { "parameters": { "$target_workflow": true }}
+  { "branch": "$target_branch", "parameters": { "$target_workflow": true }}
 EOF
 )
 

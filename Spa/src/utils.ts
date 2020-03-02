@@ -1,12 +1,13 @@
 import { QueryStringType } from "requests/types";
 import isEmpty = require('lodash/isEmpty');
 const  uuidv4 = require('uuid/v4')
-var debug = require('debug')('utils')
+import { logger } from 'configs/logger';
+const log = logger("utils");
 
 
 export const prettyConsole = (target: any): void => {
   var cache: any[] = []
-  debug(JSON.stringify(target, function(key, value) {
+  log(JSON.stringify(target, function(key, value) {
     if (typeof value === 'object' && value !== null) {
         if (cache.indexOf(value) !== -1) {
             // Duplicate reference found, discard key

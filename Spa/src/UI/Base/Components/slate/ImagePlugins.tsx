@@ -6,7 +6,8 @@ import cloneDeep from 'lodash/cloneDeep'
 import { ToolBarBtnType } from './types';
 import { FaImage } from 'react-icons/fa';
 import { generateBlogContentPublicImageUrl, generateFileWithUuidv4 } from 'src/utils';
-var debug = require('debug')('ui:withImages')
+import { logger } from 'configs/logger';
+const log = logger("withImages");
 
 declare type ImagePluginEditor = {
   insertImage: () => void
@@ -38,7 +39,7 @@ export const withImages = (editor: ReactEditor) => {
       const imgSrc: string = window.URL.createObjectURL(tempFile);
       const text: Text = { text: '' }
 
-      debug("*** userId at insertImage: " + userId)
+      log("*** userId at insertImage: " + userId)
       const image = {
         type: 'image',
         src: imgSrc,
@@ -71,10 +72,10 @@ export const withImages = (editor: ReactEditor) => {
         children: [text]
       }
 
-      debug("leaf")
+      log("leaf")
       const textOfCurrentElement = Editor.getTextOfCurrentElement(editor)
 
-      debug("figure" + JSON.stringify(image))
+      log("figure" + JSON.stringify(image))
 
       /**
        * do nothing if node at the current direction has text
@@ -123,8 +124,8 @@ export const withImages = (editor: ReactEditor) => {
  **/
 
 export const ImageElement: React.FunctionComponent<ImageRenderElementProps> = props => {
-  debug("inside ImageElement")
-  debug(props)
+  log("inside ImageElement")
+  log(props)
   return (
     <figure>
       <img src={props.element.src} {...props.element.attributes} />
@@ -160,13 +161,13 @@ export const ImageToolBarBtn: React.FunctionComponent<ToolBarBtnType> = (props) 
       role="image-toolbar-icon"
       className={currentClassName}
       onMouseDown={(e: React.MouseEvent<HTMLElement>) => {
-        debug("you clicked insert iamge btn")
+        log("you clicked insert iamge btn")
         event.preventDefault()
         // #REFACTOR
         // if user try to image before focus editor, not allow to do that.
         // make user to focus first
         if (editor.selection) {
-          debug("userId at ImageToolBarBtn: " + props.userId)
+          log("userId at ImageToolBarBtn: " + props.userId)
           editor.insertImage(props.userId)
         }
       }}

@@ -12,7 +12,8 @@ import Input from 'Components/Input/Input';
 import { useRouteMatch, useLocation } from 'react-router';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { useKeyupListener } from 'Hooks/KeyupListener/useKeyupListener';
-var debug = require('debug')('ui:Login')
+import { logger } from 'configs/logger';
+const log = logger("Login");
 
 const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComponentProps<{}>) => {
 
@@ -44,7 +45,7 @@ const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCom
     // final check validation ...
     validate()
       .then(() => {
-        debug('validation passed')
+        log('validation passed')
         sendRequest({
           path: '/login',
           method: RequestMethodEnum.POST,
@@ -58,7 +59,7 @@ const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCom
             }
           })
       }, () => {
-        debug('validation failed at save button event handler')
+        log('validation failed at save button event handler')
       })
   }
 
@@ -68,7 +69,7 @@ const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCom
   })
 
   const handleSubmitClickEvent: React.EventHandler<React.MouseEvent<HTMLInputElement>> = async (e) => {
-    debug('clicked update butuon')
+    log('clicked update butuon')
     _submitLoginForm()
   }
 

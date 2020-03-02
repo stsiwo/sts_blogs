@@ -30,4 +30,9 @@ public class ResetPasswordPage extends BasePage {
   public void submitResetPasswordForm() {
     this.clickElementBy(ResetPasswordUIMapper.SUBMIT_BUTTON);
   }
+
+  public LoginPage moveToLoginPage() {
+    this.clickElementBy(ResetPasswordUIMapper.LOGIN_LINK);
+    return new LoginPage(this.driver, false);
+  }
 }

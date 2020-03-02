@@ -3,7 +3,8 @@ import { AuthContextType, AuthContextActionType, AuthType } from "./types";
 import { storeUserInfo, removeUserInfo, isUserLoggedIn, getUserInfo } from "../../../../storages/user";
 import { Action } from "redux";
 import { getUserTestData } from '../../../../../tests/data/UserFaker';
-var debug = require('debug')('ui:AuthContext')
+import { logger } from 'configs/logger';
+const log = logger("AuthContext");
 
 
 // for provider
@@ -18,8 +19,8 @@ export const useAuthContext = (): AuthContextType => {
 const updateAuthContextReducer: Reducer<AuthType, AuthContextActionType> = (state, action) => {
   switch (action.type) {
     case 'login':
-      debug('action:')
-      debug(action)
+      log('action:')
+      log(action)
       storeUserInfo(action.user)
       return {
         authed: true,

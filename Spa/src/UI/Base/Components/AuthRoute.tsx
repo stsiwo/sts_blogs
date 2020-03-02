@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { Route, Redirect, RouteProps } from 'react-router-dom';
 import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
-var debug = require('debug')('ui:AuthRoute')
+import { logger } from 'configs/logger';
+const log = logger("AuthContext");
 
 export declare type AuthRoutePropType = {
   component: React.ComponentType,
@@ -10,7 +11,7 @@ export declare type AuthRoutePropType = {
 
 export const AuthRoute: React.FunctionComponent<AuthRoutePropType> = ({ component: Component, ...rest }) => {
   const { auth } = useAuthContext()
-  debug(auth)
+  log(auth)
   if (!auth.authed) return <Redirect to='/login' />
   return <Route {...rest} render={(props: RouteProps) => <Component {...props} />} />
 }

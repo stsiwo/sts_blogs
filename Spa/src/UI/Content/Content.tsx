@@ -32,7 +32,7 @@ const Content: React.FunctionComponent<{}> = (props: {}) => {
       <Switch location={background || location}>
         <Route path="/" exact component={Home} />
         <Route path="/login" exact component={Login} />
-        <Route path="/password-reset/:token" exact component={ResetPassword} />
+        <Route path="/password-reset" exact component={ResetPassword} />
         <Route path="/signup" exact component={Signup} />
         <Route path="/blogs" exact component={BlogList} />
         <Route path="/blogs/:blogId" exact component={Blog} />

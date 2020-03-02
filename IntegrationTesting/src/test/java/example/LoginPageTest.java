@@ -14,6 +14,7 @@ import main.java.page.ResetPasswordPage;
 import main.java.page.SignupPage;
 import main.java.uimapper.HomeUIMapper;
 import main.java.uimapper.LoginUIMapper;
+import main.java.uimapper.ResetPasswordUIMapper;
 
 public class LoginPageTest extends BaseTest {
 
@@ -125,7 +126,8 @@ public class LoginPageTest extends BaseTest {
     loginPage.fillForgotPasswordEmailInputBy(this.testUser.email);
 
     loginPage.submitForgotPasswordRequest();
-    loginPage.isExistInPage("requesting forgot password success. please check your email box.");
+
+    loginPage.waitForElementToHaveTextBy(LoginUIMapper.FETCHE_SUCCESS_STATUS, "requesting forgot password success. please check your email box.");
 
     String resetPasswordUrl = loginPage.tryUntilGetResetPasswordUrl(this.testUser.email, 5);
 
@@ -133,12 +135,64 @@ public class LoginPageTest extends BaseTest {
 
     ResetPasswordPage rpPage = new ResetPasswordPage(this.driver, false);
 
-    this.testUser.password = "my-new-password";
+    String newPassword = "my-new-password";
+
+    rpPage.fillInputsBy(newPassword, newPassword);
+
+    rpPage.submitResetPasswordForm();
+    rpPage.waitForElementToHaveTextBy(ResetPasswordUIMapper.FETCHE_SUCCESS_STATUS, "requesting reset password success");
+	  
+	  Assert.assertTrue(rpPage.isExistInPage("requesting reset password success"));
+
+    // cleanup (get default password back)
+    LoginPage loginPageAfter = rpPage.moveToLoginPage();
+
+    loginPageAfter.clickForgotPasswordLinkAndWaitForModal();
+
+    loginPageAfter.fillForgotPasswordEmailInputBy(this.testUser.email);
+
+    loginPageAfter.submitForgotPasswordRequest();
+
+    loginPageAfter.waitForElementToHaveTextBy(LoginUIMapper.FETCHE_SUCCESS_STATUS, "requesting forgot password success. please check your email box.");
+
+    String resetPasswordUrl2nd = loginPage.tryUntilGetResetPasswordUrl(this.testUser.email, 5);
+
+    this.driver.get(resetPasswordUrl2nd);
+
+    ResetPasswordPage rpPage2nd = new ResetPasswordPage(this.driver, false);
+
+    rpPage2nd.fillInputsBy(this.testUser.password, this.testUser.password);
+
+    rpPage2nd.submitResetPasswordForm();
+  }
+
+  public void shouldDisplayEmailNotRegisterdMessageWhenForgotPasswordRequest(Dimension ssize) {
+	  LoginPage loginPage = new LoginPage(this.driver, true);
+
+    loginPage.clickForgotPasswordLinkAndWaitForModal();
+
+    loginPage.fillForgotPasswordEmailInputBy(this.testUser.email);
+
+    loginPage.submitForgotPasswordRequest();
+
+    loginPage.waitForElementToHaveTextBy(LoginUIMapper.FETCH_FAILURE_STATUS, "provided email is not found");
+
+    Assert.assertTrue(true);
+  }
+
+  // can't test password reset token has expired
+  // so skip
+  
+  public void shouldDisplayInvalidTokenMessageWhenPasswordResetRequest(Dimension ssize) {
+    // use empty token as test data
+	  ResetPasswordPage rpPage = new ResetPasswordPage(this.driver, true);
 
     rpPage.fillInputsBy(this.testUser.password, this.testUser.password);
 
     rpPage.submitResetPasswordForm();
-	  
-	  Assert.assertTrue(rpPage.isExistInPage("requesting reset password success"));
+
+    rpPage.waitForElementToHaveTextBy(ResetPasswordUIMapper.FETCH_FAILURE_STATUS, "token is invalid. it seems wrong type. please start over again.");
+
+    Assert.assertTrue(true);
   }
 }

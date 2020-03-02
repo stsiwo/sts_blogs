@@ -1,10 +1,11 @@
 import { Node } from 'Components/fork/slate'
 import { ImageCustomElementProps } from './types';
-var debug = require('debug')('ui:BlogConent-helpers')
+import { logger } from 'configs/logger';
+const log = logger("BlogConent-helpers");
 
 
 export const replaceTmpSrcWithPublicSrc = (content: Node[]): Node[] => {
-  debug('start replaceTmpSrcWithPublicSrc')
+  log('start replaceTmpSrcWithPublicSrc')
 
   if (content) {
     content.forEach((node: Node) => {

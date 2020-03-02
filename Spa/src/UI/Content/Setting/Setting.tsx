@@ -7,7 +7,8 @@ import NewBlog from './BlogManagement/NewBlog/NewBlog';
 import UpdateBlog from './BlogManagement/UpdateBlog/UpdateBlog';
 import Profile from './Profile/Profile';
 import './Setting.scss';
-var debug = require('debug')('ui:Setting')
+import { logger } from 'configs/logger';
+const log = logger("Setting");
 
 declare type SettingNavItemType = {
   name: string
@@ -42,7 +43,7 @@ const Setting: React.FunctionComponent<{}> = (props: {}) => {
 
   let { path, url } = useRouteMatch();
 
-  debug(path)
+  log(path)
 
   return (
     <div className="setting-wrapper">

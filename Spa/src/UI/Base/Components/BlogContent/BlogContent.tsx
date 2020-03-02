@@ -15,7 +15,8 @@ import { withHistory } from 'Components/fork/slate-history';
 import { BlockQuoteElement, BulletedListElement, HeadingOneElement, HeadingTwoElement, ListItemElement, NumberedListElement, Leaf, HOTKEYS, LIST_TYPES, toggleMark } from 'Components/slate/RichText';
 import { ToolBar } from '../slate/ToolBar'
 import isHotkey from 'is-hotkey'
-var debug = require('debug')('ui:BlogContent')
+import { logger } from 'configs/logger';
+const log = logger("BlogContent");
 
 
 const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogContentPropType) => {
@@ -88,7 +89,7 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
                 // undo 
                 case 'z': {
                   event.preventDefault()
-                  debug("let's undo")
+                  log("let's undo")
                   editor.undo()
                   break
                 }
@@ -96,7 +97,7 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
                 // redo
                 case 'y': {
                   event.preventDefault()
-                  debug("let's undo")
+                  log("let's undo")
                   editor.redo()
                   break
                 }
@@ -105,8 +106,8 @@ const BlogContent: React.FunctionComponent<BlogContentPropType> = (props: BlogCo
                 if (isHotkey(hotkey, event as unknown as KeyboardEvent)) {
                   event.preventDefault()
                   const mark = HOTKEYS[hotkey as keyof typeof HOTKEYS]
-                  debug("mark at onKeyDown of toolbar")
-                  debug(mark)
+                  log("mark at onKeyDown of toolbar")
+                  log(mark)
                   toggleMark(editor, mark)
                 }
               }
