@@ -41,33 +41,25 @@ describe('m-c1: Header Component testing', () => {
    **/
 
   beforeAll(() => {
-    console.log('m-c1: beforeAll ')
   })
 
   beforeEach(() => {
-    console.log('m-c1: beforeEach ')
-
   })
 
   describe('<= laptop screen', () => {
 
     beforeAll(() => {
-      console.log('m-c1: beforeAll: <= laptop screen')
       Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: CssGlobalContextDefaultState.tabletSize })
       window.dispatchEvent(new Event('resize'));
     })
 
     beforeEach(() => {
-      console.log('m-c1: beforeEach: <= laptop screen')
-
     })
 
     afterEach(() => {
-      console.log('m-c1: afterEach: <= laptop screen ')
     })
 
     afterAll(() => {
-      console.log('m-c1: afterAll; <= laptop screen ')
     })
 
   })
@@ -75,14 +67,11 @@ describe('m-c1: Header Component testing', () => {
   describe('> laptop screen', () => {
 
     beforeAll(() => {
-      console.log('m-c1: beforeAll: > laptop screen')
       Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: CssGlobalContextDefaultState.laptopSize + 1 })
       window.dispatchEvent(new Event('resize'));
     })
 
     beforeEach(() => {
-      console.log('m-c1: beforeEach: > laptop screen')
-
     })
 
     test('gtl1. (auth:member) should display dedicated menu item (Account)', async () => {
@@ -206,21 +195,17 @@ describe('m-c1: Header Component testing', () => {
     })
 
     afterEach(() => {
-      console.log('m-c1: afterEach: > laptop screen ')
     })
 
     afterAll(() => {
-      console.log('m-c1: afterAll; > laptop screen ')
     })
 
   })
 
   afterEach(() => {
-    console.log('m-c1: afterEach ')
   })
 
   afterAll(() => {
-    console.log('m-c1: afterAll ')
   })
 
 })

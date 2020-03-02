@@ -55,11 +55,9 @@ describe('bm-c1: Signup Component testing', () => {
   }
 
   beforeAll(() => {
-    console.log('bm-c1: beforeAll ')
   })
 
   beforeEach(() => {
-    console.log('bm-c1: beforeEach ')
 
   })
 
@@ -332,11 +330,9 @@ describe('bm-c1: Signup Component testing', () => {
   })
 
   afterEach(() => {
-    console.log('bm-c1: afterEach ')
   })
 
   afterAll(() => {
-    console.log('bm-c1: afterAll ')
   })
 
   /** 
@@ -363,7 +359,6 @@ describe('bm-c1: Signup Component testing', () => {
   //      'test-password'
   //    ])
 
-  //    console.log(container)
 
   //    fireEvent.click(getByRole('signup-btn'))
   //    // wait for expectation meet otherwise async timeout

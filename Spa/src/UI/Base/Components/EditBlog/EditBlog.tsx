@@ -17,7 +17,8 @@ import { replaceTmpSrcWithPublicSrc } from 'Components/BlogContent/helpers';
 import cloneDeep = require('lodash/cloneDeep');
 import { generateFileWithUuidv4, getUuidv4 } from 'src/utils';
 import { RequestStatusType } from 'Hooks/Request/types';
-var debug = require('debug')('ui:EditBlog')
+import { logger } from 'configs/logger';
+const log = logger("EditBlog");
 
 declare type EditBlogPropsType = {
   context: string
@@ -40,7 +41,6 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId,
 
   const titleInputRef: React.MutableRefObject<HTMLInputElement> = { current: null }
   const subtitleInputRef: React.MutableRefObject<HTMLInputElement> = { current: null }
-
   const [currentIsDeleteMainImage, setIsDeleteMainImage] = React.useState<boolean>(false)
   const { currentValidationError, touch, validate } = useBlogValidation({ domain: currentBlog })
   const { currentRequestStatus: currentBlogStatus, setRequestStatus: setBlogStatus, sendRequest: saveRequest } = useRequest({})
@@ -69,7 +69,7 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId,
   }
 
   const handlePublishBlogClickEvent: React.EventHandler<React.MouseEvent<HTMLInputElement>> = async (e) => {
-    debug('start handling publish button click')
+    log('start handling publish button click')
     validate()
       .then(() => {
         setFetchContext(FetchContextEnum.PUBLISH)
@@ -83,16 +83,16 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId,
             // do something 
           })
       }, () => {
-        debug('validation failed at publish button event handler')
+        log('validation failed at publish button event handler')
       })
   }
 
   React.useEffect(() => {
     function autoSave() {
-      debug('validation passed at save button event handler')
+      log('validation passed at save button event handler')
 
       const blogDataForSubmit: BlogType = cloneDeep(currentBlog)
-      debug('setup blogImages and blogImagePaths')
+      log('setup blogImages and blogImagePaths')
       const imageList: File[] = []
       const imagePathList: string[] = []
       currentBlog.content.forEach((node: Element) => {
@@ -106,13 +106,13 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId,
         }
       })
 
-      debug('replace temp src image with publicSrc before submit')
+      log('replace temp src image with publicSrc before submit')
       blogDataForSubmit.content = replaceTmpSrcWithPublicSrc(blogDataForSubmit.content)
       blogDataForSubmit.blogImages = imageList
       blogDataForSubmit.blogImagePaths = imagePathList
-      debug(blogDataForSubmit)
+      log(blogDataForSubmit)
 
-      debug('start update request')
+      log('start update request')
       saveRequest({
         path: 'blogs/' + blogId,
         method: RequestMethodEnum.PUT,
@@ -125,7 +125,7 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId,
     }
     // give condition to make this allow to request only if initial blog data is seeded from server
     if (isInitialGetFetchDone) {
-      console.log("start autoSave useEffect at EditBlog")
+      log("start autoSave useEffect at EditBlog")
       autoSave()
       setFetchContext(FetchContextEnum.SAVE)
     }
@@ -138,8 +138,8 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId,
     ])
 
   const changeInputWidthDynamically = (inputRef: React.MutableRefObject<HTMLInputElement>, currentChLength: number): void => {
-    console.log(inputRef)
-    console.log(currentChLength)
+    log(inputRef)
+    log(currentChLength)
     inputRef.current.style.width = currentChLength > 30 ? currentChLength + 'ch' : 30 + 'ch';
   }
 

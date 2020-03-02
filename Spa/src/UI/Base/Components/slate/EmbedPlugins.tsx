@@ -5,6 +5,8 @@ import { FloatProperty, PointerEventsProperty } from 'csstype';
 import cloneDeep from 'lodash/cloneDeep'
 import { ToolBarBtnType } from './types';
 import { FaCode } from 'react-icons/fa';
+import { logger } from 'configs/logger';
+const log = logger("withEmbeds");
 
 
 declare type EmbedRenderElementProps = RenderElementProps & {
@@ -16,7 +18,7 @@ export const withEmbeds = (editor: ReactEditor) => {
   editor.isVoid = element => (element.type === 'video' ? true : isVoid(element))
 
   editor.insertEmbeds = (url: string) => {
-    console.log("insertEmbeds is called")
+    log("insertEmbeds is called")
     const text: Text = { text: '' }
     const embeds = {
       type: 'video',
@@ -30,11 +32,11 @@ export const withEmbeds = (editor: ReactEditor) => {
 
     const currentOffset = editor.selection.anchor.offset
     if (currentOffset === 0) {
-      console.log("offset is 0")
+      log("offset is 0")
       Transforms.insertNodes(editor, embeds, { at: editor.selection })
     }
     else {
-      console.log("offset is not 0")
+      log("offset is not 0")
       Transforms.insertNodes(editor, embeds, { at: editor.selection })
       Transforms.insertNodes(editor, nextDefaultElement, { at: Editor.after(editor, editor.selection) })
     }
@@ -126,7 +128,7 @@ export const EmbedsToolBarBtn: React.FunctionComponent<ToolBarBtnType> = (props)
       role="embeds-toolbar-icon"
       className={currentClassName}
       onMouseDown={(e: React.MouseEvent<HTMLElement>) => {
-        console.log("you clicked insert iamge btn")
+        log("you clicked insert iamge btn")
         event.preventDefault()
         // #REFACTOR
         // if user try to image before focus editor, not allow to do that.

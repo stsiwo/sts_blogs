@@ -9,13 +9,15 @@ import './Login.scss';
 import FetchStatus from 'Components/ApiFetch/FetchStatus';
 import { useDispatch } from 'react-redux';
 import Input from 'Components/Input/Input';
-import { useRouteMatch } from 'react-router';
+import { useRouteMatch, useLocation } from 'react-router';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { useKeyupListener } from 'Hooks/KeyupListener/useKeyupListener';
-var debug = require('debug')('ui:Login')
+import { logger } from 'configs/logger';
+const log = logger("Login");
 
 const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComponentProps<{}>) => {
 
+  let location = useLocation();
   const [currentUserLoginStatus, setUserLoginStatus] = React.useState<UserLoginType>(initialUserLoginStatus)
   const { currentRequestStatus, setRequestStatus, sendRequest } = useRequest({})
   const { currentValidationError, touch, validate } = useUserLoginValidation({ domain: currentUserLoginStatus })
@@ -43,7 +45,7 @@ const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCom
     // final check validation ...
     validate()
       .then(() => {
-        debug('validation passed')
+        log('validation passed')
         sendRequest({
           path: '/login',
           method: RequestMethodEnum.POST,
@@ -57,7 +59,7 @@ const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCom
             }
           })
       }, () => {
-        debug('validation failed at save button event handler')
+        log('validation failed at save button event handler')
       })
   }
 
@@ -67,13 +69,13 @@ const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCom
   })
 
   const handleSubmitClickEvent: React.EventHandler<React.MouseEvent<HTMLInputElement>> = async (e) => {
-    debug('clicked update butuon')
+    log('clicked update butuon')
     _submitLoginForm()
   }
 
   return (
     <div className="login-form-cover">
-      <h2 className="login-form-title">Login</h2>
+      <h2 className="page-title-center">Login</h2>
       <FetchStatus
         currentFetchStatus={currentRequestStatus}
         setFetchStatus={setRequestStatus}
@@ -120,6 +122,17 @@ const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCom
           errorStyle={'confirm-error small-input-error'}
           inputType={'password'}
         />
+        <div className="signup-login-link-wrapper">
+          <Link 
+            role="forgot-password-link"
+            to={{
+              pathname: '/forgot-password',
+              state: { background: location }
+            }}
+          >
+            forget your password&#63;
+          </Link>
+        </div>
         <div className="signup-login-link-wrapper">
           <span>if you don&rsquo;t have account,  </span><Link to={`/signup`} >Signup Page</Link>
         </div>

@@ -5,6 +5,8 @@ import { useSlate, RenderElementProps, RenderLeafProps } from '../fork/slate-rea
 import { IconType } from 'react-icons/lib/cjs';
 import { FaBold, FaItalic, FaListUl, FaListOl, FaQuoteLeft, FaHeading, FaRegFileCode, FaUnderline } from 'react-icons/fa';
 import "./Slate.scss";
+import { logger } from 'configs/logger';
+const log = logger("RichText");
 
 export const HOTKEYS = {
   'mod+b': 'bold',
@@ -18,11 +20,11 @@ export const LIST_TYPES = ['numbered-list', 'bulleted-list']
 const emptyText = { text: '' }
 
 export const toggleBlock = (editor: Editor, format: string) => {
-  console.log("inside toggleBlock")
+  log("inside toggleBlock")
   const isActive = isBlockActive(editor, format)
   const isList = LIST_TYPES.includes(format)
 
-  console.log("inside toggleBlock")
+  log("inside toggleBlock")
   Transforms.unwrapNodes(editor, {
     match: n => LIST_TYPES.includes(n.type),
     split: true,
@@ -39,7 +41,7 @@ export const toggleBlock = (editor: Editor, format: string) => {
 }
 
 export const toggleMark = (editor: Editor, format: string) => {
-  console.log("inside toggleMark")
+  log("inside toggleMark")
   const isActive = isMarkActive(editor, format)
 
   if (isActive) {
@@ -126,8 +128,8 @@ export const BlockButton: React.FunctionComponent<RichTextbuttonType> = ({ forma
       className={currentClassName}
       onMouseDown={event => {
         event.preventDefault()
-        console.log("Block button clicked with")
-        console.log(format)
+        log("Block button clicked with")
+        log(format)
         toggleBlock(editor, format)
       }}
     >
@@ -148,8 +150,8 @@ export const MarkButton: React.FunctionComponent<RichTextbuttonType> = ({ format
       className={currentClassName}
       onMouseDown={event => {
         event.preventDefault()
-        console.log("Mark button clicked with")
-        console.log(format)
+        log("Mark button clicked with")
+        log(format)
         toggleMark(editor, format)
       }}
     >

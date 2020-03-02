@@ -39,11 +39,9 @@ describe('bl-c1: Home Component testing', () => {
    **/
 
   beforeAll(() => {
-    console.log('bl-c1: beforeAll ')
   })
 
   beforeEach(() => {
-    console.log('bl-c1: beforeEach ')
     localStorage.clear()
   })
 
@@ -225,11 +223,9 @@ describe('bl-c1: Home Component testing', () => {
   })
 
   afterEach(() => {
-    console.log('bl-c1: afterEach ')
   })
 
   afterAll(() => {
-    console.log('bl-c1: afterAll ')
   })
 
 })

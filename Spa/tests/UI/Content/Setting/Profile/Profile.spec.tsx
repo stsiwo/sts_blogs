@@ -46,11 +46,9 @@ describe('p-c1: Profile Component testing', () => {
    **/
 
   beforeAll(() => {
-    console.log('p-c1: beforeAll ')
   })
 
   beforeEach(() => {
-    console.log('p-c1: beforeEach ')
   })
 
   /** test for use case which does not matter screen size  here**/
@@ -272,11 +270,9 @@ describe('p-c1: Profile Component testing', () => {
     })
   })
   afterEach(() => {
-    console.log('p-c1: afterEach ')
   })
 
   afterAll(() => {
-    console.log('p-c1: afterAll ')
   })
 
 })

@@ -64,11 +64,9 @@ describe('bm-c1: BlogManagement Component testing', () => {
    **/
 
   beforeAll(() => {
-    console.log('bm-c1: beforeAll ')
   })
 
   beforeEach(() => {
-    console.log('bm-c1: beforeEach ')
     localStorage.clear()
   })
 
@@ -405,13 +403,11 @@ describe('bm-c1: BlogManagement Component testing', () => {
   describe('bm-t-c1: <= tablet screen size', () => {
 
     beforeAll(() => {
-      console.log('bm-c1: beforeAll: small screen size')
       Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: CssGlobalContextDefaultState.tabletSize })
       window.dispatchEvent(new Event('resize'));
     })
 
     beforeEach(() => {
-      console.log('bm-c1: beforeEach: small screen size ')
     })
 
     /** test for use case for small screen size here**/
@@ -487,11 +483,9 @@ describe('bm-c1: BlogManagement Component testing', () => {
 
 
     afterEach(() => {
-      console.log('bm-c1: afterEach: small screen size ')
     })
 
     afterAll(() => {
-      console.log('bm-c1: afterAll: small screen size ')
     })
 
   })
@@ -499,13 +493,11 @@ describe('bm-c1: BlogManagement Component testing', () => {
   describe('bm-c1: > tablet screen size', () => {
 
     beforeAll(() => {
-      console.log('bm-c1: beforeAll: medium screen size')
       Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: CssGlobalContextDefaultState.tabletSize + 1 })
       window.dispatchEvent(new Event('resize'));
     })
 
     beforeEach(() => {
-      console.log('bm-c1: beforeEach: medium screen size')
     })
 
     /** test for use case for medium screen size here**/
@@ -525,11 +517,9 @@ describe('bm-c1: BlogManagement Component testing', () => {
     })
 
     afterEach(() => {
-      console.log('bm-c1: afterEach: medium screen size')
     })
 
     afterAll(() => {
-      console.log('bm-c1: afterAll: medium screen size')
     })
 
   })
@@ -537,13 +527,11 @@ describe('bm-c1: BlogManagement Component testing', () => {
   describe('bm-c1: > laptop screen size', () => {
 
     beforeAll(() => {
-      console.log('bm-c1: beforeAll: laptop screen size')
       Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: CssGlobalContextDefaultState.laptopSize + 1 })
       window.dispatchEvent(new Event('resize'));
     })
 
     beforeEach(() => {
-      console.log('bm-c1: beforeEach: laptop screen size')
     })
 
     test("gttlt1. (responsive) should display sort filter aside ", async () => {
@@ -562,20 +550,16 @@ describe('bm-c1: BlogManagement Component testing', () => {
 
 
     afterEach(() => {
-      console.log('bm-c1: afterEach: medium screen size')
     })
 
     afterAll(() => {
-      console.log('bm-c1: afterAll: medium screen size')
     })
 
   })
   afterEach(() => {
-    console.log('bm-c1: afterEach ')
   })
 
   afterAll(() => {
-    console.log('bm-c1: afterAll ')
   })
 
 })

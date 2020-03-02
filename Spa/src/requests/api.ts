@@ -2,7 +2,8 @@ import axios, { AxiosInstance, CancelTokenStatic, AxiosError, AxiosResponse } fr
 import { apiConfig } from 'configs/apiConfig';
 import { ErrorResponseDataType, RequestMethodEnum, Error401ResponseDataTypeEnum } from './types';
 import { getCookie } from 'src/utils';
-var debug = require('debug')('ui:api')
+import { logger } from 'configs/logger';
+const log = logger("api");
 
 
 declare type AxiosInstanceWithCancelToken = AxiosInstance & {
@@ -30,7 +31,7 @@ axios.interceptors.request.use((config) => {
   // set csrf token if there is access token
   const csrfAccessToken = getCookie('csrf_access_token')
   if (csrfAccessToken) {
-    debug('set csrf access token to header')
+    log('set csrf access token to header')
     config.headers['X-CSRF-TOKEN'] = csrfAccessToken
   }
 
@@ -43,8 +44,8 @@ axios.interceptors.request.use((config) => {
 
 }, null)
 
-console.log('axios defaults')
-console.log(axios.defaults)
+log('axios defaults')
+log(axios.defaults)
 
 export const api = axios
 

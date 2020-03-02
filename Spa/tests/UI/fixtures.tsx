@@ -49,8 +49,6 @@ export const ContextWrapperComponent: React.FunctionComponent<ContextWrapperComp
 
   const [auth, authDispatch] = useUpdateAuthContextReducer(defaultAuth)
 
-  console.log(auth)
-
   const initialRoute: string = props.initialRoute ? props.initialRoute : "/"
 
   return (

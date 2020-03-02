@@ -34,12 +34,9 @@ describe('h-c1: Header Component testing', () => {
    **/
 
   beforeAll(() => {
-    console.log('h-c1: beforeAll ')
   })
 
   beforeEach(() => {
-    console.log('h-c1: beforeEach ')
-
   })
 
   /** test for use case which does not matter screen size  here**/
@@ -56,14 +53,11 @@ describe('h-c1: Header Component testing', () => {
   describe('<= laptop screen', () => {
 
     beforeAll(() => {
-      console.log('h-c1: beforeAll: <= laptop screen')
       Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: CssGlobalContextDefaultState.tabletSize })
       window.dispatchEvent(new Event('resize'));
     })
 
     beforeEach(() => {
-      console.log('h-c1: beforeEach: <= laptop screen')
-
     })
 
     test('ltle1. (component) should render MenuToggleIcon', async () => {
@@ -85,33 +79,27 @@ describe('h-c1: Header Component testing', () => {
         const menuToggleIcon = await waitForElement(() => getByRole('menu-toggle-icon'))
         menuToggleIcon.click()
         await wait(() => {
-          console.log(getByRole('menu').style.width)
           expect(getByRole('menu').style.width).toBe('100%')
         })
       })
     })
 
     afterEach(() => {
-      console.log('h-c1: afterEach: <= laptop screen ')
     })
 
     afterAll(() => {
-        console.log('h-c1: afterAll; <= laptop screen ')
-      })
+    })
 
     })
 
     describe('> laptop screen', () => {
 
     beforeAll(() => {
-      console.log('h-c1: beforeAll: > laptop screen')
       Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: CssGlobalContextDefaultState.laptopSize + 1 })
       window.dispatchEvent(new Event('resize'));
     })
 
     beforeEach(() => {
-      console.log('h-c1: beforeEach: > laptop screen')
-
     })
 
     test('gtl1. (component) should not render MenuToggleIcon', async () => {
@@ -125,21 +113,17 @@ describe('h-c1: Header Component testing', () => {
     })
 
     afterEach(() => {
-      console.log('h-c1: afterEach: > laptop screen ')
     })
 
     afterAll(() => {
-      console.log('h-c1: afterAll; > laptop screen ')
     })
 
   })
 
   afterEach(() => {
-    console.log('h-c1: afterEach ')
   })
 
   afterAll(() => {
-    console.log('h-c1: afterAll ')
   })
 
 })

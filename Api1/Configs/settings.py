@@ -29,6 +29,8 @@ load_dotenv(dotenv_path=env_path)
 
 FLASK_APP = './run.py'
 
+WEB_APP_TITLE = "STS"
+
 HOST_NAME = os.getenv('HOST_NAME', '')
 
 DEBUG = bool(os.getenv('DEBUG', True))
@@ -99,6 +101,17 @@ CLIENT_SPA_URL = os.getenv('CLIENT_SPA_URL', '')
 
 TESTING = bool(os.getenv('TESTING', False))
 
-# yagmail
-# MYGMAIL_USERNAME = os.getenv('MYGMAIL_USERNAME')
-# MYGMAIL_PASSWORD = os.getenv('MYGMAIL_PASSWORD')
+# email
+MAIL_SERVER = str(os.getenv('MAIL_SERVER', "smtp.mailgun.org"))
+
+MAIL_PORT = int(os.getenv('MAIL_PORT', 465))
+
+MAIL_USE_TLS = bool(os.getenv('MAIL_USE_TLS', False))
+
+MAIL_USE_SSL = bool(os.getenv('MAIL_USE_SSL', True))
+
+MAIL_USERNAME = str(os.getenv('MAIL_USERNAME', ''))
+
+MAIL_PASSWORD = str(os.getenv('MAIL_PASSWORD', ''))
+
+MAIL_SUPPRESS_SEND = bool(os.getenv('MAIL_SUPPRESS_SEND', False))

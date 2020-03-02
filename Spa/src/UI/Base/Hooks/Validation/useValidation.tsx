@@ -2,7 +2,9 @@ import * as React from 'react'
 import { UseValidationStatusInputType, UseValidationStatusOutputType, DomainValidationType, DomainInputTouchedType, ValidationType, InputTouchedType, SubmitInputTouchedType } from './types';
 import * as yup from 'yup'
 import { UserSignupType } from 'domain/user/UserType';
-var debug = require('debug')('ui:hook:useValidation')
+import { logger } from 'configs/logger';
+const log = logger("hook:useValidation");
+
 
 const createInitialValidationError = <D extends object = {}>(domain: D): ValidationType<D> => {
   const initialValidationError = Object.keys(domain).reduce<DomainValidationType<D>>((pre: DomainValidationType<D>, cur: string) => {
@@ -47,12 +49,12 @@ export const useValidation = <D extends object>(input: UseValidationStatusInputT
       abortEarly: false
     })
       .then(async () => {
-        debug('validation success')
+        log('validation success')
         return Promise.resolve()
       })
       .catch((error: yup.ValidationError) => {
-        debug('validation failed')
-        debug(error)
+        log('validation failed')
+        log(error)
         error.inner.forEach((eachError: yup.ValidationError) => {
           currentValidationError[eachError.path as keyof ValidationType<D>] = eachError.message as ValidationType<D>[keyof D]
         })
@@ -72,14 +74,14 @@ export const useValidation = <D extends object>(input: UseValidationStatusInputT
           abortEarly: false
         })
         .then(() => {
-          debug('validation passed')
+          log('validation passed')
           setValidationError({
             ...initialValidationError
           })
         })
         .catch((error: yup.ValidationError) => {
-          debug('validation error detected')
-          debug(error)
+          log('validation error detected')
+          log(error)
           // clear all of error message first
           for (let key in currentValidationError)
             delete currentValidationError[key as keyof DomainValidationType<D>]
@@ -94,8 +96,8 @@ export const useValidation = <D extends object>(input: UseValidationStatusInputT
           })
         })
     }
-    debug('validating input.... should be called only mount and when input is updated')
-    debug(input.domain)
+    log('validating input.... should be called only mount and when input is updated')
+    log(input.domain)
     validateFormInput()
     return () => {
     };

@@ -3,7 +3,8 @@ import './NewBlog.scss';
 import { getUuidv4 } from 'src/utils';
 import EditBlog from 'Components/EditBlog/EditBlog';
 import { BlogType, initialBlogState } from 'domain/blog/BlogType';
-var debug = require('debug')('ui:NewBlog')
+import { logger } from 'configs/logger';
+const log = logger("NewBlog");
 
 const NewBlog: React.FunctionComponent<{}> = (props: {}) => {
 

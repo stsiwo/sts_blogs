@@ -13,6 +13,7 @@ CMD ["npm", "run", "start-docker"]
 FROM dev-install as testing 
 
 WORKDIR /app
+ENV DEBUG=*
 ENTRYPOINT ["npx", "jest"]
 
 FROM development as build-staging-local 
@@ -41,6 +42,7 @@ CMD ["nginx-debug", "-g", "daemon off;"]
 FROM nginx:1.17.6-alpine as staging
 
 WORKDIR /var/www
+ENV DEBUG=*
 COPY --from=build-staging /app/dist . 
 COPY ./webserver/dev.stsiwo.com /etc/nginx/conf.d/default.conf
 COPY ./webserver/dev.api.stsiwo.com /etc/nginx/conf.d/dev.api.stsiwo.com

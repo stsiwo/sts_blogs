@@ -39,7 +39,6 @@ describe('bl-c1: Blog Component testing', () => {
    **/
 
   beforeAll(() => {
-    console.log('bl-c1: beforeAll ')
     /**
      *  Error: Uncaught [TypeError: window.getSelection is not a function]
      *  : need to mock this
@@ -52,7 +51,6 @@ describe('bl-c1: Blog Component testing', () => {
   })
 
   beforeEach(() => {
-    console.log('bl-c1: beforeEach ')
     localStorage.clear()
   })
 
@@ -127,11 +125,9 @@ describe('bl-c1: Blog Component testing', () => {
   //})
 
   afterEach(() => {
-    console.log('bl-c1: afterEach ')
   })
 
   afterAll(() => {
-    console.log('bl-c1: afterAll ')
   })
 
 })

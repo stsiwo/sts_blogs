@@ -11,6 +11,8 @@ import 'ui/Base/Css/Common.scss';
 import Content from 'ui/Content/Content';
 import Header from 'ui/Header/Header';
 import Footer from 'ui/Footer/Footer';
+import { logger } from 'configs/logger';
+const log = logger(__filename)
 
 // import css for debug (only development)
 if (NODE_ENV === 'development') require('ui/Base/Css/Debug.scss');
@@ -30,15 +32,9 @@ const ScrollToTop: React.FunctionComponent<{}> = (props) => {
   return null
 }
 
-
-// enable debug
-DEBUG
-console.log('env vars:')
-console.log(DEBUG)
-
-var debug = require('debug')('ui:App')
 const App = (props: any) => {
-  debug('get initial auth and dispatch from context')
+  log('start App Component')
+  log('get initial auth and dispatch from context')
   const [auth, authDispatch] = useUpdateAuthContextReducer()
 
   return (

@@ -75,15 +75,21 @@ export const networkError: AxiosError = {
   message: 'network error'
 }
 
-export const internalServerError500Response: AxiosResponse<ErrorResponseDataType> = {
-  data: {
-    title: 'internal server error',
-    message: 'internal server error message',
-  } as ErrorResponseDataType,
-  status: 500,
-  statusText: 'Internal Server Error',
-  headers: {},
+export const internalServerError500Response: AxiosError<ErrorResponseDataType> = {
+  name: 'error message',
+  message: 'internal server error message',
   config: {},
+  response: {
+    data: {
+      title: 'internal server error',
+      message: 'internal server error message',
+    } as ErrorResponseDataType,
+    status: 500,
+    statusText: 'Internal Server Error',
+    headers: {},
+    config: {},
+  } as AxiosResponse,
+  isAxiosError: false
 }
 
 export const badRequest400Response: AxiosResponse<ErrorResponseDataType> = {
@@ -95,6 +101,40 @@ export const badRequest400Response: AxiosResponse<ErrorResponseDataType> = {
   statusText: 'Bad Request',
   headers: {},
   config: {},
+}
+
+export const invalidToken400Response: AxiosError<ErrorResponseDataType> = {
+  name: 'error message',
+  message: 'token is invalid. it seems wrong type. please start over again.',
+  config: {},
+  response: {
+    data: {
+      title: 'bad request',
+      message: 'token is invalid. it seems wrong type. please start over again.',
+    } as ErrorResponseDataType,
+    status: 400,
+    statusText: 'Bad Request',
+    headers: {},
+    config: {},
+  } as AxiosResponse,
+  isAxiosError: false
+}
+
+export const expiredToken400Response: AxiosError<ErrorResponseDataType> = {
+  name: 'error message',
+  message: 'token is invalid. it seems wrong type. please start over again.',
+  config: {},
+  response: {
+    data: {
+      title: 'bad request',
+      message: 'reset password token is exipred. please start over again.',
+    } as ErrorResponseDataType,
+    status: 400,
+    statusText: 'Bad Request',
+    headers: {},
+    config: {},
+  } as AxiosResponse,
+  isAxiosError: false
 }
 
 export const unauthorized401Response: AxiosResponse<ErrorResponseDataType> = {
@@ -200,15 +240,15 @@ export const invalidToken422Response: AxiosError<ErrorResponseDataType> = {
 
 export const notFound404ResponseV2: AxiosError<ErrorResponseDataType> = {
   name: 'not found error',
-  message: 'not found error',
+  message: 'provided email is not found',
   config: {},
   response: {
     data: {
       title: 'not found 404 response title',
-      message: 'not found',
+      message: 'provided email is not found',
     } as ErrorResponseDataType,
     status: 404,
-    statusText: 'Unauthorized',
+    statusText: 'Not Found',
     headers: {},
     config: {},
   } as AxiosResponse,

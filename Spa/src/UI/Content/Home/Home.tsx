@@ -19,6 +19,8 @@ import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
 import { useRequest } from 'Hooks/Request/useRequest';
 import { RequestMethodEnum, BlogListResponseDataType, QueryStringType, ResponseResultStatusEnum, ErrorResponseDataType, ResponseResultType } from 'requests/types';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { logger } from 'configs/logger';
+const log = logger("Home");
 
 declare type BlogOptionType = {
   recent: BlogType[]
@@ -110,9 +112,9 @@ const Home: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComp
       queryString: queryStringOption[currentBlogOptionList.active],
     })
       .then((result: ResponseResultType<BlogListResponseDataType>) => {
-        console.log('inside "then" at Home')
+        log('inside "then" at Home')
         if (result.status === ResponseResultStatusEnum.SUCCESS) {
-          console.log('fetch success at Home')
+          log('fetch success at Home')
           setBlogOptionList((prev: BlogOptionListType) => {
             return {
               active: currentBlogOptionList.active,

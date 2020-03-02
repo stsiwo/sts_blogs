@@ -11,6 +11,8 @@ import { useResponsive } from 'Hooks/Responsive/useResponsive';
 import { useRequest } from 'Hooks/Request/useRequest';
 import { RequestMethodEnum } from 'requests/types';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { logger } from 'configs/logger';
+const log = logger("Menu Component");
 
 
 const Menu: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComponentProps<{}>) => {
@@ -44,11 +46,11 @@ const Menu: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComp
       .then((data: any) => {
         // this 'then' block is called only when request success
         if (data) {
-          console.log('logout request success')
+          log('logout request success')
           authDispatch({
             type: 'logout',
           })
-          console.log('before redirect to home')
+          log('before redirect to home')
           props.history.push('/')
         }
       })

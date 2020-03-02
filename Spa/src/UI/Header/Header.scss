@@ -7,8 +7,10 @@
   position: fixed;
   top: 0;
   left: 0;
-  background-color: aqua;
   width: 100%;
+  background-color: white;
+  border-bottom: black;
+  box-shadow: 1px 2px 2px grey;
   height: 50px;
   display: flex;
   align-items: center;

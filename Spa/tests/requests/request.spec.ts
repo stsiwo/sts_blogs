@@ -181,7 +181,7 @@ describe('r-1: request module testing', () => {
 
           expect(result).toStrictEqual({
             status: ResponseResultStatusEnum.FAILURE,
-            errorMsg: 'not found'
+            errorMsg: 'provided email is not found'
           })
         })
 

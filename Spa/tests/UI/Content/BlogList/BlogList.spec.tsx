@@ -68,12 +68,10 @@ describe('bl-c1: BlogList Component testing', () => {
    **/
 
   beforeAll(() => {
-    console.log('bl-c1: beforeAll ')
   })
 
   beforeEach(() => {
     localStorage.clear()
-    console.log('bl-c1: beforeEach ')
   })
 
   /** test for use case which does not matter screen size  here**/
@@ -137,7 +135,6 @@ describe('bl-c1: BlogList Component testing', () => {
   //    const cancelBtn = await waitForElement(() => getByRole('cancel-icon'))
   //    fireEvent.click(cancelBtn)
   //    const msg = await waitForElement(() => getByText('refresh request is canceled'))
-  //    console.log(msg)
   //  })
   //})
 
@@ -218,7 +215,6 @@ describe('bl-c1: BlogList Component testing', () => {
         })
 
       const tagIconNode = await waitForElement(() => getByRole('tag-icon'))
-      console.log(debug())
       expect(tagIconNode).toBeInTheDocument()
     })
   })
@@ -412,13 +408,11 @@ describe('bl-c1: BlogList Component testing', () => {
   describe('bl-c1: <= tablet screen size', () => {
 
     beforeAll(() => {
-      console.log('bl-c1: beforeAll: small screen size')
       Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: CssGlobalContextDefaultState.tabletSize })
       window.dispatchEvent(new Event('resize'));
     })
 
     beforeEach(() => {
-      console.log('bl-c1: beforeEach: small screen size ')
     })
 
     /** test for use case for small screen size here**/
@@ -468,11 +462,9 @@ describe('bl-c1: BlogList Component testing', () => {
     })
 
     afterEach(() => {
-      console.log('bl-c1: afterEach: small screen size ')
     })
 
     afterAll(() => {
-      console.log('bl-c1: afterAll: small screen size ')
     })
 
   })
@@ -480,13 +472,11 @@ describe('bl-c1: BlogList Component testing', () => {
   describe('bl-c1: > tablet screen size', () => {
 
     beforeAll(() => {
-      console.log('bl-c1: beforeAll: medium screen size')
       Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: CssGlobalContextDefaultState.tabletSize + 1 })
       window.dispatchEvent(new Event('resize'));
     })
 
     beforeEach(() => {
-      console.log('bl-c1: beforeEach: medium screen size')
     })
 
     /** test for use case for medium screen size here**/
@@ -506,11 +496,9 @@ describe('bl-c1: BlogList Component testing', () => {
     })
 
     afterEach(() => {
-      console.log('bl-c1: afterEach: medium screen size')
     })
 
     afterAll(() => {
-      console.log('bl-c1: afterAll: medium screen size')
     })
 
   })
@@ -518,13 +506,11 @@ describe('bl-c1: BlogList Component testing', () => {
   describe('bl-c1: > laptop screen size', () => {
 
     beforeAll(() => {
-      console.log('bl-c1: beforeAll: medium screen size')
       Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: CssGlobalContextDefaultState.laptopSize + 1 })
       window.dispatchEvent(new Event('resize'));
     })
 
     beforeEach(() => {
-      console.log('bl-c1: beforeEach: medium screen size')
     })
 
     test("gttlt1. (responsive) should display sort filter aside ", async () => {
@@ -543,21 +529,17 @@ describe('bl-c1: BlogList Component testing', () => {
 
 
     afterEach(() => {
-      console.log('bl-c1: afterEach: medium screen size')
     })
 
     afterAll(() => {
-      console.log('bl-c1: afterAll: medium screen size')
     })
 
   })
 
   afterEach(() => {
-    console.log('bl-c1: afterEach ')
   })
 
   afterAll(() => {
-    console.log('bl-c1: afterAll ')
   })
 
 })

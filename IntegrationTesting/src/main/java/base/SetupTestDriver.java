@@ -1,16 +1,16 @@
 package main.java.base;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.ie.InternetExplorerOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.concurrent.TimeUnit;
+import main.java.base.EmailHelper;
 
 public class SetupTestDriver {
 	private WebDriver driver = null;
@@ -72,4 +72,24 @@ public class SetupTestDriver {
     public WebDriver getDriver() {
         return this.driver;
     }
+
+	public void setDriver(WebDriver driver) {
+		this.driver = driver;
+	}
+
+	public void setBrowser(String browser) {
+		this.browser = browser;
+	}
+
+	public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
+	}
+
+	public void setOs(String os) {
+		this.os = os;
+	}
+
+	public void setNode(String node) {
+		this.node = node;
+	}
 }
