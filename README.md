@@ -133,6 +133,12 @@
   - run above command when:
     - before finishing release branch to increment major/minor version and commit
     - after hotfix to increment patch version
+    
+### Dummy SMTP/POP3 Server
+  - use Mailtrap for staging environment
+  - NOTE
+    * (smtp) use TLS (not SSL)
+    * (pop3 & javax.mail) emailSession.getStore("pop3"); // not "pop3s"
    
 ### NOTE
   - staging server/production server use different nginx config due to ssl config
@@ -150,6 +156,12 @@
     : TS2456: Type alias 'NodeMatch' circularly references itself.
       -> even if you install the same package, i think the author does not do proper versioning.
       -> i got different dist when install it so be careful
+      
+  - debug npm library
+    - so buggy, esp using with webpack. 
+      - even if set DEBUG env var, still not show logging in console.
+      - maybe webpack cache is involving in this some way?
+      - switch to console.log with env condition
 
 ### TODO
   - reivew deployment 
