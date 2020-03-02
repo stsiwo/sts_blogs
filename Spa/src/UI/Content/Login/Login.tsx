@@ -13,15 +13,16 @@ import { useRouteMatch, useLocation } from 'react-router';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { useKeyupListener } from 'Hooks/KeyupListener/useKeyupListener';
 import { logger } from 'configs/logger';
+import { useTypeAhead } from 'Hooks/TypeAhead/useTypeAhead';
 const log = logger("Login");
 
 const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComponentProps<{}>) => {
 
   let location = useLocation();
+  const emailInputRef = React.useRef<HTMLInputElement>(null)
   const [currentUserLoginStatus, setUserLoginStatus] = React.useState<UserLoginType>(initialUserLoginStatus)
   const { currentRequestStatus, setRequestStatus, sendRequest } = useRequest({})
   const { currentValidationError, touch, validate } = useUserLoginValidation({ domain: currentUserLoginStatus })
-
   const { auth, authDispatch } = useAuthContext()
   const { url, path } = useRouteMatch()
 
@@ -35,7 +36,6 @@ const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCom
   const handleInitialFocusEvent: React.EventHandler<React.FocusEvent<HTMLInputElement>> = (e) => {
     touch(e.currentTarget.name)
   }
-
   
   const _submitLoginForm: () => void = () => {
     // extract 'confirm' for request data
