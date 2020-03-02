@@ -165,4 +165,34 @@ public class LoginPageTest extends BaseTest {
 
     rpPage2nd.submitResetPasswordForm();
   }
+
+  public void shouldDisplayEmailNotRegisterdMessageWhenForgotPasswordRequest(Dimension ssize) {
+	  LoginPage loginPage = new LoginPage(this.driver, true);
+
+    loginPage.clickForgotPasswordLinkAndWaitForModal();
+
+    loginPage.fillForgotPasswordEmailInputBy(this.testUser.email);
+
+    loginPage.submitForgotPasswordRequest();
+
+    loginPage.waitForElementToHaveTextBy(LoginUIMapper.FETCH_FAILURE_STATUS, "provided email is not found");
+
+    Assert.assertTrue(true);
+  }
+
+  // can't test password reset token has expired
+  // so skip
+  
+  public void shouldDisplayInvalidTokenMessageWhenPasswordResetRequest(Dimension ssize) {
+    // use empty token as test data
+	  ResetPasswordPage rpPage = new ResetPasswordPage(this.driver, true);
+
+    rpPage.fillInputsBy(this.testUser.password, this.testUser.password);
+
+    rpPage.submitResetPasswordForm();
+
+    rpPage.waitForElementToHaveTextBy(ResetPasswordUIMapper.FETCH_FAILURE_STATUS, "token is invalid. it seems wrong type. please start over again.");
+
+    Assert.assertTrue(true);
+  }
 }

@@ -10,6 +10,10 @@ export const apiConfig: AxiosRequestConfig = {
   // can transform response data (json) 
   transformResponse: function(data) {
     log("start transforming response at middleware")
+    /**
+     * if data is empty, it might cause "Unexpected json at the end of line" error
+     * so give a condition
+     **/
     if (data) {
       return JSON.parse(data, (key: string, value: any) => {
         if (key === 'createdDate') {
