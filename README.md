@@ -58,6 +58,11 @@
     - currently, I run integration testing on Linux platform. this is because docker selenium grid only support Linux platform.
       - if use any commercial automate testing tools, it can increase more variety of platform.
     - switch integration testing from python to Java since Java provide easier setting for parallel testing. can achieve the parallel testing using Python but need manually config for it, so move to Java.
+  - issues
+    - getting slower when running long test
+      - esp sendKeys to fill text in input field with type ahead feature.
+      - this is because of type ahead feature?? --> try to use Rxjs
+    - randomly failure when running acceptance testing 
 
 ### API DB migration Logic
   - use a single migration (SQLite context) for testing, development, staging, production to avoid any duplication of migration data
