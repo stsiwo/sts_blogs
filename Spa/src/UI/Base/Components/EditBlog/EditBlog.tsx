@@ -14,10 +14,11 @@ import TagInput from 'Components/Input/TagInput';
 import BlogContent from 'Components/BlogContent/BlogContent';
 import { Node, Element } from 'Components/fork/slate'
 import { replaceTmpSrcWithPublicSrc } from 'Components/BlogContent/helpers';
-import cloneDeep = require('lodash/cloneDeep');
 import { generateFileWithUuidv4, getUuidv4 } from 'src/utils';
 import { RequestStatusType } from 'Hooks/Request/types';
+import cloneDeep = require('lodash/cloneDeep');
 import { logger } from 'configs/logger';
+import { useBlogAutoSave } from 'Components/BlogAutoSave/useBlogAutoSave';
 const log = logger("EditBlog");
 
 declare type EditBlogPropsType = {
@@ -32,7 +33,7 @@ declare type EditBlogPropsType = {
   isInitialGetFetchDone?: boolean
 }
 
-enum FetchContextEnum {
+export enum FetchContextEnum {
   SAVE,
   PUBLISH
 }
@@ -43,31 +44,18 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId,
   const subtitleInputRef: React.MutableRefObject<HTMLInputElement> = { current: null }
   const [currentIsDeleteMainImage, setIsDeleteMainImage] = React.useState<boolean>(false)
   const { currentValidationError, touch, validate } = useBlogValidation({ domain: currentBlog })
-  const { currentRequestStatus: currentBlogStatus, setRequestStatus: setBlogStatus, sendRequest: saveRequest } = useRequest({})
   const { currentRequestStatus: currentPublishStatus, setRequestStatus: setPublishStatus, sendRequest: publishRequest } = useRequest({})
   const [curFetchContext, setFetchContext] = React.useState<FetchContextEnum>(FetchContextEnum.PUBLISH)
   const { auth } = useAuthContext()
+  const { currentBlogAutoSaveStatus, setBlogAutoSaveStatus } = useBlogAutoSave({
+    currentBlog: currentBlog, 
+    blogId: blogId,
+    currentIsDeleteMainImage: currentIsDeleteMainImage,
+    isInitialGetFetchDone: isInitialGetFetchDone,
+    setFetchContext: setFetchContext,
+  })
 
   /** EH **/
-  const mapStateToFormData = (state: BlogType): FormData => {
-    const formData = new FormData()
-    formData.set('userId', auth.user.id)
-    formData.set('title', state.title)
-    formData.set('subtitle', state.subtitle)
-    if (state.mainImage) formData.set('mainImage', state.mainImage)
-    if (currentIsDeleteMainImage) formData.set('isDeleteMainImage', '1') // true
-    formData.set('content', JSON.stringify(state.content))
-    formData.set('createdDate', state.createdDate.toJSON())
-    formData.set('tags', JSON.stringify(Array.from(state.tags)))
-    if (state.blogImagePaths && state.blogImagePaths.length !== 0) formData.set('blogImagePaths', JSON.stringify(state.blogImagePaths))
-    if (state.blogImagePaths) {
-      state.blogImages.forEach((image: File) => {
-        formData.append('blogImages[]', image)
-      })
-    }
-    return formData
-  }
-
   const handlePublishBlogClickEvent: React.EventHandler<React.MouseEvent<HTMLInputElement>> = async (e) => {
     log('start handling publish button click')
     validate()
@@ -87,58 +75,7 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId,
       })
   }
 
-  React.useEffect(() => {
-    function autoSave() {
-      log('validation passed at save button event handler')
-
-      const blogDataForSubmit: BlogType = cloneDeep(currentBlog)
-      log('setup blogImages and blogImagePaths')
-      const imageList: File[] = []
-      const imagePathList: string[] = []
-      currentBlog.content.forEach((node: Element) => {
-        if (node.type === 'image') {
-          if (node.isNew) {
-            imageList.push(node.imageFile)
-            imagePathList.push(node.publicSrc)
-          } else {
-            imagePathList.push(node.src)
-          }
-        }
-      })
-
-      log('replace temp src image with publicSrc before submit')
-      blogDataForSubmit.content = replaceTmpSrcWithPublicSrc(blogDataForSubmit.content)
-      blogDataForSubmit.blogImages = imageList
-      blogDataForSubmit.blogImagePaths = imagePathList
-      log(blogDataForSubmit)
-
-      log('start update request')
-      saveRequest({
-        path: 'blogs/' + blogId,
-        method: RequestMethodEnum.PUT,
-        headers: { 'content-type': 'multipart/form-data' },
-        data: mapStateToFormData(blogDataForSubmit),
-      })
-        .then((result: ResponseResultType<BlogResponseDataType>) => {
-          // do something 
-        })
-    }
-    // give condition to make this allow to request only if initial blog data is seeded from server
-    if (isInitialGetFetchDone) {
-      log("start autoSave useEffect at EditBlog")
-      autoSave()
-      setFetchContext(FetchContextEnum.SAVE)
-    }
-  }, [
-      currentBlog.mainImageUrl,
-      currentBlog.title,
-      currentBlog.subtitle,
-      JSON.stringify(Array.from(currentBlog.tags)),
-      JSON.stringify(currentBlog.content),
-    ])
-
   const changeInputWidthDynamically = (inputRef: React.MutableRefObject<HTMLInputElement>, currentChLength: number): void => {
-    log(inputRef)
     log(currentChLength)
     inputRef.current.style.width = currentChLength > 30 ? currentChLength + 'ch' : 30 + 'ch';
   }
@@ -212,8 +149,8 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId,
         <h2 className="page-title">{context} Blog</h2>
         {(curFetchContext === FetchContextEnum.SAVE &&
           <FetchStatus
-            currentFetchStatus={currentBlogStatus}
-            setFetchStatus={setBlogStatus}
+            currentFetchStatus={currentBlogAutoSaveStatus}
+            setFetchStatus={setBlogAutoSaveStatus}
             fetchingMsg={'saving...'}
             successMsg={'ok'}
             failureMsg={'failed'}

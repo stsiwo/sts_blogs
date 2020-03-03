@@ -1,5 +1,9 @@
 export declare type LogType = (message: any) => void;
 
+/**
+ * caveats: 
+ *  - don't try to use with huge nested object like React ref. this causes performance issues (like slow every update of component)
+ **/
 export const logger: (filename: string) => LogType = (filename) => {
   return (message) => {
     if (NODE_ENV !== 'production') {
