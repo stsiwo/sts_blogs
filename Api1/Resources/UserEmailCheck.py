@@ -21,5 +21,5 @@ class UserEmailCheck(Resource):
                 email=request.json.get('email')
                 )
         response = jsonify({})
-        response.status_code = 202 if isExist is True else 404
+        response.status_code = 204 if isExist is True else 404
         return response

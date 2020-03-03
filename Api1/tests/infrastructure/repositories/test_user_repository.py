@@ -64,7 +64,25 @@ def test_ur5_getByEmail(usersSeededFixture):
     assert user.id == userInDB.id
 
 
-def test_ur6_delete(exSession, usersSeededFixture):
+def test_ur6_isExistByEmail_should_return_true(usersSeededFixture):
+
+    userRepo = UserRepository()
+
+    isExist: bool = userRepo.isExistByEmail('test@test.com')
+
+    assert isExist is True
+
+
+def test_ur6_isExistByEmail_should_return_false(usersSeededFixture):
+
+    userRepo = UserRepository()
+
+    isExist: bool = userRepo.isExistByEmail('email@doesnotexist.com')
+
+    assert isExist is False
+
+
+def test_ur7_delete(exSession, usersSeededFixture):
 
     user = usersSeededFixture
 
@@ -79,7 +97,7 @@ def test_ur6_delete(exSession, usersSeededFixture):
     assert deletedUser is None
 
 
-def test_ur7_deleteByEmail(exSession, usersSeededFixture):
+def test_ur8_deleteByEmail(exSession, usersSeededFixture):
 
     user = usersSeededFixture
 
