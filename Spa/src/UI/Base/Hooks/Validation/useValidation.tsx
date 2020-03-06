@@ -103,8 +103,8 @@ export const useValidation = <D extends object>(input: UseValidationStatusInputT
     };
   }, [
       /** object comparison is more preferable over array **/
-      //JSON.stringify(input.domain),
-      //JSON.stringify(currentInputTouched)
+      JSON.stringify(input.domain),
+      JSON.stringify(currentInputTouched)
       //...Object.keys(input.domain).map(key => input.domain[key as keyof D]),
       //...Object.keys(currentInputTouched).map(key => currentInputTouched[key as keyof DomainInputTouchedType<D>]),
       // for update when input focus
