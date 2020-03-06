@@ -5,6 +5,8 @@ import { RequestMethodEnum } from "requests/types";
 export declare type UseTypeAheadInputType = {
   url: string
   method?: RequestMethodEnum
+  headers?: any
+  dataBuilder?: (data: any) => any
 }
 
 export declare type UseTypeAheadOutputType = {

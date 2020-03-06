@@ -10,16 +10,36 @@ export const useForgotPasswordValidation = (input: UseForgotPasswordValidationSt
 
   const { subject$: emailSubject$, currentRequestStatus: curTypeAheadRequestStatus } = useTypeAhead({
     url: "/user-email-check",
-    method: RequestMethodEnum.GET
+    method: RequestMethodEnum.GET,
+    headers: { 'content-type': 'application/json' },
+    dataBuilder: (email: string) => JSON.stringify({ email: email })
   })
   // define validation schema
+  /**
+   * the order of validation error message is displayed is backward.
+   * ex)
+   *  - yup.string().val1().val2().val3()
+   *  - val3 error message is display first and val1 mesage is the last
+   **/
+  // define validation schema
   let schema = yup.object().shape<ForgotPasswordType>({
+    /**
+     * refactor: dispatch request only when all the other validation of email passed.
+     * ex)
+     *  email validation: 
+     *    1. check not empty
+     *    2. check valid email format
+     *    3. finally send request the email exists in db
+     * - current implementation (default yup implementation): does parallel validation for each validation for a field.
+     * - for now skip!!
+     **/
+
     /**
      * integrate with type ahead feature
      *  - check provided email is registsered.
      *  - avoid every key stroke causes request (debounceTime)
      **/
-    email: yup.string().email().required().test(
+    email: yup.string().test(
       "email-check", // check input email is registered or not
       "oops. provided email is not registered.",
       async (email: string) => {
@@ -27,7 +47,7 @@ export const useForgotPasswordValidation = (input: UseForgotPasswordValidationSt
         const isEmailExist: boolean = (curTypeAheadRequestStatus.status === ResponseResultStatusEnum.SUCCESS) ? true : false
         return isEmailExist  
       }
-    )
+    ).email().required(),
   });
 
   const { currentValidationError, touch, validate } = useValidation<ForgotPasswordType>({

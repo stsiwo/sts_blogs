@@ -11,6 +11,7 @@ import {
 import { logger } from 'configs/logger';
 import { useRequest } from "Hooks/Request/useRequest";
 import { RequestMethodEnum, ResponseResultType } from "requests/types";
+import { appConfig } from "configs/appConfig";
 const log = logger("useTypeAhead");
 
 export const useTypeAhead = (input: UseTypeAheadInputType): UseTypeAheadOutputType => {
@@ -24,17 +25,31 @@ export const useTypeAhead = (input: UseTypeAheadInputType): UseTypeAheadOutputTy
   const { currentRequestStatus, setRequestStatus, sendRequest } = useRequest({})
 
 
+
   React.useEffect(() => {
     log("start subscribe type ahead feature")
     const subscription = curSubject$
       .pipe(
-        debounceTime(1000),
+        debounceTime(appConfig.debounceTime),
         distinctUntilChanged(),
+        // construct data body for the request if necessary otherwise return the value as it is
+        map((value: string) => {
+          let data: string = null;
+          if (input.dataBuilder) {
+            data = input.dataBuilder(value);
+            return data
+          }
+          return value
+        }),
         switchMap((value: string) => {
           log("start type ahead request with value: " + value)
           return from(sendRequest({
-            path: input.url, 
+            path: input.url,
             ...(input.method && { method: input.method }),
+            ...(input.headers && { headers: input.headers }),
+            ...(input.dataBuilder && { data: value }),
+            allowCache: false,
+            useCache: false
           }))
         })
       )

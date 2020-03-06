@@ -9,6 +9,7 @@ import cloneDeep = require('lodash/cloneDeep');
 import { replaceTmpSrcWithPublicSrc } from 'Components/BlogContent/helpers';
 import { useRequest } from 'Hooks/Request/useRequest';
 import { FetchContextEnum } from 'Components/EditBlog/EditBlog';
+import { appConfig } from 'configs/appConfig';
 const log = logger("useBlogAutoSave");
 
 
@@ -16,7 +17,6 @@ export const useBlogAutoSave = (input: UseBlogAutoSaveStatusInputType): UseBlogA
 
   const { auth } = useAuthContext()
   const { currentRequestStatus: currentBlogAutoSaveStatus, setRequestStatus: setBlogAutoSaveStatus, sendRequest: saveBlogAutoSaveRequest } = useRequest({})
-  const debounceTime: number = 500;
 
   const mapStateToFormData = (state: BlogType): FormData => {
     const formData = new FormData()
@@ -83,7 +83,7 @@ export const useBlogAutoSave = (input: UseBlogAutoSaveStatusInputType): UseBlogA
         autoSave()
         input.setFetchContext(FetchContextEnum.SAVE)
       }
-    }, debounceTime);
+    }, appConfig.debounceTime);
 
     return () => {
       clearTimeout(handler);

@@ -19,7 +19,6 @@ const log = logger("Login");
 const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComponentProps<{}>) => {
 
   let location = useLocation();
-  const emailInputRef = React.useRef<HTMLInputElement>(null)
   const [currentUserLoginStatus, setUserLoginStatus] = React.useState<UserLoginType>(initialUserLoginStatus)
   const { currentRequestStatus, setRequestStatus, sendRequest } = useRequest({})
   const { currentValidationError, touch, validate } = useUserLoginValidation({ domain: currentUserLoginStatus })

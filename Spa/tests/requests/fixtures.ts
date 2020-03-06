@@ -57,6 +57,31 @@ export const blogGET200EmptyResponse: AxiosResponse<BlogListResponseDataType> = 
   config: {},
 }
 
+export const userEmailCheck204Response: AxiosResponse<{}> = {
+  data: {},
+  status: 204,
+  statusText: 'OK',
+  headers: {},
+  config: {},
+}
+
+export const userEmailCheck404Response: AxiosError<ErrorResponseDataType> = {
+  name: 'nto found',
+  message: 'provided email is not registered.',
+  config: {},
+  response: {
+    data: {
+      title: 'not found',
+      message: 'provided email is not registered.',
+    } as ErrorResponseDataType,
+    status: 404,
+    statusText: 'Not Found',
+    headers: {},
+    config: {},
+  } as AxiosResponse,
+  isAxiosError: false
+}
+
 export const blogGET500Response: AxiosResponse<ErrorResponseDataType> = {
   data: {
     title: 'network or internal server error',

@@ -74,7 +74,11 @@ describe('ub-c1: NewBlog Component testing', () => {
       const titleInput = await waitForElement(() => getByLabelText('Title'))
       fireEvent.focus(titleInput) // need to focus to enable to display validation error on dom
       fireEvent.change(titleInput, { target: { value: 'hey' } })
-      expect(api.request).toHaveBeenCalled()
+
+      // actual autosave with debounce
+      await wait(() => {
+        expect(api.request).toHaveBeenCalledTimes(1)
+      })
     })
   })
 
@@ -107,7 +111,9 @@ describe('ub-c1: NewBlog Component testing', () => {
       fireEvent.focus(getByRole('publish-btn')) // don't foreget focus first 
       fireEvent.click(getByRole('publish-btn'))
       await waitForElement(() => getByText('please fix validation errors before submit'))
-      expect(api.request).toHaveBeenCalledTimes(1)
+      await wait(() => {
+        expect(api.request).toHaveBeenCalledTimes(1)
+      })
     })
   })
 
@@ -139,7 +145,9 @@ describe('ub-c1: NewBlog Component testing', () => {
       fireEvent.focus(getByRole('publish-btn')) // need to focus to enable to display validation error on dom
       fireEvent.click(getByRole('publish-btn'))
       await waitForElement(() => getByText('please fix validation errors before submit'))
-      expect(api.request).toHaveBeenCalledTimes(1)
+      await wait(() => {
+        expect(api.request).toHaveBeenCalledTimes(1)
+      })
     })
   })
 
