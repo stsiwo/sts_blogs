@@ -1,4 +1,4 @@
-# Docker Project Template with Multi-Env
+# STS Blog Web App
 
 ### API1
   - testing
@@ -162,11 +162,23 @@
       -> even if you install the same package, i think the author does not do proper versioning.
       -> i got different dist when install it so be careful
       
-  - debug npm library
+  - 'debug' npm library
     - so buggy, esp using with webpack. 
       - even if set DEBUG env var, still not show logging in console.
       - maybe webpack cache is involving in this some way?
       - switch to console.log with env condition
+  
+  - React
+    - don't mutate 'currentXXX' of useState. this cause hard-to-detect bugs
+      ex)
+        don't do this!!
+        code)
+          currentState[prop] = new-value
+          setState({
+            ...currentState
+          })
+        ==> when I use 'usePrevious' hook, it always product the same as the current state because of this above code!!!
+        DON'T DO ABOVE CODE!!!!
 
 ### TODO
   - reivew deployment 
