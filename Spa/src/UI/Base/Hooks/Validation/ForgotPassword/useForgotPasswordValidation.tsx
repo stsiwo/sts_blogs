@@ -3,17 +3,16 @@ import { UseForgotPasswordValidationStatusInputType, UseForgotPasswordValidation
 import { ForgotPasswordType } from 'domain/user/UserType';
 import * as yup from 'yup'
 import { useTypeAhead } from 'Hooks/TypeAhead/useTypeAhead';
-import { RequestMethodEnum, ResponseResultStatusEnum } from 'requests/types';
+import { RequestMethodEnum, ResponseResultStatusEnum, ResponseResultType } from 'requests/types';
+import { useRequest } from 'Hooks/Request/useRequest';
+import { logger } from 'configs/logger';
+import { Subject, from } from 'rxjs';
+import { defaultIfEmpty, tap, debounceTime, distinctUntilChanged, filter, switchMap, map, take } from 'rxjs/operators';
+const log = logger("useForgotPasswordValidation")
 
 export const useForgotPasswordValidation = (input: UseForgotPasswordValidationStatusInputType): UseForgotPasswordValidationStatusOutputType => {
 
-
-  const { subject$: emailSubject$, currentRequestStatus: curTypeAheadRequestStatus } = useTypeAhead({
-    url: "/user-email-check",
-    method: RequestMethodEnum.GET,
-    headers: { 'content-type': 'application/json' },
-    dataBuilder: (email: string) => JSON.stringify({ email: email })
-  })
+  const { currentRequestStatus, setRequestStatus, sendRequest } = useRequest({})
   // define validation schema
   /**
    * the order of validation error message is displayed is backward.
@@ -23,31 +22,66 @@ export const useForgotPasswordValidation = (input: UseForgotPasswordValidationSt
    **/
   // define validation schema
   let schema = yup.object().shape<ForgotPasswordType>({
-    /**
-     * refactor: dispatch request only when all the other validation of email passed.
-     * ex)
-     *  email validation: 
-     *    1. check not empty
-     *    2. check valid email format
-     *    3. finally send request the email exists in db
-     * - current implementation (default yup implementation): does parallel validation for each validation for a field.
-     * - for now skip!!
-     **/
-
-    /**
-     * integrate with type ahead feature
-     *  - check provided email is registsered.
-     *  - avoid every key stroke causes request (debounceTime)
-     **/
     email: yup.string().test(
       "email-check", // check input email is registered or not
       "oops. provided email is not registered.",
       async (email: string) => {
-        await emailSubject$.next(email) 
-        const isEmailExist: boolean = (curTypeAheadRequestStatus.status === ResponseResultStatusEnum.SUCCESS) ? true : false
-        return isEmailExist  
-      }
-    ).email().required(),
+        const obs$ = new Subject<string>()
+        // one time only (create observable every time this function is called
+        const subs = obs$.pipe(
+          //map((event: Event) => (event.currentTarget as HTMLInputElement).value),
+          defaultIfEmpty<string, boolean>(false),
+          tap((value: string) => log("passed deafultIfEmpty with: " + value)),
+          debounceTime(1000),
+          tap((value: string) => log("passed debounceTime with: " + value)),
+          distinctUntilChanged(),
+          tap((value: string) => log("passed distinctUntilChanged with: " + value)),
+          filter((value: string) => {
+            // email validation for filtering 
+            log("email valid filter at type ahead for email check")
+            const tmpSchema = yup.string().email()
+            if (value && tmpSchema.isValidSync(value)) return true
+            else {
+              // force to call complete since this promise can't be resolved and can't return anything at 'then' clause
+              obs$.complete()
+              log("failed email validation at typeahead pipeline")
+              return false
+            }
+          }),
+          tap((value: string) => log("passed filter with: " + value)),
+          switchMap((value: string) => {
+            log("switchMap before request")
+            return from(sendRequest({
+              path: "/test-type-ahead",
+              method: RequestMethodEnum.POST, 
+              headers: { 'content-type': 'application/json' },
+              data: JSON.stringify({ email: value }),
+              allowCache: false,
+              useCache: false
+            }))
+          }),
+          tap((value: ResponseResultType) => log("passed switchMap with: " + value)),
+          map((response: ResponseResultType) => {
+            log("got received response")
+            return response.status as number
+          }),
+          map((status: number) => {
+            log("return only status code: " + status)
+            return status
+          }),
+          tap((value: number) => log("passed final filter with: " + value)),
+          // automatic subscription and unsubscription when complete its task
+          take(1)
+        ).toPromise()
+        obs$.next(email)
+
+        return await subs.then((value: number) => {
+          // if this stream is completed before api reqeust, this 'value' hold 'undefined'
+          log("then after observable promise: " + value)
+          return value === 204 ? true : false
+        })
+        //return false
+      }).email().required(),
   });
 
   const { currentValidationError, touch, validate, validationSummaryCheck } = useValidation<ForgotPasswordType>({

@@ -18,7 +18,7 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
 
   const [currentUserSignupStatus, setUserSignupStatus] = React.useState<UserSignupType>(initialUserSignupStatus)
   const { currentRequestStatus, setRequestStatus, sendRequest } = useRequest({})
-  const { currentValidationError, touch, validate, validationSummaryCheck } = useUserSignupValidation({ domain: currentUserSignupStatus })
+  const { currentValidationError, touch, validate, validationSummaryCheck, currentTouch } = useUserSignupValidation({ domain: currentUserSignupStatus })
   const { authDispatch } = useAuthContext()
 
 
@@ -40,7 +40,7 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
     const userSignupRequestData: UserSignupRequestDataType = tempUserSignupData as UserSignupRequestDataType
     // final check validation ...
     if (validationSummaryCheck()) {
-      log('validation passed')
+      log('send login form since there is no error')
       sendRequest({
         path: '/signup',
         method: RequestMethodEnum.POST,
@@ -92,7 +92,7 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
           onInputChange={handleInputChangeEvent}
           onInputFocus={handleInitialFocusEvent}
           placeholder={"enter your name..."}
-          errorMsg={currentValidationError.name}
+          errorMsg={currentTouch.name ? currentValidationError.name : null}
           errorStyle={'name-error small-input-error'}
         />
         <Input
@@ -104,7 +104,7 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
           onInputChange={handleInputChangeEvent}
           onInputFocus={handleInitialFocusEvent}
           placeholder={"enter your email..."}
-          errorMsg={currentValidationError.email}
+          errorMsg={currentTouch.email ? currentValidationError.email : null}
           errorStyle={'email-error small-input-error'}
         />
         <Input
@@ -116,7 +116,7 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
           onInputChange={handleInputChangeEvent}
           onInputFocus={handleInitialFocusEvent}
           placeholder={"enter your password..."}
-          errorMsg={currentValidationError.password}
+          errorMsg={currentTouch.password ? currentValidationError.password : null}
           errorStyle={'password-error small-input-error'}
           inputType={'password'}
         />
@@ -129,7 +129,7 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
           onInputChange={handleInputChangeEvent}
           onInputFocus={handleInitialFocusEvent}
           placeholder={"enter your password again ..."}
-          errorMsg={currentValidationError.confirm}
+          errorMsg={currentTouch.confirm ? currentValidationError.confirm : null}
           errorStyle={'small-input-error'}
           inputType={'password'}
         />

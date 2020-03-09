@@ -43,7 +43,7 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId,
   const titleInputRef: React.MutableRefObject<HTMLInputElement> = { current: null }
   const subtitleInputRef: React.MutableRefObject<HTMLInputElement> = { current: null }
   const [currentIsDeleteMainImage, setIsDeleteMainImage] = React.useState<boolean>(false)
-  const { currentValidationError, touch, validate, validationSummaryCheck } = useBlogValidation({ domain: currentBlog })
+  const { currentValidationError, touch, validate, validationSummaryCheck, currentTouch } = useBlogValidation({ domain: currentBlog })
   const { currentRequestStatus: currentPublishStatus, setRequestStatus: setPublishStatus, sendRequest: publishRequest } = useRequest({})
   const [curFetchContext, setFetchContext] = React.useState<FetchContextEnum>(FetchContextEnum.PUBLISH)
   const { auth } = useAuthContext()
@@ -190,7 +190,7 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId,
           onInputFocus={handleInitialFocusEvent}
           placeholder={"enter blog title..."}
           wrapperStyle={'blog-detail-input-wrapper'}
-          errorMsg={currentValidationError.title}
+          errorMsg={currentTouch.title ? currentValidationError.title : null}
           forwardRef={titleInputRef}
         />
         <Input
@@ -204,7 +204,7 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId,
           onInputFocus={handleInitialFocusEvent}
           placeholder={"enter blog subtitle..."}
           wrapperStyle={'blog-detail-input-wrapper'}
-          errorMsg={currentValidationError.subtitle}
+          errorMsg={currentTouch.subtitle ? currentValidationError.subtitle : null}
           forwardRef={subtitleInputRef}
         />
         <TagInput
@@ -226,7 +226,7 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId,
           placeholder="enter blog content..."
           onChange={handleContentChangeEvent}
           onFocus={handleInitialFocusEvent}
-          errorMsg={currentValidationError.content}
+          errorMsg={currentTouch.content ? currentValidationError.content : null}
         />
         <input type="hidden" name='creationDate' value={currentBlog.createdDate.toJSON()} />
         <div className="blog-detail-input-wrapper">

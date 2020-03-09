@@ -13,5 +13,4 @@ export declare type UseUserLoginValidationStatusOutputType = {
   currentTouch: InputTouchedType<UserLoginType>,
   validate: (field: string, value: any, context?: any) => void
   validationSummaryCheck: () => boolean
-  emailInputRef: MutableRefObject<HTMLInputElement>
 }

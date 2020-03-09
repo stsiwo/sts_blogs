@@ -83,12 +83,3 @@ const ForgotPasswordEmailModal: React.FunctionComponent<ForgotPasswordEmailModal
 }
 
 export default ForgotPasswordEmailModal;
-
-
-
-
-
-
-
-
-

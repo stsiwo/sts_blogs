@@ -16,7 +16,7 @@ export const useBlogValidation = (input: UseBlogValidationStatusInputType): UseB
     createdDate: yup.date().required(),
   });
 
-  const { currentValidationError, touch, validate, validationSummaryCheck } = useValidation<BlogType>({
+  const { currentValidationError, touch, validate, validationSummaryCheck, currentTouch } = useValidation<BlogType>({
     domain: input.domain,
     schema: schema,
   })
@@ -25,6 +25,7 @@ export const useBlogValidation = (input: UseBlogValidationStatusInputType): UseB
     currentValidationError: currentValidationError,
     touch: touch,
     validate: validate,
-    validationSummaryCheck: validationSummaryCheck
+    validationSummaryCheck: validationSummaryCheck,
+    currentTouch: currentTouch
   }
 }
