@@ -12,6 +12,7 @@ import Content from 'ui/Content/Content';
 import Header from 'ui/Header/Header';
 import Footer from 'ui/Footer/Footer';
 import { logger } from 'configs/logger';
+import Test from 'ui/Content/Test';
 const log = logger(__filename)
 
 // import css for debug (only development)
@@ -44,6 +45,9 @@ const App = (props: any) => {
           <Provider store={store}>
             <Router>
               <ScrollToTop />
+              {/*
+              <Test />
+              */}
               <Header />
               <Content />
               <Footer />

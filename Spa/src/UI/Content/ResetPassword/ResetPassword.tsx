@@ -13,6 +13,7 @@ import { useRouteMatch, useLocation, useParams } from 'react-router';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { useKeyupListener } from 'Hooks/KeyupListener/useKeyupListener';
 import { logger } from 'configs/logger';
+import cloneDeep = require('lodash/cloneDeep');
 const log = logger("ResetPassword");
 
 function useQuery() {
@@ -24,39 +25,39 @@ const ResetPassword: React.FunctionComponent<RouteComponentProps<{}>> = (props: 
   let query = useQuery();
   const [currentUserResetPasswordStatus, setUserResetPasswordStatus] = React.useState<UserResetPasswordType>(initialUserResetPasswordStatus)
   const { currentRequestStatus, setRequestStatus, sendRequest } = useRequest({})
-  const { currentValidationError, touch, validate } = useUserResetPasswordValidation({ domain: currentUserResetPasswordStatus })
+  const { currentValidationError, touch, validate, validationSummaryCheck } = useUserResetPasswordValidation({ domain: currentUserResetPasswordStatus })
   const { auth, authDispatch } = useAuthContext()
   const { url, path } = useRouteMatch()
 
   const handleInputChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
-    currentUserResetPasswordStatus[e.currentTarget.name as keyof UserResetPasswordType] = e.currentTarget.value
+    const targetName = e.currentTarget.name
+    const targetValue = e.currentTarget.value
+    const tmpUserResetPasswordStatus = cloneDeep(currentUserResetPasswordStatus)
+    tmpUserResetPasswordStatus[targetName as keyof UserResetPasswordType] = targetValue
     setUserResetPasswordStatus({
-      ...currentUserResetPasswordStatus
+      ...tmpUserResetPasswordStatus
     })
   }
 
   const handleInitialFocusEvent: React.EventHandler<React.FocusEvent<HTMLInputElement>> = (e) => {
     touch(e.currentTarget.name)
   }
-  
+
   const _submitResetPasswordForm: () => void = () => {
     // final check validation ...
-    validate()
-      .then(() => {
-        log('validation passed')
-        sendRequest({
-          path: '/password-reset?token=' + query.get("token"),
-          method: RequestMethodEnum.POST,
-          headers: { 'content-type': 'application/json' },
-          data: JSON.stringify({ 
-            password: currentUserResetPasswordStatus.password 
-          })
+    if (validationSummaryCheck()) {
+      log('validation passed')
+      sendRequest({
+        path: '/password-reset?token=' + query.get("token"),
+        method: RequestMethodEnum.POST,
+        headers: { 'content-type': 'application/json' },
+        data: JSON.stringify({
+          password: currentUserResetPasswordStatus.password
         })
-          .then((result: ResponseResultType<{}>) => {
-          })
-      }, () => {
-        log('validation failed at save button event handler')
       })
+        .then((result: ResponseResultType<{}>) => {
+        })
+    }
   }
 
   useKeyupListener({

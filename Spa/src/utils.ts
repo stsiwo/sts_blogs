@@ -61,3 +61,24 @@ export function getTimeOneHourAfter() {
   dt.setHours( dt.getHours() + 1 )
   return dt.getTime()
 }
+
+/**
+ * check two object has the same properties (could have different values for the same properties)
+ *  - just check two object has same form (properties) or not
+ **/
+export function isSameObjectForm(a: object, b: object): boolean {
+  let isSame = true
+  Object.keys(a).forEach((key: string) => {
+    if (!b.hasOwnProperty(key)) {
+      isSame = false
+    }
+  })
+  return isSame
+}
+
+export function transformObject<A extends object, B extends object>(original: A, destination: B): B {
+  if (!isSameObjectForm(original, destination)) {
+    
+  }
+  else return destination
+}

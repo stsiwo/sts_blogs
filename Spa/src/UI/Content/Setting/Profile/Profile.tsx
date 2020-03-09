@@ -18,19 +18,19 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
   /** update user profile **/
 
   /** state **/
-  const { auth } = useAuthContext() 
+  const { auth } = useAuthContext()
   log(auth)
   const [currentUser, setUser] = React.useState<UserType>(auth.user)
   log('before useValidation')
   log(currentUser)
-  const { currentValidationError, touch, validate } = useProfileValidation({ domain: currentUser })
+  const { currentValidationError, touch, validate, validationSummaryCheck } = useProfileValidation({ domain: currentUser })
 
   const path: string = '/users/' + currentUser.id
   const method: RequestMethodEnum = RequestMethodEnum.PUT
 
   const { currentRequestStatus: currentUpdateRequestStatus, setRequestStatus: setUpdateRequestStatus, sendRequest: sendUpdateRequest } = useRequest({})
   const { currentRequestStatus: currentUserFetchStatus, setRequestStatus: setUserFetchStatus, sendRequest: fetchUser } = useRequest({})
-  const [ currentAvatarDeleteFlag, setAvatarDeleteFlag ] = React.useState<boolean>(false)
+  const [currentAvatarDeleteFlag, setAvatarDeleteFlag] = React.useState<boolean>(false)
 
   /** lifecycle **/
 
@@ -119,18 +119,15 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
   const handleSaveUserClickEvent: React.EventHandler<React.MouseEvent<HTMLInputElement>> = async (e) => {
     log('clicked update butuon')
     // final check validation ...
-    validate()
-      .then(() => {
-        log('validation passed at save button event handler')
-        sendUpdateRequest({
-          path: path,
-          method: method,
-          headers: { 'content-type': 'multipart/form-data' },
-          data: mapStateToFormData(currentUser)
-        })
-      }, () => {
-        log('validation failed at save button event handler')
+    if (validationSummaryCheck()) {
+      log('validation passed at save button event handler')
+      sendUpdateRequest({
+        path: path,
+        method: method,
+        headers: { 'content-type': 'multipart/form-data' },
+        data: mapStateToFormData(currentUser)
       })
+    } 
   }
 
   const handleInitialFocusEvent: React.EventHandler<React.FocusEvent<HTMLInputElement>> = (e) => {

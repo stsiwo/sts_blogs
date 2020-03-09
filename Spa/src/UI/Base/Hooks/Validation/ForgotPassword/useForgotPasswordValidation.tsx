@@ -50,7 +50,7 @@ export const useForgotPasswordValidation = (input: UseForgotPasswordValidationSt
     ).email().required(),
   });
 
-  const { currentValidationError, touch, validate } = useValidation<ForgotPasswordType>({
+  const { currentValidationError, touch, validate, validationSummaryCheck } = useValidation<ForgotPasswordType>({
     domain: input.domain,
     schema: schema
   })
@@ -59,5 +59,6 @@ export const useForgotPasswordValidation = (input: UseForgotPasswordValidationSt
     currentValidationError: currentValidationError,
     touch: touch,
     validate: validate,
+    validationSummaryCheck: validationSummaryCheck
   }
 }

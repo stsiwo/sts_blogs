@@ -12,14 +12,15 @@ export const useUserResetPasswordValidation = (input: UseUserResetPasswordValida
     confirm: yup.string().required().oneOf([yup.ref('password'), null], 'passwords must match')
   });
 
-  const { currentValidationError, touch, validate } = useValidation<UserResetPasswordType>({
+  const { currentValidationError, touch, validate, validationSummaryCheck } = useValidation<UserResetPasswordType>({
     domain: input.domain,
-    schema: schema
+    schema: schema,
   })
 
   return {
     currentValidationError: currentValidationError,
     touch: touch,
     validate: validate,
+    validationSummaryCheck: validationSummaryCheck
   }
 }

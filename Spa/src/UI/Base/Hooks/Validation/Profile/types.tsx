@@ -9,5 +9,6 @@ export declare type UseProfileValidationStatusInputType = {
 export declare type UseProfileValidationStatusOutputType = {
   currentValidationError: DomainValidationType<UserType> 
   touch: (name: string) => void,
-  validate: () => Promise<void>
+  validate: (field: string, value: any, context?: any) => void
+  validationSummaryCheck: () => boolean
 }

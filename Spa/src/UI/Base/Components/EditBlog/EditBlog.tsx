@@ -43,12 +43,12 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId,
   const titleInputRef: React.MutableRefObject<HTMLInputElement> = { current: null }
   const subtitleInputRef: React.MutableRefObject<HTMLInputElement> = { current: null }
   const [currentIsDeleteMainImage, setIsDeleteMainImage] = React.useState<boolean>(false)
-  const { currentValidationError, touch, validate } = useBlogValidation({ domain: currentBlog })
+  const { currentValidationError, touch, validate, validationSummaryCheck } = useBlogValidation({ domain: currentBlog })
   const { currentRequestStatus: currentPublishStatus, setRequestStatus: setPublishStatus, sendRequest: publishRequest } = useRequest({})
   const [curFetchContext, setFetchContext] = React.useState<FetchContextEnum>(FetchContextEnum.PUBLISH)
   const { auth } = useAuthContext()
   const { currentBlogAutoSaveStatus, setBlogAutoSaveStatus } = useBlogAutoSave({
-    currentBlog: currentBlog, 
+    currentBlog: currentBlog,
     blogId: blogId,
     currentIsDeleteMainImage: currentIsDeleteMainImage,
     isInitialGetFetchDone: isInitialGetFetchDone,
@@ -58,21 +58,18 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId,
   /** EH **/
   const handlePublishBlogClickEvent: React.EventHandler<React.MouseEvent<HTMLInputElement>> = async (e) => {
     log('start handling publish button click')
-    validate()
-      .then(() => {
-        setFetchContext(FetchContextEnum.PUBLISH)
-        publishRequest({
-          path: "/blogs/" + blogId,
-          method: RequestMethodEnum.PATCH,
-          headers: { 'content-type': 'application/json' },
-          data: JSON.stringify({ public: 1 }),
-        })
-          .then((result: ResponseResultType<BlogResponseDataType>) => {
-            // do something 
-          })
-      }, () => {
-        log('validation failed at publish button event handler')
+    if (validationSummaryCheck()) {
+      setFetchContext(FetchContextEnum.PUBLISH)
+      publishRequest({
+        path: "/blogs/" + blogId,
+        method: RequestMethodEnum.PATCH,
+        headers: { 'content-type': 'application/json' },
+        data: JSON.stringify({ public: 1 }),
       })
+        .then((result: ResponseResultType<BlogResponseDataType>) => {
+          // do something 
+        })
+    }
   }
 
   const changeInputWidthDynamically = (inputRef: React.MutableRefObject<HTMLInputElement>, currentChLength: number): void => {

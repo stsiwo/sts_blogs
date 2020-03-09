@@ -14,6 +14,8 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { useKeyupListener } from 'Hooks/KeyupListener/useKeyupListener';
 import { logger } from 'configs/logger';
 import { useTypeAhead } from 'Hooks/TypeAhead/useTypeAhead';
+import { usePrevious } from 'Hooks/Previous/usePrevious';
+import cloneDeep = require('lodash/cloneDeep');
 const log = logger("Login");
 
 const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComponentProps<{}>) => {
@@ -21,45 +23,46 @@ const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCom
   let location = useLocation();
   const [currentUserLoginStatus, setUserLoginStatus] = React.useState<UserLoginType>(initialUserLoginStatus)
   const { currentRequestStatus, setRequestStatus, sendRequest } = useRequest({})
-  const { currentValidationError, touch, validate } = useUserLoginValidation({ domain: currentUserLoginStatus })
+  const { currentValidationError, touch, validate, validationSummaryCheck, currentTouch, emailInputRef } = useUserLoginValidation({ domain: currentUserLoginStatus })
   const { auth, authDispatch } = useAuthContext()
   const { url, path } = useRouteMatch()
 
   const handleInputChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
-    currentUserLoginStatus[e.currentTarget.name as keyof UserLoginType] = e.currentTarget.value
+    const tmpUserLoginStatus = cloneDeep(currentUserLoginStatus)
+    tmpUserLoginStatus[e.currentTarget.name as keyof UserLoginType] = e.currentTarget.value
     setUserLoginStatus({
-      ...currentUserLoginStatus
+      ...tmpUserLoginStatus
     })
   }
 
   const handleInitialFocusEvent: React.EventHandler<React.FocusEvent<HTMLInputElement>> = (e) => {
     touch(e.currentTarget.name)
   }
-  
+
   const _submitLoginForm: () => void = () => {
     // extract 'confirm' for request data
     const tempUserLoginData: UserLoginType = Object.assign({}, currentUserLoginStatus)
     delete tempUserLoginData.confirm
     const userLoginRequestData: UserLoginRequestDataType = tempUserLoginData as UserLoginRequestDataType
     // final check validation ...
-    validate()
-      .then(() => {
-        log('validation passed')
-        sendRequest({
-          path: '/login',
-          method: RequestMethodEnum.POST,
-          headers: { 'content-type': 'application/json' },
-          data: JSON.stringify(userLoginRequestData)
-        })
-          .then((result: ResponseResultType<UserResponseDataType>) => {
-            if (result.status === ResponseResultStatusEnum.SUCCESS) {
-              authDispatch({ type: 'login', user: result.data.user as UserType })
-              props.history.push('/')
-            }
-          })
-      }, () => {
-        log('validation failed at save button event handler')
+
+    if (validationSummaryCheck()) {
+      log('send login form since there is no error')
+      sendRequest({
+        path: '/login',
+        method: RequestMethodEnum.POST,
+        headers: { 'content-type': 'application/json' },
+        data: JSON.stringify(userLoginRequestData)
       })
+        .then((result: ResponseResultType<UserResponseDataType>) => {
+          if (result.status === ResponseResultStatusEnum.SUCCESS) {
+            authDispatch({ type: 'login', user: result.data.user as UserType })
+            props.history.push('/')
+          }
+        })
+    } else {
+      log("one of fields has validation error. need to display ..")
+    }
   }
 
   useKeyupListener({
@@ -92,8 +95,9 @@ const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCom
           onInputChange={handleInputChangeEvent}
           onInputFocus={handleInitialFocusEvent}
           placeholder={"enter your email..."}
-          errorMsg={currentValidationError.email}
+          errorMsg={currentTouch.email ? currentValidationError.email : null}
           errorStyle={'email-error small-input-error'}
+          forwardRef={emailInputRef}
         />
         <Input
           id={"password"}
@@ -104,7 +108,7 @@ const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCom
           onInputChange={handleInputChangeEvent}
           onInputFocus={handleInitialFocusEvent}
           placeholder={"enter your password..."}
-          errorMsg={currentValidationError.password}
+          errorMsg={currentTouch.password ? currentValidationError.password : null}
           errorStyle={'password-error small-input-error'}
           inputType={'password'}
         />
@@ -117,12 +121,12 @@ const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCom
           onInputChange={handleInputChangeEvent}
           onInputFocus={handleInitialFocusEvent}
           placeholder={"enter your password again ..."}
-          errorMsg={currentValidationError.confirm}
+          errorMsg={currentTouch.confirm ? currentValidationError.confirm : null}
           errorStyle={'confirm-error small-input-error'}
           inputType={'password'}
         />
         <div className="signup-login-link-wrapper">
-          <Link 
+          <Link
             role="forgot-password-link"
             to={{
               pathname: '/forgot-password',

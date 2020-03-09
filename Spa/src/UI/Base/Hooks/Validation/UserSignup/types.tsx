@@ -9,5 +9,6 @@ export declare type UseUserSignupValidationStatusInputType = {
 export declare type UseUserSignupValidationStatusOutputType = {
   currentValidationError: ValidationType<UserSignupType> 
   touch: (name: string) => void,
-  validate: () => Promise<void>
+  validate: (field: string, value: any, context?: any) => void
+  validationSummaryCheck: () => boolean
 }

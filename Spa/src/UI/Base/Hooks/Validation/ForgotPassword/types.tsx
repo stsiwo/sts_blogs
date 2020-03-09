@@ -9,5 +9,6 @@ export declare type UseForgotPasswordValidationStatusInputType = {
 export declare type UseForgotPasswordValidationStatusOutputType = {
   currentValidationError: ValidationType<ForgotPasswordType> 
   touch: (name: string) => void,
-  validate: () => Promise<void>
+  validate: (field: string, value: any, context?: any) => void
+  validationSummaryCheck: () => boolean
 }

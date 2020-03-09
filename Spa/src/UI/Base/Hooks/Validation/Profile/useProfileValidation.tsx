@@ -15,15 +15,16 @@ export const useProfileValidation = (input: UseProfileValidationStatusInputType)
     confirm: yup.string().oneOf([yup.ref('password'), null], 'passwords must match')
   });
 
-  const { currentValidationError, touch, validate } = useValidation<UserType>({
+  const { currentValidationError, touch, validate, validationSummaryCheck } = useValidation<UserType>({
     domain: input.domain,
-    schema: schema
+    schema: schema,
   })
 
   return {
     currentValidationError: currentValidationError,
     touch: touch,
     validate: validate,
+    validationSummaryCheck: validationSummaryCheck
   }
 }
 

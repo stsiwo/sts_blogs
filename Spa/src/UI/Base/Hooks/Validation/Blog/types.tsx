@@ -9,5 +9,6 @@ export declare type UseBlogValidationStatusInputType = {
 export declare type UseBlogValidationStatusOutputType = {
   currentValidationError: ValidationType<BlogType> 
   touch: (name: string) => void,
-  validate: () => Promise<void>
+  validate: (field: string, value: any, context?: any) => void
+  validationSummaryCheck: () => boolean
 }
