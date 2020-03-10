@@ -1,0 +1,39 @@
+@import '../../../Base/Css/GlobalVariables';
+@import '../../../Base/Css/Mixins';
+
+.checkmark-wrapper {
+  display: inline-block; 
+  vertical-align: middle;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #000;
+  animation: checkmark-wrapper-animation 1s cubic-bezier(0.8, 0.2, 0.2, 0.8) 0s;
+}
+
+.checkmark {
+  vertical-align: middle;
+  border: none;
+  width: 15px;
+  height: 15px;
+  animation: checkmark-animation 1s cubic-bezier(1, 0, 0, 1) 0.5s;
+}
+
+@keyframes checkmark-wrapper-animation {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+
+@keyframes checkmark-animation {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

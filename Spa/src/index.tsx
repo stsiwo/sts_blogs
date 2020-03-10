@@ -45,9 +45,6 @@ const App = (props: any) => {
           <Provider store={store}>
             <Router>
               <ScrollToTop />
-              {/*
-              <Test />
-              */}
               <Header />
               <Content />
               <Footer />

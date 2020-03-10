@@ -1,10 +1,12 @@
 import * as React from 'react'
 import { BlogType } from 'domain/blog/BlogType';
+import { RequestStatusType } from 'Hooks/Request/types';
 
 export declare type BaseInputPropType = React.PropsWithChildren<{
   wrapperStyle?: string
   labelStyle?: string
   errorStyle?: string
+  errorMsg?: string
   inputType?: string
   label: string
   id: string
@@ -20,6 +22,8 @@ export declare type InputPropType = BaseInputPropType & {
   errorMsg: string
   /** don't use 'ref' key, it not gonna work. use 'forwardRef' instead **/
   forwardRef?: React.MutableRefObject<HTMLInputElement>
+  typeAhead?: boolean
+  typeAheadStatus?: RequestStatusType
 }
 
 export declare type TagInputPropType = BaseInputPropType & {

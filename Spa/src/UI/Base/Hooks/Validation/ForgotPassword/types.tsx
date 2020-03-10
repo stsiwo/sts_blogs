@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { ForgotPasswordType } from 'domain/user/UserType';
 import { DomainValidationType, ValidationType, InputTouchedType } from '../types';
+import { RequestStatusType } from 'Hooks/Request/types';
 
 export declare type UseForgotPasswordValidationStatusInputType = {
   domain: ForgotPasswordType
@@ -12,4 +13,5 @@ export declare type UseForgotPasswordValidationStatusOutputType = {
   validate: (field: string, value: any, context?: any) => void
   validationSummaryCheck: () => boolean
   currentTouch: InputTouchedType<ForgotPasswordType>
+  typeAheadStatus: RequestStatusType
 }

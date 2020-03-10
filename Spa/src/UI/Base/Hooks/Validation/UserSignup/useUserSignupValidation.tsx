@@ -98,6 +98,7 @@ export const useUserSignupValidation = (input: UseUserSignupValidationStatusInpu
     touch: touch,
     validate: validate,
     validationSummaryCheck: validationSummaryCheck,
-    currentTouch: currentTouch
+    currentTouch: currentTouch,
+    typeAheadStatus: currentRequestStatus
   }
 }

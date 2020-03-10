@@ -91,17 +91,18 @@ public class LoginPageTest extends BaseTest {
 	  
   }
 
-  @Test(dataProvider = "all-size")
-  public void shouldDisplayFetchErrorMessageWhenProvidedEmailDoesNotRegistered(Dimension ssize) {
-	  this.driver.manage().window().setSize(ssize);
-	  
-	  LoginPage loginPage = new LoginPage(this.driver, true);
-	  loginPage.login("email@doesnot.exists", this.testUser.password, this.testUser.password);
-	  
-	  loginPage.waitForElementBy(LoginUIMapper.FETCH_ERR_MSG);
-	  
-	  Assert.assertTrue(loginPage.isExistInPage("provided email is not found"));
-  }
+// comment out for type ahead feature to check email exists when user enteres email
+//  @Test(dataProvider = "all-size")
+//  public void shouldDisplayFetchErrorMessageWhenProvidedEmailDoesNotRegistered(Dimension ssize) {
+//	  this.driver.manage().window().setSize(ssize);
+//	  
+//	  LoginPage loginPage = new LoginPage(this.driver, true);
+//	  loginPage.login("email@doesnot.exists", this.testUser.password, this.testUser.password);
+//	  
+//	  loginPage.waitForElementBy(LoginUIMapper.FETCH_ERR_MSG);
+//	  
+//	  Assert.assertTrue(loginPage.isExistInPage("provided email is not found"));
+//  }
 
   @Test(dataProvider = "all-size")
   public void shouldDisplayFetchErrorMessageWhenProvidedPasswordIsInvalid(Dimension ssize) {

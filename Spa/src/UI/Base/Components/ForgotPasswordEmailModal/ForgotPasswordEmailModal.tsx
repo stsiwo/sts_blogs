@@ -17,7 +17,7 @@ const log = logger("ForgotPasswordModal");
 const ForgotPasswordEmailModal: React.FunctionComponent<ForgotPasswordEmailModalPropType> = (props: ForgotPasswordEmailModalPropType) => {
 
   const [currentForgotPasswordStatus, setForgotPasswordStatus] = React.useState<ForgotPasswordType>(initialForgotPasswordStatus)
-  const { currentValidationError, touch, validate, validationSummaryCheck, currentTouch } = useForgotPasswordValidation({ domain: currentForgotPasswordStatus })
+  const { currentValidationError, touch, validate, validationSummaryCheck, currentTouch, typeAheadStatus } = useForgotPasswordValidation({ domain: currentForgotPasswordStatus })
   const { currentRequestStatus: currentForgotPasswordRequestStatus, setRequestStatus: setForgotPasswordRequestStatus, sendRequest: sendForgotPasswordRequest } = useRequest({})
 
   const handleInputChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
@@ -63,6 +63,8 @@ const ForgotPasswordEmailModal: React.FunctionComponent<ForgotPasswordEmailModal
         placeholder={"enter your email..."}
         errorMsg={currentTouch.email ? currentValidationError.email : null}
         errorStyle={'email-error'}
+        typeAhead={true}
+        typeAheadStatus={typeAheadStatus}
       />
       <FetchStatus
         currentFetchStatus={currentForgotPasswordRequestStatus}

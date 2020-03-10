@@ -2,6 +2,7 @@ package main.java.page;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.By;
 
 import main.java.base.Config;
 import main.java.base.EmailHelper;
@@ -26,20 +27,33 @@ public class LoginPage extends BasePage {
 	}
 	
 	public void login(String email, String password, String confirm) {
-		this.enterTextInElementBy(LoginUIMapper.EMAIL_INPUT, email, true);
-		this.enterTextInElementBy(LoginUIMapper.PASSWORD_INPUT, password, true);
-		this.enterTextInElementBy(LoginUIMapper.CONFIRM_INPUT, confirm, true);
+    this.enterEmailInfoAndWaitForTypeAheadResponse(email);
+    this.enterLoginInfoAndWaitForErrorDisappear(LoginUIMapper.PASSWORD_INPUT, password, LoginUIMapper.PASSWORD_ERROR);
+    this.enterLoginInfoAndWaitForErrorDisappear(LoginUIMapper.CONFIRM_INPUT, confirm, LoginUIMapper.CONFIRM_ERROR);
+
 		this.clickElementBy(LoginUIMapper.SUBMIT_BUTTON);
 	}
 	
 	public void initialLogin(String email, String password, String confirm) {
-		this.enterTextInElementBy(LoginUIMapper.EMAIL_INPUT, email, true);
-		this.enterTextInElementBy(LoginUIMapper.PASSWORD_INPUT, password, true);
-		this.enterTextInElementBy(LoginUIMapper.CONFIRM_INPUT, confirm, true);
+    this.enterEmailInfoAndWaitForTypeAheadResponse(email);
+    this.enterLoginInfoAndWaitForErrorDisappear(LoginUIMapper.PASSWORD_INPUT, password, LoginUIMapper.PASSWORD_ERROR);
+    this.enterLoginInfoAndWaitForErrorDisappear(LoginUIMapper.CONFIRM_INPUT, confirm, LoginUIMapper.CONFIRM_ERROR);
+
 		this.clickElementBy(LoginUIMapper.SUBMIT_BUTTON);
 		
 		this.waitForElementBy(HomeUIMapper.SLOGAN);
 	}
+
+  public void enterEmailInfoAndWaitForTypeAheadResponse(String text) {
+		this.enterTextInElementBy(LoginUIMapper.EMAIL_INPUT, text, true);
+    this.waitForElementToHaveTextBy(LoginUIMapper.EMAIL_ERROR, "oops. provided email is not registered.");
+    this.waitForElementToBeInvisibleBy(LoginUIMapper.EMAIL_ERROR);
+  }
+
+  public void enterLoginInfoAndWaitForErrorDisappear(By locator, String text, By errorLocator) {
+		this.enterTextInElementBy(locator, text, true);
+    this.waitForElementToBeInvisibleBy(errorLocator);
+  }
 
   public void clickForgotPasswordLinkAndWaitForModal() {
     this.clickElementBy(LoginUIMapper.FORGOT_PASSWORD_LINK, LoginUIMapper.FORGOT_PASSWORD_MODAL);

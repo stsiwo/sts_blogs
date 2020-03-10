@@ -111,5 +111,6 @@ export const useUserLoginValidation = (input: UseUserLoginValidationStatusInputT
     currentTouch: currentTouch,
     validate: validate,
     validationSummaryCheck: validationSummaryCheck,
+    typeAheadStatus: currentRequestStatus
   }
 }

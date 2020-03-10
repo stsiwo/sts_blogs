@@ -2,6 +2,9 @@ import * as React from 'react';
 import './Input.scss';
 import { InputPropType } from './types';
 import BaseInput from './BaseInput';
+import { ResponseResultStatusEnum } from 'requests/types';
+import Loading from 'ui/Base/Icons/Loading/Loading';
+import CheckMark from 'ui/Base/Icons/CheckMark/CheckMark';
 
 const Input: React.FunctionComponent<InputPropType> = (props: InputPropType) => {
 
@@ -13,6 +16,8 @@ const Input: React.FunctionComponent<InputPropType> = (props: InputPropType) => 
       label={props.label}
       labelStyle={props.labelStyle}
       wrapperStyle={props.wrapperStyle}
+      errorMsg={props.errorMsg}
+      errorStyle={props.errorStyle}
     >
       <input 
         type={inputType} 
@@ -25,8 +30,11 @@ const Input: React.FunctionComponent<InputPropType> = (props: InputPropType) => 
         onFocus={props.onInputFocus} 
         ref={props.forwardRef}
       />
-      {(props.errorMsg && 
-         <div className={`input-error ${props.errorStyle}`} role="input-field-error-msg">{props.errorMsg}</div>
+      {(props.typeAhead && props.typeAheadStatus.status === ResponseResultStatusEnum.FETCHING &&
+        <Loading />
+      )}
+      {(props.typeAhead && props.typeAheadStatus.status === ResponseResultStatusEnum.SUCCESS &&
+        <CheckMark />
       )}
     </BaseInput>
   );

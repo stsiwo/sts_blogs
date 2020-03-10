@@ -18,6 +18,8 @@ public class LoginUIMapper {
       
     public final static By CONFIRM_ERROR = By.className("div.confirm-error");
       
+    public final static By FIELD_ERROR = By.cssSelector("div[role='input-field-error-msg']");
+
     public final static By SUMMARY_ERROR = By.className("div.summary-error");
       
     public final static By SUBMIT_BUTTON = By.cssSelector("input[role='login-btn']");

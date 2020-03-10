@@ -97,6 +97,7 @@ export const useForgotPasswordValidation = (input: UseForgotPasswordValidationSt
     touch: touch,
     validate: validate,
     validationSummaryCheck: validationSummaryCheck,
-    currentTouch: currentTouch
+    currentTouch: currentTouch,
+    typeAheadStatus: currentRequestStatus,
   }
 }

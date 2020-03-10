@@ -23,7 +23,7 @@ const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCom
   let location = useLocation();
   const [currentUserLoginStatus, setUserLoginStatus] = React.useState<UserLoginType>(initialUserLoginStatus)
   const { currentRequestStatus, setRequestStatus, sendRequest } = useRequest({})
-  const { currentValidationError, touch, validate, validationSummaryCheck, currentTouch } = useUserLoginValidation({ domain: currentUserLoginStatus })
+  const { currentValidationError, touch, validate, validationSummaryCheck, currentTouch, typeAheadStatus } = useUserLoginValidation({ domain: currentUserLoginStatus })
   const { auth, authDispatch } = useAuthContext()
   const { url, path } = useRouteMatch()
 
@@ -97,6 +97,8 @@ const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCom
           placeholder={"enter your email..."}
           errorMsg={currentTouch.email ? currentValidationError.email : null}
           errorStyle={'email-error small-input-error'}
+          typeAhead={true}
+          typeAheadStatus={typeAheadStatus}
         />
         <Input
           id={"password"}

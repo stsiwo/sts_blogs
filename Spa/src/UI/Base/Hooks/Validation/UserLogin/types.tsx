@@ -2,6 +2,7 @@ import * as React from 'react'
 import { UserLoginType } from 'domain/user/UserType';
 import { DomainValidationType, ValidationType, InputTouchedType } from '../types';
 import { MutableRefObject } from 'react';
+import { RequestStatusType } from 'Hooks/Request/types';
 
 export declare type UseUserLoginValidationStatusInputType = {
   domain: UserLoginType
@@ -13,4 +14,5 @@ export declare type UseUserLoginValidationStatusOutputType = {
   currentTouch: InputTouchedType<UserLoginType>,
   validate: (field: string, value: any, context?: any) => void
   validationSummaryCheck: () => boolean
+  typeAheadStatus: RequestStatusType
 }
