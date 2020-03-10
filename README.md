@@ -204,3 +204,5 @@
     - does gcp provide the nice feature to trigger bash script when upload file?
   - switch to aws
     - gcp will shut down at 2023???????
+  - update-docker-compose sh does not work when deploy same version + latest
+    - docker-compsoe can't recognize the different content of the same image namge with latest
