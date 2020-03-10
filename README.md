@@ -45,6 +45,23 @@
     - production
        - docker-compose.yml
 
+### Unit/Service Testing
+  - use Jest for spa and pytest for api
+  #### SPA Unit/Service Testing Note
+    - it is important to think about flow/steps of test case.
+      - sometimes, jest goes beyound user behavior because of its speed. 
+      ex)
+        epxected flow:
+          - 1. initial load (setup necessary state etc...)
+          - 2. handling event (click, change etc...)
+        but Jest might cause wierd bug:
+          - 1. initial load (setup necessary state etc...)
+          - 2. during inital load, start event handling <--- this is problem
+          - 3. finish inital setup and produce unexpected bugs
+        - solution:
+          - use 'wait' to make sure each step complete in the order you expect!!!
+  #### API Unit/Service Testing Note
+
 ### Integration Testing
   - staging (local)
     1. [run docker-compose at staging-local](#docker-compose)
