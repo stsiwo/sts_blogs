@@ -9,6 +9,7 @@ import { ContextWrapperComponent } from '../../fixtures';
 import Login from 'ui/Content/Login/Login';
 import ForgotPasswordEmailModal from 'Components/ForgotPasswordEmailModal/ForgotPasswordEmailModal';
 import '../../../data/mocks/localStorageMock'
+jest.setTimeout(10000)
 
 
 describe('l-c1: Login Component testing', () => {
@@ -195,31 +196,39 @@ describe('l-c1: Login Component testing', () => {
       .mockResolvedValueOnce(userGET200Response)
 
     await act(async () => {
-      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText, queryByRole } = render(
         <ContextWrapperComponent component={Login} isAuth />
       )
-      const inputs = await waitForElement(() => [
-        getByLabelText('Email'),
-        getByLabelText('Password'),
-        getByLabelText('Confirm'),
-      ])
-
-      seedInputTestValues(inputs, [
-        'test@test.com',
-        'test-password',
-        'test-password'
-      ])
-      
-      // wait for type ahead request has done
+      // need to do individually otherwise, got errors
+      const emailInput = await waitForElement(() => getByLabelText("Email"))
+      fireEvent.focus(emailInput)
+      // need for only first field to wait for initial validation 
+      // use this because there is no way to wait state update
       await wait(() => {
-        expect(api.request).toHaveBeenCalledTimes(1)
+        expect(queryByRole("input-field-error-msg")).toBeInTheDocument()
+      })
+      fireEvent.change(emailInput, { target: { value: "test@test.com" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
       })
 
+      const passwordInput = await waitForElement(() => getByLabelText("Password"))
+      fireEvent.focus(passwordInput)
+      fireEvent.change(passwordInput, { target: { value: "test-password" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
+      })
+
+      const confirmInput = await waitForElement(() => getByLabelText("Confirm"))
+      fireEvent.focus(confirmInput)
+      fireEvent.change(confirmInput, { target: { value: "test-password" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
+      })
 
       fireEvent.click(getByRole('login-btn'))
       await wait(() => {
-        expect(api.request).toHaveBeenCalledTimes(1)
-        debug()
+        expect(api.request).toHaveBeenCalledTimes(2)
       })
     })
   })
@@ -230,24 +239,34 @@ describe('l-c1: Login Component testing', () => {
       .mockResolvedValueOnce(userGET200Response) // for submit request
 
     await act(async () => {
-      const { getByText, getByRole, getAllByRole, debug, getByLabelText, queryByText } = render(
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText, queryByText, queryByRole } = render(
         <ContextWrapperComponent component={Login} />
       )
-      const inputs = await waitForElement(() => [
-        getByLabelText('Email'),
-        getByLabelText('Password'),
-        getByLabelText('Confirm'),
-      ])
-
-      seedInputTestValues(inputs, [
-        'test@test.com',
-        'test-password',
-        'test-password'
-      ])
-
-      // wait for type ahead request has done
+      // need to do individually otherwise, got errors
+      const emailInput = await waitForElement(() => getByLabelText("Email"))
+      fireEvent.focus(emailInput)
+      // need for only first field to wait for initial validation 
+      // use this because there is no way to wait state update
       await wait(() => {
-        expect(api.request).toHaveBeenCalledTimes(1)
+        expect(queryByRole("input-field-error-msg")).toBeInTheDocument()
+      })
+      fireEvent.change(emailInput, { target: { value: "test@test.com" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
+      })
+
+      const passwordInput = await waitForElement(() => getByLabelText("Password"))
+      fireEvent.focus(passwordInput)
+      fireEvent.change(passwordInput, { target: { value: "test-password" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
+      })
+
+      const confirmInput = await waitForElement(() => getByLabelText("Confirm"))
+      fireEvent.focus(confirmInput)
+      fireEvent.change(confirmInput, { target: { value: "test-password" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
       })
 
       fireEvent.click(getByRole('login-btn'))
@@ -261,28 +280,40 @@ describe('l-c1: Login Component testing', () => {
 
   test('a15. (DOM) should show "login failure" message when login failed because of 4xx or 5xx error', async () => {
     api.request = jest.fn()
+      //.mockResolvedValue(userEmailCheck204Response) 
       .mockResolvedValueOnce(userEmailCheck204Response) // for type ahead request 
-      .mockReturnValue(Promise.reject(internalServerError500Response))
+      .mockRejectedValueOnce(internalServerError500Response)
 
     await act(async () => {
-      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
-        <ContextWrapperComponent component={Login} isAuth />
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText, queryByRole } = render(
+        <ContextWrapperComponent component={Login} />
       )
-      const inputs = await waitForElement(() => [
-        getByLabelText('Email'),
-        getByLabelText('Password'),
-        getByLabelText('Confirm'),
-      ])
 
-      seedInputTestValues(inputs, [
-        'test@test.com',
-        'test-password',
-        'test-password'
-      ])
-
-      // wait for type ahead request has done
+      // need to do individually otherwise, got errors
+      const emailInput = await waitForElement(() => getByLabelText("Email"))
+      fireEvent.focus(emailInput)
+      // need for only first field to wait for initial validation 
+      // use this because there is no way to wait state update
       await wait(() => {
-        expect(api.request).toHaveBeenCalledTimes(1)
+        expect(queryByRole("input-field-error-msg")).toBeInTheDocument()
+      })
+      fireEvent.change(emailInput, { target: { value: "test@test.com" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
+      })
+
+      const passwordInput = await waitForElement(() => getByLabelText("Password"))
+      fireEvent.focus(passwordInput)
+      fireEvent.change(passwordInput, { target: { value: "test-password" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
+      })
+
+      const confirmInput = await waitForElement(() => getByLabelText("Confirm"))
+      fireEvent.focus(confirmInput)
+      fireEvent.change(confirmInput, { target: { value: "test-password" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
       })
 
       fireEvent.click(getByRole('login-btn'))
@@ -296,27 +327,37 @@ describe('l-c1: Login Component testing', () => {
   test('a14. (DOM) should show "login failure" message when login failed because of network issue', async () => {
     api.request = jest.fn()
       .mockResolvedValueOnce(userEmailCheck204Response) // for type ahead request 
-      .mockReturnValue(Promise.reject(networkError))
+      .mockRejectedValueOnce(networkError)
 
     await act(async () => {
-      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText, queryByRole } = render(
         <ContextWrapperComponent component={Login} isAuth />
       )
-      const inputs = await waitForElement(() => [
-        getByLabelText('Email'),
-        getByLabelText('Password'),
-        getByLabelText('Confirm'),
-      ])
-
-      seedInputTestValues(inputs, [
-        'test@test.com',
-        'test-password',
-        'test-password'
-      ])
-      
-      // wait for type ahead request has done
+      // need to do individually otherwise, got errors
+      const emailInput = await waitForElement(() => getByLabelText("Email"))
+      fireEvent.focus(emailInput)
+      // need for only first field to wait for initial validation 
+      // use this because there is no way to wait state update
       await wait(() => {
-        expect(api.request).toHaveBeenCalledTimes(1)
+        expect(queryByRole("input-field-error-msg")).toBeInTheDocument()
+      })
+      fireEvent.change(emailInput, { target: { value: "test@test.com" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
+      })
+
+      const passwordInput = await waitForElement(() => getByLabelText("Password"))
+      fireEvent.focus(passwordInput)
+      fireEvent.change(passwordInput, { target: { value: "test-password" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
+      })
+
+      const confirmInput = await waitForElement(() => getByLabelText("Confirm"))
+      fireEvent.focus(confirmInput)
+      fireEvent.change(confirmInput, { target: { value: "test-password" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
       })
 
       fireEvent.click(getByRole('login-btn'))
@@ -389,7 +430,7 @@ describe('l-c1: Login Component testing', () => {
     api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
     await act(async () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
-        <ContextWrapperComponent component={ForgotPasswordEmailModal}  />
+        <ContextWrapperComponent component={ForgotPasswordEmailModal} />
       )
       const inputs = await waitForElement(() => [
         getByLabelText('Email'),

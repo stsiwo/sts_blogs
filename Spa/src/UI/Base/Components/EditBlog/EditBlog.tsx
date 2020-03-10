@@ -43,7 +43,7 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId,
   const titleInputRef: React.MutableRefObject<HTMLInputElement> = { current: null }
   const subtitleInputRef: React.MutableRefObject<HTMLInputElement> = { current: null }
   const [currentIsDeleteMainImage, setIsDeleteMainImage] = React.useState<boolean>(false)
-  const { currentValidationError, touch, validate, validationSummaryCheck, currentTouch } = useBlogValidation({ domain: currentBlog })
+  const { currentValidationError, touch, validate, validationSummaryCheck, currentTouch } = useBlogValidation({ domain: { title: currentBlog.title, subtitle: currentBlog.subtitle }})
   const { currentRequestStatus: currentPublishStatus, setRequestStatus: setPublishStatus, sendRequest: publishRequest } = useRequest({})
   const [curFetchContext, setFetchContext] = React.useState<FetchContextEnum>(FetchContextEnum.PUBLISH)
   const { auth } = useAuthContext()
@@ -226,7 +226,7 @@ const EditBlog: React.FunctionComponent<EditBlogPropsType> = ({ context, blogId,
           placeholder="enter blog content..."
           onChange={handleContentChangeEvent}
           onFocus={handleInitialFocusEvent}
-          errorMsg={currentTouch.content ? currentValidationError.content : null}
+          errorMsg={null}
         />
         <input type="hidden" name='creationDate' value={currentBlog.createdDate.toJSON()} />
         <div className="blog-detail-input-wrapper">

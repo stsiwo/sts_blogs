@@ -6,8 +6,9 @@ import { logger } from 'configs/logger';
 import { Subject, from } from 'rxjs';
 import { debounceTime, tap, distinctUntilChanged, filter, switchMap, map, take } from 'rxjs/operators';
 import { useRequest } from 'Hooks/Request/useRequest';
-import { RequestMethodEnum, ResponseResultType } from 'requests/types';
+import { RequestMethodEnum, ResponseResultType, ResponseResultStatusEnum } from 'requests/types';
 import * as React from 'react';
+import { appConfig } from 'configs/appConfig';
 const log = logger("useUserSignupValidation")
 
 export const useUserSignupValidation = (input: UseUserSignupValidationStatusInputType): UseUserSignupValidationStatusOutputType => {
@@ -24,7 +25,7 @@ export const useUserSignupValidation = (input: UseUserSignupValidationStatusInpu
         // one time only (create observable every time this function is called
         const subs = obs$.pipe(
           //map((event: Event) => (event.currentTarget as HTMLInputElement).value),
-          debounceTime(1000),
+          debounceTime(appConfig.debounceTime),
           tap((value: string) => log("passed debounceTime with: " + value)),
           distinctUntilChanged(),
           tap((value: string) => log("passed distinctUntilChanged with: " + value)),
@@ -44,7 +45,7 @@ export const useUserSignupValidation = (input: UseUserSignupValidationStatusInpu
           switchMap((value: string) => {
             log("switchMap before request")
             return from(sendRequest({
-              path: "/test-type-ahead",
+              path: "/user-email-check",
               method: RequestMethodEnum.POST, 
               headers: { 'content-type': 'application/json' },
               data: JSON.stringify({ email: value }),
@@ -55,6 +56,8 @@ export const useUserSignupValidation = (input: UseUserSignupValidationStatusInpu
           tap((value: ResponseResultType) => log("passed switchMap with: " + value)),
           map((response: ResponseResultType) => {
             log("got received response")
+            // refer: ResponseResultStatusEnum
+            // not Axios (or api status code)
             return response.status as number
           }),
           map((status: number) => {
@@ -70,7 +73,7 @@ export const useUserSignupValidation = (input: UseUserSignupValidationStatusInpu
         return await subs.then((value: number) => {
           // if this stream is completed before api reqeust, this 'value' hold 'undefined'
           log("then after observable promise: " + value)
-          return value === 204 ? true : false
+          return value === ResponseResultStatusEnum.SUCCESS ? true : false
         }).catch(() => false)
         //return false
       }).email().required(),

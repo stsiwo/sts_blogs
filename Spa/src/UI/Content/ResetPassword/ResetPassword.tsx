@@ -25,11 +25,12 @@ const ResetPassword: React.FunctionComponent<RouteComponentProps<{}>> = (props: 
   let query = useQuery();
   const [currentUserResetPasswordStatus, setUserResetPasswordStatus] = React.useState<UserResetPasswordType>(initialUserResetPasswordStatus)
   const { currentRequestStatus, setRequestStatus, sendRequest } = useRequest({})
-  const { currentValidationError, touch, validate, validationSummaryCheck } = useUserResetPasswordValidation({ domain: currentUserResetPasswordStatus })
+  const { currentValidationError, touch, validate, validationSummaryCheck, currentTouch } = useUserResetPasswordValidation({ domain: currentUserResetPasswordStatus })
   const { auth, authDispatch } = useAuthContext()
   const { url, path } = useRouteMatch()
 
   const handleInputChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
+    log("start handling input change")
     const targetName = e.currentTarget.name
     const targetValue = e.currentTarget.value
     const tmpUserResetPasswordStatus = cloneDeep(currentUserResetPasswordStatus)
@@ -90,7 +91,7 @@ const ResetPassword: React.FunctionComponent<RouteComponentProps<{}>> = (props: 
           onInputChange={handleInputChangeEvent}
           onInputFocus={handleInitialFocusEvent}
           placeholder={"enter your password..."}
-          errorMsg={currentValidationError.password}
+          errorMsg={currentTouch.password ? currentValidationError.password : null}
           errorStyle={'password-error small-input-error'}
           inputType={'password'}
         />
@@ -103,7 +104,7 @@ const ResetPassword: React.FunctionComponent<RouteComponentProps<{}>> = (props: 
           onInputChange={handleInputChangeEvent}
           onInputFocus={handleInitialFocusEvent}
           placeholder={"enter your password again ..."}
-          errorMsg={currentValidationError.confirm}
+          errorMsg={currentTouch.confirm ? currentValidationError.confirm : null}
           errorStyle={'confirm-error small-input-error'}
           inputType={'password'}
         />

@@ -32,7 +32,7 @@ export const useUserLoginValidation = (input: UseUserLoginValidationStatusInputT
         // one time only (create observable every time this function is called
         const subs = obs$.pipe(
           //map((event: Event) => (event.currentTarget as HTMLInputElement).value),
-          debounceTime(1000),
+          debounceTime(appConfig.debounceTime),
           tap((value: string) => log("passed debounceTime with: " + value)),
           distinctUntilChanged(),
           tap((value: string) => log("passed distinctUntilChanged with: " + value)),
@@ -52,7 +52,7 @@ export const useUserLoginValidation = (input: UseUserLoginValidationStatusInputT
           switchMap((value: string) => {
             log("switchMap before request")
             return from(sendRequest({
-              path: "/test-type-ahead",
+              path: "/user-email-check",
               method: RequestMethodEnum.POST, 
               headers: { 'content-type': 'application/json' },
               data: JSON.stringify({ email: value }),
@@ -63,6 +63,8 @@ export const useUserLoginValidation = (input: UseUserLoginValidationStatusInputT
           tap((value: ResponseResultType) => log("passed switchMap with: " + value)),
           map((response: ResponseResultType) => {
             log("got received response")
+            // reference: ResponseResultStatusEnum (2: success and so on)
+            // not Axios response status (or from api status code)
             return response.status as number
           }),
           map((status: number) => {
@@ -78,8 +80,9 @@ export const useUserLoginValidation = (input: UseUserLoginValidationStatusInputT
         return await subs.then((value: number) => {
           // if this stream is completed before api reqeust, this 'value' hold 'undefined'
           log("then after observable promise: " + value)
-          return value === 204 ? true : false
-        }).catch(() => false)
+          // '2' represetn 2xx (success and provided email exists)
+          return value === ResponseResultStatusEnum.SUCCESS ? true : false
+        })
         //return false
       }).email().required(),
     password: yup.string().required(),

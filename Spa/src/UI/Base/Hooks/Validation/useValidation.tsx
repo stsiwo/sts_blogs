@@ -87,7 +87,7 @@ export const useValidation = <D extends object>(input: UseValidationStatusInputT
     log("start validationSummaryCheck")
     let isPassed: boolean = true
     Object.keys(currentValidationError).forEach((key: string) => {
-      if (key !== 'submit' && currentValidationError[key as keyof D] !== "") {
+      if (key !== 'submit' && input.domain.hasOwnProperty(key) && currentValidationError[key as keyof D] !== "") {
         log("validation error detected at " + key + " with " + currentValidationError[key as keyof D])
         isPassed = false
       }

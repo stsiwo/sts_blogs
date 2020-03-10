@@ -26,7 +26,7 @@ const Input: React.FunctionComponent<InputPropType> = (props: InputPropType) => 
         ref={props.forwardRef}
       />
       {(props.errorMsg && 
-         <div className={`input-error ${props.errorStyle}`}>{props.errorMsg}</div>
+         <div className={`input-error ${props.errorStyle}`} role="input-field-error-msg">{props.errorMsg}</div>
       )}
     </BaseInput>
   );

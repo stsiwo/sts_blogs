@@ -45,6 +45,14 @@ export const initialUserResetPasswordStatus: UserResetPasswordType = {
 
 export declare type UserResetPasswordRequestDataType = UserResetPasswordType
 
+export declare type UserProfileType = {
+  id: string
+  name: string
+  email: string
+  password: string
+  confirm: string
+}
+
 export declare type UserLoginRequestDataType = {
   email: string
   password: string

@@ -23,7 +23,13 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
   const [currentUser, setUser] = React.useState<UserType>(auth.user)
   log('before useValidation')
   log(currentUser)
-  const { currentValidationError, touch, validate, validationSummaryCheck } = useProfileValidation({ domain: currentUser })
+  const { currentValidationError, touch, validate, validationSummaryCheck, currentTouch } = useProfileValidation({ domain: {
+    id: currentUser.id,
+    name: currentUser.name,
+    email: currentUser.email,
+    password: currentUser.password,
+    confirm: currentUser.confirm
+  } })
 
   const path: string = '/users/' + currentUser.id
   const method: RequestMethodEnum = RequestMethodEnum.PUT
@@ -182,7 +188,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
             onInputFocus={handleInitialFocusEvent}
             placeholder={"enter new user name..."}
             wrapperStyle={'grid-input-wrapper'}
-            errorMsg={currentValidationError.name}
+            errorMsg={currentTouch.name ? currentValidationError.name : null}
           />
           <Input
             id={"email"}
@@ -195,7 +201,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
             onInputFocus={handleInitialFocusEvent}
             placeholder={"enter new email..."}
             wrapperStyle={'grid-input-wrapper'}
-            errorMsg={currentValidationError.email}
+            errorMsg={currentTouch.email ? currentValidationError.email : null}
           />
           <Input
             id={"password"}
@@ -209,7 +215,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
             onInputFocus={handleInitialFocusEvent}
             placeholder={"enter new password..."}
             wrapperStyle={'grid-input-wrapper'}
-            errorMsg={currentValidationError.password}
+            errorMsg={currentTouch.password ? currentValidationError.password : null}
           />
           <Input
             id={"confirm"}
@@ -223,7 +229,7 @@ const Profile: React.FunctionComponent<{}> = (props: {}) => {
             onInputFocus={handleInitialFocusEvent}
             placeholder={"enter new password again..."}
             wrapperStyle={'grid-input-wrapper'}
-            errorMsg={currentValidationError.confirm}
+            errorMsg={currentTouch.confirm ? currentValidationError.confirm : null}
           />
           <div className="grid-input-wrapper">
             <button type="button" className="btn" onClick={handleSaveUserClickEvent} role="update-btn">Update</button>

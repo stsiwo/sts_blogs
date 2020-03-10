@@ -111,7 +111,8 @@ describe('l-c1: ResetPassword Component testing', () => {
       )
       const confirmInput = await waitForElement(() => getByLabelText('Confirm'))
       fireEvent.focus(confirmInput) // need to focus to enable to display validation error on dom
-      fireEvent.change(confirmInput, { target: { value: 'match' } })
+      const confirmNotNullErrorNode = await waitForElement(() => getByText('confirm is a required field'))
+      fireEvent.change(confirmInput, { target: { value: 'no-match' } })
       const confirmErrorNode = await waitForElement(() => getByText('passwords must match'))
       expect(confirmErrorNode).toBeInTheDocument()
     })
@@ -125,6 +126,7 @@ describe('l-c1: ResetPassword Component testing', () => {
       )
       const confirmInput = await waitForElement(() => getByLabelText('Confirm'))
       fireEvent.focus(confirmInput) // need to focus to enable to display validation error on dom
+      const confirmNotNullErrorNode = await waitForElement(() => getByText('confirm is a required field'))
       fireEvent.change(confirmInput, { target: { value: 'match' } })
       const confirmErrorNode = await waitForElement(() => getByText('passwords must match'))
       fireEvent.click(getByRole('reset-password-btn'))
