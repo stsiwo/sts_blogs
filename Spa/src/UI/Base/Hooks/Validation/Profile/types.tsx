@@ -1,13 +1,15 @@
 import * as React from 'react'
-import { UserType } from 'domain/user/UserType';
-import { DomainValidationType } from '../types';
+import { UserType, UserProfileType } from 'domain/user/UserType';
+import { DomainValidationType, InputTouchedType } from '../types';
 
 export declare type UseProfileValidationStatusInputType = {
-  domain: UserType
+  domain: UserProfileType
 }
 
 export declare type UseProfileValidationStatusOutputType = {
-  currentValidationError: DomainValidationType<UserType> 
+  currentValidationError: DomainValidationType<UserProfileType> 
   touch: (name: string) => void,
-  validate: () => Promise<void>
+  validate: (field: string, value: any, context?: any) => void
+  validationSummaryCheck: () => boolean
+  currentTouch: InputTouchedType<UserProfileType>
 }

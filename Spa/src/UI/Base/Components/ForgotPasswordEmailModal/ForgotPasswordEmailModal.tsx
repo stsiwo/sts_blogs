@@ -10,19 +10,21 @@ import { RequestMethodEnum, ResponseResultType, ResponseResultStatusEnum } from 
 import FetchStatus from 'Components/ApiFetch/FetchStatus';
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { logger } from 'configs/logger';
+import cloneDeep = require('lodash/cloneDeep');
 const log = logger("ForgotPasswordModal");
 
 
 const ForgotPasswordEmailModal: React.FunctionComponent<ForgotPasswordEmailModalPropType> = (props: ForgotPasswordEmailModalPropType) => {
 
   const [currentForgotPasswordStatus, setForgotPasswordStatus] = React.useState<ForgotPasswordType>(initialForgotPasswordStatus)
-  const { currentValidationError, touch, validate } = useForgotPasswordValidation({ domain: currentForgotPasswordStatus })
+  const { currentValidationError, touch, validate, validationSummaryCheck, currentTouch } = useForgotPasswordValidation({ domain: currentForgotPasswordStatus })
   const { currentRequestStatus: currentForgotPasswordRequestStatus, setRequestStatus: setForgotPasswordRequestStatus, sendRequest: sendForgotPasswordRequest } = useRequest({})
 
   const handleInputChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
-    currentForgotPasswordStatus[e.currentTarget.name as keyof ForgotPasswordType] = e.currentTarget.value
+    const tmpForgotPasswordStatus = cloneDeep(currentForgotPasswordStatus)
+    tmpForgotPasswordStatus[e.currentTarget.name as keyof ForgotPasswordType] = e.currentTarget.value
     setForgotPasswordStatus({
-      ...currentForgotPasswordStatus
+      ...tmpForgotPasswordStatus
     })
   }
 
@@ -32,20 +34,17 @@ const ForgotPasswordEmailModal: React.FunctionComponent<ForgotPasswordEmailModal
 
   const handleSubmitClickEvent: React.EventHandler<React.MouseEvent<HTMLInputElement>> = async (e) => {
     log('clicked update butuon')
-    validate()
-      .then(() => {
-        log('validation passed')
-        sendForgotPasswordRequest({
-          path: '/forgot-password',
-          method: RequestMethodEnum.POST,
-          headers: { 'content-type': 'application/json' },
-          data: JSON.stringify({ email: currentForgotPasswordStatus.email })
-        })
-          .then((result: ResponseResultType<{}>) => {
-          })
-      }, () => {
-        log('validation failed at save button event handler')
+    if (validationSummaryCheck()) {
+      log('validation passed')
+      sendForgotPasswordRequest({
+        path: '/forgot-password',
+        method: RequestMethodEnum.POST,
+        headers: { 'content-type': 'application/json' },
+        data: JSON.stringify({ email: currentForgotPasswordStatus.email })
       })
+        .then((result: ResponseResultType<{}>) => {
+        })
+    }
   }
 
   return (
@@ -62,7 +61,7 @@ const ForgotPasswordEmailModal: React.FunctionComponent<ForgotPasswordEmailModal
         onInputChange={handleInputChangeEvent}
         onInputFocus={handleInitialFocusEvent}
         placeholder={"enter your email..."}
-        errorMsg={currentValidationError.email}
+        errorMsg={currentTouch.email ? currentValidationError.email : null}
         errorStyle={'email-error'}
       />
       <FetchStatus
@@ -84,12 +83,3 @@ const ForgotPasswordEmailModal: React.FunctionComponent<ForgotPasswordEmailModal
 }
 
 export default ForgotPasswordEmailModal;
-
-
-
-
-
-
-
-
-

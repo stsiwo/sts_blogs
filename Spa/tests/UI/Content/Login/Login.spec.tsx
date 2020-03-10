@@ -1,13 +1,15 @@
 import '@testing-library/jest-dom/extend-expect';
 // import react-testing methods
-import { fireEvent, queryByRole, queryByText, render, wait, waitForElement } from '@testing-library/react';
+import { fireEvent, queryByRole, queryByText, render, wait, waitForElement, waitForElementToBeRemoved } from '@testing-library/react';
 import * as React from 'react';
 import { act } from 'react-dom/test-utils';
 import { api } from 'requests/api';
-import { userGET200Response, internalServerError500Response, networkError, notFound404ResponseV2 } from '../../../requests/fixtures';
+import { userGET200Response, internalServerError500Response, networkError, notFound404ResponseV2, userEmailCheck204Response } from '../../../requests/fixtures';
 import { ContextWrapperComponent } from '../../fixtures';
 import Login from 'ui/Content/Login/Login';
 import ForgotPasswordEmailModal from 'Components/ForgotPasswordEmailModal/ForgotPasswordEmailModal';
+import '../../../data/mocks/localStorageMock'
+jest.setTimeout(10000)
 
 
 describe('l-c1: Login Component testing', () => {
@@ -49,7 +51,7 @@ describe('l-c1: Login Component testing', () => {
   })
 
   beforeEach(() => {
-
+    localStorage.clear()
   })
 
   /** test for use case which does not matter screen size  here**/
@@ -189,49 +191,86 @@ describe('l-c1: Login Component testing', () => {
   }
 
   test('a12. (EH) should start login request when "login" is clicked', async () => {
-    api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
+    api.request = jest.fn()
+      .mockResolvedValueOnce(userEmailCheck204Response) // for type ahead request 
+      .mockResolvedValueOnce(userGET200Response)
+
     await act(async () => {
-      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText, queryByRole } = render(
         <ContextWrapperComponent component={Login} isAuth />
       )
-      const inputs = await waitForElement(() => [
-        getByLabelText('Email'),
-        getByLabelText('Password'),
-        getByLabelText('Confirm'),
-      ])
+      // need to do individually otherwise, got errors
+      const emailInput = await waitForElement(() => getByLabelText("Email"))
+      fireEvent.focus(emailInput)
+      // need for only first field to wait for initial validation 
+      // use this because there is no way to wait state update
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeInTheDocument()
+      })
+      fireEvent.change(emailInput, { target: { value: "test@test.com" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
+      })
 
-      seedInputTestValues(inputs, [
-        'test@test.com',
-        'test-password',
-        'test-password'
-      ])
+      const passwordInput = await waitForElement(() => getByLabelText("Password"))
+      fireEvent.focus(passwordInput)
+      fireEvent.change(passwordInput, { target: { value: "test-password" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
+      })
+
+      const confirmInput = await waitForElement(() => getByLabelText("Confirm"))
+      fireEvent.focus(confirmInput)
+      fireEvent.change(confirmInput, { target: { value: "test-password" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
+      })
 
       fireEvent.click(getByRole('login-btn'))
       await wait(() => {
-        expect(api.request).toHaveBeenCalledTimes(1)
+        expect(api.request).toHaveBeenCalledTimes(2)
       })
     })
   })
 
   test('a13. (DOM) should show "login success" message when login completed', async () => {
-    api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
-    await act(async () => {
-      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
-        <ContextWrapperComponent component={Login} isAuth />
-      )
-      const inputs = await waitForElement(() => [
-        getByLabelText('Email'),
-        getByLabelText('Password'),
-        getByLabelText('Confirm'),
-      ])
+    api.request = jest.fn()
+      .mockResolvedValueOnce(userEmailCheck204Response) // for type ahead request 
+      .mockResolvedValueOnce(userGET200Response) // for submit request
 
-      seedInputTestValues(inputs, [
-        'test@test.com',
-        'test-password',
-        'test-password'
-      ])
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText, queryByText, queryByRole } = render(
+        <ContextWrapperComponent component={Login} />
+      )
+      // need to do individually otherwise, got errors
+      const emailInput = await waitForElement(() => getByLabelText("Email"))
+      fireEvent.focus(emailInput)
+      // need for only first field to wait for initial validation 
+      // use this because there is no way to wait state update
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeInTheDocument()
+      })
+      fireEvent.change(emailInput, { target: { value: "test@test.com" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
+      })
+
+      const passwordInput = await waitForElement(() => getByLabelText("Password"))
+      fireEvent.focus(passwordInput)
+      fireEvent.change(passwordInput, { target: { value: "test-password" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
+      })
+
+      const confirmInput = await waitForElement(() => getByLabelText("Confirm"))
+      fireEvent.focus(confirmInput)
+      fireEvent.change(confirmInput, { target: { value: "test-password" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
+      })
 
       fireEvent.click(getByRole('login-btn'))
+
       // wait for expectation meet otherwise async timeout
       await wait(() => {
         expect(getByText('requesting user login success')).toBeInTheDocument()
@@ -240,22 +279,42 @@ describe('l-c1: Login Component testing', () => {
   })
 
   test('a15. (DOM) should show "login failure" message when login failed because of 4xx or 5xx error', async () => {
-    api.request = jest.fn().mockReturnValue(Promise.reject(internalServerError500Response))
-    await act(async () => {
-      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
-        <ContextWrapperComponent component={Login} isAuth />
-      )
-      const inputs = await waitForElement(() => [
-        getByLabelText('Email'),
-        getByLabelText('Password'),
-        getByLabelText('Confirm'),
-      ])
+    api.request = jest.fn()
+      //.mockResolvedValue(userEmailCheck204Response) 
+      .mockResolvedValueOnce(userEmailCheck204Response) // for type ahead request 
+      .mockRejectedValueOnce(internalServerError500Response)
 
-      seedInputTestValues(inputs, [
-        'test@test.com',
-        'test-password',
-        'test-password'
-      ])
+    await act(async () => {
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText, queryByRole } = render(
+        <ContextWrapperComponent component={Login} />
+      )
+
+      // need to do individually otherwise, got errors
+      const emailInput = await waitForElement(() => getByLabelText("Email"))
+      fireEvent.focus(emailInput)
+      // need for only first field to wait for initial validation 
+      // use this because there is no way to wait state update
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeInTheDocument()
+      })
+      fireEvent.change(emailInput, { target: { value: "test@test.com" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
+      })
+
+      const passwordInput = await waitForElement(() => getByLabelText("Password"))
+      fireEvent.focus(passwordInput)
+      fireEvent.change(passwordInput, { target: { value: "test-password" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
+      })
+
+      const confirmInput = await waitForElement(() => getByLabelText("Confirm"))
+      fireEvent.focus(confirmInput)
+      fireEvent.change(confirmInput, { target: { value: "test-password" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
+      })
 
       fireEvent.click(getByRole('login-btn'))
       // wait for expectation meet otherwise async timeout
@@ -266,22 +325,40 @@ describe('l-c1: Login Component testing', () => {
   })
 
   test('a14. (DOM) should show "login failure" message when login failed because of network issue', async () => {
-    api.request = jest.fn().mockReturnValue(Promise.reject(networkError))
+    api.request = jest.fn()
+      .mockResolvedValueOnce(userEmailCheck204Response) // for type ahead request 
+      .mockRejectedValueOnce(networkError)
+
     await act(async () => {
-      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText, queryByRole } = render(
         <ContextWrapperComponent component={Login} isAuth />
       )
-      const inputs = await waitForElement(() => [
-        getByLabelText('Email'),
-        getByLabelText('Password'),
-        getByLabelText('Confirm'),
-      ])
+      // need to do individually otherwise, got errors
+      const emailInput = await waitForElement(() => getByLabelText("Email"))
+      fireEvent.focus(emailInput)
+      // need for only first field to wait for initial validation 
+      // use this because there is no way to wait state update
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeInTheDocument()
+      })
+      fireEvent.change(emailInput, { target: { value: "test@test.com" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
+      })
 
-      seedInputTestValues(inputs, [
-        'test@test.com',
-        'test-password',
-        'test-password'
-      ])
+      const passwordInput = await waitForElement(() => getByLabelText("Password"))
+      fireEvent.focus(passwordInput)
+      fireEvent.change(passwordInput, { target: { value: "test-password" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
+      })
+
+      const confirmInput = await waitForElement(() => getByLabelText("Confirm"))
+      fireEvent.focus(confirmInput)
+      fireEvent.change(confirmInput, { target: { value: "test-password" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
+      })
 
       fireEvent.click(getByRole('login-btn'))
       // wait for expectation meet otherwise async timeout
@@ -353,7 +430,7 @@ describe('l-c1: Login Component testing', () => {
     api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
     await act(async () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
-        <ContextWrapperComponent component={ForgotPasswordEmailModal}  />
+        <ContextWrapperComponent component={ForgotPasswordEmailModal} />
       )
       const inputs = await waitForElement(() => [
         getByLabelText('Email'),
@@ -362,6 +439,11 @@ describe('l-c1: Login Component testing', () => {
       seedInputTestValues(inputs, [
         'test@test.com',
       ])
+
+      // wait for type ahead request has done
+      await wait(() => {
+        expect(api.request).toHaveBeenCalledTimes(1)
+      })
 
       fireEvent.click(getByRole('forgot-password-btn'))
       // wait for expectation meet otherwise async timeout
@@ -372,7 +454,10 @@ describe('l-c1: Login Component testing', () => {
   })
 
   test('a21. (forgot password:fetch) should show "FG failure" message when login failed because of network issue', async () => {
-    api.request = jest.fn().mockReturnValue(Promise.reject(internalServerError500Response))
+    api.request = jest.fn()
+      .mockResolvedValueOnce(userEmailCheck204Response) // for type ahead request 
+      .mockRejectedValueOnce(internalServerError500Response) // for submit request
+
     await act(async () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={ForgotPasswordEmailModal} />
@@ -384,6 +469,12 @@ describe('l-c1: Login Component testing', () => {
       seedInputTestValues(inputs, [
         'test@test.com',
       ])
+
+      // wait for type ahead request has done
+      await wait(() => {
+        expect(api.request).toHaveBeenCalledTimes(1)
+      })
+
 
       fireEvent.click(getByRole('forgot-password-btn'))
       // wait for expectation meet otherwise async timeout
@@ -394,7 +485,11 @@ describe('l-c1: Login Component testing', () => {
   })
 
   test('a22. (forgot password:fetch) should show "FG failure" message when login failed because the email does not exist (404)', async () => {
-    api.request = jest.fn().mockReturnValue(Promise.reject(notFound404ResponseV2))
+
+    api.request = jest.fn()
+      .mockResolvedValueOnce(userEmailCheck204Response) // for type ahead request 
+      .mockRejectedValueOnce(notFound404ResponseV2) // for submit request
+
     await act(async () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={ForgotPasswordEmailModal} />
@@ -406,6 +501,11 @@ describe('l-c1: Login Component testing', () => {
       seedInputTestValues(inputs, [
         'test@test.com',
       ])
+
+      // wait for type ahead request has done
+      await wait(() => {
+        expect(api.request).toHaveBeenCalledTimes(1)
+      })
 
       fireEvent.click(getByRole('forgot-password-btn'))
       // wait for expectation meet otherwise async timeout

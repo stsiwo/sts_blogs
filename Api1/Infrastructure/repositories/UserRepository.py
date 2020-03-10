@@ -18,6 +18,9 @@ class UserRepository(BaseRepository[User]):
     def getByEmail(self, email: str) -> User:
         return self._session.query(User).filter_by(email=email).first()
 
+    def isExistByEmail(self, email: str) -> bool:
+        return True if self.getByEmail(email) is not None else False
+
     def delete(self, id: str):
         self._session.query(User).filter_by(id=id).delete()
 

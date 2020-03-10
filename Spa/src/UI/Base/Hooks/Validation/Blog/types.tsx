@@ -1,13 +1,16 @@
 import * as React from 'react'
-import { DomainValidationType, ValidationType } from '../types';
+import { DomainValidationType, ValidationType, InputTouchedType } from '../types';
 import { BlogType } from 'domain/blog/BlogType'
+import { BlogValidationType } from 'domain/blog/BlogValidationType';
 
 export declare type UseBlogValidationStatusInputType = {
-  domain: BlogType
+  domain: BlogValidationType
 }
 
 export declare type UseBlogValidationStatusOutputType = {
-  currentValidationError: ValidationType<BlogType> 
+  currentValidationError: ValidationType<BlogValidationType> 
   touch: (name: string) => void,
-  validate: () => Promise<void>
+  validate: (field: string, value: any, context?: any) => void
+  validationSummaryCheck: () => boolean
+  currentTouch: InputTouchedType<BlogValidationType> 
 }

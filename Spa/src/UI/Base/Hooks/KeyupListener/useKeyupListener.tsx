@@ -20,6 +20,6 @@ export const useKeyupListener = (input: UseKeyupListenerInput): void => {
       document.removeEventListener<'keyup'>('keyup', handleSubmitEnterKeyupEvent)
     }
 
-  })
+  }, [])
 
 }

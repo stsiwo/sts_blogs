@@ -1,16 +1,11 @@
 import { BlogType } from "./BlogType";
 
 export declare type BlogValidationType = {
-  [P in keyof BlogType]: string
+  title: string
+  subtitle: string
 }
 
 export const initialBlogValidationState: BlogValidationType = {
-  id: '',
   title: '',
   subtitle: '',
-  mainImage: '',
-  mainImageUrl: '',
-  content: '',
-  tags: '',
-  createdDate: ''
 }

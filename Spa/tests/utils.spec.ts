@@ -1,5 +1,5 @@
 import { QueryStringType } from "../src/requests/types";
-import { buildQueryString } from "../src/utils";
+import { buildQueryString, isSameObjectForm } from "../src/utils";
 
 describe('utils testing', () => {
 
@@ -46,6 +46,33 @@ describe('utils testing', () => {
       })
   }
 
-  test('test promise', async () => {
+  test('isSameObjectForm should return false since two object has different form', async () => {
+    const A = {
+      a: 1,
+      b: 2,
+      c: 3,
+    }
+    const B = {
+      a: 1,
+      b: 2,
+      d: 3
+    }
+
+    expect(isSameObjectForm(A, B)).toBeFalsy()
+  })
+
+  test('isSameObjectForm should return true since two object has same form', async () => {
+    const A = {
+      a: 1,
+      b: 2,
+      c: 3,
+    }
+    const B = {
+      c: 4,
+      a: 4,
+      b: 4,
+    }
+
+    expect(isSameObjectForm(A, B)).toBeTruthy()
   })
 })

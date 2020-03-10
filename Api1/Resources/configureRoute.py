@@ -13,6 +13,7 @@ from Resources.Test import Test
 # from Resources.UploadImage import UploadImage
 from Resources.UploadedImage import UploadedImage
 from Resources.ForgotPassword import ForgotPassword
+from Resources.UserEmailCheck import UserEmailCheck
 from Resources.PasswordReset import PasswordReset
 
 
@@ -28,5 +29,6 @@ api.add_resource(BlogComments, '/blogs/<string:blog_id>/comments')
 # api.add_resource(UploadImage, '/uploads', '/uploads/<string:file_name>')
 api.add_resource(UploadedImage, '/images/<string:user_id>/<string:file_name>')
 api.add_resource(ForgotPassword, '/forgot-password')
+api.add_resource(UserEmailCheck, '/user-email-check')
 api.add_resource(PasswordReset, '/password-reset')
 api.add_resource(Test, '/test')

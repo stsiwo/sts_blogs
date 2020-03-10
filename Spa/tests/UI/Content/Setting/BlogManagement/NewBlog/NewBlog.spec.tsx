@@ -8,6 +8,7 @@ import { blogGET200NonEmptyResponse, blogGET200EmptyResponse, noDateGET200Respon
 import NewBlog from 'ui/Content/Setting/BlogManagement/NewBlog/NewBlog'
 import { ContextWrapperComponent } from '../../../../fixtures';
 import { CssGlobalContextDefaultState } from 'Contexts/CssGlobalContext/CssGlobalContextDefaultState';
+jest.setTimeout(10000)
 
 
 describe('ub-c1: NewBlog Component testing', () => {
@@ -74,7 +75,11 @@ describe('ub-c1: NewBlog Component testing', () => {
       const titleInput = await waitForElement(() => getByLabelText('Title'))
       fireEvent.focus(titleInput) // need to focus to enable to display validation error on dom
       fireEvent.change(titleInput, { target: { value: 'hey' } })
-      expect(api.request).toHaveBeenCalled()
+
+      // actual autosave with debounce
+      await wait(() => {
+        expect(api.request).toHaveBeenCalledTimes(1)
+      })
     })
   })
 
@@ -107,7 +112,9 @@ describe('ub-c1: NewBlog Component testing', () => {
       fireEvent.focus(getByRole('publish-btn')) // don't foreget focus first 
       fireEvent.click(getByRole('publish-btn'))
       await waitForElement(() => getByText('please fix validation errors before submit'))
-      expect(api.request).toHaveBeenCalledTimes(1)
+      await wait(() => {
+        expect(api.request).toHaveBeenCalledTimes(1)
+      })
     })
   })
 
@@ -139,7 +146,9 @@ describe('ub-c1: NewBlog Component testing', () => {
       fireEvent.focus(getByRole('publish-btn')) // need to focus to enable to display validation error on dom
       fireEvent.click(getByRole('publish-btn'))
       await waitForElement(() => getByText('please fix validation errors before submit'))
-      expect(api.request).toHaveBeenCalledTimes(1)
+      await wait(() => {
+        expect(api.request).toHaveBeenCalledTimes(1)
+      })
     })
   })
 
@@ -173,22 +182,32 @@ describe('ub-c1: NewBlog Component testing', () => {
       fireEvent.change(tagsInput, { target: { value: 'sample' } })
       fireEvent.keyDown(tagsInput, { key: 'Enter', code: 13, charCode: 13 })
       const tagIcons = await waitForElement(() => queryAllByRole('tag-icon'))
-      expect(tagIcons.length).toBe(1) 
+      expect(tagIcons.length).toBe(1)
     })
-  
+
   })
 
   test('a8. (validation) should display summary error msg when there is at least one of validation error and click "publish" btn', async () => {
+    api.request = jest.fn()
     await act(async () => {
-      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText, queryByRole } = render(
         <ContextWrapperComponent component={NewBlog} isAuth />
       )
 
       // must wait until fetch is completed
       const publishBtn = await waitForElement(() => getByRole('publish-btn'))
+
+      // wait for initial validation for all fields (there is no way to wait state update in this library so use below)
+      const titleNode = await waitForElement(() => getByLabelText("Title"))
+      fireEvent.focus(titleNode)
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeInTheDocument() 
+      })
+
       fireEvent.focus(publishBtn) // don't foreget focus first 
       fireEvent.click(publishBtn)
       // wait until below expectation is met otherwise, timeout
+      debug()
       await wait(() => {
         expect(getByRole('summary-input-error')).toBeInTheDocument()
       })
@@ -211,25 +230,36 @@ describe('ub-c1: NewBlog Component testing', () => {
         expect(api.request).toHaveBeenCalledTimes(1) // 1: initial fetch so count it
       })
     })
-  
+
   })
 
   test('a10. (EH) should start publish request when "publish" is clicked', async () => {
     api.request = jest.fn().mockResolvedValue(noDateGET200Response)
     await act(async () => {
-      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText, queryByRole } = render(
         <ContextWrapperComponent component={NewBlog} isAuth />
       )
 
-      const inputs = await waitForElement(() => [
-        getByLabelText('Title'),
-        getByLabelText('Subtitle'),
-      ])
+      // need to do individually otherwise, got errors
+      const titleInput = await waitForElement(() => getByLabelText("Title"))
+      fireEvent.focus(titleInput)
+      // need for only first field to wait for initial validation 
+      // use this because there is no way to wait state update
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeInTheDocument()
+      })
+      fireEvent.change(titleInput, { target: { value: "test-title" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
+      })
 
-      seedInputTestValues(inputs, [
-        'test-title',
-        'test-subtitle',
-      ])
+      const subtitleInput = await waitForElement(() => getByLabelText("Subtitle"))
+      fireEvent.focus(subtitleInput)
+      fireEvent.change(subtitleInput, { target: { value: "test-subtitle" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
+      })
+
       // must wait until fetch is completed
       api.request = jest.fn().mockResolvedValue(noDateGET200Response)
       const publishBtn = await waitForElement(() => getByRole('publish-btn'))
@@ -238,7 +268,7 @@ describe('ub-c1: NewBlog Component testing', () => {
       const currentCallsNum = (api.request as any).mock.calls.length
       // wait until below expectation is met otherwise, timeout
       await wait(() => {
-        expect(api.request).toHaveBeenCalledTimes(2) // 1 (initial) + 1 (publish)
+        expect(getByRole("fetch-success-status")).toBeInTheDocument() 
       })
     })
   })
@@ -246,18 +276,29 @@ describe('ub-c1: NewBlog Component testing', () => {
   test('a11. (DOM) should show "save success" message when save completed', async () => {
 
     await act(async () => {
-      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText, queryByRole } = render(
         <ContextWrapperComponent component={NewBlog} isAuth />
       )
-      const inputs = await waitForElement(() => [
-        getByLabelText('Title'),
-        getByLabelText('Subtitle'),
-      ])
+      // need to do individually otherwise, got errors
+      const titleInput = await waitForElement(() => getByLabelText("Title"))
+      fireEvent.focus(titleInput)
+      // need for only first field to wait for initial validation 
+      // use this because there is no way to wait state update
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeInTheDocument()
+      })
+      fireEvent.change(titleInput, { target: { value: "test-title" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
+      })
 
-      seedInputTestValues(inputs, [
-        'test-title',
-        'test-subtitle',
-      ])
+      const subtitleInput = await waitForElement(() => getByLabelText("Subtitle"))
+      fireEvent.focus(subtitleInput)
+      fireEvent.change(subtitleInput, { target: { value: "test-subtitle" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
+      })
+
       // must wait until fetch is completed
       const publishBtn = await waitForElement(() => getByRole('publish-btn'))
       // mock response of save request
@@ -273,18 +314,29 @@ describe('ub-c1: NewBlog Component testing', () => {
   test('a12. (DOM) should show "save failure" message when save failed because of network issue', async () => {
 
     await act(async () => {
-      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText, queryByRole } = render(
         <ContextWrapperComponent component={NewBlog} isAuth />
       )
-      const inputs = await waitForElement(() => [
-        getByLabelText('Title'),
-        getByLabelText('Subtitle'),
-      ])
+      // need to do individually otherwise, got errors
+      const titleInput = await waitForElement(() => getByLabelText("Title"))
+      fireEvent.focus(titleInput)
+      // need for only first field to wait for initial validation 
+      // use this because there is no way to wait state update
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeInTheDocument()
+      })
+      fireEvent.change(titleInput, { target: { value: "test-title" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
+      })
 
-      seedInputTestValues(inputs, [
-        'test-title',
-        'test-subtitle',
-      ])
+      const subtitleInput = await waitForElement(() => getByLabelText("Subtitle"))
+      fireEvent.focus(subtitleInput)
+      fireEvent.change(subtitleInput, { target: { value: "test-subtitle" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
+      })
+
       // must wait until fetch is completed
       const publishBtn = await waitForElement(() => getByRole('publish-btn'))
       // mock response of save request
@@ -300,18 +352,30 @@ describe('ub-c1: NewBlog Component testing', () => {
   test('a13. (DOM) should show "save failure" message when save failed because of 4xx or 5xx error', async () => {
 
     await act(async () => {
-      const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
+      const { getByText, getByRole, getAllByRole, debug, getByLabelText, queryByRole } = render(
         <ContextWrapperComponent component={NewBlog} isAuth />
       )
-      const inputs = await waitForElement(() => [
-        getByLabelText('Title'),
-        getByLabelText('Subtitle'),
-      ])
 
-      seedInputTestValues(inputs, [
-        'test-title',
-        'test-subtitle',
-      ])
+      // need to do individually otherwise, got errors
+      const titleInput = await waitForElement(() => getByLabelText("Title"))
+      fireEvent.focus(titleInput)
+      // need for only first field to wait for initial validation 
+      // use this because there is no way to wait state update
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeInTheDocument()
+      })
+      fireEvent.change(titleInput, { target: { value: "test-title" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
+      })
+
+      const subtitleInput = await waitForElement(() => getByLabelText("Subtitle"))
+      fireEvent.focus(subtitleInput)
+      fireEvent.change(subtitleInput, { target: { value: "test-subtitle" } })
+      await wait(() => {
+        expect(queryByRole("input-field-error-msg")).toBeNull()
+      })
+
       // must wait until fetch is completed
       const publishBtn = await waitForElement(() => getByRole('publish-btn'))
       // mock response of save request

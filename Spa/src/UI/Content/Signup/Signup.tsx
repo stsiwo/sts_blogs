@@ -11,20 +11,22 @@ import Input from 'Components/Input/Input';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { useKeyupListener } from 'Hooks/KeyupListener/useKeyupListener';
 import { logger } from 'configs/logger';
+import cloneDeep = require('lodash/cloneDeep');
 const log = logger("Signup");
 
 const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComponentProps<{}>) => {
 
   const [currentUserSignupStatus, setUserSignupStatus] = React.useState<UserSignupType>(initialUserSignupStatus)
   const { currentRequestStatus, setRequestStatus, sendRequest } = useRequest({})
-  const { currentValidationError, touch, validate } = useUserSignupValidation({ domain: currentUserSignupStatus })
+  const { currentValidationError, touch, validate, validationSummaryCheck, currentTouch } = useUserSignupValidation({ domain: currentUserSignupStatus })
   const { authDispatch } = useAuthContext()
-  
+
 
   const handleInputChangeEvent: React.EventHandler<React.ChangeEvent<HTMLInputElement>> = (e) => {
-    currentUserSignupStatus[e.currentTarget.name as keyof UserSignupType] = e.currentTarget.value
+    const tempUserSignupData = cloneDeep(currentUserSignupStatus)
+    tempUserSignupData[e.currentTarget.name as keyof UserSignupType] = e.currentTarget.value
     setUserSignupStatus({
-      ...currentUserSignupStatus
+      ...tempUserSignupData
     })
   }
   const handleInitialFocusEvent: React.EventHandler<React.FocusEvent<HTMLInputElement>> = (e) => {
@@ -37,31 +39,28 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
     delete tempUserSignupData.confirm
     const userSignupRequestData: UserSignupRequestDataType = tempUserSignupData as UserSignupRequestDataType
     // final check validation ...
-    validate()
-      .then(() => {
-        log('validation passed')
-        sendRequest({
-          path: '/signup',
-          method: RequestMethodEnum.POST,
-          headers: { 'content-type': 'application/json' },
-          data: JSON.stringify(userSignupRequestData),
-        })
-          .then((result: ResponseResultType<UserResponseDataType>) => {
-            // this 'then' block is called only when request success
-            if (result.status === ResponseResultStatusEnum.SUCCESS) {
-              log('got response with user data')
-              log(result)
-              authDispatch({
-                type: 'login',
-                user: result.data.user as UserType
-              })
-              log('before redirect')
-              props.history.push('/')
-            }
-          })
-      }, () => {
-        log('validation failed at save button event handler')
+    if (validationSummaryCheck()) {
+      log('send login form since there is no error')
+      sendRequest({
+        path: '/signup',
+        method: RequestMethodEnum.POST,
+        headers: { 'content-type': 'application/json' },
+        data: JSON.stringify(userSignupRequestData),
       })
+        .then((result: ResponseResultType<UserResponseDataType>) => {
+          // this 'then' block is called only when request success
+          if (result.status === ResponseResultStatusEnum.SUCCESS) {
+            log('got response with user data')
+            log(result)
+            authDispatch({
+              type: 'login',
+              user: result.data.user as UserType
+            })
+            log('before redirect')
+            props.history.push('/')
+          }
+        })
+    }
   }
 
   useKeyupListener({
@@ -93,7 +92,7 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
           onInputChange={handleInputChangeEvent}
           onInputFocus={handleInitialFocusEvent}
           placeholder={"enter your name..."}
-          errorMsg={currentValidationError.name}
+          errorMsg={currentTouch.name ? currentValidationError.name : null}
           errorStyle={'name-error small-input-error'}
         />
         <Input
@@ -105,7 +104,7 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
           onInputChange={handleInputChangeEvent}
           onInputFocus={handleInitialFocusEvent}
           placeholder={"enter your email..."}
-          errorMsg={currentValidationError.email}
+          errorMsg={currentTouch.email ? currentValidationError.email : null}
           errorStyle={'email-error small-input-error'}
         />
         <Input
@@ -117,7 +116,7 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
           onInputChange={handleInputChangeEvent}
           onInputFocus={handleInitialFocusEvent}
           placeholder={"enter your password..."}
-          errorMsg={currentValidationError.password}
+          errorMsg={currentTouch.password ? currentValidationError.password : null}
           errorStyle={'password-error small-input-error'}
           inputType={'password'}
         />
@@ -130,7 +129,7 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
           onInputChange={handleInputChangeEvent}
           onInputFocus={handleInitialFocusEvent}
           placeholder={"enter your password again ..."}
-          errorMsg={currentValidationError.confirm}
+          errorMsg={currentTouch.confirm ? currentValidationError.confirm : null}
           errorStyle={'small-input-error'}
           inputType={'password'}
         />

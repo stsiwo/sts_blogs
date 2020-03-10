@@ -1,6 +1,6 @@
 /** for user who login this web app **/
 export declare type UserType = {
-  id: string, 
+  id: string,
   name: string,
   email?: string,
   password?: string,
@@ -16,13 +16,13 @@ export enum RoleEnum {
 }
 
 export const initialUserState: UserType = {
-  id: '', 
+  id: '',
   name: '',
   email: '',
   password: '',
   avatarUrl: '',
   avatarImage: null,
-  roles: [], 
+  roles: [],
 }
 
 export declare type ForgotPasswordType = {
@@ -43,17 +43,36 @@ export const initialUserResetPasswordStatus: UserResetPasswordType = {
   confirm: ''
 }
 
-export declare type UserResetPasswordRequestDataType = UserResetPasswordType 
+export declare type UserResetPasswordRequestDataType = UserResetPasswordType
+
+export declare type UserProfileType = {
+  id: string
+  name: string
+  email: string
+  password: string
+  confirm: string
+}
 
 export declare type UserLoginRequestDataType = {
   email: string
   password: string
 }
 
-
 export declare type UserLoginType = {
+  email: string
+  password: string,
   confirm: string
-} & UserLoginRequestDataType
+}
+
+export declare type UserCredentialValidationSchemaType = {
+  password: string,
+  confirm: string
+}
+
+export declare type UserLoginValidationSchemaType = {
+  email: string,
+  credential: UserCredentialValidationSchemaType
+}
 
 export const initialUserLoginStatus: UserLoginType = {
   email: '',

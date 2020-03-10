@@ -4,7 +4,7 @@ import { fireEvent, queryByRole, queryByText, render, wait, waitForElement } fro
 import * as React from 'react';
 import { act } from 'react-dom/test-utils';
 import { api } from 'requests/api';
-import { userGET200Response, internalServerError500Response, networkError, notFound404ResponseV2, invalidToken400Response, expiredToken400Response } from '../../../requests/fixtures';
+import { userGET200Response, internalServerError500Response, networkError, notFound404ResponseV2, invalidToken400Response, expiredToken400Response, userEmailCheck204Response } from '../../../requests/fixtures';
 import { ContextWrapperComponent } from '../../fixtures';
 import ResetPassword from 'ui/Content/ResetPassword/ResetPassword';
 import ForgotPasswordEmailModal from 'Components/ForgotPasswordEmailModal/ForgotPasswordEmailModal';
@@ -111,7 +111,8 @@ describe('l-c1: ResetPassword Component testing', () => {
       )
       const confirmInput = await waitForElement(() => getByLabelText('Confirm'))
       fireEvent.focus(confirmInput) // need to focus to enable to display validation error on dom
-      fireEvent.change(confirmInput, { target: { value: 'match' } })
+      const confirmNotNullErrorNode = await waitForElement(() => getByText('confirm is a required field'))
+      fireEvent.change(confirmInput, { target: { value: 'no-match' } })
       const confirmErrorNode = await waitForElement(() => getByText('passwords must match'))
       expect(confirmErrorNode).toBeInTheDocument()
     })
@@ -125,6 +126,7 @@ describe('l-c1: ResetPassword Component testing', () => {
       )
       const confirmInput = await waitForElement(() => getByLabelText('Confirm'))
       fireEvent.focus(confirmInput) // need to focus to enable to display validation error on dom
+      const confirmNotNullErrorNode = await waitForElement(() => getByText('confirm is a required field'))
       fireEvent.change(confirmInput, { target: { value: 'match' } })
       const confirmErrorNode = await waitForElement(() => getByText('passwords must match'))
       fireEvent.click(getByRole('reset-password-btn'))
@@ -224,20 +226,24 @@ describe('l-c1: ResetPassword Component testing', () => {
   })
 
   test('a11. (DOM) should show "resetpassword failure" message when resetpassword failed because of invalid (tampered) token', async () => {
-    api.request = jest.fn().mockReturnValue(Promise.reject(invalidToken400Response))
+    api.request = jest.fn()
+      .mockRejectedValueOnce(invalidToken400Response) // for submit request
+
     await act(async () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
-        <ContextWrapperComponent component={ForgotPasswordEmailModal} />
+        <ContextWrapperComponent component={ResetPassword} />
       )
       const inputs = await waitForElement(() => [
-        getByLabelText('Email'),
+        getByLabelText('Password'),
+        getByLabelText('Confirm'),
       ])
 
       seedInputTestValues(inputs, [
-        'test@test.com',
+        'test-password',
+        'test-password'
       ])
 
-      fireEvent.click(getByRole('forgot-password-btn'))
+      fireEvent.click(getByRole('reset-password-btn'))
       // wait for expectation meet otherwise async timeout
       await wait(() => {
         expect(getByText('token is invalid. it seems wrong type. please start over again.')).toBeInTheDocument()
@@ -246,20 +252,24 @@ describe('l-c1: ResetPassword Component testing', () => {
   })
 
   test('a12. (DOM) should show "resetpassword failure" message when resetpassword failed because of expired token', async () => {
-    api.request = jest.fn().mockReturnValue(Promise.reject(expiredToken400Response))
+    api.request = jest.fn()
+      .mockRejectedValueOnce(expiredToken400Response) // for submit request
+
     await act(async () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
-        <ContextWrapperComponent component={ForgotPasswordEmailModal} />
+        <ContextWrapperComponent component={ResetPassword} />
       )
       const inputs = await waitForElement(() => [
-        getByLabelText('Email'),
+        getByLabelText('Password'),
+        getByLabelText('Confirm'),
       ])
 
       seedInputTestValues(inputs, [
-        'test@test.com',
+        'test-password',
+        'test-password'
       ])
 
-      fireEvent.click(getByRole('forgot-password-btn'))
+      fireEvent.click(getByRole('reset-password-btn'))
       // wait for expectation meet otherwise async timeout
       await wait(() => {
         expect(getByText('reset password token is exipred. please start over again.')).toBeInTheDocument()

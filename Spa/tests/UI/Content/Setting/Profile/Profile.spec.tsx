@@ -201,7 +201,7 @@ describe('p-c1: Profile Component testing', () => {
 
   test('a10. (EH) should start update request when "update" is clicked', async () => {
 
-    api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
+    api.request = jest.fn().mockResolvedValue(userGET200Response)
     await act(async () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Profile} isAuth />
@@ -218,7 +218,7 @@ describe('p-c1: Profile Component testing', () => {
 
   test('a11. (DOM) should show "update success" message when update completed', async () => {
 
-    api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
+    api.request = jest.fn().mockResolvedValue(userGET200Response)
     await act(async () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Profile} isAuth />
@@ -226,7 +226,7 @@ describe('p-c1: Profile Component testing', () => {
       // must wait until fetch is completed
       const updateBtn = await waitForElement(() => getByText('Update'))
       // mock response of update request
-      api.request = jest.fn().mockReturnValue(Promise.resolve(noDateGET200Response))
+      api.request = jest.fn().mockResolvedValue(noDateGET200Response)
       fireEvent.click(updateBtn)
       await wait(() => {
         expect(getByText('updating user profile success')).toBeInTheDocument()
@@ -236,7 +236,7 @@ describe('p-c1: Profile Component testing', () => {
 
   test('a12. (DOM) should show "update failure" message when update failed because of network issue', async () => {
 
-    api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
+    api.request = jest.fn().mockResolvedValue(userGET200Response)
     await act(async () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Profile} isAuth />
@@ -244,7 +244,7 @@ describe('p-c1: Profile Component testing', () => {
       // must wait until fetch is completed
       const updateBtn = await waitForElement(() => getByText('Update'))
       // mock response of update request
-      api.request = jest.fn().mockReturnValue(Promise.reject(networkError))
+      api.request = jest.fn().mockRejectedValue(networkError)
       fireEvent.click(updateBtn)
       await wait(() => {
         expect(getByText('updating user profile failed')).toBeInTheDocument()
@@ -254,7 +254,7 @@ describe('p-c1: Profile Component testing', () => {
   
   test('a13. (DOM) should show "update failure" message when update failed because of 4xx/5xx error', async () => {
 
-    api.request = jest.fn().mockReturnValue(Promise.resolve(userGET200Response))
+    api.request = jest.fn().mockResolvedValue(userGET200Response)
     await act(async () => {
       const { getByText, getByRole, getAllByRole, debug, getByLabelText } = render(
         <ContextWrapperComponent component={Profile} isAuth />
@@ -262,7 +262,7 @@ describe('p-c1: Profile Component testing', () => {
       // must wait until fetch is completed
       const updateBtn = await waitForElement(() => getByText('Update'))
       // mock response of update request
-      api.request = jest.fn().mockReturnValue(Promise.reject(internalServerError500Response))
+      api.request = jest.fn().mockRejectedValue(internalServerError500Response)
       fireEvent.click(updateBtn)
       await wait(() => {
         expect(getByText('updating user profile failed')).toBeInTheDocument()
