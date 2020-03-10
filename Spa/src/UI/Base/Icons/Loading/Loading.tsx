@@ -10,7 +10,7 @@ const Loading: React.FunctionComponent<LoadingPropType> = (props: LoadingPropTyp
 
 
   return (
-    <div className="lds-ellipsis">
+    <div className="lds-ellipsis" role="loading-icon">
       <div></div>
       <div></div>
       <div></div>

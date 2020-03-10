@@ -11,7 +11,7 @@ const CheckMark: React.FunctionComponent<CheckMarkPropType> = (props: CheckMarkP
 
 
   return (
-    <div className="checkmark-wrapper">
+    <div className="checkmark-wrapper" role="checkmark-icon">
       <FaCheck className="checkmark"/>
     </div>
   );
