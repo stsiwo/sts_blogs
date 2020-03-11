@@ -46,8 +46,7 @@ public class LoginPage extends BasePage {
 
   public void enterEmailInfoAndWaitForTypeAheadResponse(String text) {
 		this.enterTextInElementBy(LoginUIMapper.EMAIL_INPUT, text, true);
-    this.waitForElementToHaveTextBy(LoginUIMapper.EMAIL_ERROR, "oops. provided email is not registered.");
-    this.waitForElementToBeInvisibleBy(LoginUIMapper.EMAIL_ERROR);
+    this.waitForElementBy(LoginUIMapper.TYPE_AHEAD_SUCCESS_ICON);
   }
 
   public void enterLoginInfoAndWaitForErrorDisappear(By locator, String text, By errorLocator) {

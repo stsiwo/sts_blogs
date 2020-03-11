@@ -25,13 +25,13 @@ body {
 
 .white-input {
   @include base-input;
-  font-size: $regularFontSize;
+  //font-size: $regularFontSize;
   color: white;
   padding: 5px;
 }
 
 .white-input-label {
-  font-size: $subTitleFontSize;
+  //font-size: $subTitleFontSize;
 }
 
 .black-input {
@@ -42,7 +42,7 @@ body {
 }
 
 .input-error {
-  font-size: 1.3em;
+  //font-size: 1.3em;
   color: red;
   font-weight: bold;
 }

@@ -51,21 +51,23 @@ const ForgotPasswordEmailModal: React.FunctionComponent<ForgotPasswordEmailModal
     <div className="forgot-password-email-modal-wrapper" role="forgot-password-email-modal">
       <h1 className="forgot-password-email-modal-title">Forgot Password Request</h1>
       <p className="forgot-password-email-modal-sentence">Please enter your registered email address</p>
-      <Input
-        id={"forgot-password-email"}
-        inputStyle={"white-input"}
-        inputValue={currentForgotPasswordStatus.email}
-        label={"Email"}
-        labelStyle={"white-input-label"}
-        name={"email"}
-        onInputChange={handleInputChangeEvent}
-        onInputFocus={handleInitialFocusEvent}
-        placeholder={"enter your email..."}
-        errorMsg={currentTouch.email ? currentValidationError.email : null}
-        errorStyle={'email-error'}
-        typeAhead={true}
-        typeAheadStatus={typeAheadStatus}
-      />
+      <form className="signup-login-form-content">
+        <Input
+          id={"forgot-password-email"}
+          inputStyle={"white-input"}
+          inputValue={currentForgotPasswordStatus.email}
+          label={"Email"}
+          labelStyle={"white-input-label"}
+          name={"email"}
+          onInputChange={handleInputChangeEvent}
+          onInputFocus={handleInitialFocusEvent}
+          placeholder={"enter your email..."}
+          errorMsg={currentTouch.email ? currentValidationError.email : null}
+          errorStyle={'email-error'}
+          typeAhead={true}
+          typeAheadStatus={typeAheadStatus}
+        />
+      </form>
       <FetchStatus
         currentFetchStatus={currentForgotPasswordRequestStatus}
         setFetchStatus={setForgotPasswordRequestStatus}
