@@ -2,4 +2,13 @@
 
 .label-input-row {
   white-space: nowrap;
+  position: relative;
+}
+
+// CheckMark & Loading Component
+.label-input-row > div {
+  position: absolute;
+  display: block;
+  right: 35px;
+  top: 12px;
 }

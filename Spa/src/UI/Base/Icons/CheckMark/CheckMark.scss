@@ -2,17 +2,19 @@
 @import '../../../Base/Css/Mixins';
 
 .checkmark-wrapper {
+  background-color: #5cb85c;
   display: inline-block; 
   vertical-align: middle;
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  border: 2px solid #000;
+  border: 1px solid #5cb85c;
   animation: checkmark-wrapper-animation 0.5s cubic-bezier(0.8, 0.2, 0.2, 0.8) 0s;
 }
 
 .checkmark {
-  vertical-align: middle;
+  color: #fff;
+  vertical-align: sub;
   border: none;
   width: 15px;
   height: 15px;

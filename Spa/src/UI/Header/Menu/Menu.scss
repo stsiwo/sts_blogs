@@ -18,7 +18,8 @@
     width: 0;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.7);
-    transition: 0.5s
+    transition: 0.5s;
+    padding: 0;
   }
 
   @media only screen and (min-width: $laptopSize + 1 + "px") {
@@ -28,7 +29,8 @@
 }
 
 .header-menu-close-icon-row {
-  text-align: end;
+  // don't use 'text-align: end' 
+  text-align: right;
 }
 
 .header-menu-close-icon {
