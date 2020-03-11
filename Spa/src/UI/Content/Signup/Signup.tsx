@@ -18,7 +18,7 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
 
   const [currentUserSignupStatus, setUserSignupStatus] = React.useState<UserSignupType>(initialUserSignupStatus)
   const { currentRequestStatus, setRequestStatus, sendRequest } = useRequest({})
-  const { currentValidationError, touch, validate, validationSummaryCheck, currentTouch } = useUserSignupValidation({ domain: currentUserSignupStatus })
+  const { currentValidationError, touch, validate, validationSummaryCheck, currentTouch, typeAheadStatus } = useUserSignupValidation({ domain: currentUserSignupStatus })
   const { authDispatch } = useAuthContext()
 
 
@@ -106,6 +106,8 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
           placeholder={"enter your email..."}
           errorMsg={currentTouch.email ? currentValidationError.email : null}
           errorStyle={'email-error small-input-error'}
+          typeAhead={true}
+          typeAheadStatus={typeAheadStatus}
         />
         <Input
           id={"password"}
