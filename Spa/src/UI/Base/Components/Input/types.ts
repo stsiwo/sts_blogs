@@ -23,6 +23,7 @@ export declare type InputPropType = BaseInputPropType & {
   /** don't use 'ref' key, it not gonna work. use 'forwardRef' instead **/
   forwardRef?: React.MutableRefObject<HTMLInputElement>
   typeAhead?: boolean
+  typeAheadFor?: string
   typeAheadStatus?: RequestStatusType
 }
 

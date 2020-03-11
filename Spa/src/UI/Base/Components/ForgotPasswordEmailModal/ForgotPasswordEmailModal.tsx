@@ -65,6 +65,7 @@ const ForgotPasswordEmailModal: React.FunctionComponent<ForgotPasswordEmailModal
           errorMsg={currentTouch.email ? currentValidationError.email : null}
           errorStyle={'email-error'}
           typeAhead={true}
+          typeAheadFor={"login"}
           typeAheadStatus={typeAheadStatus}
         />
       </form>

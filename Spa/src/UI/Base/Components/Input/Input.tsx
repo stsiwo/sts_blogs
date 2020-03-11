@@ -33,7 +33,10 @@ const Input: React.FunctionComponent<InputPropType> = (props: InputPropType) => 
       {(props.typeAhead && props.typeAheadStatus.status === ResponseResultStatusEnum.FETCHING &&
         <Loading />
       )}
-      {(props.typeAhead && props.typeAheadStatus.status === ResponseResultStatusEnum.SUCCESS &&
+      {(props.typeAhead && props.typeAheadFor === 'login' && props.typeAheadStatus.status === ResponseResultStatusEnum.SUCCESS &&
+        <CheckMark />
+      )}
+      {(props.typeAhead && props.typeAheadFor === 'signup' && props.typeAheadStatus.status === ResponseResultStatusEnum.FAILURE &&
         <CheckMark />
       )}
     </BaseInput>

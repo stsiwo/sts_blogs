@@ -107,6 +107,7 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
           errorMsg={currentTouch.email ? currentValidationError.email : null}
           errorStyle={'email-error small-input-error'}
           typeAhead={true}
+          typeAheadFor={"signup"}
           typeAheadStatus={typeAheadStatus}
         />
         <Input

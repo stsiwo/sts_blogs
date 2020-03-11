@@ -98,6 +98,7 @@ const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCom
           errorMsg={currentTouch.email ? currentValidationError.email : null}
           errorStyle={'email-error small-input-error'}
           typeAhead={true}
+          typeAheadFor={"login"}
           typeAheadStatus={typeAheadStatus}
         />
         <Input
