@@ -112,7 +112,7 @@ const ResetPassword: React.FunctionComponent<RouteComponentProps<{}>> = (props: 
           <span>Move to </span><Link to={`/login`} >Login Page</Link><span> after successfully reset your password</span>
         </div>
         <div className="login-form-content-btn-wrapper">
-          {(currentValidationError.submit && <div className="summary-error small-input-error">{currentValidationError.submit}</div>)}
+          {(currentValidationError.submit && <div className="summary-error small-input-error" role="summary-error">{currentValidationError.submit}</div>)}
           <input className="btn" type="button" onClick={handleSubmitClickEvent} value="Reset Password" role="reset-password-btn" />
         </div>
       </form>

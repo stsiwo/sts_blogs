@@ -142,7 +142,7 @@ const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCom
           <span>if you don&rsquo;t have account,  </span><Link to={`/signup`} >Signup Page</Link>
         </div>
         <div className="login-form-content-btn-wrapper">
-          {(currentValidationError.submit && <div className="summary-error small-input-error">{currentValidationError.submit}</div>)}
+          {(currentValidationError.submit && <div className="summary-error small-input-error" role="summary-error">{currentValidationError.submit}</div>)}
           <input className="btn" type="button" onClick={handleSubmitClickEvent} value="Login" role="login-btn" />
         </div>
       </form>

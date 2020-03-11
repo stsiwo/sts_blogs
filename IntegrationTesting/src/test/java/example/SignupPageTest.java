@@ -48,6 +48,18 @@ public class SignupPageTest extends BaseTest {
 	  
 	  Assert.assertTrue(signupPage.isExistInPage("email is a required field"));
   }
+
+  @Test(dataProvider = "all-size")
+  public void shouldDisplayEmailInputAlreadyExistValidationErrorWhenEmailAlreadyExists(Dimension ssize) {
+	  this.driver.manage().window().setSize(ssize);
+	  
+	  SignupPage signupPage = new SignupPage(this.driver, true);
+    signupPage.enterEmailInfoAndWaitForEmailAlreadyExistErrorMsg(this.testUser.email);
+
+    signupPage.waitForElementToHaveTextBy(SignupUIMapper.FIELD_ERROR, "oops. provided email is already registered.");
+	  
+	  Assert.assertTrue(signupPage.isExistInPage("oops. provided email is already registered."));
+  }
   
   // add the other validation rule and test
   
@@ -81,8 +93,10 @@ public class SignupPageTest extends BaseTest {
 	  signupPage.clickElementBy(SignupUIMapper.CONFIRM_INPUT);
 	  signupPage.waitForElementBy(SignupUIMapper.FIELD_ERROR);
 
+    signupPage.waitAnimationEnd();
+
 	  signupPage.clickElementBy(SignupUIMapper.SUBMIT_BUTTON);
-	  signupPage.waitForElementBy(SignupUIMapper.FIELD_ERROR);
+	  signupPage.waitForElementToHaveTextBy(SignupUIMapper.SUMMARY_ERROR, "please fix validation errors before submit");
 	  
 	  Assert.assertTrue(signupPage.isExistInPage("please fix validation errors before submit"));
   }
@@ -103,6 +117,9 @@ public class SignupPageTest extends BaseTest {
 	  this.driver.manage().window().setSize(ssize);
 	  
 	  SignupPage signupPage = new SignupPage(this.driver, true);
+    // ?? wait for initial validation has done. 
+    // sometimes, name error message still exists even if clear validation
+    signupPage.waitAnimationEnd();
 	  signupPage.signup(this.faker.name().name(), this.faker.internet().emailAddress(), "new_password");
 	  
 	  HomePage homePage = new HomePage(this.driver, false);
@@ -114,15 +131,16 @@ public class SignupPageTest extends BaseTest {
 	  homePage.headerComponent.logout();
   }
   
-  @Test(dataProvider = "all-size")
-  public void shouldDisplayUserAlreadyExistMessageWhenEmailAlreadyExist(Dimension ssize) {
-	  this.driver.manage().window().setSize(ssize);
-	  
-	  SignupPage signupPage = new SignupPage(this.driver, true);
-	  signupPage.signup(this.testUser.name, this.testUser.email, this.testUser.password);
-	  
-	  signupPage.waitForElementBy(SignupUIMapper.FETCH_ERR_MSG);
-	  
-	  Assert.assertTrue(signupPage.isExistInPage("provided email already exists."));
-  }
+  // comment out since type ahead feature
+  //@Test(dataProvider = "all-size")
+  //public void shouldDisplayUserAlreadyExistMessageWhenEmailAlreadyExist(Dimension ssize) {
+	//  this.driver.manage().window().setSize(ssize);
+	//  
+	//  SignupPage signupPage = new SignupPage(this.driver, true);
+	//  signupPage.signup(this.testUser.name, this.testUser.email, this.testUser.password);
+	//  
+	//  signupPage.waitForElementBy(SignupUIMapper.FETCH_ERR_MSG);
+	//  
+	//  Assert.assertTrue(signupPage.isExistInPage("provided email already exists."));
+  //}
 }

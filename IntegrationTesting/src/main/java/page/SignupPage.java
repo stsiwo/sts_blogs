@@ -23,19 +23,24 @@ public final class SignupPage extends BasePage {
 	
 	public void signup(String name, String email, String password) {
     this.enterSignupInfoAndWaitForErrorDisappear(SignupUIMapper.NAME_INPUT, name, SignupUIMapper.NAME_ERROR);
-    this.enterEmailInfoAndWaitForTypeAheadResponse(email);
+    this.enterEmailInfoAndWaitForSuccessIcon(email);
     this.enterSignupInfoAndWaitForErrorDisappear(SignupUIMapper.PASSWORD_INPUT, password, SignupUIMapper.PASSWORD_ERROR);
     this.enterSignupInfoAndWaitForErrorDisappear(SignupUIMapper.CONFIRM_INPUT, password, SignupUIMapper.CONFIRM_ERROR);
 		this.clickElementBy(SignupUIMapper.SUBMIT_BUTTON);
 	}
 
-  public void enterEmailInfoAndWaitForTypeAheadResponse(String text) {
+  public void enterEmailInfoAndWaitForSuccessIcon(String text) {
 		this.enterTextInElementBy(SignupUIMapper.EMAIL_INPUT, text, true);
     this.waitForElementBy(SignupUIMapper.TYPE_AHEAD_SUCCESS_ICON);
   }
 
+  public void enterEmailInfoAndWaitForEmailAlreadyExistErrorMsg(String text) {
+		this.enterTextInElementBy(SignupUIMapper.EMAIL_INPUT, text, true);
+    this.waitForElementBy(SignupUIMapper.FIELD_ERROR);
+  }
+
   public void enterSignupInfoAndWaitForErrorDisappear(By locator, String text, By errorLocator) {
 		this.enterTextInElementBy(locator, text, true);
-    this.waitForElementToBeInvisibleBy(errorLocator);
+    this.waitForElementToBeInvisibleBy(SignupUIMapper.FIELD_ERROR);
   }
 }

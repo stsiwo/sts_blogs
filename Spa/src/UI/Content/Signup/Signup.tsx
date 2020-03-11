@@ -140,7 +140,7 @@ const Signup: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteCo
           <span>if you alreay have account, </span><Link to='/login' >Login Page</Link>
         </div>
         <div className="signup-form-content-btn-wrapper">
-          {(currentValidationError.submit && <div className="summary-error small-input-error">{currentValidationError.submit}</div>)}
+          {(currentValidationError.submit && <div className="summary-error small-input-error" role="summary-error">{currentValidationError.submit}</div>)}
           <input className="btn" type="button" onClick={handleSubmitClickEvent} value="Signup" role="signup-btn" />
         </div>
       </form>

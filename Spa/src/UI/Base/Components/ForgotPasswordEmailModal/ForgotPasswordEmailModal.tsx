@@ -77,7 +77,7 @@ const ForgotPasswordEmailModal: React.FunctionComponent<ForgotPasswordEmailModal
         failureMsg={'requesting forgot password failed'}
       />
       <div className="login-form-content-btn-wrapper">
-        {(currentValidationError.submit && <div className="summary-error small-input-error">{currentValidationError.submit}</div>)}
+        {(currentValidationError.submit && <div className="summary-error small-input-error" role="summary-error">{currentValidationError.submit}</div>)}
         <input className="white-btn" type="button" onClick={handleSubmitClickEvent} value="Send Request" role="forgot-password-btn" />
       </div>
       <Link to={`/login`} className="forgot-password-email-modal-close-icon" role='close-forgot-password-modal-link'>
