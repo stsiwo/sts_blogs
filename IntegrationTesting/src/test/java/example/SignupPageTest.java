@@ -33,6 +33,7 @@ public class SignupPageTest extends BaseTest {
 	  
 	  SignupPage signupPage = new SignupPage(this.driver, true);
 	  signupPage.clickElementBy(SignupUIMapper.NAME_INPUT);
+	  signupPage.waitForElementBy(SignupUIMapper.FIELD_ERROR);
 	  
 	  Assert.assertTrue(signupPage.isExistInPage("name is a required field"));
   }
@@ -43,6 +44,7 @@ public class SignupPageTest extends BaseTest {
 	  
 	  SignupPage signupPage = new SignupPage(this.driver, true);
 	  signupPage.clickElementBy(SignupUIMapper.EMAIL_INPUT);
+	  signupPage.waitForElementBy(SignupUIMapper.FIELD_ERROR);
 	  
 	  Assert.assertTrue(signupPage.isExistInPage("email is a required field"));
   }
@@ -55,6 +57,7 @@ public class SignupPageTest extends BaseTest {
 	  
 	  SignupPage signupPage = new SignupPage(this.driver, true);
 	  signupPage.clickElementBy(SignupUIMapper.PASSWORD_INPUT);
+	  signupPage.waitForElementBy(SignupUIMapper.FIELD_ERROR);
 	  
 	  Assert.assertTrue(signupPage.isExistInPage("password is a required field"));
   }
@@ -65,6 +68,7 @@ public class SignupPageTest extends BaseTest {
 	  
 	  SignupPage signupPage = new SignupPage(this.driver, true);
 	  signupPage.clickElementBy(SignupUIMapper.CONFIRM_INPUT);
+	  signupPage.waitForElementBy(SignupUIMapper.FIELD_ERROR);
 	  
 	  Assert.assertTrue(signupPage.isExistInPage("confirm is a required field"));
   }
@@ -75,8 +79,10 @@ public class SignupPageTest extends BaseTest {
 	  
 	  SignupPage signupPage = new SignupPage(this.driver, true);
 	  signupPage.clickElementBy(SignupUIMapper.CONFIRM_INPUT);
-	  ///signupPage.waitForElementBy(SignupUIMapper.CONFIRM_ERROR);
+	  signupPage.waitForElementBy(SignupUIMapper.FIELD_ERROR);
+
 	  signupPage.clickElementBy(SignupUIMapper.SUBMIT_BUTTON);
+	  signupPage.waitForElementBy(SignupUIMapper.FIELD_ERROR);
 	  
 	  Assert.assertTrue(signupPage.isExistInPage("please fix validation errors before submit"));
   }

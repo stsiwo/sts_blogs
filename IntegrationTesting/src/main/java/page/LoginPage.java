@@ -60,6 +60,7 @@ public class LoginPage extends BasePage {
 
   public void fillForgotPasswordEmailInputBy(String emailInput) {
     this.enterTextInElementBy(LoginUIMapper.FORGOT_PASSWORD_EMAIL_INPUT, emailInput, true);
+    this.waitForElementBy(LoginUIMapper.TYPE_AHEAD_SUCCESS_ICON);
   }
 
   public void submitForgotPasswordRequest() {

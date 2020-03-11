@@ -21,6 +21,10 @@ public final class SignupUIMapper {
     public final static By CONFIRM_INPUT = By.id("confirm");
 
     public final static By CONFIRM_ERROR = By.className("div.confirm-error");
+
+    public final static By FIELD_ERROR = By.cssSelector("div[role='input-field-error-msg']");
+
+    public final static By TYPE_AHEAD_SUCCESS_ICON = By.cssSelector("div[role='checkmark-icon']");
     
     public final static By SUMMARY_ERROR = By.className("div.summary-error");
     
@@ -29,6 +33,5 @@ public final class SignupUIMapper {
     public final static By LOGIN_LINK = By.linkText("Login Page");
     
     public final static By FETCH_ERR_MSG = By.cssSelector("p.fetch-status-err-msg");
-
 
 }

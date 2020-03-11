@@ -17,9 +17,14 @@ export const useUserSignupValidation = (input: UseUserSignupValidationStatusInpu
   // define validation schema
   let schema = yup.object().shape<UserSignupType>({
     name: yup.string().required(),
+    /**
+     * this is different from Login type ahead
+     *  - it is for detecting provided email is NOT registered so that users can realize when input
+     *  - this Signup type ahead to for detecting provided email is registered so that users can realize when input and go login
+     **/
     email: yup.string().test(
       "email-check", // check input email is registered or not
-      "oops. provided email is not registered.",
+      "oops. provided email is already registered.",
       async (email: string) => {
         const obs$ = new Subject<string>()
         // one time only (create observable every time this function is called
@@ -73,8 +78,8 @@ export const useUserSignupValidation = (input: UseUserSignupValidationStatusInpu
         return await subs.then((value: number) => {
           // if this stream is completed before api reqeust, this 'value' hold 'undefined'
           log("then after observable promise: " + value)
-          return value === ResponseResultStatusEnum.SUCCESS ? true : false
-        }).catch(() => false)
+          return value === ResponseResultStatusEnum.SUCCESS ? false : true
+        })
         //return false
       }).email().required(),
     password: yup.string().required(),

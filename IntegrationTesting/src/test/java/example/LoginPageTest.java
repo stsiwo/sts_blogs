@@ -24,6 +24,8 @@ public class LoginPageTest extends BaseTest {
 	  
 	  LoginPage loginPage = new LoginPage(this.driver, true);
 	  loginPage.clickElementBy(LoginUIMapper.EMAIL_INPUT);
+
+    loginPage.waitForElementBy(LoginUIMapper.FIELD_ERROR);
 	  
 	  Assert.assertTrue(loginPage.isExistInPage("email is a required field"));
   }
@@ -36,6 +38,8 @@ public class LoginPageTest extends BaseTest {
 	  
 	  LoginPage loginPage = new LoginPage(this.driver, true);
 	  loginPage.clickElementBy(LoginUIMapper.PASSWORD_INPUT);
+
+    loginPage.waitForElementBy(LoginUIMapper.FIELD_ERROR);
 	  
 	  Assert.assertTrue(loginPage.isExistInPage("password is a required field"));
   }
@@ -196,4 +200,5 @@ public class LoginPageTest extends BaseTest {
 
     Assert.assertTrue(true);
   }
+
 }

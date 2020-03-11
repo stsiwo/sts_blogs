@@ -2,6 +2,7 @@ package main.java.page;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.By;
 
 import main.java.base.Config;
 import main.java.uimapper.SignupUIMapper;
@@ -21,10 +22,20 @@ public final class SignupPage extends BasePage {
 	}
 	
 	public void signup(String name, String email, String password) {
-		this.enterTextInElementBy(SignupUIMapper.NAME_INPUT, name, true);
-		this.enterTextInElementBy(SignupUIMapper.EMAIL_INPUT, email, true);
-		this.enterTextInElementBy(SignupUIMapper.PASSWORD_INPUT, password, true);
-		this.enterTextInElementBy(SignupUIMapper.CONFIRM_INPUT, password, true);
+    this.enterSignupInfoAndWaitForErrorDisappear(SignupUIMapper.NAME_INPUT, name, SignupUIMapper.NAME_ERROR);
+    this.enterEmailInfoAndWaitForTypeAheadResponse(email);
+    this.enterSignupInfoAndWaitForErrorDisappear(SignupUIMapper.PASSWORD_INPUT, password, SignupUIMapper.PASSWORD_ERROR);
+    this.enterSignupInfoAndWaitForErrorDisappear(SignupUIMapper.CONFIRM_INPUT, password, SignupUIMapper.CONFIRM_ERROR);
 		this.clickElementBy(SignupUIMapper.SUBMIT_BUTTON);
 	}
+
+  public void enterEmailInfoAndWaitForTypeAheadResponse(String text) {
+		this.enterTextInElementBy(SignupUIMapper.EMAIL_INPUT, text, true);
+    this.waitForElementBy(SignupUIMapper.TYPE_AHEAD_SUCCESS_ICON);
+  }
+
+  public void enterSignupInfoAndWaitForErrorDisappear(By locator, String text, By errorLocator) {
+		this.enterTextInElementBy(locator, text, true);
+    this.waitForElementToBeInvisibleBy(errorLocator);
+  }
 }
