@@ -30,7 +30,6 @@ const Input: React.FunctionComponent<InputPropType> = (props: InputPropType) => 
         onFocus={props.onInputFocus} 
         ref={props.forwardRef}
       />
-        <CheckMark />
       {(props.typeAhead && props.typeAheadStatus.status === ResponseResultStatusEnum.FETCHING &&
         <Loading />
       )}
