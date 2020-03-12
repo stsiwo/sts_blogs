@@ -25,6 +25,10 @@ import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
 import ManageYourBlogs from 'Components/ManageYourBlogs/ManageYourBlogs';
 import { useLocation } from 'react-router';
 import { logger } from 'configs/logger';
+import { Subject, from } from 'rxjs';
+import { debounceTime, tap, distinctUntilChanged, switchMap, map } from 'rxjs/operators';
+import { appConfig } from 'configs/appConfig';
+import { useBlogFilterSortTypeAhead } from 'Hooks/BlogFilterSortTypeAhead/useBlogFilterSortTypeAhead';
 const log = logger("BlogList");
 
 declare type FetchResultType = {
@@ -43,7 +47,6 @@ function useQuery() {
 
 const BlogList: React.FunctionComponent<{}> = (props: {}) => {
 
-  const path = '/blogs'
   const query = useQuery()
   /** state **/
   const [currentBlogs, setBlogs] = React.useState([] as BlogType[])
@@ -52,63 +55,33 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   const isFilterSortBarOpen = useSelector((state: StateType) => state.ui.isFilterSortBarOpen)
 
   /** hooks **/
+  const { currentRequestStatus: currentInitialBlogsFetchStatus, setRequestStatus: setInitialBlogsFetchStatus, sendRequest: sendBlogsFetchRequest, currentCancelSource } = useRequest({})
   const currentScreenSize = useResponsive()
   const dispatch = useDispatch()
   const { currentPaginationStatus, setPaginationStatus } = usePagination({})
   const { currentFilters, currentSort, setFilters, setSort } = useBlogFilterSort({
     initialTags: query.get('tags') ? [
       {
-        name: query.get('tags') 
+        name: query.get('tags')
       }
     ] : [],
     initialKeyword: query.get('keyword')
   })
-  const { currentRequestStatus: currentInitialBlogsFetchStatus, setRequestStatus: setInitialBlogsFetchStatus, sendRequest: sendBlogsFetchRequest, currentCancelSource } = useRequest({})
   const [currentRefreshCount, setRefreshCount] = React.useState<number>(null)
   // diable cache when refersh request
   const [isRefresh, setIsRefresh] = React.useState<boolean>(false)
   const { auth } = useAuthContext()
-
-  const queryString = {
-    page: currentPaginationStatus.page,
-    limit: currentPaginationStatus.limit,
-    tags: currentFilters.tags.map((tag: TagType) => tag.name),
-    startDate: currentFilters.startDate ? currentFilters.startDate.toJSON() : null,
-    endDate: currentFilters.endDate ? currentFilters.endDate.toJSON() : null,
-    keyword: currentFilters.keyword,
-    sort: currentSort,
-  }
-
-  React.useEffect(() => {
-    log("start useEffect")
-    // might can move to inside eh of refresh click
-    log('before request')
-    log(currentFilters)
-
-    log("start send blog fetch request")
-    sendBlogsFetchRequest({
-      path: path,
-      method: RequestMethodEnum.GET,
-      queryString: queryString,
-      ...(isRefresh && { useCache: false }),
-    })
-      .then((result: ResponseResultType<BlogListResponseDataType>) => {
-        if (result.status === ResponseResultStatusEnum.SUCCESS) {
-          log('fetch blog list success.')
-          log(result.data.blogs)
-          setBlogs(result.data.blogs)
-          // assign new total count of pagination
-          setPaginationStatus({
-            ...currentPaginationStatus,
-            totalCount: result.data.totalCount
-          })
-        }
-        setIsRefresh(false)
-      })
-  }, [
-      JSON.stringify(queryString),
-      currentRefreshCount
-    ])
+  useBlogFilterSortTypeAhead({
+    currentFilters: currentFilters,
+    currentPaginationStatus: currentPaginationStatus,
+    currentRefreshCount: currentRefreshCount,
+    currentSort: currentSort,
+    isRefresh: isRefresh,
+    sendRequest: sendBlogsFetchRequest,
+    setBlogs: setBlogs,
+    setIsRefresh: setIsRefresh,
+    setPaginationStatus: setPaginationStatus
+  })
 
   /** EH **/
   const handleFilterSortNavClickEvent: React.EventHandler<React.MouseEvent<HTMLElement>> = (e) => {
@@ -165,7 +138,7 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
         />
         <div className="blog-list-items-wrapper">
           {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FETCHING && <p role="fetching">fetching ... </p>)}
-          {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FAILURE  && <p>sorry.. blogs are not currently available...</p>)}
+          {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.FAILURE && <p>sorry.. blogs are not currently available...</p>)}
           {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.SUCCESS && currentBlogs.length === 0 && <p role="no-search-result-title">there is no blog based on the your sort & filter</p>)}
           {(currentInitialBlogsFetchStatus.status === ResponseResultStatusEnum.SUCCESS && currentBlogs.length !== 0 && renderBlogs(currentBlogs))}
         </div>

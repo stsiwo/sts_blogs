@@ -15,7 +15,6 @@ import org.testng.annotations.Test;
 
 import com.github.javafaker.Faker;
 
-import main.java.base.Config;
 import main.java.base.SetupTestDriver;
 import main.java.page.HomePage;
 

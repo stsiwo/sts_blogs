@@ -11,6 +11,7 @@ import { ContextWrapperComponent } from "../../fixtures";
 import Content from 'ui/Content/Content';
 // setup mocked localstorage 
 import '../../../data/mocks/localStorageMock.ts'
+jest.setTimeout(10000)
 
 
 
@@ -77,19 +78,21 @@ describe('bl-c1: BlogList Component testing', () => {
   /** test for use case which does not matter screen size  here**/
   test('a2. (lifecycle) should start api request when this component is mounted', async () => {
 
-    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
+    api.request = jest.fn().mockResolvedValue(blogGET200NonEmptyResponse)
     await act(async () => {
       render(
         <ContextWrapperComponent component={BlogList} />
       )
     })
+    await wait(() => {
+      expect(api.request).toHaveBeenCalled()
+    })
 
-    expect(api.request).toHaveBeenCalled()
   })
 
   test("a4. (EH) should start api request when 'refresh' button is clicked", async () => {
 
-    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
+    api.request = jest.fn().mockResolvedValue(blogGET200NonEmptyResponse)
     // should replace mock with real one
     //api.CancelToken.source = jest.fn().mockReturnValue('cancel-token')
     await act(async () => {
@@ -101,15 +104,15 @@ describe('bl-c1: BlogList Component testing', () => {
       await waitForElement(() => getAllByRole('blog-item'))
 
       fireEvent.click(getByRole('refresh-icon'))
-
       await waitForElement(() => getAllByRole('blog-item'))
 
+      await wait(() => {
+        /**
+         * since disable caching 
+         **/
+        expect(api.request).toHaveBeenCalledTimes(2)
+      })
     })
-    /**
-     * since disable caching 
-     **/
-    expect(api.request).toHaveBeenCalledTimes(2)
-
   })
 
   const delayedResolvedValue = (data: any): Promise<any> => {
@@ -240,8 +243,10 @@ describe('bl-c1: BlogList Component testing', () => {
         })
 
     })
-    expect(api.request).toHaveBeenCalledTimes(2)
-    expect((api.request as any).mock.calls[1][0].url).toContain('tags=test-tag')
+    await wait(() => {
+      expect(api.request).toHaveBeenCalledTimes(2)
+      expect((api.request as any).mock.calls[1][0].url).toContain('tags=test-tag')
+    })
   })
 
   test("a15. (EH) should start api request when new keyword is entered and url must contain the keyword", async () => {
@@ -262,8 +267,10 @@ describe('bl-c1: BlogList Component testing', () => {
         })
 
     })
-    expect(api.request).toHaveBeenCalledTimes(2)
-    expect((api.request as any).mock.calls[1][0].url).toContain('keyword=test-keyword')
+    await wait(() => {
+      expect(api.request).toHaveBeenCalledTimes(2)
+      expect((api.request as any).mock.calls[1][0].url).toContain('keyword=test-keyword')
+    })
   })
 
   test("a16 (EH) should start api request when new startDate is entered and url must contain the startDate ", async () => {
@@ -285,8 +292,10 @@ describe('bl-c1: BlogList Component testing', () => {
         })
 
     })
-    expect(api.request).toHaveBeenCalledTimes(2)
-    expect((api.request as any).mock.calls[1][0].url).toContain('startDate=2019-11-13')
+    await wait(() => {
+      expect(api.request).toHaveBeenCalledTimes(2)
+      expect((api.request as any).mock.calls[1][0].url).toContain('startDate=2019-11-13')
+    })
   })
 
   test("a17. (EH) should start api request when new endDate is entered and url must contain the endDate", async () => {
@@ -308,8 +317,10 @@ describe('bl-c1: BlogList Component testing', () => {
         })
 
     })
-    expect(api.request).toHaveBeenCalledTimes(2)
-    expect((api.request as any).mock.calls[1][0].url).toContain('endDate=2019-11-13')
+    await wait(() => {
+      expect(api.request).toHaveBeenCalledTimes(2)
+      expect((api.request as any).mock.calls[1][0].url).toContain('endDate=2019-11-13')
+    })
   })
 
   test("a18. (EH) should start api request when new sort is selected and url must contain the sort", async () => {
@@ -357,8 +368,10 @@ describe('bl-c1: BlogList Component testing', () => {
       const thirdPageBtn = await waitForElement(() => getByText('3'))
       fireEvent.click(thirdPageBtn)
     })
-    expect(api.request).toHaveBeenCalledTimes(2)
-    expect((api.request as any).mock.calls[1][0].url).toContain('page=3')
+    await wait(() => {
+      expect(api.request).toHaveBeenCalledTimes(2)
+      expect((api.request as any).mock.calls[1][0].url).toContain('page=3')
+    })
   })
 
   test("a21. (EH) should start api request when last page number is click and url must contain the number", async () => {
@@ -371,8 +384,11 @@ describe('bl-c1: BlogList Component testing', () => {
       const lastPageBtn = await waitForElement(() => getByRole('last-page-btn'))
       fireEvent.click(lastPageBtn)
     })
-    expect(api.request).toHaveBeenCalledTimes(2)
-    expect((api.request as any).mock.calls[1][0].url).toContain('page=500&limit=20')
+
+    await wait(() => {
+      expect(api.request).toHaveBeenCalledTimes(2)
+      expect((api.request as any).mock.calls[1][0].url).toContain('page=500&limit=20')
+    })
   })
 
   test("a22. (cache) should cache response data in localStorage after request", async () => {
@@ -384,11 +400,13 @@ describe('bl-c1: BlogList Component testing', () => {
       await waitForElement(() => getAllByRole('blog-item'))
     })
     const path = (api.request as any).mock.calls[0][0].url
-    expect(localStorage.getItem(path)).not.toBeNull()
+    await wait(() => {
+      expect(localStorage.getItem(path)).not.toBeNull()
+    })
   })
 
   test("a23. (cache) should use cached data when request to the same endpoint (with queryString)", async () => {
-    api.request = jest.fn().mockReturnValue(Promise.resolve(blogGET200NonEmptyResponse))
+    api.request = jest.fn().mockResolvedValue(blogGET200NonEmptyResponse)
     const { getByText, getByRole, container, asFragment, debug, getAllByRole, getByLabelText } = render(
       <ContextWrapperComponent component={BlogList} />
     )
@@ -400,6 +418,11 @@ describe('bl-c1: BlogList Component testing', () => {
      * -> workaround is to use 'Simulate.change()'
      **/
     Simulate.change(sortInput)
+    // wait for above 'change' has completed
+    await wait(() => {
+      expect(api.request).toHaveBeenCalledTimes(2)
+    })
+    
     const nextSortInput = getByLabelText('Date Asc')
     Simulate.change(nextSortInput)
     await wait(() => {

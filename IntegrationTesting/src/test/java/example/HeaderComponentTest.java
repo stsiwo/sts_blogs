@@ -4,6 +4,7 @@ import org.openqa.selenium.Dimension;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import main.java.base.Config;
 import main.java.page.BlogListPage;
 import main.java.page.BlogPage;
 import main.java.page.HomePage;
@@ -26,9 +27,10 @@ public class HeaderComponentTest extends BaseTest {
 	  this.driver.manage().window().setSize(ssize);
 	  
 	  HomePage homePage = new HomePage(this.driver, true);
-	  Assert.assertEquals(homePage.getTextOfElementBy(HeaderComponentUIMapper.LOGO_TITLE), "STS");
+	  Assert.assertEquals(homePage.getTextOfElementBy(HeaderComponentUIMapper.LOGO_TITLE), Config.getInstance().getValue("appTitle"));
   }
 
+  /**
   @Test(dataProvider = "desktop")
   public void shouldDisplayBlogsNavMenuItemInHeader(Dimension ssize) {
 	  this.driver.manage().window().setSize(ssize);
@@ -118,4 +120,5 @@ public class HeaderComponentTest extends BaseTest {
 	  LoginPage loginPage = homePage.headerComponent.clickLoginLinkThruNavSideBar();
 	  Assert.assertTrue(loginPage.IsElementExist(HeaderComponentUIMapper.LOGIN_NAV_ITEM));
   }
+  **/
 }

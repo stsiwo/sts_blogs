@@ -79,7 +79,9 @@ describe('bm-c1: BlogManagement Component testing', () => {
         <ContextWrapperComponent component={BlogManagement} isAuth />
       )
     })
-    expect(api.request).toHaveBeenCalled()
+    await wait(() => {
+      expect(api.request).toHaveBeenCalled()
+    })
   })
 
   test("a2. (EH) should start api request when 'refresh' button is clicked", async () => {
@@ -98,13 +100,13 @@ describe('bm-c1: BlogManagement Component testing', () => {
       fireEvent.click(getByRole('refresh-icon'))
 
       await waitForElement(() => getAllByRole('blog-item'))
-
+      await wait(() => {
+        /**
+         * since disable cache at refresh request 
+         **/
+        expect(api.request).toHaveBeenCalledTimes(2)
+      })
     })
-    /**
-     * since disable cache at refresh request 
-     **/
-    expect(api.request).toHaveBeenCalledTimes(2)
-
   })
 
   // need to think how to test 'cancel' feature
@@ -136,8 +138,10 @@ describe('bm-c1: BlogManagement Component testing', () => {
         }
       })
     })
-    expect(api.request).toHaveBeenCalledTimes(2)
-    expect((api.request as any).mock.calls[1][0].url).toContain('limit=40')
+    await wait(() => {
+      expect(api.request).toHaveBeenCalledTimes(2)
+      expect((api.request as any).mock.calls[1][0].url).toContain('limit=40')
+    })
   })
 
   test("a5. (responsive) should display a list of blog after successful api request when blog exists", async () => {
@@ -148,7 +152,9 @@ describe('bm-c1: BlogManagement Component testing', () => {
         <ContextWrapperComponent component={BlogManagement} isAuth />
       )
       const blogListNode = await waitForElement(() => getAllByRole('blog-item'))
-      expect(blogListNode.length).toBeGreaterThan(0)
+      await wait(() => {
+        expect(blogListNode.length).toBeGreaterThan(0)
+      })
     })
   })
 
@@ -221,7 +227,9 @@ describe('bm-c1: BlogManagement Component testing', () => {
         <ContextWrapperComponent component={BlogManagement} isAuth />
       )
       const memberOnlyNode = queryByText(container, 'Member Only')
-      expect(memberOnlyNode).toBeNull()
+      await wait(() => {
+        expect(memberOnlyNode).toBeNull()
+      })
     })
   })
 
@@ -257,7 +265,9 @@ describe('bm-c1: BlogManagement Component testing', () => {
         })
 
       const tagIconNode = await waitForElement(() => getByRole('tag-icon'))
-      expect(tagIconNode).toBeInTheDocument()
+      await wait(() => {
+        expect(tagIconNode).toBeInTheDocument()
+      })
     })
   })
 
@@ -280,8 +290,10 @@ describe('bm-c1: BlogManagement Component testing', () => {
         })
 
     })
-    expect(api.request).toHaveBeenCalledTimes(2)
-    expect((api.request as any).mock.calls[1][0].url).toContain('tags=test-tag')
+    await wait(() => {
+      expect(api.request).toHaveBeenCalledTimes(2)
+      expect((api.request as any).mock.calls[1][0].url).toContain('tags=test-tag')
+    })
   })
 
   test("a15. (filter sort) should start api request when new keyword is entered and url must contain the keyword", async () => {
@@ -302,8 +314,10 @@ describe('bm-c1: BlogManagement Component testing', () => {
         })
 
     })
-    expect(api.request).toHaveBeenCalledTimes(2)
-    expect((api.request as any).mock.calls[1][0].url).toContain('keyword=test-keyword')
+    await wait(() => {
+      expect(api.request).toHaveBeenCalledTimes(2)
+      expect((api.request as any).mock.calls[1][0].url).toContain('keyword=test-keyword')
+    })
   })
 
   test("a16. (filter sort) should start api request when new startDate is entered and url must contain the startDate", async () => {
@@ -325,8 +339,10 @@ describe('bm-c1: BlogManagement Component testing', () => {
         })
 
     })
-    expect(api.request).toHaveBeenCalledTimes(2)
-    expect((api.request as any).mock.calls[1][0].url).toContain('startDate=2019-11-13')
+    await wait(() => {
+      expect(api.request).toHaveBeenCalledTimes(2)
+      expect((api.request as any).mock.calls[1][0].url).toContain('startDate=2019-11-13')
+    })
   })
 
   test("a17. (filter sort) should start api request when new endDate is entered and url must contain the endDate", async () => {
@@ -348,8 +364,10 @@ describe('bm-c1: BlogManagement Component testing', () => {
         })
 
     })
-    expect(api.request).toHaveBeenCalledTimes(2)
-    expect((api.request as any).mock.calls[1][0].url).toContain('endDate=2019-11-13')
+    await wait(() => {
+      expect(api.request).toHaveBeenCalledTimes(2)
+      expect((api.request as any).mock.calls[1][0].url).toContain('endDate=2019-11-13')
+    })
   })
 
   test("a18. (filter sort) should start api request when new sort is selected and url must contain the sort", async () => {
@@ -384,8 +402,10 @@ describe('bm-c1: BlogManagement Component testing', () => {
       const thirdPageBtn = await waitForElement(() => getByText('3'))
       fireEvent.click(thirdPageBtn)
     })
-    expect(api.request).toHaveBeenCalledTimes(2)
-    expect((api.request as any).mock.calls[1][0].url).toContain('page=3&limit=20')
+    await wait(() => {
+      expect(api.request).toHaveBeenCalledTimes(2)
+      expect((api.request as any).mock.calls[1][0].url).toContain('page=3&limit=20')
+    })
   })
 
   test("a20. (EH) should start api request when last page number is click and url must contain the number", async () => {
@@ -398,8 +418,10 @@ describe('bm-c1: BlogManagement Component testing', () => {
       const lastPageBtn = await waitForElement(() => getByRole('last-page-btn'))
       fireEvent.click(lastPageBtn)
     })
-    expect(api.request).toHaveBeenCalledTimes(2)
-    expect((api.request as any).mock.calls[1][0].url).toContain('page=500&limit=20')
+    await wait(() => {
+      expect(api.request).toHaveBeenCalledTimes(2)
+      expect((api.request as any).mock.calls[1][0].url).toContain('page=500&limit=20')
+    })
   })
 
   describe('bm-t-c1: <= tablet screen size', () => {

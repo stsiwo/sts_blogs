@@ -25,6 +25,7 @@ import BlogListController from 'Components/BlogListController/BlogListController
 import BlogItem from 'Components/BlogItem/BlogItem';
 import { getBlogTestData } from '../../../../../tests/data/BlogFaker';
 import { logger } from 'configs/logger';
+import { useBlogFilterSortTypeAhead } from 'Hooks/BlogFilterSortTypeAhead/useBlogFilterSortTypeAhead';
 const log = logger("BlogManagement");
 
 export enum FetchContextEnum {
@@ -58,50 +59,18 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   const [isRefresh, setIsRefresh] = React.useState<boolean>(false)
   const [curFetchContext, setFetchContext] = React.useState<FetchContextEnum>(FetchContextEnum.FETCH)
 
-  const queryString = {
-    page: currentPaginationStatus.page,
-    limit: currentPaginationStatus.limit,
-    tags: currentFilters.tags.map((tag: TagType) => tag.name),
-    startDate: currentFilters.startDate ? currentFilters.startDate.toJSON() : null,
-    endDate: currentFilters.endDate ? currentFilters.endDate.toJSON() : null,
-    keyword: currentFilters.keyword,
-    sort: currentSort,
-  }
+  useBlogFilterSortTypeAhead({
+    currentFilters: currentFilters,
+    currentPaginationStatus: currentPaginationStatus,
+    currentRefreshCount: currentRefreshCount,
+    currentSort: currentSort,
+    isRefresh: isRefresh,
+    setIsRefresh: setIsRefresh,
+    sendRequest: sendBlogsFetchRequest,
+    setBlogs: setBlogs,
+    setPaginationStatus: setPaginationStatus
+  })
 
-  React.useEffect(() => {
-    log("start useEffect")
-    // might can move to inside eh of refresh click
-    
-    log("start send blog fetch request")
-    setFetchContext(FetchContextEnum.FETCH)
-    sendBlogsFetchRequest({
-      path: '/users/' + userId + '/blogs',
-      method: RequestMethodEnum.GET,
-      queryString: queryString,
-      ...(isRefresh && { useCache: false }),
-    })
-      .then((result: ResponseResultType<BlogListResponseDataType>) => {
-
-        if (NODE_ENV === 'development') {
-          log("development env so inject blog test data")
-          setBlogs(getBlogTestData())
-        }
-        else if (result.status === ResponseResultStatusEnum.SUCCESS) {
-          log("fetch success and receive data")
-          setBlogs(result.data.blogs)
-
-          // assign new total count of pagination
-          setPaginationStatus({
-            ...currentPaginationStatus,
-            totalCount: result.data.totalCount
-          })
-        }
-        setIsRefresh(false)
-      })
-  }, [
-      JSON.stringify(queryString),
-      currentRefreshCount
-    ])
 
   /** EH **/
   const handleFilterSortNavClickEvent: React.EventHandler<React.MouseEvent<HTMLElement>> = (e) => {
