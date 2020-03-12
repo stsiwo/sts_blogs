@@ -1,7 +1,7 @@
 import { QueryStringType } from "requests/types";
-import isEmpty = require('lodash/isEmpty');
 const  uuidv4 = require('uuid/v4')
 import { logger } from 'configs/logger';
+import isEmpty from "lodash/isEmpty";
 const log = logger("utils");
 
 

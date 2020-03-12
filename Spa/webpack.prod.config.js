@@ -9,6 +9,7 @@ module.exports = merge(common, {
   devtool: 'source-map',
   output: {
     filename: '[name].[contenthash].js',
+    chunkFilename: '[id].bundle.js',
     path: path.resolve(__dirname, 'dist')
   },
   plugins: [

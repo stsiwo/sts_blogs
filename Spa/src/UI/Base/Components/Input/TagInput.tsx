@@ -3,11 +3,15 @@ import './TagInput.scss';
 import { TagInputPropType } from './types';
 import Tag from 'Components/Tag/Tag';
 import BaseInput from './BaseInput';
-import cloneDeep = require('lodash/cloneDeep');
+import cloneDeep from 'lodash/cloneDeep';
+import { logger } from 'configs/logger';
+const log = logger("TagInput")
 
 const TagInput: React.FunctionComponent<TagInputPropType> = (props: TagInputPropType) => {
 
-  const isTagsLimit: boolean = props.currentBlog.tags.size >= 10
+  const isTagsLimit: boolean = props.currentBlog.tags.size >= 5 
+  log("tag limit: " + isTagsLimit)
+  log("current tag size: " + props.currentBlog.tags.size)
   const tagInputRef = React.useRef(null)
 
   const handleTagDeleteClickEvent: React.EventHandler<React.MouseEvent<HTMLDivElement>> = (e) => {
@@ -54,39 +58,41 @@ const TagInput: React.FunctionComponent<TagInputPropType> = (props: TagInputProp
   }
 
   return (
-    <BaseInput
-      id={props.id}
-      label={props.label}
-      labelStyle={props.labelStyle}
-      wrapperStyle={props.wrapperStyle}
-    >
-      {(!isTagsLimit &&
-        <input
-          type="text"
-          id={props.id}
-          name='tag-entry'
-          className={props.inputStyle}
-          onKeyDown={handleTagInputEnterOrTabKeyClickEvent}
-          ref={tagInputRef}
-          placeholder="enter #tags here ..."
-        />
-      )}
-      {(isTagsLimit &&
-        <input
-          type="text"
-          id='tag-entry'
-          name='tag-entry'
-          className="black-input grid-input blog-detail-input"
-          onKeyDown={handleTagInputEnterOrTabKeyClickEvent}
-          ref={tagInputRef}
-          placeholder="opps you reached max tags limit ..."
-          readOnly
-        />
-      )}
+    <>
+      <BaseInput
+        id={props.id}
+        label={props.label}
+        labelStyle={props.labelStyle}
+        wrapperStyle={props.wrapperStyle}
+      >
+        {(!isTagsLimit &&
+          <input
+            type="text"
+            id={props.id}
+            name='tag-entry'
+            className={props.inputStyle}
+            onKeyDown={handleTagInputEnterOrTabKeyClickEvent}
+            ref={tagInputRef}
+            placeholder="enter #tags here ..."
+          />
+        )}
+        {(isTagsLimit &&
+          <input
+            type="text"
+            id='tag-entry'
+            name='tag-entry'
+            className="black-input grid-input blog-detail-input"
+            onKeyDown={handleTagInputEnterOrTabKeyClickEvent}
+            ref={tagInputRef}
+            placeholder="opps you reached max tags limit ..."
+            readOnly
+          />
+        )}
+      </BaseInput>
       <div className="aside-filter-tags-list-selected">
         {renderCurrentTags()}
       </div>
-    </BaseInput>
+    </>
   );
 }
 

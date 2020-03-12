@@ -3,8 +3,8 @@ import { UseValidationStatusInputType, UseValidationStatusOutputType, DomainVali
 import * as yup from 'yup'
 import { UserSignupType } from 'domain/user/UserType';
 import { logger } from 'configs/logger';
-import cloneDeep = require('lodash/cloneDeep');
 import { usePrevious } from 'Hooks/Previous/usePrevious';
+import cloneDeep from 'lodash/cloneDeep';
 const log = logger("hook:useValidation");
 
 

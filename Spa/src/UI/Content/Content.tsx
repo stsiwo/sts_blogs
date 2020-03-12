@@ -1,16 +1,18 @@
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import Blog from './Blog/Blog';
-import BlogList from './BlogList/BlogList';
 import './Content.scss';
-import Home from './Home/Home';
-import Login from './Login/Login';
-import Setting from './Setting/Setting';
-import Signup from './Signup/Signup';
+const Home = React.lazy(() => import(/* webpackChunkName: "home" */"./Home/Home"));
+const Blog = React.lazy(() => import(/* webpackChunkName: "blog" */"./Blog/Blog"));
+const BlogList = React.lazy(() => import(/* webpackChunkName: "blogList" */"./BlogList/BlogList"));
+const Login = React.lazy(() => import(/* webpackChunkName: "login" */"./Login/Login"));
+const Setting = React.lazy(() => import(/* webpackChunkName: "setting" */"./Setting/Setting"));
+const Signup = React.lazy(() => import(/* webpackChunkName: "signup" */"./Signup/Signup"));
+const ResetPassword = React.lazy(() => import(/* webpackChunkName: "resetPassword" */"./ResetPassword/ResetPassword"));
+const GorgotPasswordEmailModal = React.lazy(() => import(/* webpackChunkName: "forgotPassword" */"Components/ForgotPasswordEmailModal/ForgotPasswordEmailModal"));
 import { AuthRoute } from 'Components/AuthRoute';
 import ForgotPasswordEmailModal from 'Components/ForgotPasswordEmailModal/ForgotPasswordEmailModal';
 import { useLocation } from 'react-router';
-import ResetPassword from './ResetPassword/ResetPassword';
+import Loading from 'ui/Base/Icons/Loading/Loading';
 
 
 const Content: React.FunctionComponent<{}> = (props: {}) => {
@@ -29,18 +31,20 @@ const Content: React.FunctionComponent<{}> = (props: {}) => {
 
   return (
     <section className="content-wrapper">
-      <Switch location={background || location}>
-        <Route path="/" exact component={Home} />
-        <Route path="/login" exact component={Login} />
-        <Route path="/password-reset" exact component={ResetPassword} />
-        <Route path="/signup" exact component={Signup} />
-        <Route path="/blogs" exact component={BlogList} />
-        <Route path="/blogs/:blogId" exact component={Blog} />
-        {/** siince setting has route, remove 'exact' **/}
-        <AuthRoute path="/setting" component={Setting} />
-      </Switch>
-      {/* Show the modal when a background page is set */}
-      {background && <Route path="/forgot-password" children={<ForgotPasswordEmailModal />} />}
+      <React.Suspense fallback={<Loading />} >
+        <Switch location={background || location}>
+          <Route path="/" exact component={Home} />
+          <Route path="/login" exact component={Login} />
+          <Route path="/password-reset" exact component={ResetPassword} />
+          <Route path="/signup" exact component={Signup} />
+          <Route path="/blogs" exact component={BlogList} />
+          <Route path="/blogs/:blogId" exact component={Blog} />
+          {/** siince setting has route, remove 'exact' **/}
+          <AuthRoute path="/setting" component={Setting} />
+        </Switch>
+        {/* Show the modal when a background page is set */}
+        {background && <Route path="/forgot-password" children={<ForgotPasswordEmailModal />} />}
+      </React.Suspense>
     </section>
   );
 }

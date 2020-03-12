@@ -16,7 +16,7 @@ import { Node, Element } from 'Components/fork/slate'
 import { replaceTmpSrcWithPublicSrc } from 'Components/BlogContent/helpers';
 import { generateFileWithUuidv4, getUuidv4 } from 'src/utils';
 import { RequestStatusType } from 'Hooks/Request/types';
-import cloneDeep = require('lodash/cloneDeep');
+import cloneDeep from 'lodash/cloneDeep';
 import { logger } from 'configs/logger';
 import { useBlogAutoSave } from 'Components/BlogAutoSave/useBlogAutoSave';
 const log = logger("EditBlog");

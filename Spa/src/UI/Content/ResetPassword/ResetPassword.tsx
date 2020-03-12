@@ -13,7 +13,7 @@ import { useRouteMatch, useLocation, useParams } from 'react-router';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { useKeyupListener } from 'Hooks/KeyupListener/useKeyupListener';
 import { logger } from 'configs/logger';
-import cloneDeep = require('lodash/cloneDeep');
+import cloneDeep from 'lodash/cloneDeep';
 const log = logger("ResetPassword");
 
 function useQuery() {

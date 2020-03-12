@@ -7,7 +7,6 @@ import { SortEnum } from 'domain/blog/Sort';
 //test image
 const whiteAvatar = require('../../../../tests/data/images/white-1920x1280.jpg');
 const redImage = require('../../../../tests/data/images/red-girl-1920x1279.jpg');
-import range = require('lodash/range');
 import { CssPropertyAnimationType, searchInputAnimationStatus } from 'ui/Base/Animation/types';
 import { useCssGlobalContext } from 'Contexts/CssGlobalContext/CssGlobalContext';
 import { useResponsive } from 'Hooks/Responsive/useResponsive';

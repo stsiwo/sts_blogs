@@ -45,6 +45,8 @@ public class LoginPage extends BasePage {
 	}
 
   public void enterEmailInfoAndWaitForTypeAheadResponse(String text) {
+    // wait for some time to avoid wierd error
+    this.waitAnimationEnd();
 		this.enterTextInElementBy(LoginUIMapper.EMAIL_INPUT, text, true);
     this.waitForElementBy(LoginUIMapper.TYPE_AHEAD_SUCCESS_ICON);
   }

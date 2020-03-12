@@ -5,6 +5,7 @@ import MenuToggleIcon from './MenuToggleIcon/MenuToggleIcon';
 import Menu from './Menu/Menu';
 import { useResponsive } from 'Hooks/Responsive/useResponsive';
 import { Link } from 'react-router-dom';
+import { appConfig } from 'configs/appConfig';
 
 
 const Header: React.FunctionComponent<{}> = (props: {}) => {
@@ -29,7 +30,7 @@ const Header: React.FunctionComponent<{}> = (props: {}) => {
   return (
     <header className="header-wrapper">
       <Link to="/" className="black-link header-title-link" role="title-link">
-        <h1 className="header-title">STS</h1>
+        <h1 className="header-title">{appConfig.titleName}</h1>
       </Link>
       {(currentScreenSize.isLTELaptop && renderMenuSidebar())}
       {(!currentScreenSize.isLTELaptop && renderHorizontalMenu())}

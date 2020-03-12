@@ -3,5 +3,6 @@ declare type appConfigType = {
   debounceTime: number
 }
 export const appConfig = {
-  debounceTime: 300
+  titleName: "STS Blog",
+  debounceTime: 500 
 }

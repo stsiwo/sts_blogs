@@ -10,7 +10,7 @@ import { RequestMethodEnum, ResponseResultType, ResponseResultStatusEnum } from 
 import FetchStatus from 'Components/ApiFetch/FetchStatus';
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { logger } from 'configs/logger';
-import cloneDeep = require('lodash/cloneDeep');
+import cloneDeep from 'lodash/cloneDeep'; 
 const log = logger("ForgotPasswordModal");
 
 

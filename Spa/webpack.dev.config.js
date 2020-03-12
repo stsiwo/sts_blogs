@@ -2,6 +2,7 @@ const path = require('path');
 const merge = require('webpack-merge');
 const common = require('./webpack.common.config.js');
 const webpack = require('webpack');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = merge(common, {
   mode: 'development',
@@ -15,6 +16,7 @@ module.exports = merge(common, {
   },
   output: {
     filename: '[name].bundle.js',
+    chunkFilename: '[id].bundle.js',
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/'
   },
@@ -25,6 +27,7 @@ module.exports = merge(common, {
       DEBUG: JSON.stringify("*"),
       API1_URL: JSON.stringify("http://api.stsiwo.com"),
       PUBLIC_IMAGE_PATH: JSON.stringify("/images/"),
-    })
+    }),
+    new BundleAnalyzerPlugin()
   ]
 }); 

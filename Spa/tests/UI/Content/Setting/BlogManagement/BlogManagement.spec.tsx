@@ -232,7 +232,9 @@ describe('bm-c1: BlogManagement Component testing', () => {
       const { getByText, getByRole, container, asFragment, debug, getAllByRole } = render(
         <ContextWrapperComponent component={Content} isAuth initialRoute={'/setting/blogs'} />
       )
-      expect(document.getElementsByClassName('aside-new-blog-link')[0].getAttribute('href')).toBe('/setting/blogs/new')
+      await wait(() => {
+        expect(document.getElementsByClassName('aside-new-blog-link')[0].getAttribute('href')).toBe('/setting/blogs/new')
+      })
     })
   })
 

@@ -5,7 +5,7 @@ import { ResponseResultStatusEnum, RequestMethodEnum, ResponseResultType, BlogRe
 import { BlogType } from 'domain/blog/BlogType';
 import { useAuthContext } from 'Contexts/AuthContext/AuthContext';
 import { logger } from 'configs/logger';
-import cloneDeep = require('lodash/cloneDeep');
+import cloneDeep from 'lodash/cloneDeep';
 import { replaceTmpSrcWithPublicSrc } from 'Components/BlogContent/helpers';
 import { useRequest } from 'Hooks/Request/useRequest';
 import { FetchContextEnum } from 'Components/EditBlog/EditBlog';

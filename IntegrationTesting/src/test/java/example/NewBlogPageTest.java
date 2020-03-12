@@ -37,129 +37,142 @@ public class NewBlogPageTest extends BaseTest {
 
   @AfterMethod
   public void logout() {
-	  this.driver.get(HomePage.url);
-	  HomePage homePage = new HomePage(this.driver, false);
-	  homePage.headerComponent.logout(); 
-  }
-  @Test(dataProvider = "all-size")
-  public void shouldDisplayNewBlogPageHeading(Dimension ssize) {
-	  this.driver.manage().window().setSize(ssize);
-	  
-	  NewBlogPage newBlogPage = new NewBlogPage(this.driver, true, this.testUser.email, this.testUser.password);
-	  Assert.assertEquals(newBlogPage.getTextOfElementBy(NewBlogUIMapper.PAGE_TITLE), "New Blog");
-  }
-  
-  @Test(dataProvider = "all-size")
-  public void shouldSaveNewBlog(Dimension ssize) {
-	  this.driver.manage().window().setSize(ssize);
-	  
-	  NewBlogPage newBlogPage = new NewBlogPage(this.driver, true, this.testUser.email, this.testUser.password);
-	  newBlogPage.scrollToTop();
-
-	  File testImageFile = new File("src/test/resources/test_image.jpg");
-	  
-	  newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.MAIN_IMAGE_INPUT, testImageFile.getAbsolutePath(), false);
-	  newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.BLOG_TITLE_INPUT, "sample blog title", true);
-	  newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.BLOG_SUBTITLE_INPUT, "sample blog subtitle", true);
-	  newBlogPage.enterTagInInput("selenium");
-	  
-	  newBlogPage.scrollToTop();
-	  newBlogPage.waitAnimationEnd();
-	  
-	  newBlogPage.waitForElementToHaveTextBy(NewBlogUIMapper.FETCH_STATUS_TITLE, "ok");
-	  Assert.assertTrue(true);
+    this.driver.get(HomePage.url);
+    HomePage homePage = new HomePage(this.driver, false);
+    homePage.headerComponent.logout();
   }
 
+  /**
+   * @Test(dataProvider = "all-size") public void
+   *                    shouldDisplayNewBlogPageHeading(Dimension ssize) {
+   *                    this.driver.manage().window().setSize(ssize);
+   * 
+   *                    NewBlogPage newBlogPage = new NewBlogPage(this.driver,
+   *                    true, this.testUser.email, this.testUser.password);
+   *                    Assert.assertEquals(newBlogPage.getTextOfElementBy(NewBlogUIMapper.PAGE_TITLE),
+   *                    "New Blog"); }
+   * 
+   * @Test(dataProvider = "all-size") public void shouldSaveNewBlog(Dimension
+   *                    ssize) { this.driver.manage().window().setSize(ssize);
+   * 
+   *                    NewBlogPage newBlogPage = new NewBlogPage(this.driver,
+   *                    true, this.testUser.email, this.testUser.password);
+   *                    newBlogPage.scrollToTop();
+   * 
+   *                    File testImageFile = new
+   *                    File("src/test/resources/test_image.jpg");
+   * 
+   *                    newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.MAIN_IMAGE_INPUT,
+   *                    testImageFile.getAbsolutePath(), false);
+   *                    newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.BLOG_TITLE_INPUT,
+   *                    "sample blog title", true);
+   *                    newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.BLOG_SUBTITLE_INPUT,
+   *                    "sample blog subtitle", true);
+   *                    newBlogPage.enterTagInInput("selenium");
+   * 
+   *                    newBlogPage.scrollToTop(); newBlogPage.waitAnimationEnd();
+   * 
+   *                    newBlogPage.waitForElementToHaveTextBy(NewBlogUIMapper.FETCH_STATUS_TITLE,
+   *                    "ok"); Assert.assertTrue(true); }
+   * 
+   **/
   @Test(dataProvider = "all-size")
   public void shouldPublishNewBlog(Dimension ssize) {
-	  this.driver.manage().window().setSize(ssize);
-	  
-	  NewBlogPage newBlogPage = new NewBlogPage(this.driver, true, this.testUser.email, this.testUser.password);
-	  newBlogPage.scrollToTop();
+    this.driver.manage().window().setSize(ssize);
 
-	  File testImageFile = new File("src/test/resources/test_image.jpg");
-	  
-	  newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.MAIN_IMAGE_INPUT, testImageFile.getAbsolutePath(), false);
-	  newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.BLOG_TITLE_INPUT, "sample blog title", true);
-	  newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.BLOG_SUBTITLE_INPUT, "sample blog subtitle", true);
-	  newBlogPage.enterTagInInput("selenium");
-	  
-	  newBlogPage.scrollToBottom();
-	  newBlogPage.waitAnimationEnd();
-	  newBlogPage.clickElementBy(EditBlogComponentUIMapper.PUBLISH_BUTTON);
+    NewBlogPage newBlogPage = new NewBlogPage(this.driver, true, this.testUser.email, this.testUser.password);
+    newBlogPage.scrollToTop();
 
-	  newBlogPage.scrollToTop();
-	  newBlogPage.waitAnimationEnd();
-	  try {
-		  newBlogPage.waitForElementToHaveTextBy(NewBlogUIMapper.FETCH_STATUS_TITLE, "ok");
-	  } catch (TimeoutException e) {
-		  newBlogPage.takeScreenshot("publish-new-blog");
-		  throw e;
-	  }
-	  Assert.assertTrue(true);
+    File testImageFile = new File("src/test/resources/test_image.jpg");
+
+    newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.MAIN_IMAGE_INPUT, testImageFile.getAbsolutePath(),
+        false);
+    newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.BLOG_TITLE_INPUT, "sample blog title", true);
+    newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.BLOG_SUBTITLE_INPUT, "sample blog subtitle", true);
+    newBlogPage.enterTagInInput("selenium");
+
+    newBlogPage.scrollToTop();
+    newBlogPage.waitAnimationEnd();
+    newBlogPage.waitForElementToHaveTextBy(NewBlogUIMapper.FETCH_STATUS_TITLE, "ok");
+
+    newBlogPage.scrollToBottom();
+    newBlogPage.waitAnimationEnd();
+    newBlogPage.clickElementBy(EditBlogComponentUIMapper.PUBLISH_BUTTON);
+
+    newBlogPage.scrollToTop();
+    newBlogPage.waitAnimationEnd();
+    try {
+      newBlogPage.waitForElementToHaveTextBy(NewBlogUIMapper.FETCH_STATUS_TITLE, "ok");
+    } catch (TimeoutException e) {
+      newBlogPage.takeScreenshot("publish-new-blog");
+      throw e;
+    }
+    Assert.assertTrue(true);
   }
 
   @Test(dataProvider = "desktop")
   public void shouldNotDisplayNonPublishedBlogAtBlogListPage(Dimension ssize) {
-	  this.driver.manage().window().setSize(ssize);
-	  
-	  NewBlogPage newBlogPage = new NewBlogPage(this.driver, true, this.testUser.email, this.testUser.password);
-	  newBlogPage.scrollToTop();
-	  
-	  String targetBlogTitle = this.faker.lorem().sentence();
+    this.driver.manage().window().setSize(ssize);
 
-	  File testImageFile = new File("src/test/resources/test_image.jpg");
-	  
-	  newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.MAIN_IMAGE_INPUT, testImageFile.getAbsolutePath(), false);
-	  newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.BLOG_TITLE_INPUT, targetBlogTitle, true);
-	  newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.BLOG_SUBTITLE_INPUT, "sample blog subtitle", true);
-	  newBlogPage.enterTagInInput("selenium");
-	  
-	  newBlogPage.scrollToTop();
-	  newBlogPage.waitAnimationEnd();
-	  newBlogPage.waitForElementToHaveTextBy(NewBlogUIMapper.FETCH_STATUS_TITLE, "ok");
-	  
-	  newBlogPage.driver.get(BlogListPage.url);
-	  
-	  BlogListPage blogListPage = new BlogListPage(this.driver, false);
-	  blogListPage.enterTextInElementBy(BlogFilterSortUIMapper.FILTER_KEYWORD_INPUT, targetBlogTitle, true);
-	  blogListPage.waitForElementBy(BlogFilterSortUIMapper.NO_SEARCH_RESULT_TITLE);
-	  Assert.assertTrue(true);
+    NewBlogPage newBlogPage = new NewBlogPage(this.driver, true, this.testUser.email, this.testUser.password);
+    newBlogPage.scrollToTop();
+
+    String targetBlogTitle = this.faker.lorem().sentence();
+
+    File testImageFile = new File("src/test/resources/test_image.jpg");
+
+    newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.MAIN_IMAGE_INPUT, testImageFile.getAbsolutePath(),
+        false);
+    newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.BLOG_TITLE_INPUT, targetBlogTitle, true);
+    newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.BLOG_SUBTITLE_INPUT, "sample blog subtitle", true);
+    newBlogPage.enterTagInInput("selenium");
+
+    newBlogPage.scrollToTop();
+    newBlogPage.waitAnimationEnd();
+    newBlogPage.waitForElementToHaveTextBy(NewBlogUIMapper.FETCH_STATUS_TITLE, "ok");
+
+    newBlogPage.driver.get(BlogListPage.url);
+
+    BlogListPage blogListPage = new BlogListPage(this.driver, false);
+    blogListPage.enterTextInElementBy(BlogFilterSortUIMapper.FILTER_KEYWORD_INPUT, targetBlogTitle, true);
+    blogListPage.waitForElementBy(BlogFilterSortUIMapper.NO_SEARCH_RESULT_TITLE);
+    Assert.assertTrue(true);
   }
 
   @Test(dataProvider = "desktop")
   public void shouldDisplayPublishedBlogAtBlogListPage(Dimension ssize) {
-	  this.driver.manage().window().setSize(ssize);
-	  
-	  NewBlogPage newBlogPage = new NewBlogPage(this.driver, true, this.testUser.email, this.testUser.password);
-	  newBlogPage.scrollToTop();
-	  
-	  String targetBlogTitle = this.faker.lorem().sentence();
+    this.driver.manage().window().setSize(ssize);
 
-	  File testImageFile = new File("src/test/resources/test_image.jpg");
-	  
-	  newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.MAIN_IMAGE_INPUT, testImageFile.getAbsolutePath(), false);
-	  newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.BLOG_TITLE_INPUT, targetBlogTitle, true);
-	  newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.BLOG_SUBTITLE_INPUT, "sample blog subtitle", true);
-	  newBlogPage.enterTagInInput("selenium");
-	  
-	  newBlogPage.scrollToTop();
-	  newBlogPage.waitAnimationEnd();
-	  newBlogPage.waitForElementToHaveTextBy(NewBlogUIMapper.FETCH_STATUS_TITLE, "ok");
+    NewBlogPage newBlogPage = new NewBlogPage(this.driver, true, this.testUser.email, this.testUser.password);
+    newBlogPage.scrollToTop();
 
-	  newBlogPage.scrollToBottom();
-	  newBlogPage.waitAnimationEnd();
-	  newBlogPage.clickElementBy(EditBlogComponentUIMapper.PUBLISH_BUTTON);
+    String targetBlogTitle = this.faker.lorem().sentence();
 
-	  newBlogPage.scrollToTop();
-	  newBlogPage.waitAnimationEnd();
-	  newBlogPage.waitForElementToHaveTextBy(NewBlogUIMapper.FETCH_STATUS_TITLE, "ok");
-	  
-	  newBlogPage.driver.get(BlogListPage.url);
-	  
-	  BlogListPage blogListPage = new BlogListPage(this.driver, false);
-	  blogListPage.enterTextInElementBy(BlogFilterSortUIMapper.FILTER_KEYWORD_INPUT, targetBlogTitle, true);
-	  blogListPage.waitForElementBy(BlogListUIMapper.BLOG_ITEM);
-	  Assert.assertTrue(true);
+    File testImageFile = new File("src/test/resources/test_image.jpg");
+
+    newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.MAIN_IMAGE_INPUT, testImageFile.getAbsolutePath(),
+        false);
+    newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.BLOG_TITLE_INPUT, targetBlogTitle, true);
+    newBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.BLOG_SUBTITLE_INPUT, "sample blog subtitle", true);
+    newBlogPage.enterTagInInput("selenium");
+
+    newBlogPage.scrollToTop();
+    newBlogPage.waitAnimationEnd();
+    newBlogPage.waitForElementToHaveTextBy(NewBlogUIMapper.FETCH_STATUS_TITLE, "ok");
+
+    newBlogPage.scrollToBottom();
+    newBlogPage.waitAnimationEnd();
+    newBlogPage.clickElementBy(EditBlogComponentUIMapper.PUBLISH_BUTTON);
+
+    newBlogPage.scrollToTop();
+    newBlogPage.waitAnimationEnd();
+    newBlogPage.waitForElementToHaveTextBy(NewBlogUIMapper.FETCH_STATUS_TITLE, "ok");
+
+    newBlogPage.driver.get(BlogListPage.url);
+
+    BlogListPage blogListPage = new BlogListPage(this.driver, false);
+    blogListPage.enterTextInElementBy(BlogFilterSortUIMapper.FILTER_KEYWORD_INPUT, targetBlogTitle, true);
+    blogListPage.waitForElementBy(BlogListUIMapper.BLOG_ITEM);
+    Assert.assertTrue(true);
   }
 }

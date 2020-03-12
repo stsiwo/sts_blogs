@@ -1,5 +1,5 @@
-import range = require('lodash/range');
 import { BuildPaginationResultType, PageType } from './types';
+import range from 'lodash/range';
 
 /**
  * helper hook for pagination 

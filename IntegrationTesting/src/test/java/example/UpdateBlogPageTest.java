@@ -95,34 +95,6 @@ public class UpdateBlogPageTest extends BaseTest {
   }
   
   @Test(dataProvider = "laptop")
-  public void shouldNotDisplayNonPublishedBlogAtBlogListPage(Dimension ssize) {
-	  this.driver.manage().window().setSize(ssize);
-	  
-	  UpdateBlogPage updateBlogPage = new UpdateBlogPage(this.driver, true, this.testUser.email, this.testUser.password);
-	  updateBlogPage.scrollToTop();
-	  
-	  String targetBlogTitle = this.faker.lorem().sentence();
-
-	  File testImageFile = new File("src/test/resources/test_image.jpg");
-	  
-	  updateBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.MAIN_IMAGE_INPUT, testImageFile.getAbsolutePath(), false);
-	  updateBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.BLOG_TITLE_INPUT, targetBlogTitle, true);
-	  updateBlogPage.enterTextInElementBy(EditBlogComponentUIMapper.BLOG_SUBTITLE_INPUT, "sample blog subtitle", true);
-	  updateBlogPage.enterTagInInput("selenium");
-	  
-	  updateBlogPage.scrollToTop();
-	  updateBlogPage.waitAnimationEnd();
-	  updateBlogPage.waitForElementToHaveTextBy(UpdateBlogUIMapper.FETCH_STATUS_TITLE, "ok");
-	  
-	  updateBlogPage.driver.get(BlogListPage.url);
-	  
-	  BlogListPage blogListPage = new BlogListPage(this.driver, false);
-	  blogListPage.enterTextInElementBy(BlogFilterSortUIMapper.FILTER_KEYWORD_INPUT, targetBlogTitle, true);
-	  blogListPage.waitForElementBy(BlogFilterSortUIMapper.NO_SEARCH_RESULT_TITLE);
-	  Assert.assertTrue(true);
-  }
-
-  @Test(dataProvider = "laptop")
   public void shouldDisplayPublishedBlogAtBlogListPage(Dimension ssize) {
 	  this.driver.manage().window().setSize(ssize);
 	  

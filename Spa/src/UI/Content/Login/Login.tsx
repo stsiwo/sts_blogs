@@ -15,7 +15,7 @@ import { useKeyupListener } from 'Hooks/KeyupListener/useKeyupListener';
 import { logger } from 'configs/logger';
 import { useTypeAhead } from 'Hooks/TypeAhead/useTypeAhead';
 import { usePrevious } from 'Hooks/Previous/usePrevious';
-import cloneDeep = require('lodash/cloneDeep');
+import cloneDeep from 'lodash/cloneDeep';
 const log = logger("Login");
 
 const Login: React.FunctionComponent<RouteComponentProps<{}>> = (props: RouteComponentProps<{}>) => {
