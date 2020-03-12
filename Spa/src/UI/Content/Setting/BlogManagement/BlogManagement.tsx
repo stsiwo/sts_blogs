@@ -35,7 +35,6 @@ export enum FetchContextEnum {
 
 const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
 
-
   /** refs **/
   const controllerRefs: Map<string, React.MutableRefObject<HTMLDivElement>> = new Map()
 
@@ -48,6 +47,7 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   /** hooks **/
   const { auth } = useAuthContext()
   const userId = auth.user.id
+  const requestPath = '/users/' + userId + '/blogs';
   const dispatch = useDispatch()
   const { path, url } = useRouteMatch();
   const { currentPaginationStatus, setPaginationStatus } = usePagination({})
@@ -60,6 +60,7 @@ const BlogManagement: React.FunctionComponent<{}> = (props: {}) => {
   const [curFetchContext, setFetchContext] = React.useState<FetchContextEnum>(FetchContextEnum.FETCH)
 
   useBlogFilterSortTypeAhead({
+    path: requestPath,
     currentFilters: currentFilters,
     currentPaginationStatus: currentPaginationStatus,
     currentRefreshCount: currentRefreshCount,

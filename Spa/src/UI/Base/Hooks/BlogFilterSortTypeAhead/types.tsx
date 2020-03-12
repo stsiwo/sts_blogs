@@ -5,6 +5,7 @@ import { FetchDataArgType } from "Hooks/Request/types";
 import { BlogType } from "domain/blog/BlogType";
 
 export declare type UseBlogFilterSortTypeAheadInputType = {
+  path: string
   currentPaginationStatus: PaginationStatusType
   currentFilters: FilterType
   currentSort: number

@@ -17,7 +17,6 @@ const log = logger("useBlogFilterSortTypeAhead");
 
 export const useBlogFilterSortTypeAhead = (input: UseBlogFilterSortTypeAheadInputType): UseBlogFilterSortTypeAheadOutputType => {
 
-  const path = '/blogs'
   /**
    * need to use 'useState'. 
    * this is because to prevent react from recreate new Subject object every time this component re-rendered.
@@ -50,7 +49,7 @@ export const useBlogFilterSortTypeAhead = (input: UseBlogFilterSortTypeAheadInpu
         switchMap((value: string) => {
           log("switchMap before request")
           return from(input.sendRequest({
-            path: path,
+            path: input.path,
             method: RequestMethodEnum.GET,
             queryString: queryString,
             ...(input.isRefresh && { useCache: false }),

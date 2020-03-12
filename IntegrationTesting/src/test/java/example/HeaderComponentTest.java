@@ -30,7 +30,6 @@ public class HeaderComponentTest extends BaseTest {
 	  Assert.assertEquals(homePage.getTextOfElementBy(HeaderComponentUIMapper.LOGO_TITLE), Config.getInstance().getValue("appTitle"));
   }
 
-  /**
   @Test(dataProvider = "desktop")
   public void shouldDisplayBlogsNavMenuItemInHeader(Dimension ssize) {
 	  this.driver.manage().window().setSize(ssize);
@@ -120,5 +119,4 @@ public class HeaderComponentTest extends BaseTest {
 	  LoginPage loginPage = homePage.headerComponent.clickLoginLinkThruNavSideBar();
 	  Assert.assertTrue(loginPage.IsElementExist(HeaderComponentUIMapper.LOGIN_NAV_ITEM));
   }
-  **/
 }

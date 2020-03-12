@@ -48,6 +48,7 @@ function useQuery() {
 const BlogList: React.FunctionComponent<{}> = (props: {}) => {
 
   const query = useQuery()
+  const path = '/blogs'
   /** state **/
   const [currentBlogs, setBlogs] = React.useState([] as BlogType[])
 
@@ -72,6 +73,7 @@ const BlogList: React.FunctionComponent<{}> = (props: {}) => {
   const [isRefresh, setIsRefresh] = React.useState<boolean>(false)
   const { auth } = useAuthContext()
   useBlogFilterSortTypeAhead({
+    path: path,
     currentFilters: currentFilters,
     currentPaginationStatus: currentPaginationStatus,
     currentRefreshCount: currentRefreshCount,
