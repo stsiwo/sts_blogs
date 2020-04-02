@@ -92,6 +92,8 @@
     * 3. run 'testing-dev-db-setup.sh' to create db and seed initial data for testing and development
   - update workflow: when update db schema, follow bellow steps
     * 1. run 'flask db migrate' (create new version file to detect any update)
+      * 1.1. need to modify version file (e.g., removing unnecessary code)
+        * NOTE: migration tool detect unchange code (I don't know why) so need to remove manually (esp 'created_date' & 'update_date')
     * 2. run 'update-migration.sh' for updating testing and development sqlite database (internally just upgrade database)
   - staging & production db
     - entrypoint.sh for each env handle 'upgrade' and seed initial data to each db
